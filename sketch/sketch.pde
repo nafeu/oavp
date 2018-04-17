@@ -23,9 +23,13 @@ void draw() {
   fill(255);
   stroke(255);
 
+  debug();
+
   for (int i = 0; i < fft.specSize(); i++) {
     point(i, 500 - fft.getBand(i));
   }
+}
 
-
+void debug() {
+  text("BUFFER_SIZE: " + String.valueOf(BUFFER_SIZE), 10, 20);
 }
