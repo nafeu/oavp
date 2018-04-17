@@ -8,15 +8,15 @@ FFT         fft;
 BandData bd;
 
 class BandData {
-  FFT fft;
-  AudioPlayer audio;
-  int avgSize;
-  float[] fftSmooth;
-  float minVal = 0.0;
-  float maxVal = 0.0;
-  float smoothing = 0.80;
-  boolean firstMinDone = false;
-  boolean useDB = true;
+  private FFT fft;
+  private AudioPlayer audio;
+  private int avgSize;
+  private float[] fftSmooth;
+  private float minVal = 0.0;
+  private float maxVal = 0.0;
+  private float smoothing = 0.80;
+  private boolean firstMinDone = true;
+  private boolean useDB = true;
 
   BandData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
     audio = minim.loadFile(path, bufferSize);
@@ -27,7 +27,7 @@ class BandData {
     fftSmooth = new float[avgSize];
   }
 
-  float dB(float x) {
+  private float dB(float x) {
     if (x == 0) {
       return 0;
     }
@@ -36,7 +36,7 @@ class BandData {
     }
   }
 
-  float[] getForwardData() {
+  public float[] getForwardData() {
     fft.forward( audio.mix );
     for (int i = 0; i < avgSize; i++) {
       // Get spectrum value (using dB conversion or not, as desired)
@@ -62,35 +62,35 @@ class BandData {
     return fftSmooth;
   }
 
-  int getAvgSize() {
+  public int getAvgSize() {
     return avgSize;
   }
 
-  float getMaxVal() {
+  public float getMaxVal() {
     return maxVal;
   }
 
-  float getMinVal() {
+  public float getMinVal() {
     return minVal;
   }
 
-  float getScaleFactor() {
+  public float getScaleFactor() {
     return (maxVal - minVal) + 0.00001;
   }
 
-  float getDisplayAmplitude(float x) {
+  public float getDisplayAmplitude(float x) {
     return (x - minVal) / ((maxVal - minVal) + 0.00001);
   }
 
-  void toggleUseDB() {
+  public void toggleUseDB() {
     useDB = !useDB;
   }
 
-  void toggleFirstMinDone() {
+  public void toggleFirstMinDone() {
     firstMinDone = !firstMinDone;
   }
 
-  void setSmoothing(float newSmoothing) {
+  public void setSmoothing(float newSmoothing) {
     smoothing = newSmoothing;
   }
 }
@@ -100,7 +100,7 @@ void setup() {
   size(500, 500);
 
   minim = new Minim(this);
-  bd = new BandData(minim, "test-audio-2.mp3", 1024, 200, 10);
+  bd = new BandData(minim, "test-audio-1.mp3", 1024, 200, 10);
 
 }
 
@@ -112,12 +112,26 @@ void draw() {
   float[] data = bd.getForwardData();
   int avgSize = bd.getAvgSize();
 
+  drawRectangleBars(avgSize, data);
+  drawWaveForm(avgSize, data);
+  // debug();
+}
+
+void drawRectangleBars(int avgSize, float[] data) {
   for (int i = 0; i < avgSize; i++) {
     float displayAmplitude = bd.getDisplayAmplitude(data[i]);
     rect(i * (500 / avgSize), 500, (500 / avgSize), -(500 / 2) * displayAmplitude);
   }
+}
 
-  // debug();
+void drawWaveForm(int avgSize, float[] data) {
+  translate(0, 250);
+  beginShape(LINES);
+  for (int i = 0; i < avgSize - 1; i++) {
+    vertex(i * (500 / avgSize), -(500 / 2) * bd.getDisplayAmplitude(data[i]));
+    vertex((i + 1) * (500 / avgSize), -(500 / 2) * bd.getDisplayAmplitude(data[i + 1]));
+  }
+  endShape();
 }
 
 // void debug() {
