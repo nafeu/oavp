@@ -3,6 +3,7 @@ import ddf.minim.*;
 
 Minim minim;
 BandData bandData;
+Colors colors = new Colors();
 
 // Configs
 final int FPS = 60;
@@ -14,6 +15,9 @@ final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 10;
 final float smoothing = 0.80;
+
+int avgSize;
+float[] data;
 
 void setup() {
   frameRate(FPS);
@@ -30,29 +34,29 @@ void setup() {
 }
 
 void draw() {
-  background(0);
-  fill(255);
-  stroke(255);
+  background(colors.darkRed);
+  noFill();
+  stroke(colors.white);
 
   debug();
 
-  float[] data = bandData.getForwardSpectrumData();
-  int avgSize = bandData.getAvgSize();
+  data = bandData.getForwardSpectrumData();
+  avgSize = bandData.getAvgSize();
 
-  drawRectangleSpectrum(avgSize, data);
-  drawLineSpectrum(avgSize, data);
+  drawRectangleSpectrum();
+  drawLineSpectrum();
   drawWaveForm();
   drawLevels();
 }
 
-void drawRectangleSpectrum(int avgSize, float[] data) {
+void drawRectangleSpectrum() {
   for (int i = 0; i < avgSize; i++) {
     float displayAmplitude = bandData.getDisplayAmplitude(data[i]);
     rect(i * (stageWidth / avgSize), stageHeight, (stageWidth / avgSize), -(stageHeight / 2) * displayAmplitude);
   }
 }
 
-void drawLineSpectrum(int avgSize, float[] data) {
+void drawLineSpectrum() {
   translate(0, stageHeight / 2);
   beginShape(LINES);
   for (int i = 0; i < avgSize - 1; i++) {
@@ -83,4 +87,30 @@ void debug() {
   output += ", bandsPerOctave: " + String.valueOf(bandsPerOctave);
   output += ", smoothing: " + String.valueOf(smoothing);
   text(output, 10, 20);
+}
+
+public class Colors {
+  int teal = #1abc9c;
+  int darkTeal = #16a085;
+  int green = #2ecc71;
+  int darkGreen = #27ae60;
+  int blue = #3498db;
+  int darkBlue = #2980b9;
+  int purple = #9b59b6;
+  int darkPurple = #8e44ad;
+  int red = #e74c3c;
+  int darkRed = #c0392b;
+  int orange = #e67e22;
+  int darkOrange = #d35400;
+  int yellow = #f1c40f;
+  int darkYellow = #f39c12;
+  int grey = #95a5a6;
+  int darkGrey = #7f8c8d;
+  int primary = #ecf0f1;
+  int darkPrimary = #bdc3c7;
+  int secondary = #34495e;
+  int darkSecondary = #2c3e50;
+  int white = #FFFFFF;
+  int black = #000000;
+  Colors() {}
 }
