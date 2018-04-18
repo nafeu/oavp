@@ -8,13 +8,17 @@ Colors colors = new Colors();
 // Configs
 final int FPS = 60;
 
-final int stageWidth = 700;
-final int stageHeight = 700;
+final int stageWidth = 1000;
+final int stageHeight = 1000;
 
 final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 10;
 final float smoothing = 0.80;
+
+final int stageDivider = 3;
+
+float eyeZ = 0;
 
 int avgSize;
 float[] data;
@@ -22,11 +26,11 @@ float[] data;
 void setup() {
   frameRate(FPS);
   // size(stageWidth, stageHeight);
-  size(700, 700); // Account for variable bug in processing-sublime;
+  size(1000, 1000, P3D); // Account for variable bug in processing-sublime;
 
   minim = new Minim(this);
   bandData = new BandData(minim,
-                          "test-audio-1.mp3",
+                          "test-audio.mp3",
                           bufferSize,
                           minBandwidthPerOctave,
                           bandsPerOctave,
@@ -34,7 +38,12 @@ void setup() {
 }
 
 void draw() {
-  background(colors.darkRed);
+  float centerX = width/2.0 + map(mouseX, 0, stageWidth, -(stageWidth / 2), (stageWidth / 2));
+  float centerY = height/2.0 + map(mouseY, 0, stageHeight, -(stageHeight / 2), (stageHeight / 2));
+  camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0) + eyeZ,
+         centerX, centerY, 0,
+         0, 1, 0);
+  background(colors.darkBlue);
   noFill();
   stroke(colors.white);
 
@@ -43,25 +52,28 @@ void draw() {
   data = bandData.getForwardSpectrumData();
   avgSize = bandData.getAvgSize();
 
-  drawRectangleSpectrum();
-  drawLineSpectrum();
-  drawWaveForm();
   drawLevels();
+  drawWaveForm();
+
+  translate(0, (stageHeight / stageDivider));
+  drawLineSpectrum();
+
+  translate(0, (stageHeight / stageDivider));
+  drawRectangleSpectrum();
 }
 
 void drawRectangleSpectrum() {
   for (int i = 0; i < avgSize; i++) {
     float displayAmplitude = bandData.getDisplayAmplitude(data[i]);
-    rect(i * (stageWidth / avgSize), stageHeight, (stageWidth / avgSize), -(stageHeight / 2) * displayAmplitude);
+    rect(i * (stageWidth / avgSize), (stageHeight / stageDivider), (stageWidth / avgSize), -(stageHeight / stageDivider) * displayAmplitude);
   }
 }
 
 void drawLineSpectrum() {
-  translate(0, stageHeight / 2);
   beginShape(LINES);
   for (int i = 0; i < avgSize - 1; i++) {
-    vertex(i * (stageWidth / avgSize), -(stageHeight / 2) * bandData.getDisplayAmplitude(data[i]));
-    vertex((i + 1) * (stageWidth / avgSize), -(stageHeight / 2) * bandData.getDisplayAmplitude(data[i + 1]));
+    vertex(i * (stageWidth / avgSize), -(stageHeight / stageDivider) * bandData.getDisplayAmplitude(data[i]) + (stageHeight / stageDivider));
+    vertex((i + 1) * (stageWidth / avgSize), -(stageHeight / stageDivider) * bandData.getDisplayAmplitude(data[i + 1]) + (stageHeight / stageDivider));
   }
   endShape();
 }
@@ -70,15 +82,18 @@ void drawWaveForm() {
   int audioBufferSize = bandData.getBufferSize();
   for(int i = 0; i < audioBufferSize - 1; i++) {
     float x1 = map( i, 0, audioBufferSize, 0, stageWidth );
-    float x2 = map( i+1, 0, audioBufferSize, 0, stageWidth );
-    line( x1, 50 + bandData.getLeftBuffer(i)*50, x2, 50 + bandData.getLeftBuffer(i+1)*50 );
-    line( x1, 150 + bandData.getRightBuffer(i)*50, x2, 150 + bandData.getRightBuffer(i+1)*50 );
+    float x2 = map( i + 1, 0, audioBufferSize, 0, stageWidth );
+    float leftLevelScale = ((stageHeight / stageDivider) / 4);
+    float rightLevelScale = ((stageHeight / stageDivider) / 4) * 3;
+    float waveformScale = ((stageHeight / stageDivider) / 4);
+    line( x1, leftLevelScale + bandData.getLeftBuffer(i) * waveformScale, x2, leftLevelScale + bandData.getLeftBuffer(i+1) * waveformScale );
+    line( x1, rightLevelScale + bandData.getRightBuffer(i) * waveformScale, x2, rightLevelScale + bandData.getRightBuffer(i+1) * waveformScale );
   }
 }
 
 void drawLevels() {
-  rect( 0, 0, bandData.getLeftLevel() * stageWidth, 100 );
-  rect( 0, 100, bandData.getRightLevel() * stageWidth, 100 );
+  rect( 0, 0, bandData.getLeftLevel() * stageWidth, (stageHeight / stageDivider) / 2);
+  rect( 0, (stageHeight / stageDivider) / 2, bandData.getRightLevel() * stageWidth, (stageHeight / stageDivider) / 2 );
 }
 
 void debug() {
@@ -86,7 +101,12 @@ void debug() {
   output += ", minBandwidthPerOctave: " + String.valueOf(minBandwidthPerOctave);
   output += ", bandsPerOctave: " + String.valueOf(bandsPerOctave);
   output += ", smoothing: " + String.valueOf(smoothing);
-  text(output, 10, 20);
+  text(output, 10, -20);
+}
+
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  eyeZ += e * 20;
 }
 
 public class Colors {
