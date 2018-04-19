@@ -71,19 +71,11 @@ public class AvizData {
   }
 
   public float getLeftLevel() {
-    return audio.left.level();
-  }
-
-  public float getRightLevel() {
-    return audio.right.level();
-  }
-
-  public float getLeftLevelSmooth() {
     leftLevelSmooth = (smoothing) * leftLevelSmooth + ((1 - smoothing) * audio.left.level());
     return leftLevelSmooth;
   }
 
-  public float getRightLevelSmooth() {
+  public float getRightLevel() {
     rightLevelSmooth = (smoothing) * rightLevelSmooth + ((1 - smoothing) * audio.right.level());
     return rightLevelSmooth;
   }

@@ -16,7 +16,7 @@ final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 10;
 final float smoothing = 0.80;
 
-final int stageDivider = 3;
+final int stageDivider = 4;
 final int stageHeightDivided = (stageHeight / stageDivider);
 
 float eyeZ = 0;
@@ -47,44 +47,21 @@ void draw() {
   background(colors.darkBlue);
   noFill();
   stroke(colors.white);
-
   debug();
 
   avizData.forwardSpectrumData();
 
   avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
   avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
-
+  avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
+  avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
 }
 
 void drawRotatingBoxExample() {
   translate(stageWidth / 2, stageHeight / 2);
   rotateY(radians(frameCount));
-  float boxLevel = ((avizData.getLeftLevelSmooth() + avizData.getRightLevelSmooth()) / 2) * stageWidth;
+  float boxLevel = ((avizData.getLeftLevel() + avizData.getRightLevel()) / 2) * stageWidth;
   box(boxLevel, boxLevel, boxLevel);
-}
-
-void drawBasicExample() {
-  drawLevels();
-  drawWaveForm();
-}
-
-void drawWaveForm() {
-  int audioBufferSize = avizData.getBufferSize();
-  for(int i = 0; i < audioBufferSize - 1; i++) {
-    float x1 = map( i, 0, audioBufferSize, 0, stageWidth );
-    float x2 = map( i + 1, 0, audioBufferSize, 0, stageWidth );
-    float leftLevelScale = ((stageHeight / stageDivider) / 4);
-    float rightLevelScale = ((stageHeight / stageDivider) / 4) * 3;
-    float waveformScale = ((stageHeight / stageDivider) / 4);
-    line( x1, leftLevelScale + avizData.getLeftBuffer(i) * waveformScale, x2, leftLevelScale + avizData.getLeftBuffer(i+1) * waveformScale );
-    line( x1, rightLevelScale + avizData.getRightBuffer(i) * waveformScale, x2, rightLevelScale + avizData.getRightBuffer(i+1) * waveformScale );
-  }
-}
-
-void drawLevels() {
-  rect( 0, 0, avizData.getLeftLevelSmooth() * stageWidth, (stageHeight / stageDivider) / 2);
-  rect( 0, (stageHeight / stageDivider) / 2, avizData.getRightLevelSmooth() * stageWidth, (stageHeight / stageDivider) / 2 );
 }
 
 void debug() {
