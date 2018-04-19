@@ -53,16 +53,21 @@ void draw() {
   avgSize = bandData.getAvgSize();
 
   // Basic Example
-  drawBasicExample();
+  drawRectangleSpectrum(0, // x
+                        (stageHeight / stageDivider), // y
+                        stageWidth, // width
+                        (stageHeight / stageDivider), // height
+                        data, // data
+                        bandData); // bandData);
 
   // Box Example
-  // drawBoxExample();
+  // drawRotatingBoxExample();
 }
 
-void drawBoxExample() {
-
+void drawRotatingBoxExample() {
   translate(stageWidth / 2, stageHeight / 2);
-  float boxLevel = ((bandData.getLeftLevel() + bandData.getRightLevel()) / 2) * 100;
+  rotateY(radians(frameCount));
+  float boxLevel = ((bandData.getLeftLevelSmooth() + bandData.getRightLevelSmooth()) / 2) * stageWidth;
   box(boxLevel, boxLevel, boxLevel);
 }
 
@@ -71,15 +76,18 @@ void drawBasicExample() {
   drawWaveForm();
   translate(0, (stageHeight / stageDivider));
   drawLineSpectrum();
-  translate(0, (stageHeight / stageDivider));
-  drawRectangleSpectrum();
+  // drawRectangleSpectrum();
 }
 
-void drawRectangleSpectrum() {
+void drawRectangleSpectrum(float x, float y, float w, float h, float[] data, BandData bandData) {
+  pushMatrix();
+  translate(x, y);
+  int avgSize = bandData.getAvgSize();
   for (int i = 0; i < avgSize; i++) {
     float displayAmplitude = bandData.getDisplayAmplitude(data[i]);
-    rect(i * (stageWidth / avgSize), (stageHeight / stageDivider), (stageWidth / avgSize), -(stageHeight / stageDivider) * displayAmplitude);
+    rect(i * (w / avgSize), h, (w / avgSize), -h * displayAmplitude);
   }
+  popMatrix();
 }
 
 void drawLineSpectrum() {
