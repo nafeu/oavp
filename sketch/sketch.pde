@@ -17,6 +17,7 @@ final int bandsPerOctave = 10;
 final float smoothing = 0.80;
 
 final int stageDivider = 3;
+final int stageHeightDivided = (stageHeight / stageDivider);
 
 float eyeZ = 0;
 
@@ -51,14 +52,9 @@ void draw() {
   debug();
 
   data = avizData.getForwardSpectrumData();
-  avgSize = avizData.getAvgSize();
 
-  avizBarSpectrum(0, // x
-                  0, // y
-                  stageWidth, // width
-                  (stageHeight / stageDivider), // height
-                  data, // data
-                  avizData); // avizData);
+  avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, data, avizData);
+  avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, data, avizData);
 
 }
 
@@ -73,16 +69,6 @@ void drawBasicExample() {
   drawLevels();
   drawWaveForm();
   translate(0, (stageHeight / stageDivider));
-  drawLineSpectrum();
-}
-
-void drawLineSpectrum() {
-  beginShape(LINES);
-  for (int i = 0; i < avgSize - 1; i++) {
-    vertex(i * (stageWidth / avgSize), -(stageHeight / stageDivider) * avizData.getDisplayAmplitude(data[i]) + (stageHeight / stageDivider));
-    vertex((i + 1) * (stageWidth / avgSize), -(stageHeight / stageDivider) * avizData.getDisplayAmplitude(data[i + 1]) + (stageHeight / stageDivider));
-  }
-  endShape();
 }
 
 void drawWaveForm() {
