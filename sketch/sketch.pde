@@ -14,7 +14,7 @@ final int stageHeight = 500;
 final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 10;
-final float smoothing = 0.80;
+final float smoothing = 0.95;
 
 final int stageDivider = 4;
 final int stageHeightDivided = (stageHeight / stageDivider);
@@ -49,7 +49,7 @@ void draw() {
   stroke(colors.white);
   debug();
 
-  avizData.forwardSpectrumData();
+  avizData.forward();
 
   avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
   avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
