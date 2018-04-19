@@ -33,7 +33,7 @@ public class AvizData {
     }
   }
 
-  public float[] getForwardSpectrumData() {
+  public void forwardSpectrumData() {
     fft.forward( audio.mix );
     for (int i = 0; i < avgSize; i++) {
       // Get spectrum value (using dB conversion or not, as desired)
@@ -56,7 +56,10 @@ public class AvizData {
         minVal = fftSmooth[i];
       }
     }
-    return fftSmooth;
+  }
+
+  public float getSpectrumData(int i) {
+    return fftSmooth[i];
   }
 
   public float getLeftBuffer(int i) {

@@ -21,7 +21,6 @@ final int stageHeightDivided = (stageHeight / stageDivider);
 
 float eyeZ = 0;
 
-int avgSize;
 float[] data;
 
 void setup() {
@@ -51,10 +50,10 @@ void draw() {
 
   debug();
 
-  data = avizData.getForwardSpectrumData();
+  avizData.forwardSpectrumData();
 
-  avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, data, avizData);
-  avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, data, avizData);
+  avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
+  avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
 
 }
 
@@ -68,7 +67,6 @@ void drawRotatingBoxExample() {
 void drawBasicExample() {
   drawLevels();
   drawWaveForm();
-  translate(0, (stageHeight / stageDivider));
 }
 
 void drawWaveForm() {
@@ -85,8 +83,6 @@ void drawWaveForm() {
 }
 
 void drawLevels() {
-  // rect( 0, 0, avizData.getLeftLevel() * stageWidth, (stageHeight / stageDivider) / 2);
-  // rect( 0, (stageHeight / stageDivider) / 2, avizData.getRightLevel() * stageWidth, (stageHeight / stageDivider) / 2 );
   rect( 0, 0, avizData.getLeftLevelSmooth() * stageWidth, (stageHeight / stageDivider) / 2);
   rect( 0, (stageHeight / stageDivider) / 2, avizData.getRightLevelSmooth() * stageWidth, (stageHeight / stageDivider) / 2 );
 }
