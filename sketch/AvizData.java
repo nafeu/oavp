@@ -1,7 +1,7 @@
 import ddf.minim.analysis.*;
 import ddf.minim.*;
 
-public class BandData {
+public class AvizData {
   private FFT fft;
   private AudioPlayer audio;
   private int avgSize;
@@ -14,7 +14,7 @@ public class BandData {
   private boolean firstMinDone = true;
   private boolean useDB = true;
 
-  BandData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave, float smoothingValue) {
+  AvizData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave, float smoothingValue) {
     audio = minim.loadFile(path, bufferSize);
     audio.loop();
     fft = new FFT(audio.bufferSize(), audio.sampleRate());
