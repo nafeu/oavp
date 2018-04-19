@@ -7,6 +7,8 @@ public class BandData {
   private int avgSize;
   private float smoothing;
   private float[] fftSmooth;
+  private float leftLevelSmooth = 0;
+  private float rightLevelSmooth = 0;
   private float minVal = 0.0f;
   private float maxVal = 0.0f;
   private boolean firstMinDone = true;
@@ -71,6 +73,16 @@ public class BandData {
 
   public float getRightLevel() {
     return audio.right.level();
+  }
+
+  public float getLeftLevelSmooth() {
+    leftLevelSmooth = (smoothing) * leftLevelSmooth + ((1 - smoothing) * audio.left.level());
+    return leftLevelSmooth;
+  }
+
+  public float getRightLevelSmooth() {
+    rightLevelSmooth = (smoothing) * rightLevelSmooth + ((1 - smoothing) * audio.right.level());
+    return rightLevelSmooth;
   }
 
   public int getBufferSize() {
