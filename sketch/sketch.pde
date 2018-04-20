@@ -58,13 +58,14 @@ void draw() {
 
   avizData.forward();
 
-  // avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
-  // avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
-  // avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
-  // avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
-  avizRotatingBox(stageWidth / 2, stageHeight / 2, 1600, avizData);
+  avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
+  avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
+  avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
+  avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
+  avizRotatingBox(stageWidth / 2, stageHeight / 2, 200, frameCount, avizData);
+  avizRotatingBox(stageWidth / 2, stageHeight / 2, 100, -frameCount * 0.25, avizData);
   avizLogo(stageWidth / 2, stageHeight / 2, 0.50f, 400, logo);
-  avizCircleSpectrum(stageWidth / 2, stageHeight / 2, avizData);
+  avizCircleSpectrum(stageWidth / 2, stageHeight / 2, 100, 150, 700, frameCount * 0.25, avizData);
 }
 
 void debug() {

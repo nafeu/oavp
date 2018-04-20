@@ -57,10 +57,11 @@ void avizBarLevels(float x, float y, float w, float h, AvizData avizData) {
   popMatrix();
 }
 
-void avizRotatingBox(float x, float y, float scale, AvizData avizData) {
+void avizRotatingBox(float x, float y, float scale, float rotation, AvizData avizData) {
   pushMatrix();
   translate(x, y);
-  rotateY(radians(frameCount));
+  rotateY(radians(rotation));
+  rotateX(radians(rotation));
   float rawLeftLevel = avizData.getLeftLevel();
   float rawRightLevel = avizData.getRightLevel();
   float boxLevel = ((avizData.scaleLeftLevel(rawLeftLevel) + avizData.scaleRightLevel(rawRightLevel)) / 2) * scale;
@@ -76,15 +77,14 @@ void avizLogo(float x, float y, float scaleFactor, int origSize, PShape shape) {
   popMatrix();
 }
 
-void avizCircleSpectrum(float x, float y, AvizData avizData) {
+void avizCircleSpectrum(float x, float y, float h, float rangeStart, float rangeEnd, float rotation, AvizData avizData) {
   pushMatrix();
   translate(x, y);
   beginShape();
   int avgSize = avizData.getAvgSize();
-  float h = 100;
   for (int i = 0; i < avgSize; i++) {
-    float angle = map(i, 0, avgSize, 0, 360) - 90;
-    float r = map(avizData.getSpectrumVal(i), 0, 256, 150, 700);
+    float angle = map(i, 0, avgSize, 0, 360) - rotation;
+    float r = map(avizData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
     float x1 = h * cos(radians(angle));
     float y1 = h * sin(radians(angle));
     float x2 = r * cos(radians(angle));
