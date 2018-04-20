@@ -14,7 +14,8 @@ final int stageHeight = 500;
 final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 10;
-final float smoothing = 0.95;
+final float smoothing = 0.80;
+final float bufferSmoothing = 0.50;
 
 final int stageDivider = 4;
 final int stageHeightDivided = (stageHeight / stageDivider);
@@ -34,8 +35,10 @@ void setup() {
                           "test-audio.mp3",
                           bufferSize,
                           minBandwidthPerOctave,
-                          bandsPerOctave,
-                          smoothing);
+                          bandsPerOctave);
+  avizData.setSpectrumSmoothing(smoothing);
+  avizData.setLevelSmoothing(smoothing);
+  avizData.setBufferSmoothing(bufferSmoothing);
 }
 
 void draw() {

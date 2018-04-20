@@ -1,3 +1,7 @@
+float currLeftBuffer;
+int testSize = 1024;
+float[] leftBuffer = new float[testSize];
+
 void avizBarSpectrum(float x, float y, float w, float h, AvizData avizData) {
   rect(x, y, w, h);
   pushMatrix();

@@ -7,11 +7,16 @@ public class AvizData {
 
   private int avgSize;
   private int bufferSize;
-  private float smoothing;
+  private float spectrumSmoothing = 0.0f;
+  private float bufferSmoothing = 0.0f;
+  private float levelSmoothing = 0.0f;
 
   private float[] spectrum;
   private float minSpectrumVal = 0.0f;
   private float maxSpectrumVal = 0.0f;
+
+  private float[] leftBuffer;
+  private float[] rightBuffer;
 
   private float leftLevel;
   private float minLeftLevel = 0.0f;
@@ -24,15 +29,16 @@ public class AvizData {
   private boolean firstMinDone = true;
   private boolean useDB = true;
 
-  AvizData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave, float smoothingValue) {
+  AvizData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
     audio = minim.loadFile(path, bufferSize);
     audio.loop();
     fft = new FFT(audio.bufferSize(), audio.sampleRate());
     fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
     avgSize = fft.avgSize();
     bufferSize = audio.bufferSize();
-    smoothing = smoothingValue;
     spectrum = new float[avgSize];
+    leftBuffer = new float[bufferSize];
+    rightBuffer = new float[bufferSize];
   }
 
   private float dB(float x) {
@@ -45,37 +51,12 @@ public class AvizData {
   }
 
   public void forward() {
-    fft.forward( audio.mix );
-
-    // Adjust smoothing on spectrum values
-    for (int i = 0; i < avgSize; i++) {
-      // Get spectrum value (using dB conversion or not, as desired)
-      float currSpectrumVal;
-      if (useDB) {
-        currSpectrumVal = dB(fft.getAvg(i));
-      }
-      else {
-        currSpectrumVal = fft.getAvg(i);
-      }
-
-      // Smooth using exponential moving average
-      spectrum[i] = (smoothing) * spectrum[i] + ((1 - smoothing) * currSpectrumVal);
-
-      // Find max and min values ever displayed across whole spectrum
-      if (spectrum[i] > maxSpectrumVal) {
-        maxSpectrumVal = spectrum[i];
-      }
-      if (!firstMinDone || (spectrum[i] < minSpectrumVal)) {
-        minSpectrumVal = spectrum[i];
-      }
-    }
-
     // Adjust smoothing on left level
     float currLeftLevel;
     currLeftLevel = audio.left.level();
 
     // Smooth using exponential moving average
-    leftLevel = (smoothing) * leftLevel + ((1 - smoothing) * currLeftLevel);
+    leftLevel = (levelSmoothing) * leftLevel + ((1 - levelSmoothing) * currLeftLevel);
 
     // Find max and min values ever displayed across whole spectrum
     if (currLeftLevel > maxLeftLevel) {
@@ -90,7 +71,7 @@ public class AvizData {
     currRightLevel = audio.right.level();
 
     // Smooth using exponential moving average
-    rightLevel = (smoothing) * rightLevel + ((1 - smoothing) * currRightLevel);
+    rightLevel = (levelSmoothing) * rightLevel + ((1 - levelSmoothing) * currRightLevel);
 
     // Find max and min values ever displayed across whole spectrum
     if (currRightLevel > maxRightLevel) {
@@ -99,6 +80,41 @@ public class AvizData {
     if (!firstMinDone || (currRightLevel < minRightLevel)) {
       minRightLevel = rightLevel;
     }
+
+    // Adjust smoothing on buffer
+    for (int i = 0; i < audio.bufferSize(); i++) {
+      float currLeftBuffer;
+      float currRightBuffer;
+      currLeftBuffer = audio.left.get(i);
+      currRightBuffer = audio.right.get(i);
+      leftBuffer[i] = (bufferSmoothing) * leftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
+      rightBuffer[i] = (bufferSmoothing) * rightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
+    }
+
+    fft.forward( audio.mix );
+
+    // Adjust smoothing on spectrum values
+    for (int i = 0; i < avgSize; i++) {
+      // Get spectrum value (using dB conversion or not, as desired)
+      float currSpectrumVal;
+      if (useDB) {
+        currSpectrumVal = dB(fft.getAvg(i));
+      }
+      else {
+        currSpectrumVal = fft.getAvg(i);
+      }
+
+      // Smooth using exponential moving average
+      spectrum[i] = (spectrumSmoothing) * spectrum[i] + ((1 - spectrumSmoothing) * currSpectrumVal);
+
+      // Find max and min values ever displayed across whole spectrum
+      if (spectrum[i] > maxSpectrumVal) {
+        maxSpectrumVal = spectrum[i];
+      }
+      if (!firstMinDone || (spectrum[i] < minSpectrumVal)) {
+        minSpectrumVal = spectrum[i];
+      }
+    }
   }
 
   public float getSpectrumVal(int i) {
@@ -106,11 +122,11 @@ public class AvizData {
   }
 
   public float getLeftBuffer(int i) {
-    return audio.left.get(i);
+    return leftBuffer[i];
   }
 
   public float getRightBuffer(int i) {
-    return audio.right.get(i);
+    return rightBuffer[i];
   }
 
   public float getLeftLevel() {
@@ -160,7 +176,15 @@ public class AvizData {
     firstMinDone = !firstMinDone;
   }
 
-  public void setSmoothing(float newSmoothing) {
-    smoothing = newSmoothing;
+  public void setSpectrumSmoothing(float newSmoothing) {
+    spectrumSmoothing = newSmoothing;
+  }
+
+  public void setLevelSmoothing(float newSmoothing) {
+    levelSmoothing = newSmoothing;
+  }
+
+  public void setBufferSmoothing(float newSmoothing) {
+    bufferSmoothing = newSmoothing;
   }
 }
