@@ -67,3 +67,11 @@ void avizRotatingBox(float x, float y, float scale, AvizData avizData) {
   box(boxLevel, boxLevel, boxLevel);
   popMatrix();
 }
+
+void avizLogo(float x, float y, float scaleFactor, int origSize, PShape shape) {
+  pushMatrix();
+  translate(x - ((origSize / 2) * scaleFactor), y - ((origSize / 2) * scaleFactor));
+  scale(scaleFactor);
+  shape(shape, 0, 0);
+  popMatrix();
+}

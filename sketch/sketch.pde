@@ -22,6 +22,8 @@ float eyeZ = 0;
 
 float[] data;
 
+PShape logo;
+
 void setup() {
   frameRate(FPS);
   // size(stageWidth, stageHeight);
@@ -37,6 +39,8 @@ void setup() {
   avizData.setSpectrumSmoothing(0.80f);
   avizData.setLevelSmoothing(0.95f);
   avizData.setBufferSmoothing(0.80f);
+
+  logo = loadShape("test-logo.svg");
 }
 
 void draw() {
@@ -45,19 +49,21 @@ void draw() {
   camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0) + eyeZ,
          centerX, centerY, 0,
          0, 1, 0);
+
   background(colors.yellow);
   noFill();
   stroke(colors.black);
   debug();
+  rect(0, 0, stageWidth, stageHeight);
 
   avizData.forward();
 
-  avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
-  avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
-  avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
-  avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
-  avizRotatingBox(stageWidth / 2, stageHeight / 2, 500, avizData);
-
+  // avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
+  // avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
+  // avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
+  // avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
+  // avizRotatingBox(stageWidth / 2, stageHeight / 2, 500, avizData);
+  avizLogo(stageWidth / 2, stageHeight / 2, 0.50f, 400, logo);
 }
 
 void debug() {
