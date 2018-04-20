@@ -13,7 +13,7 @@ final int stageHeight = 500;
 
 final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
-final int bandsPerOctave = 10;
+final int bandsPerOctave = 30;
 
 final int stageDivider = 4;
 final int stageHeightDivided = (stageHeight / stageDivider);
@@ -54,7 +54,7 @@ void draw() {
   noFill();
   stroke(colors.black);
   debug();
-  rect(0, 0, stageWidth, stageHeight);
+  // rect(0, 0, stageWidth, stageHeight);
 
   avizData.forward();
 
@@ -62,8 +62,9 @@ void draw() {
   // avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
   // avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
   // avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
-  // avizRotatingBox(stageWidth / 2, stageHeight / 2, 500, avizData);
+  avizRotatingBox(stageWidth / 2, stageHeight / 2, 1600, avizData);
   avizLogo(stageWidth / 2, stageHeight / 2, 0.50f, 400, logo);
+  avizCircleSpectrum(stageWidth / 2, stageHeight / 2, avizData);
 }
 
 void debug() {

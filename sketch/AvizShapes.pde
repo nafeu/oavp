@@ -75,3 +75,22 @@ void avizLogo(float x, float y, float scaleFactor, int origSize, PShape shape) {
   shape(shape, 0, 0);
   popMatrix();
 }
+
+void avizCircleSpectrum(float x, float y, AvizData avizData) {
+  pushMatrix();
+  translate(x, y);
+  beginShape();
+  int avgSize = avizData.getAvgSize();
+  float h = 100;
+  for (int i = 0; i < avgSize; i++) {
+    float angle = map(i, 0, avgSize, 0, 360) - 90;
+    float r = map(avizData.getSpectrumVal(i), 0, 256, 150, 700);
+    float x1 = h * cos(radians(angle));
+    float y1 = h * sin(radians(angle));
+    float x2 = r * cos(radians(angle));
+    float y2 = r * sin(radians(angle));
+    line(x1, y1, x2, y2);
+  }
+  endShape();
+  popMatrix();
+}
