@@ -94,3 +94,17 @@ void avizCircleSpectrum(float x, float y, float h, float rangeStart, float range
   endShape();
   popMatrix();
 }
+
+/*
+
+Ideas:
+
+- Circular Waveform
+- Circular Explosions
+  - circle grows from center until going off screen
+- Waveform explosions
+  - waveform circle of the waveform expands until off screen
+- Random
+
+
+*/

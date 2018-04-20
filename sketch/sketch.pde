@@ -8,15 +8,12 @@ Colors colors;
 // Configs
 final int FPS = 60;
 
-final int stageWidth = 500;
-final int stageHeight = 500;
-
 final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 30;
 
 final int stageDivider = 4;
-final int stageHeightDivided = (stageHeight / stageDivider);
+int partitionedHeight;
 
 float eyeZ = 0;
 
@@ -26,8 +23,9 @@ PShape logo;
 
 void setup() {
   frameRate(FPS);
-  // size(stageWidth, stageHeight);
-  size(500, 500, P3D); // Account for variable bug in processing-sublime;
+  // size(width, stageHeight);
+  size(1000, 1000, P3D); // Account for variable bug in processing-sublime;
+  partitionedHeight = (height / stageDivider);
 
   colors = new Colors();
   minim = new Minim(this);
@@ -44,8 +42,8 @@ void setup() {
 }
 
 void draw() {
-  float centerX = width/2.0 + map(mouseX, 0, stageWidth, -(stageWidth / 2), (stageWidth / 2));
-  float centerY = height/2.0 + map(mouseY, 0, stageHeight, -(stageHeight / 2), (stageHeight / 2));
+  float centerX = width/2.0 + map(mouseX, 0, width, -(width / 2), (width / 2));
+  float centerY = height/2.0 + map(mouseY, 0, height, -(height / 2), (height / 2));
   camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0) + eyeZ,
          centerX, centerY, 0,
          0, 1, 0);
@@ -54,18 +52,18 @@ void draw() {
   noFill();
   stroke(colors.black);
   debug();
-  // rect(0, 0, stageWidth, stageHeight);
+  // rect(0, 0, width, stageHeight);
 
   avizData.forward();
 
-  avizBarSpectrum(0, 0, stageWidth, stageHeightDivided, avizData);
-  avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
-  avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
-  avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
-  avizRotatingBox(stageWidth / 2, stageHeight / 2, 200, frameCount, avizData);
-  avizRotatingBox(stageWidth / 2, stageHeight / 2, 100, -frameCount * 0.25, avizData);
-  avizLogo(stageWidth / 2, stageHeight / 2, 0.50f, 400, logo);
-  avizCircleSpectrum(stageWidth / 2, stageHeight / 2, 100, 150, 700, frameCount * 0.25, avizData);
+  avizBarSpectrum(0, 0, width, partitionedHeight, avizData);
+  avizLineSpectrum(0, partitionedHeight, width, partitionedHeight, avizData);
+  avizLineWaveform(0, partitionedHeight * 2, width, partitionedHeight, avizData);
+  avizBarLevels(0, partitionedHeight * 3, width, partitionedHeight, avizData);
+  avizRotatingBox(width / 2, height / 2, 200, frameCount, avizData);
+  avizRotatingBox(width / 2, height / 2, 100, -frameCount * 0.25, avizData);
+  avizLogo(width / 2, height / 2, 0.50f, 400, logo);
+  avizCircleSpectrum(width / 2, height / 2, 100, 150, 700, frameCount * 0.25, avizData);
 }
 
 void debug() {
