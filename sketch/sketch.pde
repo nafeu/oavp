@@ -14,8 +14,6 @@ final int stageHeight = 500;
 final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 10;
-final float smoothing = 0.80;
-final float bufferSmoothing = 0.50;
 
 final int stageDivider = 4;
 final int stageHeightDivided = (stageHeight / stageDivider);
@@ -36,9 +34,9 @@ void setup() {
                           bufferSize,
                           minBandwidthPerOctave,
                           bandsPerOctave);
-  avizData.setSpectrumSmoothing(smoothing);
-  avizData.setLevelSmoothing(smoothing);
-  avizData.setBufferSmoothing(bufferSmoothing);
+  avizData.setSpectrumSmoothing(0.80f);
+  avizData.setLevelSmoothing(0.95f);
+  avizData.setBufferSmoothing(0.80f);
 }
 
 void draw() {
@@ -47,9 +45,9 @@ void draw() {
   camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0) + eyeZ,
          centerX, centerY, 0,
          0, 1, 0);
-  background(colors.darkBlue);
+  background(colors.yellow);
   noFill();
-  stroke(colors.white);
+  stroke(colors.black);
   debug();
 
   avizData.forward();
@@ -58,20 +56,14 @@ void draw() {
   avizLineSpectrum(0, stageHeightDivided, stageWidth, stageHeightDivided, avizData);
   avizLineWaveform(0, stageHeightDivided * 2, stageWidth, stageHeightDivided, avizData);
   avizBarLevels(0, stageHeightDivided * 3, stageWidth, stageHeightDivided, avizData);
-}
+  avizRotatingBox(stageWidth / 2, stageHeight / 2, 500, avizData);
 
-void drawRotatingBoxExample() {
-  translate(stageWidth / 2, stageHeight / 2);
-  rotateY(radians(frameCount));
-  float boxLevel = ((avizData.getLeftLevel() + avizData.getRightLevel()) / 2) * stageWidth;
-  box(boxLevel, boxLevel, boxLevel);
 }
 
 void debug() {
   String output = "bufferSize: " + String.valueOf(bufferSize);
   output += ", minBandwidthPerOctave: " + String.valueOf(minBandwidthPerOctave);
   output += ", bandsPerOctave: " + String.valueOf(bandsPerOctave);
-  output += ", smoothing: " + String.valueOf(smoothing);
   text(output, 10, -20);
 }
 

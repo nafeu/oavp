@@ -1,7 +1,3 @@
-float currLeftBuffer;
-int testSize = 1024;
-float[] leftBuffer = new float[testSize];
-
 void avizBarSpectrum(float x, float y, float w, float h, AvizData avizData) {
   rect(x, y, w, h);
   pushMatrix();
@@ -58,5 +54,16 @@ void avizBarLevels(float x, float y, float w, float h, AvizData avizData) {
   rect(0, 0, avizData.scaleLeftLevel(rawLeftLevel) * w, h / 2);
   rect(0, h / 2, avizData.scaleRightLevel(rawRightLevel) * w, h / 2);
   endShape();
+  popMatrix();
+}
+
+void avizRotatingBox(float x, float y, float scale, AvizData avizData) {
+  pushMatrix();
+  translate(x, y);
+  rotateY(radians(frameCount));
+  float rawLeftLevel = avizData.getLeftLevel();
+  float rawRightLevel = avizData.getRightLevel();
+  float boxLevel = ((avizData.scaleLeftLevel(rawLeftLevel) + avizData.scaleRightLevel(rawRightLevel)) / 2) * scale;
+  box(boxLevel, boxLevel, boxLevel);
   popMatrix();
 }
