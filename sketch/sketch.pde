@@ -30,13 +30,13 @@ void setup() {
   colors = new Colors();
   minim = new Minim(this);
   avizData = new AvizData(minim,
-                          "test-audio.mp3",
+                          "sample.mp3",
                           bufferSize,
                           minBandwidthPerOctave,
                           bandsPerOctave);
   avizData.setSpectrumSmoothing(0.80f);
   avizData.setLevelSmoothing(0.95f);
-  avizData.setBufferSmoothing(0.80f);
+  avizData.setBufferSmoothing(0.85f);
 
   logo = loadShape("test-logo.svg");
 }
@@ -48,22 +48,31 @@ void draw() {
          centerX, centerY, 0,
          0, 1, 0);
 
-  background(colors.yellow);
+  background(colors.teal);
   noFill();
   stroke(colors.black);
+  strokeWeight(2);
   debug();
   // rect(0, 0, width, stageHeight);
 
   avizData.forward();
 
-  avizBarSpectrum(0, 0, width, partitionedHeight, avizData);
-  avizLineSpectrum(0, partitionedHeight, width, partitionedHeight, avizData);
-  avizLineWaveform(0, partitionedHeight * 2, width, partitionedHeight, avizData);
-  avizBarLevels(0, partitionedHeight * 3, width, partitionedHeight, avizData);
-  avizRotatingBox(width / 2, height / 2, 200, frameCount, avizData);
-  avizRotatingBox(width / 2, height / 2, 100, -frameCount * 0.25, avizData);
+  exampleSketch();
+}
+
+void exampleSketch() {
   avizLogo(width / 2, height / 2, 0.50f, 400, logo);
-  avizCircleSpectrum(width / 2, height / 2, 100, 150, 700, frameCount * 0.25, avizData);
+  // avizCircleLineWaveform(width / 2, height / 2, 100, 500, 0, avizData);
+  avizCircleLineWaveform(width / 2, height / 2, 100, 50, 200, frameCount * 0.25, avizData);
+  // avizCircleBarSpectrum(width / 2, height / 2, 150, 250, 1000, -frameCount * 0.25, avizData);
+
+  // avizBarSpectrum(0, 0, width, partitionedHeight, avizData);
+  // avizLineSpectrum(0, partitionedHeight, width, partitionedHeight, avizData);
+  // avizLineWaveform(0, partitionedHeight * 2, width, partitionedHeight, avizData);
+  // avizBarLevels(0, partitionedHeight * 3, width, partitionedHeight, avizData);
+  // avizRotatingBox(width / 2, height / 2, 200, frameCount, avizData);
+  // avizRotatingBox(width / 2, height / 2, 100, -frameCount * 0.25, avizData);
+  // avizCircleBarSpectrum(width / 2, height / 2, 100, 150, 700, frameCount * 0.25, avizData);
 }
 
 void debug() {

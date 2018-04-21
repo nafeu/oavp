@@ -77,7 +77,7 @@ void avizLogo(float x, float y, float scaleFactor, int origSize, PShape shape) {
   popMatrix();
 }
 
-void avizCircleSpectrum(float x, float y, float h, float rangeStart, float rangeEnd, float rotation, AvizData avizData) {
+void avizCircleBarSpectrum(float x, float y, float h, float rangeStart, float rangeEnd, float rotation, AvizData avizData) {
   pushMatrix();
   translate(x, y);
   beginShape();
@@ -90,6 +90,50 @@ void avizCircleSpectrum(float x, float y, float h, float rangeStart, float range
     float x2 = r * cos(radians(angle));
     float y2 = r * sin(radians(angle));
     line(x1, y1, x2, y2);
+  }
+  endShape();
+  popMatrix();
+}
+
+void avizCircleLineSpectrum(float x, float y, float rangeStart, float rangeEnd, float rotation, AvizData avizData) {
+  pushMatrix();
+  translate(x, y);
+  beginShape(LINES);
+  int avgSize = avizData.getAvgSize();
+  for (int i = 0; i < avgSize - 1; i++) {
+    float angleA = map(i, 0, avgSize, 0, 360) - rotation;
+    float rA = map(avizData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
+    float xA = rA * cos(radians(angleA));
+    float yA = rA * sin(radians(angleA));
+    float angleB = map(i + 1, 0, avgSize, 0, 360) - rotation;
+    float rB = map(avizData.getSpectrumVal(i + 1), 0, 256, rangeStart, rangeEnd);
+    float xB = rB * cos(radians(angleB));
+    float yB = rB * sin(radians(angleB));
+    vertex(xA, yA);
+    vertex(xB, yB);
+  }
+  endShape();
+  popMatrix();
+}
+
+// TODO: Add right buffer support
+void avizCircleLineWaveform(float x, float y, float h, float rangeStart, float rangeEnd, float rotation, AvizData avizData) {
+  pushMatrix();
+  translate(x, y);
+  beginShape(LINES);
+  int audioBufferSize = avizData.getBufferSize();
+  for (int i = 0; i < audioBufferSize - 1; i++) {
+    float angleA = map(i, 0, audioBufferSize, 0, 360) - rotation;
+    float rA = h + map(avizData.getLeftBuffer(i), -1, 1, rangeStart, rangeEnd);
+    float xA = rA * cos(radians(angleA));
+    float yA = rA * sin(radians(angleA));
+
+    float angleB = map(i + 1, 0, audioBufferSize, 0, 360) - rotation;
+    float rB = h + map(avizData.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
+    float xB = rB * cos(radians(angleB));
+    float yB = rB * sin(radians(angleB));
+    vertex(xA, yA);
+    vertex(xB, yB);
   }
   endShape();
   popMatrix();
