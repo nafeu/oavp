@@ -23,7 +23,13 @@ float deltaD = 16;
 float paramE = 0;
 float deltaE = 16;
 
-float eyeZ = 0;
+float targetCameraX = 0;
+float targetCameraY = 0;
+float targetCameraZ = 0;
+float currCameraX = 0;
+float currCameraY = 0;
+float currCameraZ = 0;
+float easing = 0.10;
 
 PShape logo;
 
@@ -54,12 +60,29 @@ void draw() {
   noFill();
   strokeWeight(2);
 
-  float centerX = width/2.0 + map(mouseX, 0, width, -(width / 2), (width / 2));
-  float centerY = height/2.0 + map(mouseY, 0, height, -(height / 2), (height / 2));
-  camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0) + eyeZ,
-         centerX, centerY, 0,
-         0, 1, 0);
+  float centerX;
+  float centerY;
 
+  if (mousePressed && (mouseButton == LEFT)) {
+    centerX = width/2.0 + map(mouseX, 0, width, -(width / 2), (width / 2));
+    centerY = height/2.0 + map(mouseY, 0, height, -(height / 2), (height / 2));
+  } else {
+    centerX = width/2.0;
+    centerY = height/2.0;
+  }
+
+  float dx = targetCameraX - currCameraX;
+  currCameraX += dx * easing;
+
+  float dy = targetCameraY - currCameraY;
+  currCameraY += dy * easing;
+
+  float dz = targetCameraZ - currCameraZ;
+  currCameraZ += dz * easing;
+
+  camera(width/2.0 + currCameraX, height/2.0 + currCameraY, (height/2.0) / tan(PI*30.0 / 180.0) + currCameraZ,
+         centerX + currCameraX, centerY + currCameraY, 0,
+         0, 1, 0);
 
   avizData.forward();
 
@@ -67,16 +90,17 @@ void draw() {
 }
 
 void exampleSketch() {
-  avizLogo(width / 2, height / 2, 0.50f * paramA, 400, logo);
-  avizCircleBarSpectrum(width / 2, height / 2, paramB, paramC, paramD, -frameCount * 0.25, avizData);
-  // avizCircleLineWaveform(width / 2, height / 2, 100, 50, 200, frameCount * 0.25, avizData);
-  // avizBarSpectrum(0, 0, width, height, avizData);
-  // avizLineSpectrum(0, height, width, height, avizData);
-  // avizLineWaveform(0, height, width, height, avizData);
+  avizLogo(width / 2, height / 2, 0.50f, 400, logo);
+  avizCircleLineWaveform(width / 2, height / 2, 0, 50, 200, frameCount * 0.25, avizData);
+  avizCircleBarSpectrum(width / 2, height / 2, 160, 232, 1024, frameCount * 0.25, avizData);
+  avizBarSpectrum(0, height - (height / 4), width, height / 4, avizData);
+  avizLineSpectrum(0, height / 4, width, -(height / 4), avizData);
+  // avizLineWaveform(0, 0, width, height, avizData);
   // avizBarLevels(0, height, width, height, avizData);
-  // avizRotatingBox(width / 2, height / 2, 200, frameCount, avizData);
-  // avizRotatingBox(width / 2, height / 2, 100, -frameCount * 0.25, avizData);
-  // avizCircleBarSpectrum(width / 2, height / 2, 100, 150, 700, frameCount * 0.25, avizData);
+  avizRotatingBox(0 + 144, height / 2, 200, frameCount, avizData);
+  avizRotatingBox(0 + 144, height / 2, 100, -frameCount * 0.25, avizData);
+  avizRotatingBox(width - 144, height / 2, 200, frameCount, avizData);
+  avizRotatingBox(width - 144, height / 2, 100, -frameCount * 0.25, avizData);
 }
 
 void debug() {
@@ -97,7 +121,13 @@ void debug() {
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  eyeZ += e * 20;
+  if (e > 0) {
+    targetCameraZ += width / 2;
+    println("[MWHEEL_UP] targetCameraZ : " + targetCameraZ);
+  } else {
+    targetCameraZ -= width / 2;
+    println("[MWHEEL_UP] targetCameraZ : " + targetCameraZ);
+  }
 }
 
 public class Colors {
@@ -129,6 +159,24 @@ public class Colors {
 void keyPressed() {
   if (key == CODED) {
     switch (keyCode) {
+      case SHIFT:
+        break;
+      case RIGHT:
+        targetCameraX += width;
+        println("[RIGHT] targetCameraX : " + targetCameraX);
+        break;
+      case LEFT:
+        targetCameraX -= width;
+        println("[LEFT] targetCameraX : " + targetCameraX);
+        break;
+      case DOWN:
+        targetCameraY += height;
+        println("[DOWN] targetCameraY : " + targetCameraY);
+        break;
+      case UP:
+        targetCameraY -= height;
+        println("[UP] targetCameraY : " + targetCameraY);
+        break;
       default:
         println("Unhandled code.");
         break;
@@ -175,45 +223,45 @@ void keyPressed() {
         paramD -= deltaD;
         println("[g] paramD : " + paramD);
         break;
-      case 'y':
+      case 'Q':
         deltaA *= 2;
-        println("[y] deltaA : " + deltaA);
+        println("[Q] deltaA : " + deltaA);
         break;
-      case 'h':
+      case 'A':
         deltaA /= 2;
-        println("[h] deltaA : " + deltaA);
+        println("[A] deltaA : " + deltaA);
         break;
-      case 'u':
+      case 'W':
         deltaB *= 2;
-        println("[u] deltaB : " + deltaB);
+        println("[W] deltaB : " + deltaB);
         break;
-      case 'j':
+      case 'S':
         deltaB /= 2;
-        println("[j] deltaB : " + deltaB);
+        println("[S] deltaB : " + deltaB);
         break;
-      case 'i':
+      case 'E':
         deltaC *= 2;
-        println("[i] deltaC : " + deltaC);
+        println("[E] deltaC : " + deltaC);
         break;
-      case 'k':
+      case 'D':
         deltaC /= 2;
-        println("[k] deltaC : " + deltaC);
+        println("[D] deltaC : " + deltaC);
         break;
-      case 'o':
+      case 'R':
         deltaD *= 2;
-        println("[o] deltaD : " + deltaD);
+        println("[R] deltaD : " + deltaD);
         break;
-      case 'l':
+      case 'F':
         deltaD /= 2;
-        println("[l] deltaD : " + deltaD);
+        println("[F] deltaD : " + deltaD);
         break;
-      case 'p':
+      case 'T':
         deltaE *= 2;
-        println("[p] deltaE : " + deltaE);
+        println("[T] deltaE : " + deltaE);
         break;
-      case ';':
+      case 'G':
         deltaE /= 2;
-        println("[;] deltaE : " + deltaE);
+        println("[G] deltaE : " + deltaE);
         break;
       case 'z':
         debug();

@@ -1,5 +1,4 @@
 void avizBarSpectrum(float x, float y, float w, float h, AvizData avizData) {
-  rect(x, y, w, h);
   pushMatrix();
   translate(x, y);
   int avgSize = avizData.getAvgSize();
@@ -12,7 +11,6 @@ void avizBarSpectrum(float x, float y, float w, float h, AvizData avizData) {
 }
 
 void avizLineSpectrum(float x, float y, float w, float h, AvizData avizData) {
-  rect(x, y, w, h);
   pushMatrix();
   translate(x, y);
   beginShape(LINES);
@@ -28,7 +26,6 @@ void avizLineSpectrum(float x, float y, float w, float h, AvizData avizData) {
 }
 
 void avizLineWaveform(float x, float y, float w, float h, AvizData avizData) {
-  rect(x, y, w, h);
   pushMatrix();
   translate(x, y);
   int audioBufferSize = avizData.getBufferSize();
@@ -46,7 +43,6 @@ void avizLineWaveform(float x, float y, float w, float h, AvizData avizData) {
 }
 
 void avizBarLevels(float x, float y, float w, float h, AvizData avizData) {
-  rect(x, y, w, h);
   pushMatrix();
   translate(x, y);
   float rawLeftLevel = avizData.getLeftLevel();
