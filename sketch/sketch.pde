@@ -3,6 +3,9 @@ import ddf.minim.*;
 
 Minim minim;
 AvizData avizData;
+AvizPosition cameraPosition;
+AvizPosition entities;
+AvizShapes visualizers;
 FlatUIColors flatUIColors;
 
 final int FPS = 60;
@@ -21,9 +24,6 @@ float paramD = 0;
 float deltaD = 16;
 float paramE = 0;
 float deltaE = 16;
-
-StagePosition cameraPosition;
-StagePosition entities;
 
 // Camera Values
 float targetCameraX = 0;
@@ -46,11 +46,12 @@ float colorEasing = 0.025;
 PShape logo;
 PFont mono;
 
+
 void setup() {
   frameRate(FPS);
   size(1000, 1000, P3D);
 
-  cameraPosition = new StagePosition(0, 0, width);
+  cameraPosition = new AvizPosition(0, 0, width);
 
   flatUIColors = new FlatUIColors();
   minim = new Minim(this);
@@ -63,6 +64,8 @@ void setup() {
   avizData.setLevelSmoothing(0.95f);
   avizData.setBufferSmoothing(0.85f);
 
+  visualizers = new AvizShapes(avizData);
+
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
   textFont(mono, 32);
@@ -71,7 +74,7 @@ void setup() {
 
   debug();
 
-  entities = new StagePosition(0, 0, width);
+  entities = new AvizPosition(0, 0, width);
 }
 
 void draw() {
@@ -88,49 +91,49 @@ void draw() {
 }
 
 void mainSketch() {
-  title("Custom SVG Logo", entities.getScaledX(), entities.getScaledY());
-  avizLogo(entities.getCenteredX(), entities.getCenteredY(), 2, 400, logo);
+  title("Custom SVG", entities.getScaledX(), entities.getScaledY());
+  visualizers.svg(entities.getCenteredX(), entities.getCenteredY(), 2, 400, logo);
 
   entities.moveRight();
 
-  title("Rectangular Bar Spectrum", entities.getScaledX(), entities.getScaledY());
-  avizBarSpectrum(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  title("Bar Spectrum", entities.getScaledX(), entities.getScaledY());
+  visualizers.spectrum.bars(entities.getScaledX(), entities.getScaledY(), width, height);
 
   entities.moveRight();
 
-  title("Rectangular Line Spectrum", entities.getScaledX(), entities.getScaledY());
-  avizLineSpectrum(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  title("Wire Spectrum", entities.getScaledX(), entities.getScaledY());
+  visualizers.spectrum.wire(entities.getScaledX(), entities.getScaledY(), width, height);
 
   entities.moveRight();
 
-  title("Rectangular Bar Levels", entities.getScaledX(), entities.getScaledY());
-  avizBarLevels(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  title("Radial Bar Spectrum", entities.getScaledX(), entities.getScaledY());
+  visualizers.spectrum.radialBars(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25);
 
   entities.moveRight();
 
-  title("Rectangular Line Waveform", entities.getScaledX(), entities.getScaledY());
-  avizLineWaveform(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  title("Radial Wire Spectrum", entities.getScaledX(), entities.getScaledY());
+  visualizers.spectrum.radialWire(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 1.50, frameCount * 0.25);
 
   entities.moveToNextLine();
 
-  title("3D Rotating Box", entities.getScaledX(), entities.getScaledY());
-  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.75, frameCount, avizData);
-  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, -frameCount * 0.25, avizData);
+  title("Wire Waveform", entities.getScaledX(), entities.getScaledY());
+  visualizers.waveform.wire(entities.getScaledX(), entities.getScaledY(), width, height);
 
   entities.moveRight();
 
-  title("Circular Bar Spectrum", entities.getScaledX(), entities.getScaledY());
-  avizCircleBarSpectrum(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25, avizData);
+  title("Radial Wire Waveform", entities.getScaledX(), entities.getScaledY());
+  visualizers.waveform.radialWire(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.25, 0, frameCount * 0.25);
 
   entities.moveRight();
 
-  title("Circular Line Spectrum", entities.getScaledX(), entities.getScaledY());
-  avizCircleLineSpectrum(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 1.50, frameCount * 0.25, avizData);
+  title("Bar Levels", entities.getScaledX(), entities.getScaledY());
+  visualizers.levels.bars(entities.getScaledX(), entities.getScaledY(), width, height);
 
   entities.moveRight();
 
-  title("Circular Line Waveform", entities.getScaledX(), entities.getScaledY());
-  avizCircleLineWaveform(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.25, 0, frameCount * 0.25, avizData);
+  title("Cube Levels", entities.getScaledX(), entities.getScaledY());
+  visualizers.levels.cube(entities.getCenteredX(), entities.getCenteredY(), width * 0.75, frameCount);
+  visualizers.levels.cube(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, -frameCount * 0.25);
 
   entities.reset();
 }
