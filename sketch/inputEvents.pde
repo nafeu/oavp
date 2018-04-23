@@ -8,6 +8,12 @@ void keyPressed() {
           targetCameraX = cameraPosition.getScaledX();
           updateBackgroundColor();
           println("[RIGHT] targetCameraX : " + targetCameraX);
+        } else if (cameraPosition.moveToNextLine(entities.getUpperBoundY())) {
+          targetCameraX = cameraPosition.getScaledX();
+          targetCameraY = cameraPosition.getScaledY();
+          updateBackgroundColor();
+          println("[RIGHT] targetCameraX : " + targetCameraX);
+          println("[RIGHT] targetCameraY : " + targetCameraY);
         }
         break;
       case LEFT:
@@ -15,6 +21,11 @@ void keyPressed() {
           targetCameraX = cameraPosition.getScaledX();
           updateBackgroundColor();
           println("[LEFT] targetCameraX : " + targetCameraX);
+        } else if (cameraPosition.moveToPrevLine(entities.getLowerBoundY())) {
+          targetCameraX = cameraPosition.getScaledX();
+          targetCameraY = cameraPosition.getScaledY();
+          println("[LEFT] targetCameraX : " + targetCameraX);
+          println("[LEFT] targetCameraY : " + targetCameraY);
         }
         break;
       case DOWN:

@@ -61,6 +61,20 @@ public class StagePosition {
       yRange[0] = y;
     }
   }
+  void moveToNextLine() {
+    x = xRange[0];
+    y += 1;
+    if (y > yRange[1]) {
+      yRange[1] = y;
+    }
+  }
+  void moveToPrevLine() {
+    x = xRange[1];
+    y -= 1;
+    if (y < yRange[0]) {
+      yRange[0] = y;
+    }
+  }
   boolean moveLeft(int boundary) {
     if (x > boundary) {
       x -= 1;
@@ -95,6 +109,28 @@ public class StagePosition {
     if (y < boundary) {
       y += 1;
       if (y > yRange[1]) {
+        yRange[0] = y;
+      }
+      return true;
+    }
+    return false;
+  }
+  boolean moveToNextLine(int boundary) {
+    if (y < boundary) {
+      x = xRange[0];
+      y += 1;
+      if (y > yRange[1]) {
+        yRange[1] = y;
+      }
+      return true;
+    }
+    return false;
+  }
+  boolean moveToPrevLine(int boundary) {
+    if (y > boundary) {
+      x = xRange[1];
+      y -= 1;
+      if (y < yRange[0]) {
         yRange[0] = y;
       }
       return true;

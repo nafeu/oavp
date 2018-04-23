@@ -91,9 +91,9 @@ void mainSketch() {
   avizBarLevels(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
   entities.moveRight();
   avizLineWaveform(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
-  entities.moveRight();
-  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width, frameCount, avizData);
-  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.5, -frameCount * 0.25, avizData);
+  entities.moveToNextLine();
+  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.75, frameCount, avizData);
+  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, -frameCount * 0.25, avizData);
   entities.moveRight();
   avizCircleBarSpectrum(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25, avizData);
   entities.moveRight();
