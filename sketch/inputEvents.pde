@@ -6,24 +6,28 @@ void keyPressed() {
       case RIGHT:
         stagePositionX += 1;
         targetCameraX = stagePositionX * width;
+        updateBackgroundColor();
         println("[RIGHT] stagePositionX : " + stagePositionX);
         println("[RIGHT] targetCameraX : " + targetCameraX);
         break;
       case LEFT:
         stagePositionX -= 1;
         targetCameraX = stagePositionX * width;
+        updateBackgroundColor();
         println("[LEFT] stagePositionX : " + stagePositionX);
         println("[LEFT] targetCameraX : " + targetCameraX);
         break;
       case DOWN:
         stagePositionY += 1;
         targetCameraY = stagePositionY * height;
+        updateBackgroundColor();
         println("[DOWN] stagePositionY : " + stagePositionY);
         println("[DOWN] targetCameraY : " + targetCameraY);
         break;
       case UP:
         stagePositionY -= 1;
         targetCameraY = stagePositionY * height;
+        updateBackgroundColor();
         println("[UP] stagePositionY : " + stagePositionY);
         println("[UP] targetCameraY : " + targetCameraY);
         break;

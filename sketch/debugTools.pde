@@ -1,4 +1,5 @@
 void debug() {
+  println("colorSeed: " + String.valueOf(colorSeed));
   println("bufferSize: " + String.valueOf(bufferSize));
   println("minBandwidthPerOctave: " + String.valueOf(minBandwidthPerOctave));
   println("bandsPerOctave: " + String.valueOf(bandsPerOctave));

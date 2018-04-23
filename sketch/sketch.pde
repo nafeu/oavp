@@ -3,7 +3,7 @@ import ddf.minim.*;
 
 Minim minim;
 AvizData avizData;
-Colors colors;
+FlatUIColors flatUIColors;
 
 final int FPS = 60;
 
@@ -30,7 +30,15 @@ float targetCameraZ = 0;
 float currCameraX = 0;
 float currCameraY = 0;
 float currCameraZ = 0;
-float easing = 0.10;
+float cameraEasing = 0.10;
+
+// int colorSeed = Math.round(random(0, 100));
+int colorSeed = 25;
+int currColor = 0;
+int targetColor;
+float currInterp = 0.0;
+float targetInterp = 1.0;
+float colorEasing = 0.05;
 
 PShape logo;
 
@@ -38,10 +46,10 @@ void setup() {
   frameRate(FPS);
   size(1000, 1000, P3D);
 
-  colors = new Colors();
+  flatUIColors = new FlatUIColors();
   minim = new Minim(this);
   avizData = new AvizData(minim,
-                          "test-audio.mp3",
+                          "sample.mp3",
                           bufferSize,
                           minBandwidthPerOctave,
                           bandsPerOctave);
@@ -51,42 +59,20 @@ void setup() {
 
   logo = loadShape("test-logo.svg");
 
+  targetColor = getBackgroundColor(stagePositionX, stagePositionY, colorSeed);
+
   debug();
 }
 
 void draw() {
   noCursor();
-  background(colors.teal);
-  stroke(colors.black);
+  updateBackgroundColorInterp();
+  background(lerpColor(currColor, targetColor, currInterp));
+  stroke(flatUIColors.black);
   noFill();
   strokeWeight(2);
-
-  float centerX;
-  float centerY;
-
-  if (mousePressed && (mouseButton == LEFT)) {
-    centerX = width/2.0 + map(mouseX, 0, width, -(width / 2), (width / 2));
-    centerY = height/2.0 + map(mouseY, 0, height, -(height / 2), (height / 2));
-  } else {
-    centerX = width/2.0;
-    centerY = height/2.0;
-  }
-
-  float dx = targetCameraX - currCameraX;
-  currCameraX += dx * easing;
-
-  float dy = targetCameraY - currCameraY;
-  currCameraY += dy * easing;
-
-  float dz = targetCameraZ - currCameraZ;
-  currCameraZ += dz * easing;
-
-  camera(width/2.0 + currCameraX, height/2.0 + currCameraY, (height/2.0) / tan(PI*30.0 / 180.0) + currCameraZ,
-         centerX + currCameraX, centerY + currCameraY, 0,
-         0, 1, 0);
-
+  updateCamera();
   avizData.forward();
-
   exampleSketch();
 }
 
