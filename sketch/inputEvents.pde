@@ -4,32 +4,32 @@ void keyPressed() {
       case SHIFT:
         break;
       case RIGHT:
-        stagePositionX += 1;
-        targetCameraX = stagePositionX * width;
-        updateBackgroundColor();
-        println("[RIGHT] stagePositionX : " + stagePositionX);
-        println("[RIGHT] targetCameraX : " + targetCameraX);
+        if (cameraPosition.moveRight(entities.getUpperBoundX())) {
+          targetCameraX = cameraPosition.getScaledX();
+          updateBackgroundColor();
+          println("[RIGHT] targetCameraX : " + targetCameraX);
+        }
         break;
       case LEFT:
-        stagePositionX -= 1;
-        targetCameraX = stagePositionX * width;
-        updateBackgroundColor();
-        println("[LEFT] stagePositionX : " + stagePositionX);
-        println("[LEFT] targetCameraX : " + targetCameraX);
+        if (cameraPosition.moveLeft(entities.getLowerBoundX())) {
+          targetCameraX = cameraPosition.getScaledX();
+          updateBackgroundColor();
+          println("[LEFT] targetCameraX : " + targetCameraX);
+        }
         break;
       case DOWN:
-        stagePositionY += 1;
-        targetCameraY = stagePositionY * height;
-        updateBackgroundColor();
-        println("[DOWN] stagePositionY : " + stagePositionY);
-        println("[DOWN] targetCameraY : " + targetCameraY);
+        if (cameraPosition.moveDown(entities.getUpperBoundY())) {
+          targetCameraY = cameraPosition.getScaledY();
+          updateBackgroundColor();
+          println("[DOWN] targetCameraY : " + targetCameraY);
+        }
         break;
       case UP:
-        stagePositionY -= 1;
-        targetCameraY = stagePositionY * height;
-        updateBackgroundColor();
-        println("[UP] stagePositionY : " + stagePositionY);
-        println("[UP] targetCameraY : " + targetCameraY);
+        if (cameraPosition.moveUp(entities.getLowerBoundY())) {
+          targetCameraY = cameraPosition.getScaledY();
+          updateBackgroundColor();
+          println("[UP] targetCameraY : " + targetCameraY);
+        }
         break;
       default:
         println("Unhandled code.");

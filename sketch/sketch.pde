@@ -22,8 +22,10 @@ float deltaD = 16;
 float paramE = 0;
 float deltaE = 16;
 
-int stagePositionX = 0;
-int stagePositionY = 0;
+StagePosition cameraPosition;
+StagePosition entities;
+
+// Camera Values
 float targetCameraX = 0;
 float targetCameraY = 0;
 float targetCameraZ = 0;
@@ -46,6 +48,8 @@ void setup() {
   frameRate(FPS);
   size(1000, 1000, P3D);
 
+  cameraPosition = new StagePosition(0, 0, width);
+
   flatUIColors = new FlatUIColors();
   minim = new Minim(this);
   avizData = new AvizData(minim,
@@ -59,7 +63,7 @@ void setup() {
 
   logo = loadShape("test-logo.svg");
 
-  targetColor = getBackgroundColor(stagePositionX, stagePositionY, colorSeed);
+  targetColor = getBackgroundColor(cameraPosition.x, cameraPosition.y, colorSeed);
 
   debug();
 }
@@ -73,19 +77,27 @@ void draw() {
   strokeWeight(2);
   updateCamera();
   avizData.forward();
-  exampleSketch();
+  mainSketch();
 }
 
-void exampleSketch() {
-  avizLogo(width / 2, height / 2, 0.50f, 400, logo);
-  avizCircleLineWaveform(width / 2, height / 2, 0, 50, 200, frameCount * 0.25, avizData);
-  avizCircleBarSpectrum(width / 2, height / 2, 160, 232, 1024, frameCount * 0.25, avizData);
-  avizBarSpectrum(0, height - (height / 4), width, height / 4, avizData);
-  avizLineSpectrum(0, height / 4, width, -(height / 4), avizData);
-  // avizLineWaveform(0, 0, width, height, avizData);
-  // avizBarLevels(0, height, width, height, avizData);
-  avizRotatingBox(0 + 144, height / 2, 200, frameCount, avizData);
-  avizRotatingBox(0 + 144, height / 2, 100, -frameCount * 0.25, avizData);
-  avizRotatingBox(width - 144, height / 2, 200, frameCount, avizData);
-  avizRotatingBox(width - 144, height / 2, 100, -frameCount * 0.25, avizData);
+void mainSketch() {
+  entities = new StagePosition(0, 0, width);
+  avizLogo(entities.getCenteredX(), entities.getCenteredY(), 2, 400, logo);
+  entities.moveRight();
+  avizBarSpectrum(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  entities.moveRight();
+  avizLineSpectrum(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  entities.moveRight();
+  avizBarLevels(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  entities.moveRight();
+  avizLineWaveform(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+  entities.moveRight();
+  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width, frameCount, avizData);
+  avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.5, -frameCount * 0.25, avizData);
+  entities.moveRight();
+  avizCircleBarSpectrum(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25, avizData);
+  entities.moveRight();
+  avizCircleLineSpectrum(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 1.50, frameCount * 0.25, avizData);
+  entities.moveRight();
+  avizCircleLineWaveform(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.25, 0, frameCount * 0.25, avizData);
 }
