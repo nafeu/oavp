@@ -1,12 +1,16 @@
 public class StagePosition {
   public int x;
   public int y;
+  private int startingX;
+  private int startingY;
   public float scale;
   public int[] xRange = new int[2];
   public int[] yRange = new int[2];
   StagePosition(int initialX, int initialY, float initialScale) {
     x = initialX;
+    startingX = initialX;
     y = initialY;
+    startingY = initialY;
     xRange[0] = x;
     xRange[1] = x;
     yRange[0] = y;
@@ -136,6 +140,10 @@ public class StagePosition {
       return true;
     }
     return false;
+  }
+  void reset() {
+    x = startingX;
+    y = startingY;
   }
 }
 

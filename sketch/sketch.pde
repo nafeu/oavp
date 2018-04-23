@@ -70,6 +70,8 @@ void setup() {
   targetColor = getBackgroundColor(cameraPosition.x, cameraPosition.y, colorSeed);
 
   debug();
+
+  entities = new StagePosition(0, 0, width);
 }
 
 void draw() {
@@ -80,15 +82,12 @@ void draw() {
   stroke(flatUIColors.black);
   noFill();
   strokeWeight(2);
-
   updateCamera();
   avizData.forward();
   mainSketch();
 }
 
 void mainSketch() {
-  entities = new StagePosition(0, 0, width);
-
   title("Custom SVG Logo", entities.getScaledX(), entities.getScaledY());
   avizLogo(entities.getCenteredX(), entities.getCenteredY(), 2, 400, logo);
 
@@ -132,4 +131,6 @@ void mainSketch() {
 
   title("Circular Line Waveform", entities.getScaledX(), entities.getScaledY());
   avizCircleLineWaveform(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.25, 0, frameCount * 0.25, avizData);
+
+  entities.reset();
 }

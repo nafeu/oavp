@@ -1,6 +1,3 @@
-import ddf.minim.analysis.*;
-import ddf.minim.*;
-
 public class AvizData {
   private FFT fft;
   private AudioPlayer audio;
