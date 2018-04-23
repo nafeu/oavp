@@ -156,6 +156,14 @@ void updateBackgroundColorInterp() {
   currInterp += di * colorEasing;
 }
 
+void title(String displayText, float x, float y) {
+  pushStyle();
+  fill(0);
+  textAlign(CENTER);
+  text(displayText, x + width * 0.5, y + height * 0.05);
+  popStyle();
+}
+
 public class FlatUIColors {
   int teal = #1abc9c;
   int darkTeal = #16a085;

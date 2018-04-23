@@ -43,6 +43,7 @@ float targetInterp = 1.0;
 float colorEasing = 0.05;
 
 PShape logo;
+PFont mono;
 
 void setup() {
   frameRate(FPS);
@@ -62,6 +63,8 @@ void setup() {
   avizData.setBufferSmoothing(0.85f);
 
   logo = loadShape("test-logo.svg");
+  mono = loadFont("RobotoMono-Regular-32.vlw");
+  textFont(mono, 32);
 
   targetColor = getBackgroundColor(cameraPosition.x, cameraPosition.y, colorSeed);
 
@@ -75,6 +78,7 @@ void draw() {
   stroke(flatUIColors.black);
   noFill();
   strokeWeight(2);
+
   updateCamera();
   avizData.forward();
   mainSketch();
@@ -82,22 +86,48 @@ void draw() {
 
 void mainSketch() {
   entities = new StagePosition(0, 0, width);
+
+  title("Custom SVG Logo", entities.getScaledX(), entities.getScaledY());
   avizLogo(entities.getCenteredX(), entities.getCenteredY(), 2, 400, logo);
+
   entities.moveRight();
+
+  title("Rectangular Bar Spectrum", entities.getScaledX(), entities.getScaledY());
   avizBarSpectrum(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+
   entities.moveRight();
+
+  title("Rectangular Line Spectrum", entities.getScaledX(), entities.getScaledY());
   avizLineSpectrum(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+
   entities.moveRight();
+
+  title("Rectangular Bar Levels", entities.getScaledX(), entities.getScaledY());
   avizBarLevels(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+
   entities.moveRight();
+
+  title("Rectangular Line Waveform", entities.getScaledX(), entities.getScaledY());
   avizLineWaveform(entities.getScaledX(), entities.getScaledY(), width, height, avizData);
+
   entities.moveToNextLine();
+
+  title("3D Rotating Box", entities.getScaledX(), entities.getScaledY());
   avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.75, frameCount, avizData);
   avizRotatingBox(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, -frameCount * 0.25, avizData);
+
   entities.moveRight();
+
+  title("Circular Bar Spectrum", entities.getScaledX(), entities.getScaledY());
   avizCircleBarSpectrum(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25, avizData);
+
   entities.moveRight();
+
+  title("Circular Line Spectrum", entities.getScaledX(), entities.getScaledY());
   avizCircleLineSpectrum(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 1.50, frameCount * 0.25, avizData);
+
   entities.moveRight();
+
+  title("Circular Line Waveform", entities.getScaledX(), entities.getScaledY());
   avizCircleLineWaveform(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.25, 0, frameCount * 0.25, avizData);
 }
