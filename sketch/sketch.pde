@@ -37,10 +37,11 @@ float cameraEasing = 0.10;
 // int colorSeed = Math.round(random(0, 100));
 int colorSeed = 25;
 int currColor = 0;
+int intermediateColor = 0;
 int targetColor;
 float currInterp = 0.0;
 float targetInterp = 1.0;
-float colorEasing = 0.05;
+float colorEasing = 0.025;
 
 PShape logo;
 PFont mono;
@@ -74,7 +75,8 @@ void setup() {
 void draw() {
   noCursor();
   updateBackgroundColorInterp();
-  background(lerpColor(currColor, targetColor, currInterp));
+  intermediateColor = lerpColor(currColor, targetColor, currInterp);
+  background(intermediateColor);
   stroke(flatUIColors.black);
   noFill();
   strokeWeight(2);

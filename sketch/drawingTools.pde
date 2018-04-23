@@ -146,7 +146,7 @@ int getBackgroundColor(int x, int y, int seed) {
 }
 
 void updateBackgroundColor() {
-  currColor = targetColor;
+  currColor = intermediateColor;
   targetColor = getBackgroundColor(cameraPosition.x, cameraPosition.y, colorSeed);
   currInterp = 0.0;
 }
