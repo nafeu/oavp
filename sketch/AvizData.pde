@@ -38,6 +38,14 @@ public class AvizData {
     rightBuffer = new float[bufferSize];
   }
 
+  public void toggleLoop() {
+    if (audio.isPlaying()) {
+      audio.pause();
+    } else {
+      audio.loop();
+    }
+  }
+
   private float dB(float x) {
     if (x == 0) {
       return 0;

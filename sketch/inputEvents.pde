@@ -4,23 +4,26 @@ void keyPressed() {
       case SHIFT:
         break;
       case RIGHT:
-          moveCameraRight();
+        moveCameraRight();
         break;
       case LEFT:
-          moveCameraLeft();
+        moveCameraLeft();
         break;
       case DOWN:
-          moveCameraDown();
+        moveCameraDown();
         break;
       case UP:
-          moveCameraUp();
+        moveCameraUp();
         break;
       default:
-        println("Unhandled code.");
+        println("Unhandled code:", keyCode);
         break;
     }
   } else {
     switch (key) {
+      case ' ':
+        avizData.toggleLoop();
+        break;
       case 'y':
         paramA += deltaA;
         println("[y] paramA : " + paramA);
