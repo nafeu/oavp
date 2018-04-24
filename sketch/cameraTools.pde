@@ -1,14 +1,39 @@
+float lastXOffset;
+float lastYOffset;
+boolean mouseDown = false;
+boolean mouseUp = true;
+
 void updateCamera() {
   float centerX;
   float centerY;
 
-  if (mousePressed && (mouseButton == LEFT)) {
-    centerX = width/2.0 + map(mouseX, 0, width, -(width / 2), (width / 2));
-    centerY = height/2.0 + map(mouseY, 0, height, -(height / 2), (height / 2));
+  if (mousePressed) {
+    if (!mouseDown) {
+      mouseDown = true;
+      mouseUp = false;
+      lastXOffset = mouseX;
+      lastYOffset = mouseY;
+    }
+    centerX = xOffset - (mouseX - lastXOffset);
+    centerY = yOffset - (mouseY - lastYOffset);
+
+    if (mouseButton == RIGHT) {
+      xOffset = width/2.0;
+      yOffset = height/2.0;
+      centerX = xOffset;
+      centerY = yOffset;
+    }
   } else {
-    centerX = width/2.0;
-    centerY = height/2.0;
+    if (!mouseUp) {
+      xOffset -= mouseX - lastXOffset;
+      yOffset -= mouseY - lastYOffset;
+      mouseUp = true;
+    }
+    mouseDown = false;
+    centerX = xOffset;
+    centerY = yOffset;
   }
+
 
   float dx = targetCameraX - currCameraX;
   currCameraX += dx * cameraEasing;

@@ -34,6 +34,9 @@ float currCameraY = 0;
 float currCameraZ = 0;
 float cameraEasing = 0.10;
 
+float xOffset;
+float yOffset;
+
 // int colorSeed = Math.round(random(0, 100));
 int colorSeed = 25;
 int currColor = 0;
@@ -75,10 +78,13 @@ void setup() {
   debug();
 
   entities = new AvizPosition(0, 0, width);
+
+  xOffset = width/2.0;
+  yOffset = height/2.0;
 }
 
 void draw() {
-  noCursor();
+  // noCursor();
   updateBackgroundColorInterp();
   intermediateColor = lerpColor(currColor, targetColor, currInterp);
   background(intermediateColor);
