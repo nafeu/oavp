@@ -1,3 +1,12 @@
+// int colorSeed = Math.round(random(0, 100));
+int colorSeed = 25;
+int currColor = 0;
+int intermediateColor = 0;
+int targetColor;
+float currInterp = 0.0;
+float targetInterp = 1.0;
+float colorEasing = 0.025;
+
 int getBackgroundColor(int x, int y, int seed) {
   int a = floor((x * seed) - (y * y)) + x;
   int b = floor((y * seed) - (x * x)) + y;

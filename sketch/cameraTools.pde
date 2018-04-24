@@ -1,3 +1,22 @@
+// Camera Values
+float targetCameraX = 0;
+float targetCameraY = 0;
+float targetCameraZ = 0;
+float currCameraX = 0;
+float currCameraY = 0;
+float currCameraZ = 0;
+float cameraEasing = 0.10;
+float finalEyeX;
+float finalEyeY;
+float finalEyeZ;
+float finalCenterX;
+float finalCenterY;
+float finalCenterZ;
+float finalUpX;
+float finalUpY;
+float finalUpZ;
+float xOffset;
+float yOffset;
 float lastXOffset;
 float lastYOffset;
 boolean mouseDown = false;
@@ -57,4 +76,47 @@ void updateCamera() {
   finalUpZ = 0;
 
   camera(finalEyeX, finalEyeY, finalEyeZ, finalCenterX, finalCenterY, finalCenterZ, finalUpX, finalUpY, finalUpZ);
+}
+
+void moveCameraRight() {
+  if (cameraPosition.moveRight(entities.getUpperBoundX())) {
+    targetCameraX = cameraPosition.getScaledX();
+    updateBackgroundColor();
+    println("[RIGHT] targetCameraX : " + targetCameraX);
+  } else if (cameraPosition.moveToNextLine(entities.getUpperBoundY())) {
+    targetCameraX = cameraPosition.getScaledX();
+    targetCameraY = cameraPosition.getScaledY();
+    updateBackgroundColor();
+    println("[RIGHT] targetCameraX : " + targetCameraX);
+    println("[RIGHT] targetCameraY : " + targetCameraY);
+  }
+}
+
+void moveCameraLeft() {
+  if (cameraPosition.moveLeft(entities.getLowerBoundX())) {
+    targetCameraX = cameraPosition.getScaledX();
+    updateBackgroundColor();
+    println("[LEFT] targetCameraX : " + targetCameraX);
+  } else if (cameraPosition.moveToPrevLine(entities.getLowerBoundY())) {
+    targetCameraX = cameraPosition.getScaledX();
+    targetCameraY = cameraPosition.getScaledY();
+    println("[LEFT] targetCameraX : " + targetCameraX);
+    println("[LEFT] targetCameraY : " + targetCameraY);
+  }
+}
+
+void moveCameraDown() {
+  if (cameraPosition.moveDown(entities.getUpperBoundY())) {
+    targetCameraY = cameraPosition.getScaledY();
+    updateBackgroundColor();
+    println("[DOWN] targetCameraY : " + targetCameraY);
+  }
+}
+
+void moveCameraUp() {
+  if (cameraPosition.moveUp(entities.getLowerBoundY())) {
+    targetCameraY = cameraPosition.getScaledY();
+    updateBackgroundColor();
+    println("[UP] targetCameraY : " + targetCameraY);
+  }
 }

@@ -14,51 +14,8 @@ final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 30;
 
-float paramA = 0;
-float deltaA = 16;
-float paramB = 0;
-float deltaB = 16;
-float paramC = 0;
-float deltaC = 16;
-float paramD = 0;
-float deltaD = 16;
-float paramE = 0;
-float deltaE = 16;
-
-// Camera Values
-float targetCameraX = 0;
-float targetCameraY = 0;
-float targetCameraZ = 0;
-float currCameraX = 0;
-float currCameraY = 0;
-float currCameraZ = 0;
-float cameraEasing = 0.10;
-float finalEyeX;
-float finalEyeY;
-float finalEyeZ;
-float finalCenterX;
-float finalCenterY;
-float finalCenterZ;
-float finalUpX;
-float finalUpY;
-float finalUpZ;
-
-
-float xOffset;
-float yOffset;
-
-// int colorSeed = Math.round(random(0, 100));
-int colorSeed = 25;
-int currColor = 0;
-int intermediateColor = 0;
-int targetColor;
-float currInterp = 0.0;
-float targetInterp = 1.0;
-float colorEasing = 0.025;
-
 PShape logo;
 PFont mono;
-
 
 void setup() {
   frameRate(FPS);
@@ -69,7 +26,7 @@ void setup() {
   flatUIColors = new FlatUIColors();
   minim = new Minim(this);
   avizData = new AvizData(minim,
-                          "sample.mp3",
+                          "test-audio.mp3",
                           bufferSize,
                           minBandwidthPerOctave,
                           bandsPerOctave);
@@ -94,7 +51,6 @@ void setup() {
 }
 
 void draw() {
-  // noCursor();
   updateBackgroundColorInterp();
   intermediateColor = lerpColor(currColor, targetColor, currInterp);
   background(intermediateColor);
