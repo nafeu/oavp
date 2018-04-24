@@ -33,6 +33,16 @@ float currCameraX = 0;
 float currCameraY = 0;
 float currCameraZ = 0;
 float cameraEasing = 0.10;
+float finalEyeX;
+float finalEyeY;
+float finalEyeZ;
+float finalCenterX;
+float finalCenterY;
+float finalCenterZ;
+float finalUpX;
+float finalUpY;
+float finalUpZ;
+
 
 float xOffset;
 float yOffset;

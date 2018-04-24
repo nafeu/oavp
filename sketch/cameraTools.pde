@@ -23,6 +23,7 @@ void updateCamera() {
       centerX = xOffset;
       centerY = yOffset;
     }
+    cursor(MOVE);
   } else {
     if (!mouseUp) {
       xOffset -= mouseX - lastXOffset;
@@ -32,6 +33,7 @@ void updateCamera() {
     mouseDown = false;
     centerX = xOffset;
     centerY = yOffset;
+    cursor(CROSS);
   }
 
 
@@ -44,7 +46,15 @@ void updateCamera() {
   float dz = targetCameraZ - currCameraZ;
   currCameraZ += dz * cameraEasing;
 
-  camera(width/2.0 + currCameraX, height/2.0 + currCameraY, (height/2.0) / tan(PI*30.0 / 180.0) + currCameraZ,
-         centerX + currCameraX, centerY + currCameraY, 0,
-         0, 1, 0);
+  finalEyeX = width/2.0 + currCameraX;
+  finalEyeY = height/2.0 + currCameraY;
+  finalEyeZ = (height/2.0) / tan(PI*30.0 / 180.0) + currCameraZ;
+  finalCenterX = centerX + currCameraX;
+  finalCenterY = centerY + currCameraY;
+  finalCenterZ = currCameraZ;
+  finalUpX = 0;
+  finalUpY = 1;
+  finalUpZ = 0;
+
+  camera(finalEyeX, finalEyeY, finalEyeZ, finalCenterX, finalCenterY, finalCenterZ, finalUpX, finalUpY, finalUpZ);
 }

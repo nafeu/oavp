@@ -1,46 +1,62 @@
+void moveCameraRight() {
+  if (cameraPosition.moveRight(entities.getUpperBoundX())) {
+    targetCameraX = cameraPosition.getScaledX();
+    updateBackgroundColor();
+    println("[RIGHT] targetCameraX : " + targetCameraX);
+  } else if (cameraPosition.moveToNextLine(entities.getUpperBoundY())) {
+    targetCameraX = cameraPosition.getScaledX();
+    targetCameraY = cameraPosition.getScaledY();
+    updateBackgroundColor();
+    println("[RIGHT] targetCameraX : " + targetCameraX);
+    println("[RIGHT] targetCameraY : " + targetCameraY);
+  }
+}
+
+void moveCameraLeft() {
+  if (cameraPosition.moveLeft(entities.getLowerBoundX())) {
+    targetCameraX = cameraPosition.getScaledX();
+    updateBackgroundColor();
+    println("[LEFT] targetCameraX : " + targetCameraX);
+  } else if (cameraPosition.moveToPrevLine(entities.getLowerBoundY())) {
+    targetCameraX = cameraPosition.getScaledX();
+    targetCameraY = cameraPosition.getScaledY();
+    println("[LEFT] targetCameraX : " + targetCameraX);
+    println("[LEFT] targetCameraY : " + targetCameraY);
+  }
+}
+
+void moveCameraDown() {
+  if (cameraPosition.moveDown(entities.getUpperBoundY())) {
+    targetCameraY = cameraPosition.getScaledY();
+    updateBackgroundColor();
+    println("[DOWN] targetCameraY : " + targetCameraY);
+  }
+}
+
+void moveCameraUp() {
+  if (cameraPosition.moveUp(entities.getLowerBoundY())) {
+    targetCameraY = cameraPosition.getScaledY();
+    updateBackgroundColor();
+    println("[UP] targetCameraY : " + targetCameraY);
+  }
+}
+
 void keyPressed() {
   if (key == CODED) {
     switch (keyCode) {
       case SHIFT:
         break;
       case RIGHT:
-        if (cameraPosition.moveRight(entities.getUpperBoundX())) {
-          targetCameraX = cameraPosition.getScaledX();
-          updateBackgroundColor();
-          println("[RIGHT] targetCameraX : " + targetCameraX);
-        } else if (cameraPosition.moveToNextLine(entities.getUpperBoundY())) {
-          targetCameraX = cameraPosition.getScaledX();
-          targetCameraY = cameraPosition.getScaledY();
-          updateBackgroundColor();
-          println("[RIGHT] targetCameraX : " + targetCameraX);
-          println("[RIGHT] targetCameraY : " + targetCameraY);
-        }
+          moveCameraRight();
         break;
       case LEFT:
-        if (cameraPosition.moveLeft(entities.getLowerBoundX())) {
-          targetCameraX = cameraPosition.getScaledX();
-          updateBackgroundColor();
-          println("[LEFT] targetCameraX : " + targetCameraX);
-        } else if (cameraPosition.moveToPrevLine(entities.getLowerBoundY())) {
-          targetCameraX = cameraPosition.getScaledX();
-          targetCameraY = cameraPosition.getScaledY();
-          println("[LEFT] targetCameraX : " + targetCameraX);
-          println("[LEFT] targetCameraY : " + targetCameraY);
-        }
+          moveCameraLeft();
         break;
       case DOWN:
-        if (cameraPosition.moveDown(entities.getUpperBoundY())) {
-          targetCameraY = cameraPosition.getScaledY();
-          updateBackgroundColor();
-          println("[DOWN] targetCameraY : " + targetCameraY);
-        }
+          moveCameraDown();
         break;
       case UP:
-        if (cameraPosition.moveUp(entities.getLowerBoundY())) {
-          targetCameraY = cameraPosition.getScaledY();
-          updateBackgroundColor();
-          println("[UP] targetCameraY : " + targetCameraY);
-        }
+          moveCameraUp();
         break;
       default:
         println("Unhandled code.");
@@ -48,85 +64,97 @@ void keyPressed() {
     }
   } else {
     switch (key) {
-      case 'q':
+      case 'y':
         paramA += deltaA;
-        println("[q] paramA : " + paramA);
+        println("[y] paramA : " + paramA);
         break;
-      case 'a':
+      case 'h':
         paramA -= deltaA;
-        println("[a] paramA : " + paramA);
+        println("[h] paramA : " + paramA);
+        break;
+      case 'u':
+        paramB += deltaB;
+        println("[u] paramB : " + paramB);
+        break;
+      case 'j':
+        paramB -= deltaB;
+        println("[j] paramB : " + paramB);
+        break;
+      case 'i':
+        paramC += deltaC;
+        println("[i] paramC : " + paramC);
+        break;
+      case 'k':
+        paramC -= deltaC;
+        println("[k] paramC : " + paramC);
+        break;
+      case 'o':
+        paramD += deltaD;
+        println("[o] paramD : " + paramD);
+        break;
+      case 'l':
+        paramD -= deltaD;
+        println("[l] paramD : " + paramD);
+        break;
+      case 'p':
+        paramE += deltaE;
+        println("[p] paramE : " + paramE);
+        break;
+      case ';':
+        paramD -= deltaD;
+        println("[;] paramD : " + paramD);
+        break;
+      case 'Y':
+        deltaA *= 2;
+        println("[Y] deltaA : " + deltaA);
+        break;
+      case 'H':
+        deltaA /= 2;
+        println("[H] deltaA : " + deltaA);
+        break;
+      case 'U':
+        deltaB *= 2;
+        println("[U] deltaB : " + deltaB);
+        break;
+      case 'J':
+        deltaB /= 2;
+        println("[J] deltaB : " + deltaB);
+        break;
+      case 'I':
+        deltaC *= 2;
+        println("[I] deltaC : " + deltaC);
+        break;
+      case 'K':
+        deltaC /= 2;
+        println("[K] deltaC : " + deltaC);
+        break;
+      case 'O':
+        deltaD *= 2;
+        println("[O] deltaD : " + deltaD);
+        break;
+      case 'L':
+        deltaD /= 2;
+        println("[L] deltaD : " + deltaD);
+        break;
+      case 'P':
+        deltaE *= 2;
+        println("[P] deltaE : " + deltaE);
+        break;
+      case ':':
+        deltaE /= 2;
+        println("[:] deltaE : " + deltaE);
         break;
       case 'w':
-        paramB += deltaB;
-        println("[w] paramB : " + paramB);
+        moveCameraUp();
         break;
       case 's':
-        paramB -= deltaB;
-        println("[s] paramB : " + paramB);
+        moveCameraDown();
         break;
-      case 'e':
-        paramC += deltaC;
-        println("[e] paramC : " + paramC);
+      case 'a':
+        moveCameraLeft();
         break;
       case 'd':
-        paramC -= deltaC;
-        println("[d] paramC : " + paramC);
-        break;
-      case 'r':
-        paramD += deltaD;
-        println("[r] paramD : " + paramD);
-        break;
-      case 'f':
-        paramD -= deltaD;
-        println("[f] paramD : " + paramD);
-        break;
-      case 't':
-        paramE += deltaE;
-        println("[t] paramE : " + paramE);
-        break;
-      case 'g':
-        paramD -= deltaD;
-        println("[g] paramD : " + paramD);
-        break;
-      case 'Q':
-        deltaA *= 2;
-        println("[Q] deltaA : " + deltaA);
-        break;
-      case 'A':
-        deltaA /= 2;
-        println("[A] deltaA : " + deltaA);
-        break;
-      case 'W':
-        deltaB *= 2;
-        println("[W] deltaB : " + deltaB);
-        break;
-      case 'S':
-        deltaB /= 2;
-        println("[S] deltaB : " + deltaB);
-        break;
-      case 'E':
-        deltaC *= 2;
-        println("[E] deltaC : " + deltaC);
-        break;
-      case 'D':
-        deltaC /= 2;
-        println("[D] deltaC : " + deltaC);
-        break;
-      case 'R':
-        deltaD *= 2;
-        println("[R] deltaD : " + deltaD);
-        break;
-      case 'F':
-        deltaD /= 2;
-        println("[F] deltaD : " + deltaD);
-        break;
-      case 'T':
-        deltaE *= 2;
-        println("[T] deltaE : " + deltaE);
-        break;
-      case 'G':
-        deltaE /= 2;
-        println("[G] deltaE : " + deltaE);
+        moveCameraRight();
         break;
       case 'z':
         debug();
@@ -149,10 +177,10 @@ void keyPressed() {
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
   if (e > 0) {
-    targetCameraZ += width / 2;
+    targetCameraZ = min(targetCameraZ + width / 2, width * 2);
     println("[MWHEEL_UP] targetCameraZ : " + targetCameraZ);
   } else {
-    targetCameraZ -= width / 2;
+    targetCameraZ = max(targetCameraZ - width / 2, -width / 2);
     println("[MWHEEL_UP] targetCameraZ : " + targetCameraZ);
   }
 }
