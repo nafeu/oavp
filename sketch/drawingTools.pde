@@ -7,19 +7,19 @@ float currInterp = 0.0;
 float targetInterp = 1.0;
 float colorEasing = 0.025;
 
-int getBackgroundColor(int x, int y, int seed) {
+int getRandomColor(int x, int y, int seed) {
   int a = floor((x * seed) - (y * y)) + x;
   int b = floor((y * seed) - (x * x)) + y;
   return materialUIColors[(seed + abs(a + b)) % materialUIColors.length];
 }
 
-void updateBackgroundColor() {
+void updateColor() {
   currColor = intermediateColor;
-  targetColor = getBackgroundColor(cameraPosition.x, cameraPosition.y, colorSeed);
+  targetColor = getRandomColor(cameraPosition.x, cameraPosition.y, colorSeed);
   currInterp = 0.0;
 }
 
-void updateBackgroundColorInterp() {
+void updateColorInterp() {
   float di = targetInterp - currInterp;
   currInterp += di * colorEasing;
 }

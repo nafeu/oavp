@@ -81,12 +81,12 @@ void updateCamera() {
 void moveCameraRight() {
   if (cameraPosition.moveRight(entities.getUpperBoundX())) {
     targetCameraX = cameraPosition.getScaledX();
-    updateBackgroundColor();
+    updateColor();
     println("[RIGHT] targetCameraX : " + targetCameraX);
   } else if (cameraPosition.moveToNextLine(entities.getUpperBoundY())) {
     targetCameraX = cameraPosition.getScaledX();
     targetCameraY = cameraPosition.getScaledY();
-    updateBackgroundColor();
+    updateColor();
     println("[RIGHT] targetCameraX : " + targetCameraX);
     println("[RIGHT] targetCameraY : " + targetCameraY);
   }
@@ -95,7 +95,7 @@ void moveCameraRight() {
 void moveCameraLeft() {
   if (cameraPosition.moveLeft(entities.getLowerBoundX())) {
     targetCameraX = cameraPosition.getScaledX();
-    updateBackgroundColor();
+    updateColor();
     println("[LEFT] targetCameraX : " + targetCameraX);
   } else if (cameraPosition.moveToPrevLine(entities.getLowerBoundY())) {
     targetCameraX = cameraPosition.getScaledX();
@@ -108,7 +108,7 @@ void moveCameraLeft() {
 void moveCameraDown() {
   if (cameraPosition.moveDown(entities.getUpperBoundY())) {
     targetCameraY = cameraPosition.getScaledY();
-    updateBackgroundColor();
+    updateColor();
     println("[DOWN] targetCameraY : " + targetCameraY);
   }
 }
@@ -116,7 +116,7 @@ void moveCameraDown() {
 void moveCameraUp() {
   if (cameraPosition.moveUp(entities.getLowerBoundY())) {
     targetCameraY = cameraPosition.getScaledY();
-    updateBackgroundColor();
+    updateColor();
     println("[UP] targetCameraY : " + targetCameraY);
   }
 }

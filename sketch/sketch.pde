@@ -47,7 +47,7 @@ void setup() {
   mono = loadFont("RobotoMono-Regular-32.vlw");
   textFont(mono, 32);
 
-  targetColor = getBackgroundColor(cameraPosition.x, cameraPosition.y, colorSeed);
+  targetColor = getRandomColor(cameraPosition.x, cameraPosition.y, colorSeed);
 
   debug();
 
@@ -59,12 +59,19 @@ void setup() {
 }
 
 void draw() {
-  updateBackgroundColorInterp();
+  updateColorInterp();
   intermediateColor = lerpColor(currColor, targetColor, currInterp);
-  background(intermediateColor);
-  stroke(flatUIColors.black);
   noFill();
   strokeWeight(2);
+
+  // Day Mode
+  background(intermediateColor);
+  stroke(flatUIColors.black);
+
+  // Night Mode
+  // stroke(intermediateColor);
+  // background(flatUIColors.black);
+
   updateCamera();
   avizData.forward();
   levelInterval.update(avizData.getLeftLevel());
