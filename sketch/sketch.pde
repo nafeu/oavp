@@ -4,6 +4,7 @@ import ddf.minim.*;
 Minim minim;
 AvizData avizData;
 AvizInterval levelInterval;
+AvizInterval beatInterval;
 AvizPosition cameraPosition;
 AvizPosition entities;
 AvizShapes visualizers;
@@ -38,6 +39,8 @@ void setup() {
   levelInterval = new AvizInterval(20);
   levelInterval.setDelay(2);
 
+  beatInterval = new AvizInterval(40);
+
   visualizers = new AvizShapes(avizData);
 
   logo = loadShape("test-logo.svg");
@@ -52,6 +55,7 @@ void setup() {
 
   xOffset = width/2.0;
   yOffset = height/2.0;
+
 }
 
 void draw() {
@@ -64,10 +68,21 @@ void draw() {
   updateCamera();
   avizData.forward();
   levelInterval.update(avizData.getLeftLevel());
+  beatInterval.update(avizData.isBeatOnset());
   mainSketch();
 }
 
 void mainSketch() {
+
+  title("Beat Splash", entities.getScaledX(), entities.getScaledY());
+  visualizers.beats.splash(entities.getCenteredX(), entities.getCenteredY(), width * 0.02, width * 0.4, beatInterval);
+
+  entities.moveRight();
+
+  title("Beat Circle", entities.getScaledX(), entities.getScaledY());
+  visualizers.beats.circle(entities.getCenteredX(), entities.getCenteredY(), width * 0.05, width * 0.25);
+
+  entities.moveRight();
 
   title("Interval Bars", entities.getScaledX(), entities.getScaledY());
   visualizers.levels.intervalBars(entities.getScaledX(), entities.getScaledY(), width, height, height, levelInterval);

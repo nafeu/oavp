@@ -1,6 +1,7 @@
 public class AvizData {
   private FFT fft;
   private AudioPlayer audio;
+  private BeatDetect beat;
 
   private int avgSize;
   private int bufferSize;
@@ -29,6 +30,7 @@ public class AvizData {
   AvizData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
     audio = minim.loadFile(path, bufferSize);
     audio.loop();
+    beat = new BeatDetect();
     fft = new FFT(audio.bufferSize(), audio.sampleRate());
     fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
     avgSize = fft.avgSize();
@@ -56,6 +58,8 @@ public class AvizData {
   }
 
   public void forward() {
+    beat.detect(audio.mix);
+
     // Adjust smoothing on left level
     float currLeftLevel;
     currLeftLevel = audio.left.level();
@@ -203,5 +207,9 @@ public class AvizData {
 
   public void setBufferSmoothing(float newSmoothing) {
     bufferSmoothing = newSmoothing;
+  }
+
+  public boolean isBeatOnset() {
+    return beat.isOnset();
   }
 }

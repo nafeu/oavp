@@ -50,6 +50,26 @@ public class AvizInterval {
     }
   }
 
+  void update(boolean rawSnapshot) {
+    float snapshot;
+    if (rawSnapshot) {
+      snapshot = 1.0;
+    } else {
+      snapshot = 0.0;
+    }
+    if (frameDelayCount == delay) {
+      float[][] temp = new float[storageSize][snapshotSize];
+      for (int i = 1; i < storageSize; i++) {
+        temp[i] = intervalData[i - 1];
+      }
+      temp[0][0] = snapshot;
+      intervalData = temp;
+      frameDelayCount = 0;
+    } else {
+      frameDelayCount++;
+    }
+  }
+
   float[] getIntervalData(int i) {
     return intervalData[i];
   }

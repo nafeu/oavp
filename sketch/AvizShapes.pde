@@ -2,11 +2,13 @@ class AvizShapes {
   public Spectrum spectrum;
   public Waveform waveform;
   public Levels levels;
+  public Beats beats;
 
   AvizShapes(AvizData data) {
     spectrum = new Spectrum(avizData);
     waveform = new Waveform(avizData);
     levels = new Levels(avizData);
+    beats = new Beats(avizData);
   }
 
   class Spectrum {
@@ -167,6 +169,46 @@ class AvizShapes {
       float rawRightLevel = avizData.getRightLevel();
       float boxLevel = ((avizData.scaleLeftLevel(rawLeftLevel) + avizData.scaleRightLevel(rawRightLevel)) / 2) * scale;
       box(boxLevel, boxLevel, boxLevel);
+      popMatrix();
+    }
+  }
+
+  class Beats {
+    AvizData avizData;
+    float amplitude;
+
+    Beats(AvizData data) {
+      avizData = data;
+      ellipseMode(RADIUS);
+    }
+
+    void circle(float x, float y, float minRadius, float maxRadius) {
+      pushMatrix();
+      translate(x, y);
+      if ( avizData.isBeatOnset() ) {
+        amplitude = maxRadius;
+      } else {
+        float da = amplitude - minRadius;
+        amplitude -= da * 0.08;
+      }
+      if (amplitude <= minRadius) {
+        amplitude = minRadius;
+      }
+      ellipse(0, 0, amplitude, amplitude);
+      popMatrix();
+    }
+
+    void splash(float x, float y, float minRadius, float maxRadius, AvizInterval interval) {
+      pushMatrix();
+      translate(x, y);
+      int intervalSize = interval.getIntervalSize();
+      for (int i = 0; i < intervalSize; i++) {
+        float position = map(i, 0, intervalSize, minRadius, maxRadius);
+        if (interval.getIntervalData(i)[0] == 1.0) {
+          ellipse(0, 0, position, position);
+        }
+      }
+
       popMatrix();
     }
 
