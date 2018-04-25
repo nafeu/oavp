@@ -201,6 +201,7 @@ class AvizShapes {
     void splash(float x, float y, float minRadius, float maxRadius, AvizInterval interval) {
       pushMatrix();
       translate(x, y);
+      pushStyle();
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
         float position = map(i, 0, intervalSize, minRadius, maxRadius);
@@ -208,15 +209,15 @@ class AvizShapes {
           ellipse(0, 0, position, position);
         }
       }
-
+      popStyle();
       popMatrix();
     }
 
   }
 
-  void svg(float x, float y, float scaleFactor, int origSize, PShape shape) {
+  void svg(float x, float y, float scaleFactor, float origSize, PShape shape) {
     pushMatrix();
-    translate(x - ((origSize / 2) * scaleFactor), y - ((origSize / 2) * scaleFactor));
+    translate(x - ((origSize * scaleFactor) / 2), y - ((origSize * scaleFactor) / 2));
     scale(scaleFactor);
     shape(shape, 0, 0);
     popMatrix();

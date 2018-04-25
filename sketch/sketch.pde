@@ -21,7 +21,7 @@ PFont mono;
 
 void setup() {
   frameRate(FPS);
-  size(1000, 1000, P3D);
+  size(700, 700, P3D);
 
   cameraPosition = new AvizPosition(0, 0, width);
 
@@ -39,7 +39,7 @@ void setup() {
   levelInterval = new AvizInterval(20);
   levelInterval.setDelay(2);
 
-  beatInterval = new AvizInterval(40);
+  beatInterval = new AvizInterval(100);
 
   visualizers = new AvizShapes(avizData);
 
@@ -82,7 +82,7 @@ void draw() {
 void mainSketch() {
 
   title("Beat Splash", entities.getScaledX(), entities.getScaledY());
-  visualizers.beats.splash(entities.getCenteredX(), entities.getCenteredY(), width * 0.02, width * 0.4, beatInterval);
+  visualizers.beats.splash(entities.getCenteredX(), entities.getCenteredY(), 0, width * 0.4, beatInterval);
 
   entities.moveRight();
 
@@ -97,7 +97,7 @@ void mainSketch() {
   entities.moveRight();
 
   title("Custom SVG", entities.getScaledX(), entities.getScaledY());
-  visualizers.svg(entities.getCenteredX(), entities.getCenteredY(), 2, 400, logo);
+  visualizers.svg(entities.getCenteredX(), entities.getCenteredY(), 400.0 / width, 400, logo);
 
   entities.moveRight();
 
