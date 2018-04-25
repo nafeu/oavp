@@ -3,6 +3,7 @@ import ddf.minim.*;
 
 Minim minim;
 AvizData avizData;
+AvizInterval levelInterval;
 AvizPosition cameraPosition;
 AvizPosition entities;
 AvizShapes visualizers;
@@ -34,6 +35,9 @@ void setup() {
   avizData.setLevelSmoothing(0.95f);
   avizData.setBufferSmoothing(0.85f);
 
+  levelInterval = new AvizInterval(20);
+  levelInterval.setDelay(2);
+
   visualizers = new AvizShapes(avizData);
 
   logo = loadShape("test-logo.svg");
@@ -59,10 +63,17 @@ void draw() {
   strokeWeight(2);
   updateCamera();
   avizData.forward();
+  levelInterval.update(avizData.getLeftLevel());
   mainSketch();
 }
 
 void mainSketch() {
+
+  title("Interval Bars", entities.getScaledX(), entities.getScaledY());
+  visualizers.levels.intervalBars(entities.getScaledX(), entities.getScaledY(), width, height, height, levelInterval);
+
+  entities.moveRight();
+
   title("Custom SVG", entities.getScaledX(), entities.getScaledY());
   visualizers.svg(entities.getCenteredX(), entities.getCenteredY(), 2, 400, logo);
 
@@ -81,12 +92,12 @@ void mainSketch() {
   title("Radial Bar Spectrum", entities.getScaledX(), entities.getScaledY());
   visualizers.spectrum.radialBars(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25);
 
-  entities.moveRight();
+  entities.moveToNextLine();
 
   title("Radial Wire Spectrum", entities.getScaledX(), entities.getScaledY());
   visualizers.spectrum.radialWire(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 1.50, frameCount * 0.25);
 
-  entities.moveToNextLine();
+  entities.moveRight();
 
   title("Wire Waveform", entities.getScaledX(), entities.getScaledY());
   visualizers.waveform.wire(entities.getScaledX(), entities.getScaledY(), width, height);

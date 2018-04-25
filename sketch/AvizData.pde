@@ -122,6 +122,18 @@ public class AvizData {
     }
   }
 
+  public float[] getSpectrum() {
+    return spectrum;
+  }
+
+  public float[] getLeftBuffer() {
+    return leftBuffer;
+  }
+
+  public float[] getRightBuffer() {
+    return rightBuffer;
+  }
+
   public float getSpectrumVal(int i) {
     return spectrum[i];
   }

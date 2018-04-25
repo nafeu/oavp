@@ -148,6 +148,16 @@ class AvizShapes {
       popMatrix();
     }
 
+    void intervalBars(float x, float y, float w, float h, float scale, AvizInterval interval) {
+      pushMatrix();
+      translate(x, y);
+      int intervalSize = interval.getIntervalSize();
+      for (int i = 0; i < intervalSize; i++) {
+        rect(i * (w / intervalSize), h, (w / intervalSize), -avizData.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
+      }
+      popMatrix();
+    }
+
     void cube(float x, float y, float scale, float rotation) {
       pushMatrix();
       translate(x, y);
@@ -159,6 +169,7 @@ class AvizShapes {
       box(boxLevel, boxLevel, boxLevel);
       popMatrix();
     }
+
   }
 
   void svg(float x, float y, float scaleFactor, int origSize, PShape shape) {
