@@ -1,18 +1,21 @@
+boolean mouseDown = false;
+boolean mouseUp = true;
+
 void keyPressed() {
   println("RAW INPUT:", key);
   if (key == CODED) {
     switch (keyCode) {
       case RIGHT:
-        moveCameraRight();
+        camera.moveRight();
         break;
       case LEFT:
-        moveCameraLeft();
+        camera.moveLeft();
         break;
       case DOWN:
-        moveCameraDown();
+        camera.moveDown();
         break;
       case UP:
-        moveCameraUp();
+        camera.moveUp();
         break;
       default:
         println("Unhandled code:", keyCode);
@@ -104,22 +107,22 @@ void keyPressed() {
         println("[:] deltaE : " + deltaE);
         break;
       case 'w':
-        moveCameraUp();
+        camera.moveUp();
         break;
       case 's':
-        moveCameraDown();
+        camera.moveDown();
         break;
       case 'W':
-        moveCameraForward();
+        camera.moveForward();
         break;
       case 'S':
-        moveCameraBackward();
+        camera.moveBackward();
         break;
       case 'a':
-        moveCameraLeft();
+        camera.moveLeft();
         break;
       case 'd':
-        moveCameraRight();
+        camera.moveRight();
         break;
       case 'z':
         debug();
