@@ -5,6 +5,7 @@ Minim minim;
 AvizData avizData;
 AvizInterval levelInterval;
 AvizInterval beatInterval;
+AvizAmplitude beatAmplitude;
 AvizPosition cameraPosition;
 AvizPosition entities;
 AvizShapes visualizers;
@@ -16,12 +17,13 @@ final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 30;
 
+
 PShape logo;
 PFont mono;
 
 void setup() {
   frameRate(FPS);
-  size(700, 700, P3D);
+  size(1000, 1000, P3D);
 
   cameraPosition = new AvizPosition(0, 0, width);
 
@@ -40,6 +42,7 @@ void setup() {
   levelInterval.setDelay(2);
 
   beatInterval = new AvizInterval(100);
+  beatAmplitude = new AvizAmplitude(0, 1, 0.08);
 
   visualizers = new AvizShapes(avizData);
 
@@ -55,7 +58,6 @@ void setup() {
 
   xOffset = width/2.0;
   yOffset = height/2.0;
-
 }
 
 void draw() {
@@ -76,20 +78,31 @@ void draw() {
   avizData.forward();
   levelInterval.update(avizData.getLeftLevel());
   beatInterval.update(avizData.isBeatOnset());
+  beatAmplitude.update(avizData);
   mainSketch();
 }
 
 void mainSketch() {
 
-  title("Beat Splash", entities.getScaledX(), entities.getScaledY());
-  visualizers.beats.splash(entities.getCenteredX(), entities.getCenteredY(), 0, width * 0.4, beatInterval);
+  title("Beat Splash Square (Diamond)", entities.getScaledX(), entities.getScaledY());
+  visualizers.beats.splashSquare(entities.getCenteredX(), entities.getCenteredY(), 0, width * 0.4, 45, beatInterval);
+
+  entities.moveRight();
+
+  title("Beat Square (Diamond)", entities.getScaledX(), entities.getScaledY());
+  visualizers.beats.square(entities.getCenteredX(), entities.getCenteredY(), 0, width * 0.4, 45, beatAmplitude);
+
+  entities.moveRight();
+
+  title("Beat Splash Circle", entities.getScaledX(), entities.getScaledY());
+  visualizers.beats.splashCircle(entities.getCenteredX(), entities.getCenteredY(), 0, width * 0.4, beatInterval);
 
   entities.moveRight();
 
   title("Beat Circle", entities.getScaledX(), entities.getScaledY());
-  visualizers.beats.circle(entities.getCenteredX(), entities.getCenteredY(), width * 0.05, width * 0.25);
+  visualizers.beats.circle(entities.getCenteredX(), entities.getCenteredY(), 0, width * 0.25, beatAmplitude);
 
-  entities.moveRight();
+  entities.moveToNextLine();
 
   title("Interval Bars", entities.getScaledX(), entities.getScaledY());
   visualizers.levels.intervalBars(entities.getScaledX(), entities.getScaledY(), width, height, height, levelInterval);
@@ -109,12 +122,12 @@ void mainSketch() {
   title("Wire Spectrum", entities.getScaledX(), entities.getScaledY());
   visualizers.spectrum.wire(entities.getScaledX(), entities.getScaledY(), width, height);
 
-  entities.moveRight();
+  entities.moveToNextLine();
 
   title("Radial Bar Spectrum", entities.getScaledX(), entities.getScaledY());
   visualizers.spectrum.radialBars(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25);
 
-  entities.moveToNextLine();
+  entities.moveRight();
 
   title("Radial Wire Spectrum", entities.getScaledX(), entities.getScaledY());
   visualizers.spectrum.radialWire(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 1.50, frameCount * 0.25);
@@ -129,7 +142,7 @@ void mainSketch() {
   title("Radial Wire Waveform", entities.getScaledX(), entities.getScaledY());
   visualizers.waveform.radialWire(entities.getCenteredX(), entities.getCenteredY(), width * 0.25, width * 0.25, 0, frameCount * 0.25);
 
-  entities.moveRight();
+  entities.moveToNextLine();
 
   title("Bar Levels", entities.getScaledX(), entities.getScaledY());
   visualizers.levels.bars(entities.getScaledX(), entities.getScaledY(), width, height);

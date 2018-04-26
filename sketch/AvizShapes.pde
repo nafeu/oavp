@@ -175,30 +175,32 @@ class AvizShapes {
 
   class Beats {
     AvizData avizData;
-    float amplitude;
 
     Beats(AvizData data) {
       avizData = data;
-      ellipseMode(RADIUS);
     }
 
-    void circle(float x, float y, float minRadius, float maxRadius) {
+    void circle(float x, float y, float minRadius, float maxRadius, AvizAmplitude amplitude) {
+      ellipseMode(RADIUS);
       pushMatrix();
       translate(x, y);
-      if ( avizData.isBeatOnset() ) {
-        amplitude = maxRadius;
-      } else {
-        float da = amplitude - minRadius;
-        amplitude -= da * 0.08;
-      }
-      if (amplitude <= minRadius) {
-        amplitude = minRadius;
-      }
-      ellipse(0, 0, amplitude, amplitude);
+      float scale = maxRadius - minRadius;
+      ellipse(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
       popMatrix();
     }
 
-    void splash(float x, float y, float minRadius, float maxRadius, AvizInterval interval) {
+    void square(float x, float y, float minRadius, float maxRadius, float rotation, AvizAmplitude amplitude) {
+      rectMode(CENTER);
+      pushMatrix();
+      translate(x, y);
+      rotateZ(radians(rotation));
+      float scale = maxRadius - minRadius;
+      rect(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
+      popMatrix();
+      rectMode(CORNER);
+    }
+
+    void splashCircle(float x, float y, float minRadius, float maxRadius, AvizInterval interval) {
       pushMatrix();
       translate(x, y);
       pushStyle();
@@ -212,6 +214,25 @@ class AvizShapes {
       popStyle();
       popMatrix();
     }
+
+    void splashSquare(float x, float y, float minRadius, float maxRadius, float rotation, AvizInterval interval) {
+      rectMode(CENTER);
+      pushMatrix();
+      translate(x, y);
+      rotateZ(radians(rotation));
+      pushStyle();
+      int intervalSize = interval.getIntervalSize();
+      for (int i = 0; i < intervalSize; i++) {
+        float position = map(i, 0, intervalSize, minRadius, maxRadius);
+        if (interval.getIntervalData(i)[0] == 1.0) {
+          rect(0, 0, position, position);
+        }
+      }
+      popStyle();
+      popMatrix();
+      rectMode(CORNER);
+    }
+
 
   }
 
