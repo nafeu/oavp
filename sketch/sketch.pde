@@ -11,25 +11,17 @@ AvizPosition entityPosition;
 AvizCamera camera;
 AvizShapes visualizers;
 FlatUIColors flatUIColors;
-
-final int FPS = 60;
-
-final int bufferSize = 1024;
-final int minBandwidthPerOctave = 200;
-final int bandsPerOctave = 30;
+PShape logo;
+PFont mono;
+JSONObject configs;
 
 int primaryColor;
 int secondaryColor;
 
-float fontUnit = 8;
-float fontScale = 0.0033;
-
-PShape logo;
-PFont mono;
-
 void setup() {
-  frameRate(FPS);
   size(600, 600, P3D);
+  configs = loadJSONObject("config.json");
+  frameRate(configs.getInt("frameRate"));
 
   cameraPosition = new AvizPosition(0, 0, width);
   entityPosition = new AvizPosition(0, 0, width);
@@ -39,9 +31,9 @@ void setup() {
   minim = new Minim(this);
   avizData = new AvizData(minim,
                           "test-audio.mp3",
-                          bufferSize,
-                          minBandwidthPerOctave,
-                          bandsPerOctave);
+                          configs.getInt("bufferSize"),
+                          configs.getInt("minBandwidthPerOctave"),
+                          configs.getInt("bandsPerOctave"));
   avizData.setSpectrumSmoothing(0.80f);
   avizData.setLevelSmoothing(0.95f);
   avizData.setBufferSmoothing(0.85f);
@@ -56,7 +48,7 @@ void setup() {
 
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
-  textFont(mono, 8 * (Math.round(width * 0.0033)));
+  textFont(mono, configs.getInt("fontUnit") * (Math.round(width * configs.getFloat("fontScale"))));
 
   targetColor = getRandomColor(cameraPosition.x, cameraPosition.y, colorSeed);
 
@@ -81,15 +73,16 @@ void draw() {
   background(secondaryColor);
 
   camera.update();
+
   avizData.forward();
   levelInterval.update(avizData.getLeftLevel());
   beatInterval.update(avizData.isBeatOnset());
   beatAmplitude.update(avizData);
+
   drawGallery();
 }
 
 void drawGallery() {
-
   title("Beat Splash Square (Diamond)", entityPosition.getScaledX(), entityPosition.getScaledY());
   visualizers.beats.splashSquare(entityPosition.getCenteredX(), entityPosition.getCenteredY(), 0, width * 0.4, 45, beatInterval);
 

@@ -1,0 +1,8 @@
+{
+  "frameRate": 60,
+  "bufferSize": 1024,
+  "minBandwidthPerOctave": 200,
+  "bandsPerOctave": 30,
+  "fontUnit": 8,
+  "fontScale": 0.0033
+}
