@@ -1,8 +1,7 @@
 void keyPressed() {
+  println("RAW INPUT:", key);
   if (key == CODED) {
     switch (keyCode) {
-      case SHIFT:
-        break;
       case RIGHT:
         moveCameraRight();
         break;
@@ -110,6 +109,12 @@ void keyPressed() {
       case 's':
         moveCameraDown();
         break;
+      case 'W':
+        moveCameraForward();
+        break;
+      case 'S':
+        moveCameraBackward();
+        break;
       case 'a':
         moveCameraLeft();
         break;
@@ -137,10 +142,8 @@ void keyPressed() {
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
   if (e > 0) {
-    targetCameraZ = min(targetCameraZ + width / 2, width * 2);
-    println("[MWHEEL_UP] targetCameraZ : " + targetCameraZ);
+    // Do something with forward scroll
   } else {
-    targetCameraZ = max(targetCameraZ - width / 2, -width / 2);
-    println("[MWHEEL_UP] targetCameraZ : " + targetCameraZ);
+    // Do something with backward scroll
   }
 }

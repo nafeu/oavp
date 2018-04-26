@@ -55,7 +55,6 @@ void updateCamera() {
     cursor(CROSS);
   }
 
-
   float dx = targetCameraX - currCameraX;
   currCameraX += dx * cameraEasing;
 
@@ -82,13 +81,10 @@ void moveCameraRight() {
   if (cameraPosition.moveRight(entities.getUpperBoundX())) {
     targetCameraX = cameraPosition.getScaledX();
     updateColor();
-    println("[RIGHT] targetCameraX : " + targetCameraX);
   } else if (cameraPosition.moveToNextLine(entities.getUpperBoundY())) {
     targetCameraX = cameraPosition.getScaledX();
     targetCameraY = cameraPosition.getScaledY();
     updateColor();
-    println("[RIGHT] targetCameraX : " + targetCameraX);
-    println("[RIGHT] targetCameraY : " + targetCameraY);
   }
 }
 
@@ -96,12 +92,9 @@ void moveCameraLeft() {
   if (cameraPosition.moveLeft(entities.getLowerBoundX())) {
     targetCameraX = cameraPosition.getScaledX();
     updateColor();
-    println("[LEFT] targetCameraX : " + targetCameraX);
   } else if (cameraPosition.moveToPrevLine(entities.getLowerBoundY())) {
     targetCameraX = cameraPosition.getScaledX();
     targetCameraY = cameraPosition.getScaledY();
-    println("[LEFT] targetCameraX : " + targetCameraX);
-    println("[LEFT] targetCameraY : " + targetCameraY);
   }
 }
 
@@ -109,7 +102,6 @@ void moveCameraDown() {
   if (cameraPosition.moveDown(entities.getUpperBoundY())) {
     targetCameraY = cameraPosition.getScaledY();
     updateColor();
-    println("[DOWN] targetCameraY : " + targetCameraY);
   }
 }
 
@@ -117,6 +109,13 @@ void moveCameraUp() {
   if (cameraPosition.moveUp(entities.getLowerBoundY())) {
     targetCameraY = cameraPosition.getScaledY();
     updateColor();
-    println("[UP] targetCameraY : " + targetCameraY);
   }
+}
+
+void moveCameraForward() {
+  targetCameraZ = max(targetCameraZ - width / 2, -width / 2);
+}
+
+void moveCameraBackward() {
+  targetCameraZ = min(targetCameraZ + width / 2, width * 2);
 }

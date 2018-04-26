@@ -239,8 +239,13 @@ class AvizShapes {
   void svg(float x, float y, float scaleFactor, float origSize, PShape shape) {
     pushMatrix();
     translate(x - ((origSize * scaleFactor) / 2), y - ((origSize * scaleFactor) / 2));
+    pushStyle();
+    shape.disableStyle();
+    noStroke();
+    fill(primaryColor);
     scale(scaleFactor);
     shape(shape, 0, 0);
+    popStyle();
     popMatrix();
   }
 }

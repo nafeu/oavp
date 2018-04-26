@@ -17,13 +17,18 @@ final int bufferSize = 1024;
 final int minBandwidthPerOctave = 200;
 final int bandsPerOctave = 30;
 
+int primaryColor;
+int secondaryColor;
+
+float fontUnit = 8;
+float fontScale = 0.0033;
 
 PShape logo;
 PFont mono;
 
 void setup() {
   frameRate(FPS);
-  size(1000, 1000, P3D);
+  size(600, 600, P3D);
 
   cameraPosition = new AvizPosition(0, 0, width);
 
@@ -48,7 +53,7 @@ void setup() {
 
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
-  textFont(mono, 32);
+  textFont(mono, 8 * (Math.round(width * 0.0033)));
 
   targetColor = getRandomColor(cameraPosition.x, cameraPosition.y, colorSeed);
 
@@ -58,6 +63,7 @@ void setup() {
 
   xOffset = width/2.0;
   yOffset = height/2.0;
+
 }
 
 void draw() {
@@ -67,22 +73,25 @@ void draw() {
   strokeWeight(2);
 
   // Day Mode
-  background(intermediateColor);
-  stroke(flatUIColors.black);
+  primaryColor = flatUIColors.black;
+  secondaryColor = intermediateColor;
 
   // Night Mode
-  // stroke(intermediateColor);
-  // background(flatUIColors.black);
+  // primaryColor = intermediateColor;
+  // secondaryColor = flatUIColors.black;
+
+  stroke(primaryColor);
+  background(secondaryColor);
 
   updateCamera();
   avizData.forward();
   levelInterval.update(avizData.getLeftLevel());
   beatInterval.update(avizData.isBeatOnset());
   beatAmplitude.update(avizData);
-  mainSketch();
+  drawGallery();
 }
 
-void mainSketch() {
+void drawGallery() {
 
   title("Beat Splash Square (Diamond)", entities.getScaledX(), entities.getScaledY());
   visualizers.beats.splashSquare(entities.getCenteredX(), entities.getCenteredY(), 0, width * 0.4, 45, beatInterval);
