@@ -25,18 +25,20 @@ void setup() {
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
-  style = new OavpStyle(25);
+  style = new OavpStyle(configs.getInt("colorSeed"));
 
   cameraPosition = new OavpPosition(0, 0, width);
   entityPosition = new OavpPosition(0, 0, width);
   camera = new OavpCamera(cameraPosition, entityPosition, style, width / 2, height / 2, 0.10);
 
   minim = new Minim(this);
+
   oavpData = new OavpData(minim,
-                          configs.getString("audioFile"),
+                          // configs.getString("audioFile"),
                           configs.getInt("bufferSize"),
                           configs.getInt("minBandwidthPerOctave"),
                           configs.getInt("bandsPerOctave"));
+
   oavpData.setSpectrumSmoothing(0.80f);
   oavpData.setLevelSmoothing(0.95f);
   oavpData.setBufferSmoothing(0.85f);
@@ -120,7 +122,7 @@ void drawGallery() {
     .beats.splashCircle(0, width * 0.4, beatInterval)
     .done();
 
-  entityPosition.moveRight();
+  entityPosition.moveToNextLine();
 
   text.write("Beat Circle");
   visualizers
@@ -129,7 +131,7 @@ void drawGallery() {
     .beats.circle(0, width * 0.25, beatAmplitude)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Interval Bars");
   visualizers
@@ -156,7 +158,7 @@ void drawGallery() {
     .spectrum.bars(width, height)
     .done();
 
-  entityPosition.moveRight();
+  entityPosition.moveToNextLine();
 
   text.write("Wire Spectrum");
   visualizers
@@ -165,7 +167,7 @@ void drawGallery() {
     .spectrum.wire(width, height)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Radial Bar Spectrum");
   visualizers
@@ -192,7 +194,7 @@ void drawGallery() {
     .waveform.wire(width, height)
     .done();
 
-  entityPosition.moveRight();
+  entityPosition.moveToNextLine();
 
   text.write("Radial Wire Waveform");
   visualizers
@@ -201,7 +203,7 @@ void drawGallery() {
     .waveform.radialWire(width * 0.25, width * 0.25, 0, frameCount * 0.25)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Bar Levels");
   visualizers

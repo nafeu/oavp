@@ -5,5 +5,6 @@
   "minBandwidthPerOctave": 200,
   "bandsPerOctave": 30,
   "fontUnit": 8,
-  "fontScale": 0.0033
+  "fontScale": 0.0033,
+  "colorSeed": 25
 }

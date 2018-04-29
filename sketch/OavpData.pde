@@ -1,6 +1,7 @@
 public class OavpData {
   private FFT fft;
-  private AudioPlayer audio;
+  private AudioPlayer player;
+  private AudioInput input;
   private BeatDetect beat;
 
   private int avgSize;
@@ -26,25 +27,42 @@ public class OavpData {
 
   private boolean firstMinDone = true;
   private boolean useDB = true;
+  private boolean isLineIn;
 
   OavpData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
-    audio = minim.loadFile(path, bufferSize);
-    audio.loop();
+    player = minim.loadFile(path, bufferSize);
+    player.loop();
+    isLineIn = false;
     beat = new BeatDetect();
-    fft = new FFT(audio.bufferSize(), audio.sampleRate());
+    fft = new FFT(player.bufferSize(), player.sampleRate());
     fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
     avgSize = fft.avgSize();
-    bufferSize = audio.bufferSize();
+    bufferSize = player.bufferSize();
+    spectrum = new float[avgSize];
+    leftBuffer = new float[bufferSize];
+    rightBuffer = new float[bufferSize];
+  }
+
+  OavpData (Minim minim, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
+    input = minim.getLineIn();
+    isLineIn = true;
+    beat = new BeatDetect();
+    fft = new FFT(input.bufferSize(), input.sampleRate());
+    fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
+    avgSize = fft.avgSize();
+    bufferSize = input.bufferSize();
     spectrum = new float[avgSize];
     leftBuffer = new float[bufferSize];
     rightBuffer = new float[bufferSize];
   }
 
   public void toggleLoop() {
-    if (audio.isPlaying()) {
-      audio.pause();
-    } else {
-      audio.loop();
+    if (!isLineIn) {
+      if (player.isPlaying()) {
+        player.pause();
+      } else {
+        player.loop();
+      }
     }
   }
 
@@ -57,12 +75,56 @@ public class OavpData {
     }
   }
 
+  void detectBeat() {
+    if (isLineIn) {
+      beat.detect(input.mix);
+    } else {
+      beat.detect(player.mix);
+    }
+  }
+
+  float getCurrLeftLevel() {
+    if (isLineIn) {
+      return input.left.level();
+    }
+    return player.left.level();
+  }
+
+  float getCurrRightLevel() {
+    if (isLineIn) {
+      return input.right.level();
+    }
+    return player.right.level();
+  }
+
+  float getCurrLeftBuffer(int i) {
+    if (isLineIn) {
+      return input.left.get(i);
+    }
+    return player.left.get(i);
+  }
+
+  float getCurrRightBuffer(int i) {
+    if (isLineIn) {
+      return input.right.get(i);
+    }
+    return player.right.get(i);
+  }
+
+  void forwardMix() {
+    if (isLineIn) {
+      fft.forward( input.mix );
+    } else {
+      fft.forward( player.mix );
+    }
+  }
+
   public void forward() {
-    beat.detect(audio.mix);
+    detectBeat();
 
     // Adjust smoothing on left level
     float currLeftLevel;
-    currLeftLevel = audio.left.level();
+    currLeftLevel = getCurrLeftLevel();
 
     // Smooth using exponential moving average
     leftLevel = (levelSmoothing) * leftLevel + ((1 - levelSmoothing) * currLeftLevel);
@@ -77,7 +139,7 @@ public class OavpData {
 
     // Adjust smoothing on right level
     float currRightLevel;
-    currRightLevel = audio.right.level();
+    currRightLevel = getCurrRightLevel();
 
     // Smooth using exponential moving average
     rightLevel = (levelSmoothing) * rightLevel + ((1 - levelSmoothing) * currRightLevel);
@@ -91,16 +153,16 @@ public class OavpData {
     }
 
     // Adjust smoothing on buffer
-    for (int i = 0; i < audio.bufferSize(); i++) {
+    for (int i = 0; i < getBufferSize(); i++) {
       float currLeftBuffer;
       float currRightBuffer;
-      currLeftBuffer = audio.left.get(i);
-      currRightBuffer = audio.right.get(i);
+      currLeftBuffer = getCurrLeftBuffer(i);
+      currRightBuffer = getCurrRightBuffer(i);
       leftBuffer[i] = (bufferSmoothing) * leftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
       rightBuffer[i] = (bufferSmoothing) * rightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
     }
 
-    fft.forward( audio.mix );
+    forwardMix();
 
     // Adjust smoothing on spectrum values
     for (int i = 0; i < avgSize; i++) {
@@ -159,7 +221,10 @@ public class OavpData {
   }
 
   public int getBufferSize() {
-    return audio.bufferSize();
+    if (isLineIn) {
+      return input.bufferSize();
+    }
+    return player.bufferSize();
   }
 
   public int getAvgSize() {
