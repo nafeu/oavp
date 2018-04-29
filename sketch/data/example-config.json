@@ -1,4 +1,5 @@
 {
+  "audioFile": "test-audio.mp3",
   "frameRate": 60,
   "bufferSize": 1024,
   "minBandwidthPerOctave": 200,

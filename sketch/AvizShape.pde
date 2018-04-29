@@ -1,14 +1,113 @@
-class AvizShapes {
+class AvizShape {
   public Spectrum spectrum;
   public Waveform waveform;
   public Levels levels;
   public Beats beats;
+  public AvizPosition cursor;
 
-  AvizShapes(AvizData data) {
+  AvizShape(AvizData data) {
     spectrum = new Spectrum(avizData);
     waveform = new Waveform(avizData);
     levels = new Levels(avizData);
     beats = new Beats(avizData);
+  }
+
+  AvizShape(AvizData data, AvizPosition cursor) {
+    spectrum = new Spectrum(avizData);
+    waveform = new Waveform(avizData);
+    levels = new Levels(avizData);
+    beats = new Beats(avizData);
+    this.cursor = cursor;
+  }
+
+  void attach(AvizPosition cursor) {
+    this.cursor = cursor;
+  }
+
+  AvizShape create() {
+    pushMatrix();
+    return this;
+  }
+
+  AvizShape center() {
+    translate(cursor.getCenteredX(), 0);
+    return this;
+  }
+
+  AvizShape middle() {
+    translate(0, cursor.getCenteredY());
+    return this;
+  }
+
+  AvizShape left() {
+    translate(cursor.getScaledX(), 0);
+    return this;
+  }
+
+  AvizShape right() {
+    translate(cursor.getScaledX() + cursor.scale, 0);
+    return this;
+  }
+
+  AvizShape top() {
+    translate(0, cursor.getScaledY());
+    return this;
+  }
+
+  AvizShape bottom() {
+    translate(0, cursor.getScaledY() + cursor.scale);
+    return this;
+  }
+
+  AvizShape rotate(float x) {
+    rotateX(radians(x));
+    return this;
+  }
+
+  AvizShape rotate(float x, float y) {
+    rotateX(radians(x));
+    rotateY(radians(y));
+    return this;
+  }
+
+  AvizShape next() {
+    popMatrix();
+    pushMatrix();
+    return this;
+  }
+
+  AvizShape create(float x, float y) {
+    pushMatrix();
+    translate(x, y);
+    return this;
+  }
+
+  AvizShape create(float x, float y, float rotationX, float rotationY) {
+    pushMatrix();
+    translate(x, y);
+    rotateX(radians(rotationX));
+    rotateY(radians(rotationY));
+    return this;
+  }
+
+  AvizShape create(float x, float y, float z) {
+    pushMatrix();
+    translate(x, y, z);
+    return this;
+  }
+
+  AvizShape create(float x, float y, float z, float rotationX, float rotationY, float rotationZ) {
+    pushMatrix();
+    translate(x, y, z);
+    rotateX(radians(rotationX));
+    rotateY(radians(rotationY));
+    rotateZ(radians(rotationZ));
+    return this;
+  }
+
+  AvizShape done() {
+    popMatrix();
+    return this;
   }
 
   class Spectrum {
@@ -18,21 +117,17 @@ class AvizShapes {
       avizData = data;
     }
 
-    void bars(float x, float y, float w, float h) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape bars(float w, float h) {
       int avgSize = avizData.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
         float rawAmplitude = avizData.getSpectrumVal(i);
         float displayAmplitude = avizData.scaleSpectrumVal(rawAmplitude);
         rect(i * (w / avgSize), h, (w / avgSize), -h * displayAmplitude);
       }
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void wire(float x, float y, float w, float h) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape wire(float w, float h) {
       beginShape(LINES);
       int avgSize = avizData.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
@@ -42,12 +137,10 @@ class AvizShapes {
         vertex((i + 1) * (w / avgSize), -h * avizData.scaleSpectrumVal(rawSpectrumValB) + h);
       }
       endShape();
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void radialBars(float x, float y, float h, float rangeStart, float rangeEnd, float rotation) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape radialBars(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape();
       int avgSize = avizData.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
@@ -60,12 +153,10 @@ class AvizShapes {
         line(x1, y1, x2, y2);
       }
       endShape();
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void radialWire(float x, float y, float rangeStart, float rangeEnd, float rotation) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape radialWire(float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int avgSize = avizData.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
@@ -81,7 +172,7 @@ class AvizShapes {
         vertex(xB, yB);
       }
       endShape();
-      popMatrix();
+      return AvizShape.this;
     }
   }
 
@@ -92,9 +183,7 @@ class AvizShapes {
       avizData = data;
     }
 
-    void wire(float x, float y, float w, float h) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape wire(float w, float h) {
       int audioBufferSize = avizData.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float x1 = map( i, 0, audioBufferSize, 0, w);
@@ -106,12 +195,10 @@ class AvizShapes {
         line(x1, rightBufferScale + avizData.getRightBuffer(i) * waveformScale, x2, rightBufferScale + avizData.getRightBuffer(i + 1) * waveformScale);
       }
       endShape();
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void radialWire(float x, float y, float h, float rangeStart, float rangeEnd, float rotation) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape radialWire(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int audioBufferSize = avizData.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
@@ -128,7 +215,7 @@ class AvizShapes {
         vertex(xB, yB);
       }
       endShape();
-      popMatrix();
+      return AvizShape.this;
     }
   }
 
@@ -139,37 +226,29 @@ class AvizShapes {
       avizData = data;
     }
 
-    void bars(float x, float y, float w, float h) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape bars(float w, float h) {
       float rawLeftLevel = avizData.getLeftLevel();
       float rawRightLevel = avizData.getRightLevel();
       rect(0, 0, avizData.scaleLeftLevel(rawLeftLevel) * w, h / 2);
       rect(0, h / 2, avizData.scaleRightLevel(rawRightLevel) * w, h / 2);
       endShape();
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void intervalBars(float x, float y, float w, float h, float scale, AvizInterval interval) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape intervalBars(float w, float h, float scale, AvizInterval interval) {
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
         rect(i * (w / intervalSize), h, (w / intervalSize), -avizData.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
       }
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void cube(float x, float y, float scale, float rotation) {
-      pushMatrix();
-      translate(x, y);
-      rotateY(radians(rotation));
-      rotateX(radians(rotation));
+    AvizShape cube(float scale) {
       float rawLeftLevel = avizData.getLeftLevel();
       float rawRightLevel = avizData.getRightLevel();
       float boxLevel = ((avizData.scaleLeftLevel(rawLeftLevel) + avizData.scaleRightLevel(rawRightLevel)) / 2) * scale;
       box(boxLevel, boxLevel, boxLevel);
-      popMatrix();
+      return AvizShape.this;
     }
   }
 
@@ -180,29 +259,22 @@ class AvizShapes {
       avizData = data;
     }
 
-    void circle(float x, float y, float minRadius, float maxRadius, AvizAmplitude amplitude) {
+    AvizShape circle(float minRadius, float maxRadius, AvizAmplitude amplitude) {
       ellipseMode(RADIUS);
-      pushMatrix();
-      translate(x, y);
       float scale = maxRadius - minRadius;
       ellipse(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void square(float x, float y, float minRadius, float maxRadius, float rotation, AvizAmplitude amplitude) {
+    AvizShape square(float minRadius, float maxRadius, AvizAmplitude amplitude) {
       rectMode(CENTER);
-      pushMatrix();
-      translate(x, y);
-      rotateZ(radians(rotation));
       float scale = maxRadius - minRadius;
       rect(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
-      popMatrix();
       rectMode(CORNER);
+      return AvizShape.this;
     }
 
-    void splashCircle(float x, float y, float minRadius, float maxRadius, AvizInterval interval) {
-      pushMatrix();
-      translate(x, y);
+    AvizShape splashCircle(float minRadius, float maxRadius, AvizInterval interval) {
       pushStyle();
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
@@ -212,14 +284,11 @@ class AvizShapes {
         }
       }
       popStyle();
-      popMatrix();
+      return AvizShape.this;
     }
 
-    void splashSquare(float x, float y, float minRadius, float maxRadius, float rotation, AvizInterval interval) {
+    AvizShape splashSquare(float minRadius, float maxRadius, AvizInterval interval) {
       rectMode(CENTER);
-      pushMatrix();
-      translate(x, y);
-      rotateZ(radians(rotation));
       pushStyle();
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
@@ -229,16 +298,14 @@ class AvizShapes {
         }
       }
       popStyle();
-      popMatrix();
       rectMode(CORNER);
+      return AvizShape.this;
     }
-
 
   }
 
-  void svg(float x, float y, float scaleFactor, float origSize, PShape shape) {
-    pushMatrix();
-    translate(x - ((origSize * scaleFactor) / 2), y - ((origSize * scaleFactor) / 2));
+  AvizShape svg(float scaleFactor, float origSize, PShape shape) {
+    translate(-origSize * scaleFactor / 2, -origSize * scaleFactor / 2);
     pushStyle();
     shape.disableStyle();
     noStroke();
@@ -246,7 +313,7 @@ class AvizShapes {
     scale(scaleFactor);
     shape(shape, 0, 0);
     popStyle();
-    popMatrix();
+    return this;
   }
 }
 

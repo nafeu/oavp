@@ -11,4 +11,9 @@ float deltaE = 16;
 
 void debug() {
   // Insert Debug Code
+  println("paramA:", paramA);
+  println("paramB:", paramB);
+  println("paramC:", paramC);
+  println("paramD:", paramD);
+  println("paramE:", paramE);
 }

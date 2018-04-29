@@ -9,7 +9,7 @@ AvizAmplitude beatAmplitude;
 AvizPosition cameraPosition;
 AvizPosition entityPosition;
 AvizCamera camera;
-AvizShapes visualizers;
+AvizShape visualizers;
 FlatUIColors flatUIColors;
 PShape logo;
 PFont mono;
@@ -19,18 +19,18 @@ int primaryColor;
 int secondaryColor;
 
 void setup() {
-  size(600, 600, P3D);
+  size(1000, 1000, P3D);
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
   cameraPosition = new AvizPosition(0, 0, width);
   entityPosition = new AvizPosition(0, 0, width);
-  camera = new AvizCamera(cameraPosition, entityPosition, width / 2, height / 2);
+  camera = new AvizCamera(cameraPosition, entityPosition, width / 2, height / 2, 0.10);
 
   flatUIColors = new FlatUIColors();
   minim = new Minim(this);
   avizData = new AvizData(minim,
-                          "test-audio.mp3",
+                          configs.getString("audioFile"),
                           configs.getInt("bufferSize"),
                           configs.getInt("minBandwidthPerOctave"),
                           configs.getInt("bandsPerOctave"));
@@ -44,7 +44,7 @@ void setup() {
   beatInterval = new AvizInterval(100);
   beatAmplitude = new AvizAmplitude(0, 1, 0.08);
 
-  visualizers = new AvizShapes(avizData);
+  visualizers = new AvizShape(avizData, entityPosition);
 
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
@@ -83,74 +83,134 @@ void draw() {
 }
 
 void drawGallery() {
-  title("Beat Splash Square (Diamond)", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.beats.splashSquare(entityPosition.getCenteredX(), entityPosition.getCenteredY(), 0, width * 0.4, 45, beatInterval);
+  title("Beat Splash Square", entityPosition.getScaledX(), entityPosition.getScaledY());
+  visualizers
+    .create()
+    .center().middle()
+    .beats.splashSquare(0, width * 0.4, beatInterval)
+    .done();
 
   entityPosition.moveRight();
 
-  title("Beat Square (Diamond)", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.beats.square(entityPosition.getCenteredX(), entityPosition.getCenteredY(), 0, width * 0.4, 45, beatAmplitude);
+  title("Beat Square", entityPosition.getScaledX(), entityPosition.getScaledY());
+  visualizers
+    .create()
+    .center().middle()
+    .beats.square(0, width * 0.4, beatAmplitude)
+    .done();
 
   entityPosition.moveRight();
 
   title("Beat Splash Circle", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.beats.splashCircle(entityPosition.getCenteredX(), entityPosition.getCenteredY(), 0, width * 0.4, beatInterval);
+  visualizers
+    .create()
+    .center().middle()
+    .beats.splashCircle(0, width * 0.4, beatInterval)
+    .done();
 
   entityPosition.moveRight();
 
   title("Beat Circle", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.beats.circle(entityPosition.getCenteredX(), entityPosition.getCenteredY(), 0, width * 0.25, beatAmplitude);
+  visualizers
+    .create()
+    .center().middle()
+    .beats.circle(0, width * 0.25, beatAmplitude)
+    .done();
 
   entityPosition.moveToNextLine();
 
   title("Interval Bars", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.levels.intervalBars(entityPosition.getScaledX(), entityPosition.getScaledY(), width, height, height, levelInterval);
+  visualizers
+    .create()
+    .left().top()
+    .levels.intervalBars(width, height, height, levelInterval)
+    .done();
 
   entityPosition.moveRight();
 
   title("Custom SVG", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.svg(entityPosition.getCenteredX(), entityPosition.getCenteredY(), 400.0 / width, 400, logo);
+  visualizers
+    .create()
+    .center().middle()
+    .svg(400.0 / width, 400, logo)
+    .done();
 
   entityPosition.moveRight();
 
   title("Bar Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.spectrum.bars(entityPosition.getScaledX(), entityPosition.getScaledY(), width, height);
+  visualizers
+    .create()
+    .left().top()
+    .spectrum.bars(width, height)
+    .done();
 
   entityPosition.moveRight();
 
   title("Wire Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.spectrum.wire(entityPosition.getScaledX(), entityPosition.getScaledY(), width, height);
+  visualizers
+    .create()
+    .left().top()
+    .spectrum.wire(width, height)
+    .done();
 
   entityPosition.moveToNextLine();
 
   title("Radial Bar Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.spectrum.radialBars(entityPosition.getCenteredX(), entityPosition.getCenteredY(), width * 0.25, width * 0.33, width, frameCount * 0.25);
+  visualizers
+    .create()
+    .center().middle()
+    .spectrum.radialBars(width * 0.25, width * 0.33, width, frameCount * 0.25)
+    .done();
 
   entityPosition.moveRight();
 
   title("Radial Wire Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.spectrum.radialWire(entityPosition.getCenteredX(), entityPosition.getCenteredY(), width * 0.25, width * 1.50, frameCount * 0.25);
+  visualizers
+    .create()
+    .center().middle()
+    .spectrum.radialWire(width * 0.25, width * 1.50, frameCount * 0.25)
+    .done();
 
   entityPosition.moveRight();
 
   title("Wire Waveform", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.waveform.wire(entityPosition.getScaledX(), entityPosition.getScaledY(), width, height);
+  visualizers
+    .create()
+    .left().top()
+    .waveform.wire(width, height)
+    .done();
 
   entityPosition.moveRight();
 
   title("Radial Wire Waveform", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.waveform.radialWire(entityPosition.getCenteredX(), entityPosition.getCenteredY(), width * 0.25, width * 0.25, 0, frameCount * 0.25);
+  visualizers
+    .create()
+    .center().middle()
+    .waveform.radialWire(width * 0.25, width * 0.25, 0, frameCount * 0.25)
+    .done();
 
   entityPosition.moveToNextLine();
 
   title("Bar Levels", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.levels.bars(entityPosition.getScaledX(), entityPosition.getScaledY(), width, height);
+  visualizers
+    .create()
+    .left().top()
+    .levels.bars(width, height)
+    .done();
 
   entityPosition.moveRight();
 
   title("Cube Levels", entityPosition.getScaledX(), entityPosition.getScaledY());
-  visualizers.levels.cube(entityPosition.getCenteredX(), entityPosition.getCenteredY(), width * 0.75, frameCount);
-  visualizers.levels.cube(entityPosition.getCenteredX(), entityPosition.getCenteredY(), width * 0.25, -frameCount * 0.25);
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(frameCount, frameCount)
+    .levels.cube(width * 0.75)
+    .next()
+    .center().middle()
+    .rotate(-frameCount * 0.25, -frameCount * 0.25)
+    .levels.cube(width * 0.25)
+    .done();
 
   entityPosition.reset();
 }

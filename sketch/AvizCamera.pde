@@ -5,10 +5,10 @@ public class AvizCamera {
   float currCameraX = 0;
   float currCameraY = 0;
   float currCameraZ = 0;
-  float cameraEasing = 0.10;
   float finalEyeX;
   float finalEyeY;
   float finalEyeZ;
+  float cameraEasing;
   float finalCenterX;
   float finalCenterY;
   float finalCenterZ;
@@ -22,11 +22,12 @@ public class AvizCamera {
   AvizPosition cameraPosition;
   AvizPosition entityPosition;
 
-  AvizCamera(AvizPosition cameraPosition, AvizPosition entityPosition, float xOffset, float yOffset) {
+  AvizCamera(AvizPosition cameraPosition, AvizPosition entityPosition, float xOffset, float yOffset, float cameraEasing) {
     this.cameraPosition = cameraPosition;
     this.entityPosition = entityPosition;
     this.xOffset = xOffset;
     this.yOffset = yOffset;
+    this.cameraEasing = cameraEasing;
   }
 
   void update() {

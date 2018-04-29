@@ -145,8 +145,8 @@ void keyPressed() {
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
   if (e > 0) {
-    // Do something with forward scroll
+    camera.moveBackward();
   } else {
-    // Do something with backward scroll
+    camera.moveForward();
   }
 }
