@@ -127,6 +127,9 @@ void keyPressed() {
       case 'z':
         debug();
         break;
+      case 'x':
+        isDayMode = !isDayMode;
+        break;
       // case '$':
       //   param# += delta#;
       //   println("[$] param# : " + param#);

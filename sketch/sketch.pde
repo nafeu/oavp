@@ -17,19 +17,25 @@ PShape logo;
 PFont mono;
 JSONObject configs;
 
+float stageWidth = 1000;
+float stageHeight = 1000;
+float gridScale = 1000;
+
+boolean isDayMode = true;
 int primaryColor;
 int secondaryColor;
 
 void setup() {
-  size(1000, 1000, P3D);
+  // size(1280, 1000, P3D);
+  fullScreen(P3D);
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
-  style = new OavpStyle(configs.getInt("colorSeed"));
+  style = new OavpStyle(configs.getInt("colorAccent"));
 
-  cameraPosition = new OavpPosition(0, 0, width);
-  entityPosition = new OavpPosition(0, 0, width);
-  camera = new OavpCamera(cameraPosition, entityPosition, style, width / 2, height / 2, 0.10);
+  cameraPosition = new OavpPosition(0, 0, gridScale);
+  entityPosition = new OavpPosition(0, 0, gridScale);
+  camera = new OavpCamera(cameraPosition, entityPosition, style, stageWidth / 2, stageHeight / 2, 0.10);
 
   minim = new Minim(this);
 
@@ -55,7 +61,7 @@ void setup() {
 
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
-  textFont(mono, configs.getInt("fontUnit") * (Math.round(width * configs.getFloat("fontScale"))));
+  textFont(mono, configs.getInt("fontUnit") * (Math.round(stageWidth * configs.getFloat("fontScale"))));
 
   style.setTargetColor(cameraPosition);
 
@@ -70,13 +76,13 @@ void draw() {
   noFill();
   strokeWeight(2);
 
-  // Day Mode
-  primaryColor = style.flat.black;
-  secondaryColor = style.getIntermediateColor();
-
-  // Night Mode
-  // primaryColor = intermediateColor;
-  // secondaryColor = flatUIColors.black;
+  if (isDayMode) {
+    primaryColor = style.flat.black;
+    secondaryColor = style.getIntermediateColor();
+  } else {
+    primaryColor = style.getIntermediateColor();
+    secondaryColor = style.flat.black;
+  }
 
   stroke(primaryColor);
   background(secondaryColor);
@@ -101,7 +107,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.splashSquare(0, width * 0.4, beatInterval)
+    .beats.splashSquare(0, stageWidth * 0.4, beatInterval)
     .done();
 
   entityPosition.moveRight();
@@ -110,7 +116,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.square(0, width * 0.4, beatAmplitude)
+    .beats.square(0, stageWidth * 0.4, beatAmplitude)
     .done();
 
   entityPosition.moveRight();
@@ -119,7 +125,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.splashCircle(0, width * 0.4, beatInterval)
+    .beats.splashCircle(0, stageWidth * 0.4, beatInterval)
     .done();
 
   entityPosition.moveToNextLine();
@@ -128,7 +134,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.circle(0, width * 0.25, beatAmplitude)
+    .beats.circle(0, stageWidth * 0.25, beatAmplitude)
     .done();
 
   entityPosition.moveRight();
@@ -137,7 +143,7 @@ void drawGallery() {
   visualizers
     .create()
     .left().top()
-    .levels.intervalBars(width, height, height, levelInterval)
+    .levels.intervalBars(stageWidth, stageHeight, stageHeight, levelInterval)
     .done();
 
   entityPosition.moveRight();
@@ -146,7 +152,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .svg(400.0 / width, 400, logo)
+    .svg(400.0 / stageWidth, 400, logo)
     .done();
 
   entityPosition.moveRight();
@@ -155,7 +161,7 @@ void drawGallery() {
   visualizers
     .create()
     .left().top()
-    .spectrum.bars(width, height)
+    .spectrum.bars(stageWidth, stageHeight)
     .done();
 
   entityPosition.moveToNextLine();
@@ -164,7 +170,7 @@ void drawGallery() {
   visualizers
     .create()
     .left().top()
-    .spectrum.wire(width, height)
+    .spectrum.wire(stageWidth, stageHeight)
     .done();
 
   entityPosition.moveRight();
@@ -173,7 +179,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .spectrum.radialBars(width * 0.25, width * 0.33, width, frameCount * 0.25)
+    .spectrum.radialBars(stageWidth * 0.25, stageWidth * 0.33, stageWidth, frameCount * 0.25)
     .done();
 
   entityPosition.moveRight();
@@ -182,7 +188,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .spectrum.radialWire(width * 0.25, width * 1.50, frameCount * 0.25)
+    .spectrum.radialWire(stageWidth * 0.25, stageWidth * 1.50, frameCount * 0.25)
     .done();
 
   entityPosition.moveRight();
@@ -191,7 +197,7 @@ void drawGallery() {
   visualizers
     .create()
     .left().top()
-    .waveform.wire(width, height)
+    .waveform.wire(stageWidth, stageHeight)
     .done();
 
   entityPosition.moveToNextLine();
@@ -200,7 +206,7 @@ void drawGallery() {
   visualizers
     .create()
     .center().middle()
-    .waveform.radialWire(width * 0.25, width * 0.25, 0, frameCount * 0.25)
+    .waveform.radialWire(stageWidth * 0.25, stageWidth * 0.25, 0, frameCount * 0.25)
     .done();
 
   entityPosition.moveRight();
@@ -209,7 +215,7 @@ void drawGallery() {
   visualizers
     .create()
     .left().top()
-    .levels.bars(width, height)
+    .levels.bars(stageWidth, stageHeight)
     .done();
 
   entityPosition.moveRight();
@@ -219,11 +225,11 @@ void drawGallery() {
     .create()
     .center().middle()
     .rotate(frameCount, frameCount)
-    .levels.cube(width * 0.75)
+    .levels.cube(stageWidth * 0.75)
     .next()
     .center().middle()
     .rotate(-frameCount * 0.25, -frameCount * 0.25)
-    .levels.cube(width * 0.25)
+    .levels.cube(stageWidth * 0.25)
     .done();
 
   entityPosition.reset();

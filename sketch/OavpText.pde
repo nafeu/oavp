@@ -14,7 +14,6 @@ public class OavpText {
 
   void write(String text, float x, float y, float w, float h, float padding) {
     pushStyle();
-    fill(0);
     // textAlign(CENTER);
     text(text, x + padding, y + padding, w - padding * 2, h - padding * 2);
     popStyle();
@@ -28,7 +27,6 @@ public class OavpText {
 
   void write(String text) {
     pushStyle();
-    fill(0);
     // textAlign(CENTER);
     text(text, cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.scale - padding * 2, cursor.scale - padding * 2);
     popStyle();

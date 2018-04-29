@@ -47,8 +47,8 @@ public class OavpCamera {
       centerY = yOffset - (mouseY - lastYOffset);
 
       if (mouseButton == RIGHT) {
-        xOffset = width/2.0;
-        yOffset = height/2.0;
+        xOffset = stageWidth/2.0;
+        yOffset = stageHeight/2.0;
         centerX = xOffset;
         centerY = yOffset;
       }
@@ -74,9 +74,9 @@ public class OavpCamera {
     float dz = targetCameraZ - currCameraZ;
     currCameraZ += dz * cameraEasing;
 
-    finalEyeX = width/2.0 + currCameraX;
-    finalEyeY = height/2.0 + currCameraY;
-    finalEyeZ = (height/2.0) / tan(PI*30.0 / 180.0) + currCameraZ;
+    finalEyeX = stageWidth/2.0 + currCameraX;
+    finalEyeY = stageHeight/2.0 + currCameraY;
+    finalEyeZ = (stageHeight/2.0) / tan(PI*30.0 / 180.0) + currCameraZ;
     finalCenterX = centerX + currCameraX;
     finalCenterY = centerY + currCameraY;
     finalCenterZ = currCameraZ;
@@ -130,11 +130,11 @@ public class OavpCamera {
   }
 
   void moveForward() {
-    targetCameraZ = max(targetCameraZ - width / 2, -width / 2);
+    targetCameraZ = max(targetCameraZ - stageWidth / 2, -stageWidth / 2);
   }
 
   void moveBackward() {
-    targetCameraZ = min(targetCameraZ + width / 2, width * 2);
+    targetCameraZ = min(targetCameraZ + stageWidth / 2, stageWidth * 2);
   }
 }
 
