@@ -10,8 +10,8 @@ OavpPosition cameraPosition;
 OavpPosition entityPosition;
 OavpCamera camera;
 OavpShape visualizers;
-OavpText oavpText;
-FlatUIColors flatUIColors;
+OavpText text;
+OavpStyle style;
 PShape logo;
 PFont mono;
 JSONObject configs;
@@ -24,11 +24,12 @@ void setup() {
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
+  style = new OavpStyle(25);
+
   cameraPosition = new OavpPosition(0, 0, width);
   entityPosition = new OavpPosition(0, 0, width);
-  camera = new OavpCamera(cameraPosition, entityPosition, width / 2, height / 2, 0.10);
+  camera = new OavpCamera(cameraPosition, entityPosition, style, width / 2, height / 2, 0.10);
 
-  flatUIColors = new FlatUIColors();
   minim = new Minim(this);
   oavpData = new OavpData(minim,
                           configs.getString("audioFile"),
@@ -46,27 +47,27 @@ void setup() {
   beatAmplitude = new OavpAmplitude(0, 1, 0.08);
 
   visualizers = new OavpShape(oavpData, entityPosition);
-  oavpText = new OavpText(entityPosition);
-  oavpText.setPadding(20);
+  text = new OavpText(entityPosition);
+  text.setPadding(20);
 
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
   textFont(mono, configs.getInt("fontUnit") * (Math.round(width * configs.getFloat("fontScale"))));
 
-  targetColor = getRandomColor(cameraPosition.x, cameraPosition.y, colorSeed);
+  style.setTargetColor(cameraPosition);
 
   debug();
 }
 
 void draw() {
-  updateColorInterp();
-  intermediateColor = lerpColor(currColor, targetColor, currInterp);
+  style.updateColorInterp();
+  style.getIntermediateColor();
   noFill();
   strokeWeight(2);
 
   // Day Mode
-  primaryColor = flatUIColors.black;
-  secondaryColor = intermediateColor;
+  primaryColor = style.flat.black;
+  secondaryColor = style.getIntermediateColor();
 
   // Night Mode
   // primaryColor = intermediateColor;
@@ -86,11 +87,11 @@ void draw() {
 }
 
 void drawGallery() {
-  oavpText.read("intro.txt");
+  text.read("intro.txt");
 
   entityPosition.moveRight();
 
-  oavpText.write("Beat Splash Square");
+  text.write("Beat Splash Square");
   visualizers
     .create()
     .center().middle()
@@ -99,7 +100,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Beat Square");
+  text.write("Beat Square");
   visualizers
     .create()
     .center().middle()
@@ -108,7 +109,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Beat Splash Circle");
+  text.write("Beat Splash Circle");
   visualizers
     .create()
     .center().middle()
@@ -117,7 +118,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Beat Circle");
+  text.write("Beat Circle");
   visualizers
     .create()
     .center().middle()
@@ -126,7 +127,7 @@ void drawGallery() {
 
   entityPosition.moveToNextLine();
 
-  oavpText.write("Interval Bars");
+  text.write("Interval Bars");
   visualizers
     .create()
     .left().top()
@@ -135,7 +136,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Custom SVG");
+  text.write("Custom SVG");
   visualizers
     .create()
     .center().middle()
@@ -144,7 +145,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Bar Spectrum");
+  text.write("Bar Spectrum");
   visualizers
     .create()
     .left().top()
@@ -153,7 +154,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Wire Spectrum");
+  text.write("Wire Spectrum");
   visualizers
     .create()
     .left().top()
@@ -162,7 +163,7 @@ void drawGallery() {
 
   entityPosition.moveToNextLine();
 
-  oavpText.write("Radial Bar Spectrum");
+  text.write("Radial Bar Spectrum");
   visualizers
     .create()
     .center().middle()
@@ -171,7 +172,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Radial Wire Spectrum");
+  text.write("Radial Wire Spectrum");
   visualizers
     .create()
     .center().middle()
@@ -180,7 +181,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Wire Waveform");
+  text.write("Wire Waveform");
   visualizers
     .create()
     .left().top()
@@ -189,7 +190,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Radial Wire Waveform");
+  text.write("Radial Wire Waveform");
   visualizers
     .create()
     .center().middle()
@@ -198,7 +199,7 @@ void drawGallery() {
 
   entityPosition.moveToNextLine();
 
-  oavpText.write("Bar Levels");
+  text.write("Bar Levels");
   visualizers
     .create()
     .left().top()
@@ -207,7 +208,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  oavpText.write("Cube Levels");
+  text.write("Cube Levels");
   visualizers
     .create()
     .center().middle()

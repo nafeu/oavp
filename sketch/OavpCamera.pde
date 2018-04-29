@@ -21,13 +21,15 @@ public class OavpCamera {
   float lastYOffset;
   OavpPosition cameraPosition;
   OavpPosition entityPosition;
+  OavpStyle style;
 
-  OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, float xOffset, float yOffset, float cameraEasing) {
+  OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, OavpStyle style, float xOffset, float yOffset, float cameraEasing) {
     this.cameraPosition = cameraPosition;
     this.entityPosition = entityPosition;
     this.xOffset = xOffset;
     this.yOffset = yOffset;
     this.cameraEasing = cameraEasing;
+    this.style = style;
   }
 
   void update() {
@@ -96,18 +98,17 @@ public class OavpCamera {
   void moveRight() {
     if (cameraPosition.moveRight(entityPosition.getUpperBoundX())) {
       targetCameraX = cameraPosition.getScaledX();
-      updateColor();
     } else if (cameraPosition.moveToNextLine(entityPosition.getUpperBoundY())) {
       targetCameraX = cameraPosition.getScaledX();
       targetCameraY = cameraPosition.getScaledY();
-      updateColor();
     }
+    style.updateColor(this.cameraPosition);
   }
 
   void moveLeft() {
     if (cameraPosition.moveLeft(entityPosition.getLowerBoundX())) {
       targetCameraX = cameraPosition.getScaledX();
-      updateColor();
+      style.updateColor(this.cameraPosition);
     } else if (cameraPosition.moveToPrevLine(entityPosition.getLowerBoundY())) {
       targetCameraX = cameraPosition.getScaledX();
       targetCameraY = cameraPosition.getScaledY();
@@ -117,14 +118,14 @@ public class OavpCamera {
   void moveDown() {
     if (cameraPosition.moveDown(entityPosition.getUpperBoundY())) {
       targetCameraY = cameraPosition.getScaledY();
-      updateColor();
+      style.updateColor(this.cameraPosition);
     }
   }
 
   void moveUp() {
     if (cameraPosition.moveUp(entityPosition.getLowerBoundY())) {
       targetCameraY = cameraPosition.getScaledY();
-      updateColor();
+      style.updateColor(this.cameraPosition);
     }
   }
 

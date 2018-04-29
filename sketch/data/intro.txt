@@ -10,4 +10,6 @@ Welcome to oavp, a set of tools created to rapidly generate high quality, 60fps,
 
 Controls:
 [ wasd / arrow keys ] to navigate through the gallery
-[ shift + ws / mwheel ] to zoom in/out
+[ shift + ws / mousewheel ] to zoom in/out
+[ left-click mouse + movement ] to change viewing angle
+[ space ] pause/play audio
