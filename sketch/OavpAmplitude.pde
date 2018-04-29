@@ -1,10 +1,10 @@
-public class AvizAmplitude {
+public class OavpAmplitude {
   float easing;
   float min;
   float max;
   float value;
 
-  AvizAmplitude(float min, float max, float easing) {
+  OavpAmplitude(float min, float max, float easing) {
     this.min = min;
     this.max = max;
     this.easing = easing;
@@ -18,8 +18,8 @@ public class AvizAmplitude {
     this.value = value;
   }
 
-  void update(AvizData avizData) {
-    if (avizData.isBeatOnset()) {
+  void update(OavpData oavpData) {
+    if (oavpData.isBeatOnset()) {
       value = max;
     } else {
       float dv = value - min;

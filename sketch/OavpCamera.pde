@@ -1,4 +1,4 @@
-public class AvizCamera {
+public class OavpCamera {
   float targetCameraX = 0;
   float targetCameraY = 0;
   float targetCameraZ = 0;
@@ -19,10 +19,10 @@ public class AvizCamera {
   float yOffset;
   float lastXOffset;
   float lastYOffset;
-  AvizPosition cameraPosition;
-  AvizPosition entityPosition;
+  OavpPosition cameraPosition;
+  OavpPosition entityPosition;
 
-  AvizCamera(AvizPosition cameraPosition, AvizPosition entityPosition, float xOffset, float yOffset, float cameraEasing) {
+  OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, float xOffset, float yOffset, float cameraEasing) {
     this.cameraPosition = cameraPosition;
     this.entityPosition = entityPosition;
     this.xOffset = xOffset;

@@ -2,14 +2,15 @@ import ddf.minim.analysis.*;
 import ddf.minim.*;
 
 Minim minim;
-AvizData avizData;
-AvizInterval levelInterval;
-AvizInterval beatInterval;
-AvizAmplitude beatAmplitude;
-AvizPosition cameraPosition;
-AvizPosition entityPosition;
-AvizCamera camera;
-AvizShape visualizers;
+OavpData oavpData;
+OavpInterval levelInterval;
+OavpInterval beatInterval;
+OavpAmplitude beatAmplitude;
+OavpPosition cameraPosition;
+OavpPosition entityPosition;
+OavpCamera camera;
+OavpShape visualizers;
+OavpText oavpText;
 FlatUIColors flatUIColors;
 PShape logo;
 PFont mono;
@@ -23,28 +24,30 @@ void setup() {
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
-  cameraPosition = new AvizPosition(0, 0, width);
-  entityPosition = new AvizPosition(0, 0, width);
-  camera = new AvizCamera(cameraPosition, entityPosition, width / 2, height / 2, 0.10);
+  cameraPosition = new OavpPosition(0, 0, width);
+  entityPosition = new OavpPosition(0, 0, width);
+  camera = new OavpCamera(cameraPosition, entityPosition, width / 2, height / 2, 0.10);
 
   flatUIColors = new FlatUIColors();
   minim = new Minim(this);
-  avizData = new AvizData(minim,
+  oavpData = new OavpData(minim,
                           configs.getString("audioFile"),
                           configs.getInt("bufferSize"),
                           configs.getInt("minBandwidthPerOctave"),
                           configs.getInt("bandsPerOctave"));
-  avizData.setSpectrumSmoothing(0.80f);
-  avizData.setLevelSmoothing(0.95f);
-  avizData.setBufferSmoothing(0.85f);
+  oavpData.setSpectrumSmoothing(0.80f);
+  oavpData.setLevelSmoothing(0.95f);
+  oavpData.setBufferSmoothing(0.85f);
 
-  levelInterval = new AvizInterval(20);
+  levelInterval = new OavpInterval(20);
   levelInterval.setDelay(2);
 
-  beatInterval = new AvizInterval(100);
-  beatAmplitude = new AvizAmplitude(0, 1, 0.08);
+  beatInterval = new OavpInterval(100);
+  beatAmplitude = new OavpAmplitude(0, 1, 0.08);
 
-  visualizers = new AvizShape(avizData, entityPosition);
+  visualizers = new OavpShape(oavpData, entityPosition);
+  oavpText = new OavpText(entityPosition);
+  oavpText.setPadding(20);
 
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
@@ -74,16 +77,20 @@ void draw() {
 
   camera.update();
 
-  avizData.forward();
-  levelInterval.update(avizData.getLeftLevel());
-  beatInterval.update(avizData.isBeatOnset());
-  beatAmplitude.update(avizData);
+  oavpData.forward();
+  levelInterval.update(oavpData.getLeftLevel());
+  beatInterval.update(oavpData.isBeatOnset());
+  beatAmplitude.update(oavpData);
 
   drawGallery();
 }
 
 void drawGallery() {
-  title("Beat Splash Square", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.read("intro.txt");
+
+  entityPosition.moveRight();
+
+  oavpText.write("Beat Splash Square");
   visualizers
     .create()
     .center().middle()
@@ -92,7 +99,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Beat Square", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Beat Square");
   visualizers
     .create()
     .center().middle()
@@ -101,7 +108,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Beat Splash Circle", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Beat Splash Circle");
   visualizers
     .create()
     .center().middle()
@@ -110,7 +117,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Beat Circle", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Beat Circle");
   visualizers
     .create()
     .center().middle()
@@ -119,7 +126,7 @@ void drawGallery() {
 
   entityPosition.moveToNextLine();
 
-  title("Interval Bars", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Interval Bars");
   visualizers
     .create()
     .left().top()
@@ -128,7 +135,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Custom SVG", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Custom SVG");
   visualizers
     .create()
     .center().middle()
@@ -137,7 +144,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Bar Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Bar Spectrum");
   visualizers
     .create()
     .left().top()
@@ -146,7 +153,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Wire Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Wire Spectrum");
   visualizers
     .create()
     .left().top()
@@ -155,7 +162,7 @@ void drawGallery() {
 
   entityPosition.moveToNextLine();
 
-  title("Radial Bar Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Radial Bar Spectrum");
   visualizers
     .create()
     .center().middle()
@@ -164,7 +171,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Radial Wire Spectrum", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Radial Wire Spectrum");
   visualizers
     .create()
     .center().middle()
@@ -173,7 +180,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Wire Waveform", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Wire Waveform");
   visualizers
     .create()
     .left().top()
@@ -182,7 +189,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Radial Wire Waveform", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Radial Wire Waveform");
   visualizers
     .create()
     .center().middle()
@@ -191,7 +198,7 @@ void drawGallery() {
 
   entityPosition.moveToNextLine();
 
-  title("Bar Levels", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Bar Levels");
   visualizers
     .create()
     .left().top()
@@ -200,7 +207,7 @@ void drawGallery() {
 
   entityPosition.moveRight();
 
-  title("Cube Levels", entityPosition.getScaledX(), entityPosition.getScaledY());
+  oavpText.write("Cube Levels");
   visualizers
     .create()
     .center().middle()

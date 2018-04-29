@@ -1,88 +1,88 @@
-class AvizShape {
+class OavpShape {
   public Spectrum spectrum;
   public Waveform waveform;
   public Levels levels;
   public Beats beats;
-  public AvizPosition cursor;
+  public OavpPosition cursor;
 
-  AvizShape(AvizData data) {
-    spectrum = new Spectrum(avizData);
-    waveform = new Waveform(avizData);
-    levels = new Levels(avizData);
-    beats = new Beats(avizData);
+  OavpShape(OavpData data) {
+    spectrum = new Spectrum(oavpData);
+    waveform = new Waveform(oavpData);
+    levels = new Levels(oavpData);
+    beats = new Beats(oavpData);
   }
 
-  AvizShape(AvizData data, AvizPosition cursor) {
-    spectrum = new Spectrum(avizData);
-    waveform = new Waveform(avizData);
-    levels = new Levels(avizData);
-    beats = new Beats(avizData);
+  OavpShape(OavpData data, OavpPosition cursor) {
+    spectrum = new Spectrum(oavpData);
+    waveform = new Waveform(oavpData);
+    levels = new Levels(oavpData);
+    beats = new Beats(oavpData);
     this.cursor = cursor;
   }
 
-  void attach(AvizPosition cursor) {
+  void attach(OavpPosition cursor) {
     this.cursor = cursor;
   }
 
-  AvizShape create() {
+  OavpShape create() {
     pushMatrix();
     return this;
   }
 
-  AvizShape center() {
+  OavpShape center() {
     translate(cursor.getCenteredX(), 0);
     return this;
   }
 
-  AvizShape middle() {
+  OavpShape middle() {
     translate(0, cursor.getCenteredY());
     return this;
   }
 
-  AvizShape left() {
+  OavpShape left() {
     translate(cursor.getScaledX(), 0);
     return this;
   }
 
-  AvizShape right() {
+  OavpShape right() {
     translate(cursor.getScaledX() + cursor.scale, 0);
     return this;
   }
 
-  AvizShape top() {
+  OavpShape top() {
     translate(0, cursor.getScaledY());
     return this;
   }
 
-  AvizShape bottom() {
+  OavpShape bottom() {
     translate(0, cursor.getScaledY() + cursor.scale);
     return this;
   }
 
-  AvizShape rotate(float x) {
+  OavpShape rotate(float x) {
     rotateX(radians(x));
     return this;
   }
 
-  AvizShape rotate(float x, float y) {
+  OavpShape rotate(float x, float y) {
     rotateX(radians(x));
     rotateY(radians(y));
     return this;
   }
 
-  AvizShape next() {
+  OavpShape next() {
     popMatrix();
     pushMatrix();
     return this;
   }
 
-  AvizShape create(float x, float y) {
+  OavpShape create(float x, float y) {
     pushMatrix();
     translate(x, y);
     return this;
   }
 
-  AvizShape create(float x, float y, float rotationX, float rotationY) {
+  OavpShape create(float x, float y, float rotationX, float rotationY) {
     pushMatrix();
     translate(x, y);
     rotateX(radians(rotationX));
@@ -90,13 +90,13 @@ class AvizShape {
     return this;
   }
 
-  AvizShape create(float x, float y, float z) {
+  OavpShape create(float x, float y, float z) {
     pushMatrix();
     translate(x, y, z);
     return this;
   }
 
-  AvizShape create(float x, float y, float z, float rotationX, float rotationY, float rotationZ) {
+  OavpShape create(float x, float y, float z, float rotationX, float rotationY, float rotationZ) {
     pushMatrix();
     translate(x, y, z);
     rotateX(radians(rotationX));
@@ -105,47 +105,47 @@ class AvizShape {
     return this;
   }
 
-  AvizShape done() {
+  OavpShape done() {
     popMatrix();
     return this;
   }
 
   class Spectrum {
-    AvizData avizData;
+    OavpData oavpData;
 
-    Spectrum(AvizData data) {
-      avizData = data;
+    Spectrum(OavpData data) {
+      oavpData = data;
     }
 
-    AvizShape bars(float w, float h) {
-      int avgSize = avizData.getAvgSize();
+    OavpShape bars(float w, float h) {
+      int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
-        float rawAmplitude = avizData.getSpectrumVal(i);
-        float displayAmplitude = avizData.scaleSpectrumVal(rawAmplitude);
+        float rawAmplitude = oavpData.getSpectrumVal(i);
+        float displayAmplitude = oavpData.scaleSpectrumVal(rawAmplitude);
         rect(i * (w / avgSize), h, (w / avgSize), -h * displayAmplitude);
       }
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape wire(float w, float h) {
+    OavpShape wire(float w, float h) {
       beginShape(LINES);
-      int avgSize = avizData.getAvgSize();
+      int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
-        float rawSpectrumValA = avizData.getSpectrumVal(i);
-        float rawSpectrumValB = avizData.getSpectrumVal(i + 1);
-        vertex(i * (w / avgSize), -h * avizData.scaleSpectrumVal(rawSpectrumValA) + h);
-        vertex((i + 1) * (w / avgSize), -h * avizData.scaleSpectrumVal(rawSpectrumValB) + h);
+        float rawSpectrumValA = oavpData.getSpectrumVal(i);
+        float rawSpectrumValB = oavpData.getSpectrumVal(i + 1);
+        vertex(i * (w / avgSize), -h * oavpData.scaleSpectrumVal(rawSpectrumValA) + h);
+        vertex((i + 1) * (w / avgSize), -h * oavpData.scaleSpectrumVal(rawSpectrumValB) + h);
       }
       endShape();
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape radialBars(float h, float rangeStart, float rangeEnd, float rotation) {
+    OavpShape radialBars(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape();
-      int avgSize = avizData.getAvgSize();
+      int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
         float angle = map(i, 0, avgSize, 0, 360) - rotation;
-        float r = map(avizData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
+        float r = map(oavpData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
         float x1 = h * cos(radians(angle));
         float y1 = h * sin(radians(angle));
         float x2 = r * cos(radians(angle));
@@ -153,128 +153,128 @@ class AvizShape {
         line(x1, y1, x2, y2);
       }
       endShape();
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape radialWire(float rangeStart, float rangeEnd, float rotation) {
+    OavpShape radialWire(float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
-      int avgSize = avizData.getAvgSize();
+      int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
         float angleA = map(i, 0, avgSize, 0, 360) - rotation;
-        float rA = map(avizData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
+        float rA = map(oavpData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
         float xA = rA * cos(radians(angleA));
         float yA = rA * sin(radians(angleA));
         float angleB = map(i + 1, 0, avgSize, 0, 360) - rotation;
-        float rB = map(avizData.getSpectrumVal(i + 1), 0, 256, rangeStart, rangeEnd);
+        float rB = map(oavpData.getSpectrumVal(i + 1), 0, 256, rangeStart, rangeEnd);
         float xB = rB * cos(radians(angleB));
         float yB = rB * sin(radians(angleB));
         vertex(xA, yA);
         vertex(xB, yB);
       }
       endShape();
-      return AvizShape.this;
+      return OavpShape.this;
     }
   }
 
   class Waveform {
-    AvizData avizData;
+    OavpData oavpData;
 
-    Waveform(AvizData data) {
-      avizData = data;
+    Waveform(OavpData data) {
+      oavpData = data;
     }
 
-    AvizShape wire(float w, float h) {
-      int audioBufferSize = avizData.getBufferSize();
+    OavpShape wire(float w, float h) {
+      int audioBufferSize = oavpData.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float x1 = map( i, 0, audioBufferSize, 0, w);
         float x2 = map( i + 1, 0, audioBufferSize, 0, w);
         float leftBufferScale = (h / 4);
         float rightBufferScale = (h / 4) * 3;
         float waveformScale = (h / 4);
-        line(x1, leftBufferScale + avizData.getLeftBuffer(i) * waveformScale, x2, leftBufferScale + avizData.getLeftBuffer(i + 1) * waveformScale);
-        line(x1, rightBufferScale + avizData.getRightBuffer(i) * waveformScale, x2, rightBufferScale + avizData.getRightBuffer(i + 1) * waveformScale);
+        line(x1, leftBufferScale + oavpData.getLeftBuffer(i) * waveformScale, x2, leftBufferScale + oavpData.getLeftBuffer(i + 1) * waveformScale);
+        line(x1, rightBufferScale + oavpData.getRightBuffer(i) * waveformScale, x2, rightBufferScale + oavpData.getRightBuffer(i + 1) * waveformScale);
       }
       endShape();
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape radialWire(float h, float rangeStart, float rangeEnd, float rotation) {
+    OavpShape radialWire(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
-      int audioBufferSize = avizData.getBufferSize();
+      int audioBufferSize = oavpData.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float angleA = map(i, 0, audioBufferSize, 0, 360) - rotation;
-        float rA = h + map(avizData.getLeftBuffer(i), -1, 1, rangeStart, rangeEnd);
+        float rA = h + map(oavpData.getLeftBuffer(i), -1, 1, rangeStart, rangeEnd);
         float xA = rA * cos(radians(angleA));
         float yA = rA * sin(radians(angleA));
 
         float angleB = map(i + 1, 0, audioBufferSize, 0, 360) - rotation;
-        float rB = h + map(avizData.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
+        float rB = h + map(oavpData.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
         float xB = rB * cos(radians(angleB));
         float yB = rB * sin(radians(angleB));
         vertex(xA, yA);
         vertex(xB, yB);
       }
       endShape();
-      return AvizShape.this;
+      return OavpShape.this;
     }
   }
 
   class Levels {
-    AvizData avizData;
+    OavpData oavpData;
 
-    Levels(AvizData data) {
-      avizData = data;
+    Levels(OavpData data) {
+      oavpData = data;
     }
 
-    AvizShape bars(float w, float h) {
-      float rawLeftLevel = avizData.getLeftLevel();
-      float rawRightLevel = avizData.getRightLevel();
-      rect(0, 0, avizData.scaleLeftLevel(rawLeftLevel) * w, h / 2);
-      rect(0, h / 2, avizData.scaleRightLevel(rawRightLevel) * w, h / 2);
+    OavpShape bars(float w, float h) {
+      float rawLeftLevel = oavpData.getLeftLevel();
+      float rawRightLevel = oavpData.getRightLevel();
+      rect(0, 0, oavpData.scaleLeftLevel(rawLeftLevel) * w, h / 2);
+      rect(0, h / 2, oavpData.scaleRightLevel(rawRightLevel) * w, h / 2);
       endShape();
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape intervalBars(float w, float h, float scale, AvizInterval interval) {
+    OavpShape intervalBars(float w, float h, float scale, OavpInterval interval) {
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
-        rect(i * (w / intervalSize), h, (w / intervalSize), -avizData.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
+        rect(i * (w / intervalSize), h, (w / intervalSize), -oavpData.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
       }
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape cube(float scale) {
-      float rawLeftLevel = avizData.getLeftLevel();
-      float rawRightLevel = avizData.getRightLevel();
-      float boxLevel = ((avizData.scaleLeftLevel(rawLeftLevel) + avizData.scaleRightLevel(rawRightLevel)) / 2) * scale;
+    OavpShape cube(float scale) {
+      float rawLeftLevel = oavpData.getLeftLevel();
+      float rawRightLevel = oavpData.getRightLevel();
+      float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
       box(boxLevel, boxLevel, boxLevel);
-      return AvizShape.this;
+      return OavpShape.this;
     }
   }
 
   class Beats {
-    AvizData avizData;
+    OavpData oavpData;
 
-    Beats(AvizData data) {
-      avizData = data;
+    Beats(OavpData data) {
+      oavpData = data;
     }
 
-    AvizShape circle(float minRadius, float maxRadius, AvizAmplitude amplitude) {
+    OavpShape circle(float minRadius, float maxRadius, OavpAmplitude amplitude) {
       ellipseMode(RADIUS);
       float scale = maxRadius - minRadius;
       ellipse(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape square(float minRadius, float maxRadius, AvizAmplitude amplitude) {
+    OavpShape square(float minRadius, float maxRadius, OavpAmplitude amplitude) {
       rectMode(CENTER);
       float scale = maxRadius - minRadius;
       rect(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
       rectMode(CORNER);
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape splashCircle(float minRadius, float maxRadius, AvizInterval interval) {
+    OavpShape splashCircle(float minRadius, float maxRadius, OavpInterval interval) {
       pushStyle();
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
@@ -284,10 +284,10 @@ class AvizShape {
         }
       }
       popStyle();
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
-    AvizShape splashSquare(float minRadius, float maxRadius, AvizInterval interval) {
+    OavpShape splashSquare(float minRadius, float maxRadius, OavpInterval interval) {
       rectMode(CENTER);
       pushStyle();
       int intervalSize = interval.getIntervalSize();
@@ -299,12 +299,12 @@ class AvizShape {
       }
       popStyle();
       rectMode(CORNER);
-      return AvizShape.this;
+      return OavpShape.this;
     }
 
   }
 
-  AvizShape svg(float scaleFactor, float origSize, PShape shape) {
+  OavpShape svg(float scaleFactor, float origSize, PShape shape) {
     translate(-origSize * scaleFactor / 2, -origSize * scaleFactor / 2);
     pushStyle();
     shape.disableStyle();

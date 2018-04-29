@@ -24,7 +24,7 @@ void keyPressed() {
   } else {
     switch (key) {
       case ' ':
-        avizData.toggleLoop();
+        oavpData.toggleLoop();
         break;
       case 'y':
         paramA += deltaA;

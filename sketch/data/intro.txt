@@ -1,0 +1,13 @@
+[ oavp ] - Open Audio Visualizers for Processing
+
+2018 - Nafeu Nasir | github.com/nafeu
+
+---
+
+Welcome to oavp, a set of tools created to rapidly generate high quality, 60fps, abstract artwork visuals synced to any sound input (files or live input). Perfect for youtube music channels, music videos, art installations, or live visuals during a performance.
+
+---
+
+Controls:
+[ wasd / arrow keys ] to navigate through the gallery
+[ shift + ws / mwheel ] to zoom in/out

@@ -1,4 +1,4 @@
-public class AvizInterval {
+public class OavpInterval {
 
   float[][] intervalData;
   int storageSize;
@@ -6,14 +6,14 @@ public class AvizInterval {
   int frameDelayCount = 0;
   int delay;
 
-  AvizInterval(int storageSize, int snapshotSize) {
+  OavpInterval(int storageSize, int snapshotSize) {
     this.storageSize = storageSize;
     this.snapshotSize = snapshotSize;
     this.delay = 1;
     intervalData = new float[storageSize][snapshotSize];
   }
 
-  AvizInterval(int storageSize) {
+  OavpInterval(int storageSize) {
     this.storageSize = storageSize;
     this.snapshotSize = 1;
     this.delay = 1;

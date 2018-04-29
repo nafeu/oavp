@@ -1,4 +1,4 @@
-public class AvizPosition {
+public class OavpPosition {
   public int x;
   public int y;
   private int startingX;
@@ -6,7 +6,7 @@ public class AvizPosition {
   public float scale;
   public int[] xRange = new int[2];
   public int[] yRange = new int[2];
-  AvizPosition(int initialX, int initialY, float initialScale) {
+  OavpPosition(int initialX, int initialY, float initialScale) {
     x = initialX;
     startingX = initialX;
     y = initialY;

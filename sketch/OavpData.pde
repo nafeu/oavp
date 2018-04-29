@@ -1,4 +1,4 @@
-public class AvizData {
+public class OavpData {
   private FFT fft;
   private AudioPlayer audio;
   private BeatDetect beat;
@@ -27,7 +27,7 @@ public class AvizData {
   private boolean firstMinDone = true;
   private boolean useDB = true;
 
-  AvizData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
+  OavpData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
     audio = minim.loadFile(path, bufferSize);
     audio.loop();
     beat = new BeatDetect();
