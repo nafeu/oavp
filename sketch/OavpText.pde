@@ -20,10 +20,10 @@ public class OavpText {
     popStyle();
   }
 
-  void read(String path) {
+  String read(String path) {
     String[] lines = loadStrings(path);
     String text = String.join("\n", lines);
-    text(text, cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.scale - padding * 2, cursor.scale - padding * 2);
+    return text;
   }
 
   void write(String text) {

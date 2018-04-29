@@ -12,6 +12,7 @@ OavpCamera camera;
 OavpShape visualizers;
 OavpText text;
 OavpStyle style;
+String introText;
 PShape logo;
 PFont mono;
 JSONObject configs;
@@ -56,6 +57,8 @@ void setup() {
 
   style.setTargetColor(cameraPosition);
 
+  introText = text.read("intro.txt");
+
   debug();
 }
 
@@ -87,7 +90,8 @@ void draw() {
 }
 
 void drawGallery() {
-  text.read("intro.txt");
+
+  text.write(introText);
 
   entityPosition.moveRight();
 
