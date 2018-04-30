@@ -5,9 +5,11 @@ import java.util.Random;
 Minim minim;
 OavpData oavpData;
 OavpInterval levelInterval;
+OavpGridInterval levelGridInterval;
 OavpInterval beatInterval;
 OavpAmplitude beatAmplitude;
 OavpInterval beatAmplitudeInterval;
+OavpGridInterval beatAmplitudeGridInterval;
 OavpPosition cameraPosition;
 OavpPosition entityPosition;
 OavpCamera camera;
@@ -28,7 +30,7 @@ int defaultStrokeWeight = 2;
 
 void setup() {
   // size(1280, 1000, P3D);
-  fullScreen(P3D);
+  fullScreen(P3D, 2);
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
@@ -41,7 +43,7 @@ void setup() {
   minim = new Minim(this);
 
   oavpData = new OavpData(minim,
-                          configs.getString("audioFile"),
+                          // configs.getString("audioFile"),
                           configs.getInt("bufferSize"),
                           configs.getInt("minBandwidthPerOctave"),
                           configs.getInt("bandsPerOctave"));
@@ -52,10 +54,12 @@ void setup() {
 
   levelInterval = new OavpInterval(20);
   levelInterval.setDelay(2);
+  levelGridInterval = new OavpGridInterval(10);
 
   beatInterval = new OavpInterval(100);
   beatAmplitude = new OavpAmplitude(0, 1, 0.08);
   beatAmplitudeInterval = new OavpInterval(20);
+  beatAmplitudeGridInterval = new OavpGridInterval(10);
 
   visualizers = new OavpShape(oavpData, entityPosition);
   text = new OavpText(entityPosition);
@@ -84,10 +88,13 @@ void draw() {
   camera.update();
 
   oavpData.forward();
-  levelInterval.updateAveraged(oavpData.getLeftLevel());
+  levelInterval.update(oavpData.getLeftLevel(), 1);
+  levelGridInterval.update(oavpData.getLeftLevel(), 0);
   beatInterval.update(oavpData.isBeatOnset());
   beatAmplitude.update(oavpData);
-  beatAmplitudeInterval.update(beatAmplitude.getValue());
+  beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
+  beatAmplitudeGridInterval.update(beatAmplitude.getValue(), 0);
+  println(oavpData.getLeftLevel());
 
   drawExamples();
 }

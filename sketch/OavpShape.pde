@@ -233,6 +233,22 @@ class OavpShape {
       oavpData = data;
     }
 
+    OavpShape gridSquare(float w, float h, OavpGridInterval interval) {
+      rectMode(CENTER);
+      float colScale = w / interval.numCols;
+      float rowScale = h / interval.numRows;
+      for (int i = 0; i < interval.numRows; i++) {
+        for (int j = 0; j < interval.numCols; j++) {
+          float x = (j * colScale) + (colScale * 0.5);
+          float y = (i * rowScale) + (rowScale * 0.5);
+          float finalLevel = oavpData.scaleLeftLevel(interval.getData(i, j));
+          rect(x, y, finalLevel * colScale, finalLevel * rowScale);
+        }
+      }
+      rectMode(CORNER);
+      return OavpShape.this;
+    }
+
     OavpShape bars(float w, float h) {
       float rawLeftLevel = oavpData.getLeftLevel();
       float rawRightLevel = oavpData.getRightLevel();
@@ -264,6 +280,21 @@ class OavpShape {
 
     Beats(OavpData data) {
       oavpData = data;
+    }
+
+    OavpShape gridSquare(float w, float h, OavpGridInterval interval) {
+      rectMode(CENTER);
+      float colScale = w / interval.numCols;
+      float rowScale = h / interval.numRows;
+      for (int i = 0; i < interval.numRows; i++) {
+        for (int j = 0; j < interval.numCols; j++) {
+          float x = (j * colScale) + (colScale * 0.5);
+          float y = (i * rowScale) + (rowScale * 0.5);
+          rect(x, y, interval.getData(i, j) * colScale, interval.getData(i, j) * rowScale);
+        }
+      }
+      rectMode(CORNER);
+      return OavpShape.this;
     }
 
     OavpShape circle(float minRadius, float maxRadius, OavpAmplitude amplitude) {

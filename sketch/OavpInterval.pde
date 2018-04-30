@@ -20,14 +20,14 @@ public class OavpInterval {
     intervalData = new float[storageSize][snapshotSize];
   }
 
-  void update(float[] snapshot) {
+  void update(float[] snapshot, float averageWeight) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[storageSize][snapshotSize];
       for (int i = 1; i < storageSize; i++) {
         temp[i] = intervalData[i - 1];
       }
       for (int j = 0; j < storageSize; j++) {
-        temp[0][j] = snapshot[j];
+        temp[0][j] = average(snapshot[j], temp[1][j], averageWeight);
       }
       intervalData = temp;
       frameDelayCount = 0;
@@ -36,50 +36,19 @@ public class OavpInterval {
     }
   }
 
-  void updateAveraged(float[] snapshot) {
+  void update(float snapshot, float averageWeight) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[storageSize][snapshotSize];
       for (int i = 1; i < storageSize; i++) {
         temp[i] = intervalData[i - 1];
       }
-      for (int j = 0; j < storageSize; j++) {
-        temp[0][j] = average(snapshot[j], temp[1][j]);
-      }
+      temp[0][0] = average(snapshot, temp[1][0], averageWeight);
       intervalData = temp;
       frameDelayCount = 0;
     } else {
       frameDelayCount++;
     }
   }
-
-  void update(float snapshot) {
-    if (frameDelayCount == delay) {
-      float[][] temp = new float[storageSize][snapshotSize];
-      for (int i = 1; i < storageSize; i++) {
-        temp[i] = intervalData[i - 1];
-      }
-      temp[0][0] = snapshot;
-      intervalData = temp;
-      frameDelayCount = 0;
-    } else {
-      frameDelayCount++;
-    }
-  }
-
-  void updateAveraged(float snapshot) {
-    if (frameDelayCount == delay) {
-      float[][] temp = new float[storageSize][snapshotSize];
-      for (int i = 1; i < storageSize; i++) {
-        temp[i] = intervalData[i - 1];
-      }
-      temp[0][0] = average(snapshot, temp[1][0]);
-      intervalData = temp;
-      frameDelayCount = 0;
-    } else {
-      frameDelayCount++;
-    }
-  }
-
 
   void update(boolean rawSnapshot) {
     float snapshot;

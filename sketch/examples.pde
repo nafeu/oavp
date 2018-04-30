@@ -1,5 +1,24 @@
 void drawExamples() {
-  exampleGallery();
+  // exampleGallery();
+  sandbox();
+}
+
+void sandbox() {
+  visualizers
+    .create()
+    .top().left()
+    .levels.gridSquare(entityPosition.scale, entityPosition.scale, levelGridInterval)
+    .done();
+
+  entityPosition.moveRight();
+
+  visualizers
+    .create()
+    .top().left()
+    .beats.gridSquare(entityPosition.scale, entityPosition.scale, beatAmplitudeGridInterval)
+    .done();
+
+  entityPosition.reset();
 }
 
 void exampleGallery() {
