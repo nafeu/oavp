@@ -125,10 +125,19 @@ void keyPressed() {
         camera.moveRight();
         break;
       case 'z':
-        debug();
+        style.toggleContrastColor();
         break;
       case 'x':
-        isDayMode = !isDayMode;
+        style.toggleMode();
+        break;
+      case 'c':
+        style.cycleColorOffset(cameraPosition);
+        break;
+      case 'v':
+        style.cycleColorAccent(cameraPosition);
+        break;
+      case '/':
+        debug();
         break;
       // case '$':
       //   param# += delta#;

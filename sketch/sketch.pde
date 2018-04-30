@@ -1,5 +1,6 @@
 import ddf.minim.analysis.*;
 import ddf.minim.*;
+import java.util.Random;
 
 Minim minim;
 OavpData oavpData;
@@ -29,7 +30,7 @@ int defaultStrokeWeight = 2;
 
 void setup() {
   // size(1280, 1000, P3D);
-  fullScreen(P3D);
+  fullScreen(P3D, 2);
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
@@ -79,16 +80,8 @@ void draw() {
   noFill();
   strokeWeight(2);
 
-  if (isDayMode) {
-    primaryColor = style.flat.black;
-    secondaryColor = style.getIntermediateColor();
-  } else {
-    primaryColor = style.getIntermediateColor();
-    secondaryColor = style.flat.black;
-  }
-
-  stroke(primaryColor);
-  background(secondaryColor);
+  stroke(style.getPrimaryColor());
+  background(style.getSecondaryColor());
 
   camera.update();
 
@@ -98,7 +91,8 @@ void draw() {
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue());
 
-  drawGallery();
+  // drawGallery();
+  exampleGhostCircle();
 }
 
 void exampleGhostCircle() {

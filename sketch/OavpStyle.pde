@@ -1,6 +1,7 @@
 public class OavpStyle {
 
   int colorAccent;
+  int colorOffset;
   int currColor = 0;
   int intermediateColor = 0;
   int targetColor;
@@ -8,20 +9,51 @@ public class OavpStyle {
   float targetInterp = 1.0;
   float colorEasing = 0.025;
   FlatUIColors flat;
-  int primary;
-  int secondary;
+  boolean isBlackContrast = true;
+  boolean isDayMode = true;
 
   OavpStyle(int colorAccent) {
     this.colorAccent = colorAccent % material[colorAccent].length;
     flat = new FlatUIColors();
   }
 
+  int getPrimaryColor() {
+    if (isDayMode) {
+      return this.getContrastColor();
+    } else {
+      return this.getIntermediateColor();
+    }
+  }
+
+  int getSecondaryColor() {
+    if (isDayMode) {
+      return this.getIntermediateColor();
+    } else {
+      return this.getContrastColor();
+    }
+  }
+
+  void toggleMode() {
+    isDayMode = !isDayMode;
+  }
+
   void setColorAccent(int colorAccent) {
-    this.colorAccent = colorAccent % material[colorAccent].length;
+    this.colorAccent = colorAccent % material.length;
   }
 
   void setTargetColor(OavpPosition position) {
-    targetColor = this.getRandomColor(position.x, position.y);
+    int colorIndex = (abs(position.x + position.y) + colorOffset) % material[colorAccent].length;
+    targetColor = material[colorAccent][colorIndex];
+  }
+
+  void cycleColorAccent(OavpPosition position) {
+    colorAccent = (colorAccent + 1) % material.length;
+    this.updateColor(position);
+  }
+
+  void cycleColorOffset(OavpPosition position) {
+    colorOffset = (colorOffset + 1) % material[colorAccent].length;
+    this.updateColor(position);
   }
 
   int getIntermediateColor() {
@@ -29,19 +61,31 @@ public class OavpStyle {
     return intermediateColor;
   }
 
-  int getRandomColor(int x, int y) {
-    return material[colorAccent][(x + y) % material[colorAccent].length];
+  int getRandomColor() {
+    int randomIndex = new Random().nextInt(material[colorAccent].length);
+    return material[colorAccent][randomIndex];
   }
 
   void updateColor(OavpPosition position) {
     currColor = intermediateColor;
-    targetColor = this.getRandomColor(position.x, position.y);
+    setTargetColor(position);
     currInterp = 0.0;
   }
 
   void updateColorInterp() {
     float di = targetInterp - currInterp;
     currInterp += di * colorEasing;
+  }
+
+  int getContrastColor() {
+    if (isBlackContrast) {
+      return flat.black;
+    }
+    return flat.white;
+  }
+
+  void toggleContrastColor() {
+    isBlackContrast = !isBlackContrast;
   }
 
   public class FlatUIColors {
