@@ -284,11 +284,21 @@ class OavpShape {
     OavpShape ghostCircle(float minRadius, float maxRadius, OavpInterval interval, int trailSize) {
       ellipseMode(RADIUS);
       float scale = maxRadius - minRadius;
-      for (int i = 0; i < trailSize; i++) {
+      for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
         strokeWeight(i);
         ellipse(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
       }
       strokeWeight(defaultStrokeWeight);
+      return OavpShape.this;
+    }
+
+    OavpShape ghostSquare(float minRadius, float maxRadius, OavpInterval interval, int trailSize) {
+      rectMode(CENTER);
+      float scale = maxRadius - minRadius;
+      for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
+        rect(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
+      }
+      rectMode(CORNER);
       return OavpShape.this;
     }
 
@@ -327,7 +337,6 @@ class OavpShape {
     pushStyle();
     shape.disableStyle();
     noStroke();
-    fill(primaryColor);
     scale(scaleFactor);
     shape(shape, 0, 0);
     popStyle();

@@ -1,9 +1,23 @@
+void drawExamples() {
+  exampleGallery();
+}
+
 void exampleGallery() {
   text.write(introText);
+  entityPosition.moveRight();
+
+  text.write("Beat Ghost Square");
+
+  visualizers
+    .create()
+    .center().middle()
+    .beats.ghostSquare(0, stageWidth * 0.75, beatAmplitudeInterval, 20)
+    .done();
 
   entityPosition.moveRight();
 
   text.write("Beat Splash Square");
+
   visualizers
     .create()
     .center().middle()
@@ -13,6 +27,7 @@ void exampleGallery() {
   entityPosition.moveRight();
 
   text.write("Beat Square");
+
   visualizers
     .create()
     .center().middle()
@@ -21,14 +36,25 @@ void exampleGallery() {
 
   entityPosition.moveRight();
 
+  text.write("Beat Ghost Circle");
+
+  visualizers
+    .create()
+    .center().middle()
+    .beats.ghostCircle(0, stageWidth * 0.4, beatAmplitudeInterval, 20)
+    .done();
+
+  entityPosition.moveToNextLine();
+
   text.write("Beat Splash Circle");
+
   visualizers
     .create()
     .center().middle()
     .beats.splashCircle(0, stageWidth * 0.4, beatInterval)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Beat Circle");
   visualizers
@@ -48,12 +74,18 @@ void exampleGallery() {
 
   entityPosition.moveRight();
 
+  pushStyle();
+  fill(style.getPrimaryColor());
+  noStroke();
+
   text.write("Custom SVG");
   visualizers
     .create()
     .center().middle()
     .svg(400.0 / stageWidth, 400, logo)
     .done();
+
+  popStyle();
 
   entityPosition.moveRight();
 
@@ -100,7 +132,7 @@ void exampleGallery() {
     .waveform.wire(stageWidth, stageHeight)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Radial Wire Waveform");
   visualizers
@@ -109,7 +141,7 @@ void exampleGallery() {
     .waveform.radialWire(stageWidth * 0.25, stageWidth * 0.25, 0, frameCount * 0.25)
     .done();
 
-  entityPosition.moveRight();
+  entityPosition.moveToNextLine();
 
   text.write("Bar Levels");
   visualizers

@@ -28,7 +28,7 @@ int defaultStrokeWeight = 2;
 
 void setup() {
   // size(1280, 1000, P3D);
-  fullScreen(P3D, 2);
+  fullScreen(P3D);
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 
@@ -41,7 +41,7 @@ void setup() {
   minim = new Minim(this);
 
   oavpData = new OavpData(minim,
-                          // configs.getString("audioFile"),
+                          configs.getString("audioFile"),
                           configs.getInt("bufferSize"),
                           configs.getInt("minBandwidthPerOctave"),
                           configs.getInt("bandsPerOctave"));
@@ -89,5 +89,5 @@ void draw() {
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue());
 
-  exampleGallery();
+  drawExamples();
 }
