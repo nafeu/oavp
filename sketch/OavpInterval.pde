@@ -27,6 +27,22 @@ public class OavpInterval {
         temp[i] = intervalData[i - 1];
       }
       for (int j = 0; j < storageSize; j++) {
+        temp[0][j] = snapshot[j];
+      }
+      intervalData = temp;
+      frameDelayCount = 0;
+    } else {
+      frameDelayCount++;
+    }
+  }
+
+  void updateAveraged(float[] snapshot) {
+    if (frameDelayCount == delay) {
+      float[][] temp = new float[storageSize][snapshotSize];
+      for (int i = 1; i < storageSize; i++) {
+        temp[i] = intervalData[i - 1];
+      }
+      for (int j = 0; j < storageSize; j++) {
         temp[0][j] = average(snapshot[j], temp[1][j]);
       }
       intervalData = temp;
@@ -42,6 +58,20 @@ public class OavpInterval {
       for (int i = 1; i < storageSize; i++) {
         temp[i] = intervalData[i - 1];
       }
+      temp[0][0] = snapshot;
+      intervalData = temp;
+      frameDelayCount = 0;
+    } else {
+      frameDelayCount++;
+    }
+  }
+
+  void updateAveraged(float snapshot) {
+    if (frameDelayCount == delay) {
+      float[][] temp = new float[storageSize][snapshotSize];
+      for (int i = 1; i < storageSize; i++) {
+        temp[i] = intervalData[i - 1];
+      }
       temp[0][0] = average(snapshot, temp[1][0]);
       intervalData = temp;
       frameDelayCount = 0;
@@ -49,6 +79,7 @@ public class OavpInterval {
       frameDelayCount++;
     }
   }
+
 
   void update(boolean rawSnapshot) {
     float snapshot;

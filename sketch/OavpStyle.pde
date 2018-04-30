@@ -1,6 +1,5 @@
 public class OavpStyle {
 
-  // int colorSeed = Math.round(random(0, 100));
   int colorAccent;
   int currColor = 0;
   int intermediateColor = 0;

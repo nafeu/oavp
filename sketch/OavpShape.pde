@@ -70,6 +70,13 @@ class OavpShape {
     return this;
   }
 
+  OavpShape rotate(float x, float y, float z) {
+    rotateX(radians(x));
+    rotateY(radians(y));
+    rotateZ(radians(z));
+    return this;
+  }
+
   OavpShape next() {
     popMatrix();
     pushMatrix();
@@ -271,6 +278,17 @@ class OavpShape {
       float scale = maxRadius - minRadius;
       rect(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
       rectMode(CORNER);
+      return OavpShape.this;
+    }
+
+    OavpShape ghostCircle(float minRadius, float maxRadius, OavpInterval interval, int trailSize) {
+      ellipseMode(RADIUS);
+      float scale = maxRadius - minRadius;
+      for (int i = 0; i < trailSize; i++) {
+        strokeWeight(i);
+        ellipse(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
+      }
+      strokeWeight(defaultStrokeWeight);
       return OavpShape.this;
     }
 

@@ -6,6 +6,7 @@ OavpData oavpData;
 OavpInterval levelInterval;
 OavpInterval beatInterval;
 OavpAmplitude beatAmplitude;
+OavpInterval beatAmplitudeInterval;
 OavpPosition cameraPosition;
 OavpPosition entityPosition;
 OavpCamera camera;
@@ -24,6 +25,7 @@ float gridScale = 1000;
 boolean isDayMode = true;
 int primaryColor;
 int secondaryColor;
+int defaultStrokeWeight = 2;
 
 void setup() {
   // size(1280, 1000, P3D);
@@ -54,6 +56,7 @@ void setup() {
 
   beatInterval = new OavpInterval(100);
   beatAmplitude = new OavpAmplitude(0, 1, 0.08);
+  beatAmplitudeInterval = new OavpInterval(20);
 
   visualizers = new OavpShape(oavpData, entityPosition);
   text = new OavpText(entityPosition);
@@ -90,11 +93,38 @@ void draw() {
   camera.update();
 
   oavpData.forward();
-  levelInterval.update(oavpData.getLeftLevel());
+  levelInterval.updateAveraged(oavpData.getLeftLevel());
   beatInterval.update(oavpData.isBeatOnset());
   beatAmplitude.update(oavpData);
+  beatAmplitudeInterval.update(beatAmplitude.getValue());
 
   drawGallery();
+}
+
+void exampleGhostCircle() {
+  visualizers
+    .create()
+    .center().middle()
+    .beats.ghostCircle(0, stageWidth * 0.75, beatAmplitudeInterval, 20)
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(0, 0, frameCount * 0.25)
+    .beats.splashSquare(0, stageWidth * 0.4, beatInterval)
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(frameCount, frameCount)
+    .levels.cube(stageWidth * 0.75)
+    .next()
+    .center().middle()
+    .rotate(-frameCount * 0.25, -frameCount * 0.25)
+    .levels.cube(stageWidth * 0.25)
+    .done();
 }
 
 void drawGallery() {
