@@ -1,16 +1,38 @@
 void drawExamples() {
-  // exampleGallery();
-  sandbox();
+  exampleGallery();
 }
 
-void sandbox() {
+void exampleDimensionalGrid() {
   visualizers
     .create()
-    .top().left()
-    .levels.gridSquare(entityPosition.scale, entityPosition.scale, levelGridInterval)
+    .beats.gridSquare(entityPosition.scale, entityPosition.scale, beatAmplitudeGridInterval)
     .done();
+}
 
+void exampleDiagonalGrid() {
+  visualizers
+    .create(entityPosition.getScaledX(), entityPosition.getScaledY())
+    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .done()
+    .create(entityPosition.scale, entityPosition.getScaledY())
+    .rotate(0, 0, 90)
+    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .done()
+    .create(entityPosition.getScaledX(), entityPosition.scale)
+    .rotate(0, 0, 270)
+    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .done()
+    .create(entityPosition.scale, entityPosition.scale)
+    .rotate(0, 0, 180)
+    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .done();
+}
+
+void exampleGallery() {
+  text.write(introText);
   entityPosition.moveRight();
+
+  text.write("Beat Grid Square");
 
   visualizers
     .create()
@@ -18,11 +40,6 @@ void sandbox() {
     .beats.gridSquare(entityPosition.scale, entityPosition.scale, beatAmplitudeGridInterval)
     .done();
 
-  entityPosition.reset();
-}
-
-void exampleGallery() {
-  text.write(introText);
   entityPosition.moveRight();
 
   text.write("Beat Ghost Square");
@@ -63,7 +80,7 @@ void exampleGallery() {
     .beats.ghostCircle(0, stageWidth * 0.4, beatAmplitudeInterval, 20)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Beat Splash Circle");
 
@@ -115,7 +132,7 @@ void exampleGallery() {
     .spectrum.bars(stageWidth, stageHeight)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Wire Spectrum");
   visualizers
@@ -160,7 +177,7 @@ void exampleGallery() {
     .waveform.radialWire(stageWidth * 0.25, stageWidth * 0.25, 0, frameCount * 0.25)
     .done();
 
-  entityPosition.moveToNextLine();
+  entityPosition.moveRight();
 
   text.write("Bar Levels");
   visualizers

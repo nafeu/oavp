@@ -43,6 +43,52 @@ public class OavpGridInterval {
     }
   }
 
+  void updateDiagonal(float value, float averageWeight) {
+    if (frameDelayCount == delay) {
+      float[][] temp = new float[numRows][numCols];
+      for (int i = 0; i < numRows; i++) {
+        for (int j = 0; j < numCols; j++) {
+          if (i == 0 && j == 0) {
+            temp[i][j] = average(value, data[i][j + 1], averageWeight);
+          }
+          else {
+            if (i < j) {
+              temp[i][j] = data[i][j - 1];
+            } else if (i > j) {
+              temp[i][j] = data[i - 1][j];
+            } else {
+              // This one can be in either direction
+              temp[i][j] = data[i][j - 1];
+            }
+          }
+        }
+      }
+      data = temp;
+      frameDelayCount = 0;
+    } else {
+      frameDelayCount++;
+    }
+  }
+
+  void updateDimensional(float value, float averageWeight) {
+    if (frameDelayCount == delay) {
+      float[][] temp = new float[numRows][numCols];
+      for (int i = 0; i < numRows; i++) {
+        for (int j = 0; j < numCols; j++) {
+          if (j == 0) {
+            temp[i][j] = average(value, data[i][j], averageWeight);
+          } else {
+            temp[i][j] = data[i][j - 1];
+          }
+        }
+      }
+      data = temp;
+      frameDelayCount = 0;
+    } else {
+      frameDelayCount++;
+    }
+  }
+
   float castBoolean(boolean bool) {
     if (bool) {
       return 1.0;

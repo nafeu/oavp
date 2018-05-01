@@ -89,12 +89,13 @@ void draw() {
 
   oavpData.forward();
   levelInterval.update(oavpData.getLeftLevel(), 1);
-  levelGridInterval.update(oavpData.getLeftLevel(), 0);
+  // levelGridInterval.update(oavpData.getLeftLevel(), 0);
+  levelGridInterval.updateDiagonal(oavpData.getLeftLevel(), 0);
   beatInterval.update(oavpData.isBeatOnset());
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
-  beatAmplitudeGridInterval.update(beatAmplitude.getValue(), 0);
-  println(oavpData.getLeftLevel());
+  // beatAmplitudeGridInterval.update(beatAmplitude.getValue(), 0);
+  beatAmplitudeGridInterval.updateDimensional(beatAmplitude.getValue(), 0);
 
   drawExamples();
 }
