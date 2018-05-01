@@ -13,7 +13,8 @@ OavpGridInterval beatAmplitudeGridInterval;
 OavpPosition cameraPosition;
 OavpPosition entityPosition;
 OavpCamera camera;
-OavpShape visualizers;
+OavpVisualizer visualizers;
+OavpShape shapes;
 OavpText text;
 OavpStyle style;
 String introText;
@@ -61,7 +62,8 @@ void setup() {
   beatAmplitudeInterval = new OavpInterval(20);
   beatAmplitudeGridInterval = new OavpGridInterval(10);
 
-  visualizers = new OavpShape(oavpData, entityPosition);
+  visualizers = new OavpVisualizer(oavpData, entityPosition);
+  shapes = new OavpShape();
   text = new OavpText(entityPosition);
   text.setPadding(20);
 
@@ -73,6 +75,7 @@ void setup() {
 
   introText = text.read("intro.txt");
 
+  sandboxSetup();
   debug();
 }
 

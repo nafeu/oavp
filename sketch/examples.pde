@@ -1,5 +1,37 @@
 void drawExamples() {
   exampleGallery();
+  // sandbox();
+}
+
+void sandboxSetup() {
+
+}
+
+void sandbox() {
+
+}
+
+void exampleFlatbox() {
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(-22.5, -45, 0)
+    .levels.flatbox(stageWidth * 0.25, style.flat.red)
+    .done();
+
+  visualizers
+    .create()
+    .left().middle()
+    .rotate(-22.5, -45, 0)
+    .levels.flatbox(stageWidth * 0.25, style.flat.blue)
+    .done();
+
+  visualizers
+    .create()
+    .right().middle()
+    .rotate(-22.5, -45, 0)
+    .levels.flatbox(stageWidth * 0.25, style.flat.green)
+    .done();
 }
 
 void exampleDimensionalGrid() {
@@ -30,6 +62,24 @@ void exampleDiagonalGrid() {
 
 void exampleGallery() {
   text.write(introText);
+  entityPosition.moveRight();
+
+  text.write("Levels/Beat Flatbox");
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(-22.5, -45, 0)
+    .levels.flatbox(stageWidth * 0.125, style.flat.grey)
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(-22.5, -45, 0)
+    .beats.flatbox(stageWidth * 0.25, style.flat.grey, beatAmplitude)
+    .done();
+
   entityPosition.moveRight();
 
   text.write("Beat Grid Square");
