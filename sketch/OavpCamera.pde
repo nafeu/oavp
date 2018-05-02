@@ -1,10 +1,25 @@
+final int CAMERA_MODE_DEFAULT = 0;
+final int CAMERA_MODE_ORTHO = 1;
+
 public class OavpCamera {
+  float targetOrthoLeft;
+  float targetOrthoRight;
+  float targetOrthoBottom;
+  float targetOrthoTop;
+  float currOrthoLeft = 0;
+  float currOrthoRight = 0;
+  float currOrthoBottom = 0;
+  float currOrthoTop = 0;
+  float orthoScale = 0.25;
+  int orthoDistanceLimit = 10;
+
   float targetCameraX = 0;
   float targetCameraY = 0;
   float targetCameraZ = 0;
   float currCameraX = 0;
   float currCameraY = 0;
   float currCameraZ = 0;
+
   float finalEyeX;
   float finalEyeY;
   float finalEyeZ;
@@ -15,13 +30,17 @@ public class OavpCamera {
   float finalUpX;
   float finalUpY;
   float finalUpZ;
+
   float xOffset;
   float yOffset;
   float lastXOffset;
   float lastYOffset;
+
   OavpPosition cameraPosition;
   OavpPosition entityPosition;
   OavpStyle style;
+
+  boolean isOrtho;
 
   OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, OavpStyle style, float xOffset, float yOffset, float cameraEasing) {
     this.cameraPosition = cameraPosition;
@@ -30,6 +49,15 @@ public class OavpCamera {
     this.yOffset = yOffset;
     this.cameraEasing = cameraEasing;
     this.style = style;
+    this.isOrtho = false;
+    this.targetOrthoLeft = -width * 0.5;
+    this.targetOrthoRight = width * 0.5;
+    this.targetOrthoBottom = -height * 0.5;
+    this.targetOrthoTop = height * 0.5;
+  }
+
+  void enableOrthoCamera() {
+    isOrtho = true;
   }
 
   void update() {
@@ -84,6 +112,21 @@ public class OavpCamera {
     finalUpY = 1;
     finalUpZ = 0;
 
+    float dol = targetOrthoLeft - currOrthoLeft;
+    currOrthoLeft += dol * cameraEasing;
+
+    float dor = targetOrthoRight - currOrthoRight;
+    currOrthoRight += dor * cameraEasing;
+
+    float dob = targetOrthoBottom - currOrthoBottom;
+    currOrthoBottom += dob * cameraEasing;
+
+    float dot = targetOrthoTop - currOrthoTop;
+    currOrthoTop += dot * cameraEasing;
+
+    if (isOrtho) {
+      ortho(currOrthoLeft, currOrthoRight, currOrthoBottom, currOrthoTop);
+    }
     camera(finalEyeX,
            finalEyeY,
            finalEyeZ,
@@ -131,10 +174,23 @@ public class OavpCamera {
 
   void moveForward() {
     targetCameraZ = max(targetCameraZ - stageWidth / 2, -stageWidth / 2);
+    if (targetOrthoLeft < (-width * orthoScale)) {
+      targetOrthoLeft = targetOrthoLeft + (width * orthoScale);
+      targetOrthoRight = targetOrthoRight - (width * orthoScale);
+      targetOrthoBottom = targetOrthoBottom + (height * orthoScale);
+      targetOrthoTop = targetOrthoTop - (height * orthoScale);
+    }
   }
 
   void moveBackward() {
-    targetCameraZ = min(targetCameraZ + stageWidth / 2, stageWidth * 2);
+    if (targetOrthoLeft > (-width * orthoScale * orthoDistanceLimit)) {
+      targetCameraZ = min(targetCameraZ + stageWidth / 2, stageWidth * 2);
+      targetOrthoLeft = targetOrthoLeft - (width * orthoScale);
+      targetOrthoRight = targetOrthoRight + (width * orthoScale);
+      targetOrthoBottom = targetOrthoBottom - (height * orthoScale);
+      targetOrthoTop = targetOrthoTop + (height * orthoScale);
+    }
   }
+
 }
 

@@ -2,19 +2,20 @@ public class OavpShape {
 
   OavpShape() {}
 
-  void flatbox(float width, float height, float depth, int inputColor) {
-    float[] a = { 0, 0, 0 };
-    float[] b = { width, 0, 0 };
-    float[] c = { width, 0, depth };
-    float[] d = { 0, 0, depth };
-    float[] e = { 0, height, 0 };
-    float[] f = { width, height, 0 };
-    float[] g = { width, height, depth };
-    float[] h = { 0, height, depth };
+  void flatbox(float x, float y, float z, float width, float height, float depth, int inputColor) {
+    float[] a = { x, y, z };
+    float[] b = { x + width, y, z };
+    float[] c = { x + width, y, z + depth };
+    float[] d = { x, y, z + depth };
+    float[] e = { x, y + height, z };
+    float[] f = { x + width, y + height, z };
+    float[] g = { x + width, y + height, z + depth };
+    float[] h = { x, y + height, z + depth };
 
     pushStyle();
-    noStroke();
-    fill(inputColor);
+    // noStroke();
+    // stroke(0);
+    fill(style.getSecondaryColor());
 
     // Face 1
     beginShape();

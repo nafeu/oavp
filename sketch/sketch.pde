@@ -40,6 +40,7 @@ void setup() {
   cameraPosition = new OavpPosition(0, 0, gridScale);
   entityPosition = new OavpPosition(0, 0, gridScale);
   camera = new OavpCamera(cameraPosition, entityPosition, style, stageWidth / 2, stageHeight / 2, 0.10);
+  camera.enableOrthoCamera();
 
   minim = new Minim(this);
 
@@ -61,6 +62,7 @@ void setup() {
   beatAmplitude = new OavpAmplitude(0, 1, 0.08);
   beatAmplitudeInterval = new OavpInterval(20);
   beatAmplitudeGridInterval = new OavpGridInterval(10);
+  // beatAmplitudeGridInterval.setDelay(4);
 
   visualizers = new OavpVisualizer(oavpData, entityPosition);
   shapes = new OavpShape();
@@ -98,7 +100,7 @@ void draw() {
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
   // beatAmplitudeGridInterval.update(beatAmplitude.getValue(), 0);
-  beatAmplitudeGridInterval.updateDimensional(beatAmplitude.getValue(), 0);
+  beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);
 
   drawExamples();
 }

@@ -233,11 +233,25 @@ class OavpVisualizer {
       oavpData = data;
     }
 
+    OavpVisualizer gridFlatbox(float w, float h, float scale, OavpGridInterval interval) {
+      float colScale = w / interval.numCols;
+      float rowScale = h / interval.numRows;
+      for (int i = 0; i < interval.numRows; i++) {
+        for (int j = 0; j < interval.numCols; j++) {
+          float x = (j * colScale);
+          float z = (i * rowScale);
+          float finalLevel = oavpData.scaleLeftLevel(interval.getData(i, j));
+          shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale, style.flat.grey);
+        }
+      }
+      return OavpVisualizer.this;
+    }
+
     OavpVisualizer flatbox(float scale, int inputColor) {
       float rawLeftLevel = oavpData.getLeftLevel();
       float rawRightLevel = oavpData.getRightLevel();
       float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
-      shapes.flatbox(scale, -boxLevel, scale, inputColor);
+      shapes.flatbox(0, 0, 0, scale, -boxLevel, scale, inputColor);
       return OavpVisualizer.this;
     }
 
@@ -291,7 +305,7 @@ class OavpVisualizer {
     }
 
     OavpVisualizer flatbox(float scale, int inputColor, OavpAmplitude amplitude) {
-      shapes.flatbox(scale, -amplitude.getValue() * scale, scale, inputColor);
+      shapes.flatbox(0, 0, 0, scale, -amplitude.getValue() * scale, scale, inputColor);
       return OavpVisualizer.this;
     }
 

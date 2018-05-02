@@ -8,7 +8,12 @@ void sandboxSetup() {
 }
 
 void sandbox() {
-
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(-22.5, -45, 0)
+    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .done();
 }
 
 void exampleFlatbox() {
@@ -62,6 +67,16 @@ void exampleDiagonalGrid() {
 
 void exampleGallery() {
   text.write(introText);
+  entityPosition.moveRight();
+
+  text.write("Levels/Beat Grid Flatbox");
+
+  visualizers
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (stageHeight * 0.125))
+    .rotate(-45, -45, 0)
+    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .done();
+
   entityPosition.moveRight();
 
   text.write("Levels/Beat Flatbox");
