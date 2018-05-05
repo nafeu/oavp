@@ -20,6 +20,9 @@ public class OavpCamera {
   float currCameraY = 0;
   float currCameraZ = 0;
 
+  float targetDistanceMultiplier = 1.75;
+  float currDistanceMultiplier = 1.75;
+
   float finalEyeX;
   float finalEyeY;
   float finalEyeZ;
@@ -31,22 +34,27 @@ public class OavpCamera {
   float finalUpY;
   float finalUpZ;
 
-  float xOffset;
-  float yOffset;
-  float lastXOffset;
-  float lastYOffset;
+  float endXCameraOffset;
+  float endYCameraOffset;
+  float startXCameraOffset;
+  float startYCameraOffset;
+
+  float endEyeRotation = 90;
+  float startEyeRotation;
 
   OavpPosition cameraPosition;
   OavpPosition entityPosition;
   OavpStyle style;
 
   boolean isOrtho;
+  boolean awaitingOffsetUpdate = false;
+  boolean awaitingRotationUpdate = false;
 
-  OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, OavpStyle style, float xOffset, float yOffset, float cameraEasing) {
+  OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, OavpStyle style, float endXCameraOffset, float endYCameraOffset, float cameraEasing) {
     this.cameraPosition = cameraPosition;
     this.entityPosition = entityPosition;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
+    this.endXCameraOffset = endXCameraOffset;
+    this.endYCameraOffset = endYCameraOffset;
     this.cameraEasing = cameraEasing;
     this.style = style;
     this.isOrtho = false;
@@ -63,33 +71,71 @@ public class OavpCamera {
   void update() {
     float centerX;
     float centerY;
+    float eyeX;
+    float eyeZ;
 
-    if (mousePressed) {
+    float ddm = targetDistanceMultiplier - currDistanceMultiplier;
+    currDistanceMultiplier += ddm * cameraEasing;
+
+    float distanceFromCenter = (stageWidth/2.0) * currDistanceMultiplier;
+
+    if (mousePressed && keyPressed && keyCode == SHIFT) {
+      awaitingRotationUpdate = true;
       if (!mouseDown) {
         mouseDown = true;
         mouseUp = false;
-        lastXOffset = mouseX;
-        lastYOffset = mouseY;
+        startEyeRotation = map(mouseX, 0, width, 0, 180);
+        if (mouseButton == RIGHT) {
+          endEyeRotation = 90;
+          eyeX = cos(radians(endEyeRotation)) * distanceFromCenter;
+          eyeZ = sin(radians(endEyeRotation)) * distanceFromCenter;
+        }
       }
-      centerX = xOffset - (mouseX - lastXOffset);
-      centerY = yOffset - (mouseY - lastYOffset);
-
-      if (mouseButton == RIGHT) {
-        xOffset = stageWidth/2.0;
-        yOffset = stageHeight/2.0;
-        centerX = xOffset;
-        centerY = yOffset;
-      }
+      centerX = endXCameraOffset;
+      centerY = endYCameraOffset;
+      eyeX = (cos(radians(endEyeRotation - (map(mouseX, 0, width, 0, 180) - startEyeRotation))) * distanceFromCenter);
+      eyeZ = (sin(radians(endEyeRotation - (map(mouseX, 0, width, 0, 180) - startEyeRotation))) * distanceFromCenter);
       cursor(MOVE);
-    } else {
+    }
+    else if (mousePressed) {
+      awaitingOffsetUpdate = true;
+      if (!mouseDown) {
+        mouseDown = true;
+        mouseUp = false;
+        startXCameraOffset = mouseX;
+        startYCameraOffset = mouseY;
+        if (mouseButton == RIGHT) {
+          endXCameraOffset = stageWidth/2.0;
+          endYCameraOffset = stageHeight/2.0;
+          centerX = endXCameraOffset;
+          centerY = endYCameraOffset;
+        }
+      }
+      centerX = endXCameraOffset - (mouseX - startXCameraOffset);
+      centerY = endYCameraOffset - (mouseY - startYCameraOffset);
+      eyeX = (cos(radians(endEyeRotation)) * distanceFromCenter);
+      eyeZ = (sin(radians(endEyeRotation)) * distanceFromCenter);
+      cursor(MOVE);
+    }
+    else
+    {
       if (!mouseUp) {
-        xOffset -= mouseX - lastXOffset;
-        yOffset -= mouseY - lastYOffset;
+        if (awaitingOffsetUpdate) {
+          endXCameraOffset -= mouseX - startXCameraOffset;
+          endYCameraOffset -= mouseY - startYCameraOffset;
+          awaitingOffsetUpdate = false;
+        }
+        if (awaitingRotationUpdate) {
+          endEyeRotation -= map(mouseX, 0, width, 0, 180) - startEyeRotation;
+          awaitingRotationUpdate = false;
+        }
         mouseUp = true;
       }
       mouseDown = false;
-      centerX = xOffset;
-      centerY = yOffset;
+      centerX = endXCameraOffset;
+      centerY = endYCameraOffset;
+      eyeX = (cos(radians(endEyeRotation)) * distanceFromCenter);
+      eyeZ = (sin(radians(endEyeRotation)) * distanceFromCenter);
       cursor(CROSS);
     }
 
@@ -102,12 +148,14 @@ public class OavpCamera {
     float dz = targetCameraZ - currCameraZ;
     currCameraZ += dz * cameraEasing;
 
-    finalEyeX = stageWidth/2.0 + currCameraX;
-    finalEyeY = stageHeight/2.0 + currCameraY;
-    finalEyeZ = (stageHeight/2.0) / tan(PI*30.0 / 180.0) + currCameraZ;
     finalCenterX = centerX + currCameraX;
     finalCenterY = centerY + currCameraY;
     finalCenterZ = currCameraZ;
+
+    finalEyeX = finalCenterX + eyeX;
+    finalEyeY = finalCenterY;
+    finalEyeZ = finalCenterZ + eyeZ;
+
     finalUpX = 0;
     finalUpY = 1;
     finalUpZ = 0;
@@ -183,12 +231,24 @@ public class OavpCamera {
   }
 
   void moveBackward() {
+    targetCameraZ = min(targetCameraZ + stageWidth / 2, stageWidth * 2);
     if (targetOrthoLeft > (-width * orthoScale * orthoDistanceLimit)) {
-      targetCameraZ = min(targetCameraZ + stageWidth / 2, stageWidth * 2);
       targetOrthoLeft = targetOrthoLeft - (width * orthoScale);
       targetOrthoRight = targetOrthoRight + (width * orthoScale);
       targetOrthoBottom = targetOrthoBottom - (height * orthoScale);
       targetOrthoTop = targetOrthoTop + (height * orthoScale);
+    }
+  }
+
+  void increaseDistance() {
+    if (targetDistanceMultiplier < 5) {
+      targetDistanceMultiplier += 0.25;
+    }
+  }
+
+  void decreaseDistance() {
+    if (targetDistanceMultiplier >= 0.5) {
+      targetDistanceMultiplier -= 0.25;
     }
   }
 

@@ -157,8 +157,8 @@ void keyPressed() {
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
   if (e > 0) {
-    camera.moveBackward();
+    camera.increaseDistance();
   } else {
-    camera.moveForward();
+    camera.decreaseDistance();
   }
 }

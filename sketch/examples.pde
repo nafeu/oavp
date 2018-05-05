@@ -9,11 +9,32 @@ void sandboxSetup() {
 
 void sandbox() {
   visualizers
-    .create()
-    .center().middle()
-    .rotate(-22.5, -45, 0)
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .rotate(-45, 135, 0)
     .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
+  visualizers
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .rotate(-45, -45, 0)
+    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .done();
+  visualizers
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .rotate(-45, -135, 0)
+    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .done();
+  visualizers
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .rotate(-45, 45, 0)
+    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .done();
+
+  pushMatrix();
+  rotateX(radians(-45));
+  rotateY(radians(-45));
+  translate(entityPosition.getCenteredX() + 205.0, entityPosition.getCenteredY() -380.0, 0);
+  box(stageWidth * 0.25 + 280.0, stageWidth * 0.25 + paramA, stageWidth * 0.25 + 280.0);
+  popMatrix();
 }
 
 void exampleFlatbox() {

@@ -1,11 +1,11 @@
-float paramA = 0;
-float deltaA = 10;
+float paramA = 1;
+float deltaA = 1;
 float paramB = 0;
-float deltaB = 10;
+float deltaB = 22.5;
 float paramC = 0;
 float deltaC = 10;
 float paramD = 0;
-float deltaD = 10;
+float deltaD = 5;
 float paramE = 0;
 float deltaE = 16;
 
