@@ -3,6 +3,9 @@ class OavpVisualizer {
   public Waveform waveform;
   public Levels levels;
   public Beats beats;
+  public Grids grids;
+  public Floaters floaters;
+  public Emitters emitters;
   public OavpPosition cursor;
 
   OavpVisualizer(OavpData data) {
@@ -10,6 +13,9 @@ class OavpVisualizer {
     waveform = new Waveform(oavpData);
     levels = new Levels(oavpData);
     beats = new Beats(oavpData);
+    grids = new Grids(oavpData);
+    floaters = new Floaters(oavpData);
+    emitters = new Emitters(oavpData);
   }
 
   OavpVisualizer(OavpData data, OavpPosition cursor) {
@@ -17,6 +23,9 @@ class OavpVisualizer {
     waveform = new Waveform(oavpData);
     levels = new Levels(oavpData);
     beats = new Beats(oavpData);
+    grids = new Grids(oavpData);
+    floaters = new Floaters(oavpData);
+    emitters = new Emitters(oavpData);
     this.cursor = cursor;
   }
 
@@ -80,6 +89,31 @@ class OavpVisualizer {
   OavpVisualizer next() {
     popMatrix();
     pushMatrix();
+    return this;
+  }
+
+  OavpVisualizer move(float x, float y, float z) {
+    translate(x, y, z);
+    return this;
+  }
+
+  OavpVisualizer moveUp(float distance) {
+    translate(0, -distance);
+    return this;
+  }
+
+  OavpVisualizer moveDown(float distance) {
+    translate(0, distance);
+    return this;
+  }
+
+  OavpVisualizer moveLeft(float distance) {
+    translate(-distance, 0);
+    return this;
+  }
+
+  OavpVisualizer moveRight(float distance) {
+    translate(distance, 0);
     return this;
   }
 
@@ -233,41 +267,11 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer gridFlatbox(float w, float h, float scale, OavpGridInterval interval) {
-      float colScale = w / interval.numCols;
-      float rowScale = h / interval.numRows;
-      for (int i = 0; i < interval.numRows; i++) {
-        for (int j = 0; j < interval.numCols; j++) {
-          float x = (j * colScale);
-          float z = (i * rowScale);
-          float finalLevel = oavpData.scaleLeftLevel(interval.getData(i, j));
-          shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale, style.flat.grey);
-        }
-      }
-      return OavpVisualizer.this;
-    }
-
     OavpVisualizer flatbox(float scale, int inputColor) {
       float rawLeftLevel = oavpData.getLeftLevel();
       float rawRightLevel = oavpData.getRightLevel();
       float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
       shapes.flatbox(0, 0, 0, scale, -boxLevel, scale, inputColor);
-      return OavpVisualizer.this;
-    }
-
-    OavpVisualizer gridSquare(float w, float h, OavpGridInterval interval) {
-      rectMode(CENTER);
-      float colScale = w / interval.numCols;
-      float rowScale = h / interval.numRows;
-      for (int i = 0; i < interval.numRows; i++) {
-        for (int j = 0; j < interval.numCols; j++) {
-          float x = (j * colScale) + (colScale * 0.5);
-          float y = (i * rowScale) + (rowScale * 0.5);
-          float finalLevel = oavpData.scaleLeftLevel(interval.getData(i, j));
-          rect(x, y, finalLevel * colScale, finalLevel * rowScale);
-        }
-      }
-      rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
@@ -387,7 +391,88 @@ class OavpVisualizer {
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
+  }
 
+  class Grids {
+    OavpData oavpData;
+
+    Grids(OavpData data) {
+      oavpData = data;
+    }
+
+    OavpVisualizer flatbox(float w, float h, float scale, OavpGridInterval interval) {
+      float colScale = w / interval.numCols;
+      float rowScale = h / interval.numRows;
+      for (int i = 0; i < interval.numRows; i++) {
+        for (int j = 0; j < interval.numCols; j++) {
+          float x = (j * colScale);
+          float z = (i * rowScale);
+          float finalLevel = oavpData.scaleLeftLevel(interval.getData(i, j));
+          shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale, style.flat.grey);
+        }
+      }
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer square(float w, float h, OavpGridInterval interval) {
+      rectMode(CENTER);
+      float colScale = w / interval.numCols;
+      float rowScale = h / interval.numRows;
+      for (int i = 0; i < interval.numRows; i++) {
+        for (int j = 0; j < interval.numCols; j++) {
+          float x = (j * colScale) + (colScale * 0.5);
+          float y = (i * rowScale) + (rowScale * 0.5);
+          float finalLevel = interval.getData(i, j);
+          rect(x, y, finalLevel * colScale, finalLevel * rowScale);
+        }
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+  }
+
+  class Emitters {
+    OavpData oavpData;
+
+    Emitters(OavpData data) {
+      oavpData = data;
+    }
+
+    OavpVisualizer linear(int numTrackers, float rotationDelta, float velocity, float limit, List trackers) {
+      if (oavpData.isBeatOnset()) {
+        for (int i = 0; i < numTrackers; i++) {
+          trackers.add(new OavpTracker(0, 0, velocity, velocity, (i * rotationDelta) - 90, limit));
+        }
+      }
+      return OavpVisualizer.this;
+    }
+  }
+
+  class Floaters {
+    OavpData oavpData;
+
+    Floaters(OavpData data) {
+      oavpData = data;
+    }
+
+    OavpVisualizer chevron(float w, float h, List trackers) {
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        shapes.chevron(tracker.x, tracker.y, w, h);
+      }
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer square(float scale, List trackers) {
+      rectMode(CENTER);
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        float finalLevel = (oavpData.scaleLeftLevel(oavpData.getLeftLevel()) + oavpData.scaleRightLevel(oavpData.getRightLevel())) / 2 * scale;
+        rect(tracker.x, tracker.y, finalLevel, finalLevel);
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
   }
 
   OavpVisualizer svg(float scaleFactor, float origSize, PShape shape) {

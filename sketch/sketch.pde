@@ -1,6 +1,9 @@
 import ddf.minim.analysis.*;
 import ddf.minim.*;
 import java.util.Random;
+import java.util.List;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 Minim minim;
 OavpData oavpData;
@@ -14,6 +17,7 @@ OavpPosition cameraPosition;
 OavpPosition entityPosition;
 OavpCamera camera;
 OavpVisualizer visualizers;
+List visTrackers;
 OavpShape shapes;
 OavpText text;
 OavpStyle style;
@@ -62,9 +66,10 @@ void setup() {
   beatAmplitude = new OavpAmplitude(0, 1, 0.08);
   beatAmplitudeInterval = new OavpInterval(20);
   beatAmplitudeGridInterval = new OavpGridInterval(4);
-  // beatAmplitudeGridInterval.setDelay(4);
 
   visualizers = new OavpVisualizer(oavpData, entityPosition);
+  visTrackers = new ArrayList();
+
   shapes = new OavpShape();
   text = new OavpText(entityPosition);
   text.setPadding(20);
@@ -93,14 +98,14 @@ void draw() {
   camera.update();
 
   oavpData.forward();
+  oavpData.update(visTrackers);
   levelInterval.update(oavpData.getLeftLevel(), 1);
-  // levelGridInterval.update(oavpData.getLeftLevel(), 0);
   levelGridInterval.updateDiagonal(oavpData.getLeftLevel(), 0);
   beatInterval.update(oavpData.isBeatOnset());
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
   beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);
-  // beatAmplitudeGridInterval.updateDimensional(beatAmplitude.getValue(), 0);
 
-  drawExamples();
+  exampleGallery();
+  // sandbox();
 }

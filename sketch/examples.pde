@@ -1,40 +1,24 @@
-void drawExamples() {
-  exampleGallery();
-  // sandbox();
-}
-
-void sandboxSetup() {
-
-}
-
-void sandbox() {
+void exampleMultiFlatboxGrid() {
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, 135, 0)
-    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, -45, 0)
-    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, -135, 0)
-    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, 45, 0)
-    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
-
-  pushMatrix();
-  rotateX(radians(-45));
-  rotateY(radians(-45));
-  translate(entityPosition.getCenteredX() + 205.0, entityPosition.getCenteredY() -380.0, 0);
-  box(stageWidth * 0.25 + 280.0, stageWidth * 0.25 + paramA, stageWidth * 0.25 + 280.0);
-  popMatrix();
 }
 
 void exampleFlatbox() {
@@ -63,26 +47,26 @@ void exampleFlatbox() {
 void exampleDimensionalGrid() {
   visualizers
     .create()
-    .beats.gridSquare(entityPosition.scale, entityPosition.scale, beatAmplitudeGridInterval)
+    .grids.square(entityPosition.scale, entityPosition.scale, beatAmplitudeGridInterval)
     .done();
 }
 
 void exampleDiagonalGrid() {
   visualizers
     .create(entityPosition.getScaledX(), entityPosition.getScaledY())
-    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .grids.square(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
     .done()
     .create(entityPosition.scale, entityPosition.getScaledY())
     .rotate(0, 0, 90)
-    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .grids.square(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
     .done()
     .create(entityPosition.getScaledX(), entityPosition.scale)
     .rotate(0, 0, 270)
-    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .grids.square(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
     .done()
     .create(entityPosition.scale, entityPosition.scale)
     .rotate(0, 0, 180)
-    .beats.gridSquare(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
+    .grids.square(entityPosition.scale / 2, entityPosition.scale / 2, beatAmplitudeGridInterval)
     .done();
 }
 
@@ -90,12 +74,24 @@ void exampleGallery() {
   text.write(introText);
   entityPosition.moveRight();
 
+  text.write("Square Emitter");
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(0, 0, 0)
+    .emitters.linear(4, 90, 4, stageWidth / 4, visTrackers)
+    .floaters.square(stageWidth / 4, visTrackers)
+    .done();
+
+  entityPosition.moveRight();
+
   text.write("Levels/Beat Grid Flatbox");
 
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (stageHeight * 0.125))
     .rotate(-45, -45, 0)
-    .levels.gridFlatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
 
   entityPosition.moveRight();
@@ -123,7 +119,7 @@ void exampleGallery() {
   visualizers
     .create()
     .top().left()
-    .beats.gridSquare(entityPosition.scale, entityPosition.scale, beatAmplitudeGridInterval)
+    .grids.square(entityPosition.scale, entityPosition.scale, beatAmplitudeGridInterval)
     .done();
 
   entityPosition.moveRight();
