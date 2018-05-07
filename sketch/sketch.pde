@@ -9,7 +9,6 @@ Minim minim;
 OavpData oavpData;
 OavpInterval levelInterval;
 OavpGridInterval levelGridInterval;
-OavpInterval beatInterval;
 OavpAmplitude beatAmplitude;
 OavpInterval beatAmplitudeInterval;
 OavpGridInterval beatAmplitudeGridInterval;
@@ -59,10 +58,8 @@ void setup() {
   oavpData.setBufferSmoothing(0.85f);
 
   levelInterval = new OavpInterval(20);
-  levelInterval.setDelay(2);
-  levelGridInterval = new OavpGridInterval(10);
+  levelGridInterval = new OavpGridInterval(4);
 
-  beatInterval = new OavpInterval(100);
   beatAmplitude = new OavpAmplitude(0, 1, 0.08);
   beatAmplitudeInterval = new OavpInterval(20);
   beatAmplitudeGridInterval = new OavpGridInterval(4);
@@ -101,7 +98,6 @@ void draw() {
   oavpData.update(visTrackers);
   levelInterval.update(oavpData.getLeftLevel(), 1);
   levelGridInterval.updateDiagonal(oavpData.getLeftLevel(), 0);
-  beatInterval.update(oavpData.isBeatOnset());
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
   beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);

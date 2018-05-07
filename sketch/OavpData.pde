@@ -29,14 +29,12 @@ public class OavpData {
   private boolean useDB = true;
   private boolean isLineIn;
 
-  private boolean sendBeat = false;
-  private boolean strictBeatOnset = false;
-
   OavpData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
     player = minim.loadFile(path, bufferSize);
     player.loop();
     isLineIn = false;
     beat = new BeatDetect();
+    beat.setSensitivity(300);
     fft = new FFT(player.bufferSize(), player.sampleRate());
     fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
     avgSize = fft.avgSize();
@@ -50,6 +48,7 @@ public class OavpData {
     input = minim.getLineIn();
     isLineIn = true;
     beat = new BeatDetect();
+    beat.setSensitivity(300);
     fft = new FFT(input.bufferSize(), input.sampleRate());
     fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
     avgSize = fft.avgSize();
@@ -190,15 +189,6 @@ public class OavpData {
       }
     }
 
-    strictBeatOnset = false;
-    if (!isBeatOnset()) {
-      sendBeat = true;
-    }
-
-    if (sendBeat && isBeatOnset()) {
-      strictBeatOnset = true;
-      sendBeat = false;
-    }
   }
 
   public float[] getSpectrum() {
@@ -289,10 +279,6 @@ public class OavpData {
 
   public boolean isBeatOnset() {
     return beat.isOnset();
-  }
-
-  public boolean isStrictBeatOnset() {
-    return strictBeatOnset;
   }
 
   public void update(List trackers) {

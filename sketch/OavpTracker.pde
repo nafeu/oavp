@@ -1,38 +1,22 @@
 public class OavpTracker {
-  float startingX, startingY;
-  public float x, y;
-  float velX;
-  float velY;
-  float angle;
-  float limit;
+  float start;
+  float value;
+  float target;
+  float easing;
   boolean isDead = false;
 
-  OavpTracker(float x, float y, float velX, float velY, float angle, float limit) {
-    this.x = x;
-    this.y = y;
-    this.startingX = x;
-    this.startingY = y;
-    this.velX = velX;
-    this.velY = velY;
-    this.angle = angle;
-    this.limit = limit;
+  OavpTracker(float start, float end, float easing) {
+    this.start = start;
+    this.value = start;
+    this.target = end;
+    this.easing = easing;
   }
 
   void update() {
-    x += cos(radians(angle)) * velX;
-    y += sin(radians(angle)) * velY;
-    float maxDistance = abs(startingX - limit);
-    float distanceTravelledX = abs(startingX - x);
-    float distanceTravelledY = abs(startingY - y);
-    if (distanceTravelledX >= maxDistance) {
+    float dt = target - value;
+    value += dt * easing;
+    if (abs(dt) < abs(target - start) * 0.1) {
       isDead = true;
     }
-    if (distanceTravelledY >= maxDistance) {
-      isDead = true;
-    }
-  }
-
-  void setAngle(float angle) {
-    this.angle = angle;
   }
 }

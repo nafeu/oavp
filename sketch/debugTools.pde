@@ -1,5 +1,5 @@
-float paramA = 1;
-float deltaA = 1;
+int paramA = 1;
+int deltaA = 1;
 float paramB = 0;
 float deltaB = 22.5;
 float paramC = 0;

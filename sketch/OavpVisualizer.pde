@@ -438,11 +438,9 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer linear(int numTrackers, float rotationDelta, float velocity, float limit, List trackers) {
+    OavpVisualizer linear(float start, float end, float easing, List trackers) {
       if (oavpData.isBeatOnset()) {
-        for (int i = 0; i < numTrackers; i++) {
-          trackers.add(new OavpTracker(0, 0, velocity, velocity, (i * rotationDelta) - 90, limit));
-        }
+        trackers.add(new OavpTracker(start, end, easing));
       }
       return OavpVisualizer.this;
     }
@@ -455,22 +453,47 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer chevron(float w, float h, List trackers) {
+    OavpVisualizer square(float size, List trackers) {
+      rectMode(CENTER);
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        shapes.chevron(tracker.x, tracker.y, w, h);
+        rect(0, -tracker.value, size, size);
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer circle(float size, List trackers) {
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        ellipse(0, -tracker.value, size, size);
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer square(float scale, List trackers) {
+    OavpVisualizer splashSquare(List trackers) {
       rectMode(CENTER);
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        float finalLevel = (oavpData.scaleLeftLevel(oavpData.getLeftLevel()) + oavpData.scaleRightLevel(oavpData.getRightLevel())) / 2 * scale;
-        rect(tracker.x, tracker.y, finalLevel, finalLevel);
+        rect(0, 0, tracker.value, tracker.value);
       }
       rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer splashCircle(List trackers) {
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        ellipse(0, 0, tracker.value, tracker.value);
+      }
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer chevron(float w, float h, List trackers) {
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        shapes.chevron(0, -tracker.value, w, h);
+      }
       return OavpVisualizer.this;
     }
   }

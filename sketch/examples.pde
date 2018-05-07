@@ -1,23 +1,72 @@
+void exampleLinearEmitters() {
+  visualizers.emitters.linear(0, stageWidth / 2, 0.02, visTrackers);
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(0, 0, frameCount * 0.25)
+    .floaters.circle(10, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.circle(10, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.circle(10, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.circle(10, visTrackers)
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(0, 0, 30 + frameCount * 0.25)
+    .floaters.square(10, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.square(10, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.square(10, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.square(10, visTrackers)
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(0, 0, 60 + frameCount * 0.25)
+    .floaters.chevron(160, 80, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.chevron(160, 80, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.chevron(160, 80, visTrackers)
+    .rotate(0, 0, 90)
+    .floaters.chevron(160, 80, visTrackers)
+    .done();
+
+  visualizers
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (stageHeight * 0.125))
+    .rotate(-45, -45, 0)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .done();
+}
+
 void exampleMultiFlatboxGrid() {
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, 135, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
     .done();
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, -45, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
     .done();
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, -135, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
     .done();
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
     .rotate(-45, 45, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
     .done();
 }
 
@@ -80,7 +129,7 @@ void exampleGallery() {
     .create()
     .center().middle()
     .rotate(0, 0, 0)
-    .emitters.linear(4, 90, 4, stageWidth / 4, visTrackers)
+    .emitters.linear(0, stageWidth / 2, 0.02, visTrackers)
     .floaters.square(stageWidth / 4, visTrackers)
     .done();
 
@@ -139,7 +188,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.splashSquare(0, stageWidth * 0.4, beatInterval)
+    .floaters.splashSquare(visTrackers)
     .done();
 
   entityPosition.moveRight();
@@ -169,7 +218,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.splashCircle(0, stageWidth * 0.4, beatInterval)
+    .floaters.splashCircle(visTrackers)
     .done();
 
   entityPosition.moveRight();
@@ -296,7 +345,7 @@ void exampleGhostCircle() {
     .create()
     .center().middle()
     .rotate(0, 0, frameCount * 0.25)
-    .beats.splashSquare(0, stageWidth * 0.4, beatInterval)
+    .floaters.splashSquare(visTrackers)
     .done();
 
   visualizers
