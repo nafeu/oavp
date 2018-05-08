@@ -6,6 +6,7 @@ class OavpVisualizer {
   public Grids grids;
   public Floaters floaters;
   public Emitters emitters;
+  public Oscillator oscillators;
   public OavpPosition cursor;
 
   OavpVisualizer(OavpData data) {
@@ -16,6 +17,7 @@ class OavpVisualizer {
     grids = new Grids(oavpData);
     floaters = new Floaters(oavpData);
     emitters = new Emitters(oavpData);
+    oscillators = new Oscillator(oavpData);
   }
 
   OavpVisualizer(OavpData data, OavpPosition cursor) {
@@ -26,6 +28,7 @@ class OavpVisualizer {
     grids = new Grids(oavpData);
     floaters = new Floaters(oavpData);
     emitters = new Emitters(oavpData);
+    oscillators = new Oscillator(oavpData);
     this.cursor = cursor;
   }
 
@@ -151,12 +154,55 @@ class OavpVisualizer {
     return this;
   }
 
+  class Oscillator {
+    OavpData oavpData;
+
+    Oscillator(OavpData data) {
+      oavpData = data;
+    }
+
+    OavpVisualizer zSquare(float w, float h, float scale, float range, float speed) {
+      rectMode(CENTER);
+      pushMatrix();
+      translate(0, 0, map(sin(frameCount * speed), -1, 1, 0, range));
+      rect(w / 2, h / 2, w * scale, h * scale);
+      popMatrix();
+      rectMode(CORNER);
+
+      return OavpVisualizer.this;
+    }
+
+  }
+
   class Spectrum {
     OavpData oavpData;
 
     Spectrum(OavpData data) {
       oavpData = data;
     }
+
+    OavpVisualizer mesh(float w, float h, int specSample, OavpInterval interval) {
+      int rows = interval.getIntervalSize();
+      int cols = oavpData.getAvgSize();
+
+      float rowScale = w / rows;
+      float colScale = h / cols;
+
+      for (int i = 0; i < rows - 1; i++) {
+        beginShape(TRIANGLE_STRIP);
+        for (int j = 0; j < cols; j += specSample) {
+          float specValA = oavpData.scaleSpectrumVal(interval.getIntervalData(i)[j]);
+          float specValB = oavpData.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
+          vertex(j * colScale, i * rowScale, specValA * stageWidth / 2);
+          vertex(j * colScale, (i + 1) * rowScale, specValB * stageWidth / 2);
+        }
+        endShape();
+      }
+
+
+      return OavpVisualizer.this;
+    }
+
 
     OavpVisualizer bars(float w, float h) {
       int avgSize = oavpData.getAvgSize();

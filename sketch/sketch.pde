@@ -7,6 +7,7 @@ import java.util.ListIterator;
 
 Minim minim;
 OavpData oavpData;
+OavpInterval spectrumInterval;
 OavpInterval levelInterval;
 OavpGridInterval levelGridInterval;
 OavpAmplitude beatAmplitude;
@@ -57,6 +58,10 @@ void setup() {
   oavpData.setLevelSmoothing(0.95f);
   oavpData.setBufferSmoothing(0.85f);
 
+  println("AVG: ", oavpData.getAvgSize());
+  spectrumInterval = new OavpInterval(40, oavpData.getAvgSize());
+  // spectrumInterval.setDelay(4);
+
   levelInterval = new OavpInterval(20);
   levelGridInterval = new OavpGridInterval(4);
 
@@ -96,12 +101,13 @@ void draw() {
 
   oavpData.forward();
   oavpData.update(visTrackers);
+  spectrumInterval.update(oavpData.getSpectrum());
   levelInterval.update(oavpData.getLeftLevel(), 1);
   levelGridInterval.updateDiagonal(oavpData.getLeftLevel(), 0);
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
   beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);
 
-  exampleGallery();
-  // sandbox();
+  // exampleGallery();
+  sandbox();
 }

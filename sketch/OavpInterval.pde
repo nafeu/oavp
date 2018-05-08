@@ -20,14 +20,14 @@ public class OavpInterval {
     intervalData = new float[storageSize][snapshotSize];
   }
 
-  void update(float[] snapshot, float averageWeight) {
+  void update(float[] snapshot) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[storageSize][snapshotSize];
       for (int i = 1; i < storageSize; i++) {
         temp[i] = intervalData[i - 1];
       }
-      for (int j = 0; j < storageSize; j++) {
-        temp[0][j] = average(snapshot[j], temp[1][j], averageWeight);
+      for (int j = 0; j < snapshotSize; j++) {
+        temp[0][j] = snapshot[j];
       }
       intervalData = temp;
       frameDelayCount = 0;
