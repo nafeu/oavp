@@ -203,7 +203,6 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-
     OavpVisualizer bars(float w, float h) {
       int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
@@ -484,8 +483,15 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer linear(float start, float end, float easing, List trackers) {
+    OavpVisualizer linearBeat(float start, float end, float easing, List trackers) {
       if (oavpData.isBeatOnset()) {
+        trackers.add(new OavpTracker(start, end, easing));
+      }
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer linearDelay(float start, float end, float easing, int frameDelay, List trackers) {
+      if (frameCount % frameDelay == 0) {
         trackers.add(new OavpTracker(start, end, easing));
       }
       return OavpVisualizer.this;

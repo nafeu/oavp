@@ -1,5 +1,19 @@
+void exampleZSquareMesh() {
+  visualizers
+    .create()
+    .center().middle()
+    .moveUp(stageWidth / 4)
+    .rotate(45, 0, 45)
+    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1, stageHeight / 4, 0.025)
+    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1.1, stageHeight / 4, 0.0125)
+    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1.2, stageHeight / 4, 0.00625)
+    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1.3, stageHeight / 4, 0.003125)
+    .spectrum.mesh(stageWidth / 2, stageHeight / 2, 2, spectrumInterval)
+    .done();
+}
+
 void exampleLinearEmitters() {
-  visualizers.emitters.linear(0, stageWidth / 2, 0.02, visTrackers);
+  visualizers.emitters.linearBeat(0, stageWidth / 2, 0.02, visTrackers);
 
   visualizers
     .create()
@@ -129,7 +143,7 @@ void exampleGallery() {
     .create()
     .center().middle()
     .rotate(0, 0, 0)
-    .emitters.linear(0, stageWidth / 2, 0.02, visTrackers)
+    .emitters.linearBeat(0, stageWidth / 2, 0.02, visTrackers)
     .floaters.square(stageWidth / 4, visTrackers)
     .done();
 
