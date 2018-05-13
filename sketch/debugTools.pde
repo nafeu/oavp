@@ -1,5 +1,5 @@
-int paramA = 1;
-int deltaA = 1;
+int paramA = 70;
+int deltaA = 10;
 float paramB = 0;
 float deltaB = 22.5;
 float paramC = 0;
@@ -11,9 +11,10 @@ float deltaE = 16;
 
 void debug() {
   // Insert Debug Code
-  println("paramA:", paramA);
-  println("paramB:", paramB);
-  println("paramC:", paramC);
-  println("paramD:", paramD);
-  println("paramE:", paramE);
+  // println("paramA:", paramA);
+  // println("paramB:", paramB);
+  // println("paramC:", paramC);
+  // println("paramD:", paramD);
+  // println("paramE:", paramE);
+  metronome.reset();
 }

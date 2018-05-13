@@ -496,6 +496,13 @@ class OavpVisualizer {
       }
       return OavpVisualizer.this;
     }
+
+    OavpVisualizer linearTempo(float start, float end, float easing, OavpMetronome metronome, List trackers) {
+      if (metronome.isBeat) {
+        trackers.add(new OavpTracker(start, end, easing));
+      }
+      return OavpVisualizer.this;
+    }
   }
 
   class Floaters {

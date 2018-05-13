@@ -17,6 +17,7 @@ OavpPosition cameraPosition;
 OavpPosition entityPosition;
 OavpCamera camera;
 OavpVisualizer visualizers;
+OavpMetronome metronome;
 List visTrackers;
 OavpShape shapes;
 OavpText text;
@@ -26,18 +27,19 @@ PShape logo;
 PFont mono;
 JSONObject configs;
 
-float stageWidth = 1000;
-float stageHeight = 1000;
-float gridScale = 1000;
+float stageWidth = 500;
+float stageHeight = 500;
+float gridScale = 500;
 
 boolean isDayMode = true;
 int defaultStrokeWeight = 2;
 
 void setup() {
-  // size(1280, 1000, P3D);
-  fullScreen(P3D, 2);
+  size(500, 500, P3D);
+  // fullScreen(P3D, 2);
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
+
 
   style = new OavpStyle(configs.getInt("colorAccent"));
 
@@ -58,6 +60,7 @@ void setup() {
   oavpData.setLevelSmoothing(0.95f);
   oavpData.setBufferSmoothing(0.85f);
 
+
   println("AVG: ", oavpData.getAvgSize());
   spectrumInterval = new OavpInterval(40, oavpData.getAvgSize());
   // spectrumInterval.setDelay(4);
@@ -71,6 +74,8 @@ void setup() {
 
   visualizers = new OavpVisualizer(oavpData, entityPosition);
   visTrackers = new ArrayList();
+
+  metronome = new OavpMetronome(minim, "tack.wav", "tack.wav", 130);
 
   shapes = new OavpShape();
   text = new OavpText(entityPosition);
@@ -89,6 +94,8 @@ void setup() {
 }
 
 void draw() {
+  metronome.update();
+
   style.updateColorInterp();
   style.getIntermediateColor();
   noFill();

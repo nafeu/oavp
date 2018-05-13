@@ -139,6 +139,12 @@ void keyPressed() {
       case '/':
         debug();
         break;
+      case '.':
+        metronome.reset();
+        break;
+      case ',':
+        metronome.toggleSound();
+        break;
       // case '$':
       //   param# += delta#;
       //   println("[$] param# : " + param#);
