@@ -35,8 +35,8 @@ boolean isDayMode = true;
 int defaultStrokeWeight = 2;
 
 void setup() {
-  size(500, 500, P3D);
-  // fullScreen(P3D, 2);
+  // size(500, 500, P3D);
+  fullScreen(P3D, 2);
   configs = loadJSONObject("config.json");
   frameRate(configs.getInt("frameRate"));
 

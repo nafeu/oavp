@@ -503,6 +503,17 @@ class OavpVisualizer {
       }
       return OavpVisualizer.this;
     }
+
+    OavpVisualizer linearSpectrumTempo(float start, float end, float easing, OavpMetronome metronome, List trackers) {
+      float[] payload = new float[oavpData.getSpectrum().length];
+      for (int i = 0; i < oavpData.getSpectrum().length; i++) {
+        payload[i] = oavpData.getSpectrumVal(i);
+      }
+      if (metronome.isBeat) {
+        trackers.add(new OavpTracker(start, end, easing, payload));
+      }
+      return OavpVisualizer.this;
+    }
   }
 
   class Floaters {
@@ -510,6 +521,23 @@ class OavpVisualizer {
 
     Floaters(OavpData data) {
       oavpData = data;
+    }
+
+    OavpVisualizer spectrumWire(float w, float h, List trackers) {
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        pushMatrix();
+        translate(0, 0, -tracker.value);
+        beginShape();
+        float scale = w / tracker.payload.length;
+        for (int i = 0; i < tracker.payload.length; i++) {
+          vertex(i * scale, (h / 2) - oavpData.scaleSpectrumVal(tracker.payload[i]) * (h / 2));
+        }
+        endShape();
+        rect(0, 0, w, h);
+        popMatrix();
+      }
+      return OavpVisualizer.this;
     }
 
     OavpVisualizer square(float size, List trackers) {
