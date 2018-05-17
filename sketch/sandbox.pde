@@ -1,5 +1,5 @@
 void sandboxSetup() {
-
+  metronome.setTempo(130);
 }
 
 void sandbox() {
@@ -7,7 +7,6 @@ void sandbox() {
 
   visualizers
     .create()
-    // .moveUp(stageWidth / 4)
     .floaters.spectrumWire(stageWidth, stageHeight, visTrackers)
     .done();
 }

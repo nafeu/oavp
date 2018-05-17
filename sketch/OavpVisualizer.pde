@@ -497,19 +497,19 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearTempo(float start, float end, float easing, OavpMetronome metronome, List trackers) {
-      if (metronome.isBeat) {
+    OavpVisualizer linearTempo(float start, float end, float easing, OavpRhythm metronome, List trackers) {
+      if (metronome.onRhythm()) {
         trackers.add(new OavpTracker(start, end, easing));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearSpectrumTempo(float start, float end, float easing, OavpMetronome metronome, List trackers) {
+    OavpVisualizer linearSpectrumTempo(float start, float end, float easing, OavpRhythm metronome, List trackers) {
       float[] payload = new float[oavpData.getSpectrum().length];
       for (int i = 0; i < oavpData.getSpectrum().length; i++) {
         payload[i] = oavpData.getSpectrumVal(i);
       }
-      if (metronome.isBeat) {
+      if (metronome.onRhythm()) {
         trackers.add(new OavpTracker(start, end, easing, payload));
       }
       return OavpVisualizer.this;

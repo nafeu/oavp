@@ -16,5 +16,4 @@ void debug() {
   // println("paramC:", paramC);
   // println("paramD:", paramD);
   // println("paramE:", paramE);
-  metronome.reset();
 }
