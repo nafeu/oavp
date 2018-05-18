@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
+import de.looksgood.ani.*;
+import de.looksgood.ani.easing.*;
 
 Minim minim;
 OavpData oavpData;
@@ -49,6 +51,7 @@ void setup() {
   // camera.enableOrthoCamera();
 
   minim = new Minim(this);
+  Ani.init(this);
 
   oavpData = new OavpData(minim,
                           // configs.getString("audioFile"),
@@ -114,6 +117,6 @@ void draw() {
   beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
   beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);
 
-  // exampleGallery();
-  sandbox();
+  exampleGallery();
+  // sandbox();
 }

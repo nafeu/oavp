@@ -13,7 +13,7 @@ void exampleZSquareMesh() {
 }
 
 void exampleLinearEmitters() {
-  visualizers.emitters.linearBeat(0, stageWidth / 2, 0.02, visTrackers);
+  visualizers.emitters.linearBeat(0, stageWidth / 2, 1.0, Ani.LINEAR, visTrackers);
 
   visualizers
     .create()
@@ -143,7 +143,7 @@ void exampleGallery() {
     .create()
     .center().middle()
     .rotate(0, 0, 0)
-    .emitters.linearBeat(0, stageWidth / 2, 0.02, visTrackers)
+    .emitters.linearBeat(0, stageWidth / 2, 1.0, Ani.LINEAR, visTrackers)
     .floaters.square(stageWidth / 4, visTrackers)
     .done();
 

@@ -3,7 +3,7 @@ void sandboxSetup() {
 }
 
 void sandbox() {
-  visualizers.emitters.linearSpectrumTempo(0, stageWidth * 2, 0.005, metronome, visTrackers);
+  visualizers.emitters.linearSpectrumRhythm(0, stageWidth * 2, 1.0, Ani.LINEAR, metronome, visTrackers);
 
   visualizers
     .create()

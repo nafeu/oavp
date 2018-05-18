@@ -1,30 +1,28 @@
 public class OavpTracker {
-  float start;
   float value;
   float target;
-  float easing;
   float[] payload;
   boolean isDead = false;
 
-  OavpTracker(float start, float end, float easing) {
-    this.start = start;
+  OavpTracker(float start, float end, float duration, Easing easing) {
     this.value = start;
     this.target = end;
-    this.easing = easing;
+    start(duration, easing);
   }
 
-  OavpTracker(float start, float end, float easing, float[] payload) {
-    this.start = start;
+  OavpTracker(float start, float end, float duration, Easing easing, float[] payload) {
     this.value = start;
     this.target = end;
-    this.easing = easing;
     this.payload = payload;
+    start(duration, easing);
+  }
+
+  void start(float duration, Easing easing) {
+    Ani.to(this, duration, "value", target, easing);
   }
 
   void update() {
-    float dt = target - value;
-    value += dt * easing;
-    if (abs(dt) < abs(target - start) * 0.1) {
+    if (value == target) {
       isDead = true;
     }
   }

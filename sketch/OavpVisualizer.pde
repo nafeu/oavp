@@ -483,34 +483,34 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer linearBeat(float start, float end, float easing, List trackers) {
+    OavpVisualizer linearBeat(float start, float end, float duration, Easing easing, List trackers) {
       if (oavpData.isBeatOnset()) {
-        trackers.add(new OavpTracker(start, end, easing));
+        trackers.add(new OavpTracker(start, end, duration, easing));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearDelay(float start, float end, float easing, int frameDelay, List trackers) {
+    OavpVisualizer linearDelay(float start, float end, float duration, Easing easing, int frameDelay, List trackers) {
       if (frameCount % frameDelay == 0) {
-        trackers.add(new OavpTracker(start, end, easing));
+        trackers.add(new OavpTracker(start, end, duration, easing));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearTempo(float start, float end, float easing, OavpRhythm metronome, List trackers) {
-      if (metronome.onRhythm()) {
-        trackers.add(new OavpTracker(start, end, easing));
+    OavpVisualizer linearRhythm(float start, float end, float duration, Easing easing, OavpRhythm rhythm, List trackers) {
+      if (rhythm.onRhythm()) {
+        trackers.add(new OavpTracker(start, end, duration, easing));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearSpectrumTempo(float start, float end, float easing, OavpRhythm metronome, List trackers) {
+    OavpVisualizer linearSpectrumRhythm(float start, float end, float duration, Easing easing, OavpRhythm rhythm, List trackers) {
       float[] payload = new float[oavpData.getSpectrum().length];
       for (int i = 0; i < oavpData.getSpectrum().length; i++) {
         payload[i] = oavpData.getSpectrumVal(i);
       }
-      if (metronome.onRhythm()) {
-        trackers.add(new OavpTracker(start, end, easing, payload));
+      if (rhythm.onRhythm()) {
+        trackers.add(new OavpTracker(start, end, duration, easing, payload));
       }
       return OavpVisualizer.this;
     }
