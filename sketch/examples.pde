@@ -263,7 +263,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .svg(400.0 / oavp.STAGE_WIDTH, 400, logo)
+    .svg(400.0 / oavp.STAGE_WIDTH, svgs.get("test-logo"))
     .done();
 
   popStyle();

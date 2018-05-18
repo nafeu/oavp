@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.HashMap;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 
@@ -25,7 +26,8 @@ OavpGridInterval beatAmplitudeGridInterval;
 OavpRhythm metronome;
 List visTrackers;
 OavpText text;
-PShape logo;
+OavpSvgManager svgs;
+OavpImageManager images;
 
 boolean isDayMode = true;
 int defaultStrokeWeight = 2;
@@ -80,7 +82,12 @@ void setup() {
   text = new OavpText(entityPosition);
   text.setPadding(20);
 
-  logo = loadShape("test-logo.svg");
+  // SVG Loading
+  svgs = new OavpSvgManager();
+  svgs.add("test-logo");
+
+  // Image Loading
+  images = new OavpImageManager();
 
   style.setTargetColor(cameraPosition);
 

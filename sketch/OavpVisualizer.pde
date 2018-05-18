@@ -585,8 +585,8 @@ class OavpVisualizer {
     }
   }
 
-  OavpVisualizer svg(float scaleFactor, float origSize, PShape shape) {
-    translate(-origSize * scaleFactor / 2, -origSize * scaleFactor / 2);
+  OavpVisualizer svg(float scaleFactor, PShape shape) {
+    translate(-(shape.width) * scaleFactor / 2, -(shape.width) * scaleFactor / 2);
     pushStyle();
     shape.disableStyle();
     noStroke();
