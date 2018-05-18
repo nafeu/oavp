@@ -134,7 +134,7 @@ void exampleDiagonalGrid() {
 }
 
 void exampleGallery() {
-  text.write(introText);
+  text.write(text.read("intro.txt"));
   entityPosition.moveRight();
 
   text.write("Square Emitter");

@@ -25,9 +25,7 @@ OavpGridInterval beatAmplitudeGridInterval;
 OavpRhythm metronome;
 List visTrackers;
 OavpText text;
-String introText;
 PShape logo;
-PFont mono;
 
 boolean isDayMode = true;
 int defaultStrokeWeight = 2;
@@ -59,7 +57,7 @@ void setup() {
   }
 
   // Style Setup
-  style = new OavpStyle(oavp.COLOR_ACCENT);
+  style = new OavpStyle(oavp);
 
   // Audio Analysis Tools Setup
   oavpData = new OavpData(minim, oavp);
@@ -79,16 +77,12 @@ void setup() {
   visTrackers = new ArrayList();
 
   // Typography Setup
-  mono = loadFont("RobotoMono-Regular-32.vlw");
-  textFont(mono, oavp.FONT_UNIT * (Math.round(oavp.STAGE_WIDTH * oavp.FONT_SCALE)));
   text = new OavpText(entityPosition);
   text.setPadding(20);
 
   logo = loadShape("test-logo.svg");
 
   style.setTargetColor(cameraPosition);
-
-  introText = text.read("intro.txt");
 
   sandboxSetup();
   debug();

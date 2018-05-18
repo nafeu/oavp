@@ -11,9 +11,12 @@ public class OavpStyle {
   FlatUIColors flat;
   boolean isBlackContrast = true;
   boolean isDayMode = true;
+  PFont mono;
 
-  OavpStyle(int colorAccent) {
-    this.colorAccent = colorAccent % material[colorAccent].length;
+  OavpStyle(OavpConfig config) {
+    colorAccent = config.COLOR_ACCENT % material[config.COLOR_ACCENT].length;
+    mono = loadFont(config.FONT_FILE);
+    textFont(mono, config.FONT_UNIT * (Math.round(config.STAGE_WIDTH * config.FONT_SCALE)));
     flat = new FlatUIColors();
   }
 
