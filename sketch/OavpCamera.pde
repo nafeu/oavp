@@ -1,6 +1,3 @@
-final int CAMERA_MODE_DEFAULT = 0;
-final int CAMERA_MODE_ORTHO = 1;
-
 public class OavpCamera {
   float targetOrthoLeft;
   float targetOrthoRight;
@@ -44,19 +41,17 @@ public class OavpCamera {
 
   OavpPosition cameraPosition;
   OavpPosition entityPosition;
-  OavpStyle style;
 
   boolean isOrtho;
   boolean awaitingOffsetUpdate = false;
   boolean awaitingRotationUpdate = false;
 
-  OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, OavpStyle style, float endXCameraOffset, float endYCameraOffset, float cameraEasing) {
+  OavpCamera(OavpPosition cameraPosition, OavpPosition entityPosition, float endXCameraOffset, float endYCameraOffset, float cameraEasing) {
     this.cameraPosition = cameraPosition;
     this.entityPosition = entityPosition;
     this.endXCameraOffset = endXCameraOffset;
     this.endYCameraOffset = endYCameraOffset;
     this.cameraEasing = cameraEasing;
-    this.style = style;
     this.isOrtho = false;
     this.targetOrthoLeft = -width * 0.5;
     this.targetOrthoRight = width * 0.5;
@@ -193,13 +188,11 @@ public class OavpCamera {
       targetCameraX = cameraPosition.getScaledX();
       targetCameraY = cameraPosition.getScaledY();
     }
-    style.updateColor(this.cameraPosition);
   }
 
   void moveLeft() {
     if (cameraPosition.moveLeft(entityPosition.getLowerBoundX())) {
       targetCameraX = cameraPosition.getScaledX();
-      style.updateColor(this.cameraPosition);
     } else if (cameraPosition.moveToPrevLine(entityPosition.getLowerBoundY())) {
       targetCameraX = cameraPosition.getScaledX();
       targetCameraY = cameraPosition.getScaledY();
@@ -209,14 +202,12 @@ public class OavpCamera {
   void moveDown() {
     if (cameraPosition.moveDown(entityPosition.getUpperBoundY())) {
       targetCameraY = cameraPosition.getScaledY();
-      style.updateColor(this.cameraPosition);
     }
   }
 
   void moveUp() {
     if (cameraPosition.moveUp(entityPosition.getLowerBoundY())) {
       targetCameraY = cameraPosition.getScaledY();
-      style.updateColor(this.cameraPosition);
     }
   }
 

@@ -6,9 +6,9 @@ public class OavpData {
 
   private int avgSize;
   private int bufferSize;
-  private float spectrumSmoothing = 0.0f;
-  private float bufferSmoothing = 0.0f;
-  private float levelSmoothing = 0.0f;
+  private float spectrumSmoothing;
+  private float bufferSmoothing;
+  private float levelSmoothing;
 
   private float[] spectrum;
   private float minSpectrumVal = 0.0f;
@@ -29,33 +29,32 @@ public class OavpData {
   private boolean useDB = true;
   private boolean isLineIn;
 
-  OavpData (Minim minim, String path, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
-    player = minim.loadFile(path, bufferSize);
-    player.loop();
-    isLineIn = false;
+  OavpData (Minim minim, OavpConfig config) {
     beat = new BeatDetect();
     beat.setSensitivity(300);
-    fft = new FFT(player.bufferSize(), player.sampleRate());
-    fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
-    avgSize = fft.avgSize();
-    bufferSize = player.bufferSize();
+    if (config.AUDIO_FILE != null) {
+      player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
+      player.loop();
+      isLineIn = false;
+      fft = new FFT(player.bufferSize(), player.sampleRate());
+      fft.logAverages(config.MIN_BANDWIDTH_PER_OCTAVE, config.BANDS_PER_OCTAVE);
+      avgSize = fft.avgSize();
+      bufferSize = player.bufferSize();
+    } else {
+      input = minim.getLineIn();
+      isLineIn = true;
+      fft = new FFT(input.bufferSize(), input.sampleRate());
+      fft.logAverages(config.MIN_BANDWIDTH_PER_OCTAVE, config.BANDS_PER_OCTAVE);
+      avgSize = fft.avgSize();
+      bufferSize = input.bufferSize();
+    }
     spectrum = new float[avgSize];
     leftBuffer = new float[bufferSize];
     rightBuffer = new float[bufferSize];
-  }
 
-  OavpData (Minim minim, int bufferSize, int minBandwidthPerOctave, int bandsPerOctave) {
-    input = minim.getLineIn();
-    isLineIn = true;
-    beat = new BeatDetect();
-    beat.setSensitivity(300);
-    fft = new FFT(input.bufferSize(), input.sampleRate());
-    fft.logAverages(minBandwidthPerOctave, bandsPerOctave);
-    avgSize = fft.avgSize();
-    bufferSize = input.bufferSize();
-    spectrum = new float[avgSize];
-    leftBuffer = new float[bufferSize];
-    rightBuffer = new float[bufferSize];
+    spectrumSmoothing = config.SPECTRUM_SMOOTHING;
+    bufferSmoothing = config.BUFFER_SMOOTHING;
+    levelSmoothing = config.LEVEL_SMOOTHING;
   }
 
   public void toggleLoop() {

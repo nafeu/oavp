@@ -21,6 +21,8 @@ public class OavpConfig {
 
   public boolean ENABLE_ORTHO = false;
 
+  public float CAMERA_EASING = 0.10;
+
   OavpConfig() {}
 
   OavpConfig(String path) {
@@ -41,5 +43,6 @@ public class OavpConfig {
     LEVEL_SMOOTHING = configs.getFloat("LEVEL_SMOOTHING");
     BUFFER_SMOOTHING = configs.getFloat("BUFFER_SMOOTHING");
     ENABLE_ORTHO = configs.getBoolean("ENABLE_ORTHO");
+    CAMERA_EASING = configs.getFloat("CAMERA_EASING");
   }
 }
