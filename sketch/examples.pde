@@ -2,18 +2,18 @@ void exampleZSquareMesh() {
   visualizers
     .create()
     .center().middle()
-    .moveUp(stageWidth / 4)
+    .moveUp(oavp.STAGE_WIDTH / 4)
     .rotate(45, 0, 45)
-    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1, stageHeight / 4, 0.025)
-    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1.1, stageHeight / 4, 0.0125)
-    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1.2, stageHeight / 4, 0.00625)
-    .oscillators.zSquare(stageWidth / 2, stageHeight / 2, 1.3, stageHeight / 4, 0.003125)
-    .spectrum.mesh(stageWidth / 2, stageHeight / 2, 2, spectrumInterval)
+    .oscillators.zSquare(oavp.STAGE_WIDTH / 2, oavp.STAGE_HEIGHT / 2, 1, oavp.STAGE_HEIGHT / 4, 0.025)
+    .oscillators.zSquare(oavp.STAGE_WIDTH / 2, oavp.STAGE_HEIGHT / 2, 1.1, oavp.STAGE_HEIGHT / 4, 0.0125)
+    .oscillators.zSquare(oavp.STAGE_WIDTH / 2, oavp.STAGE_HEIGHT / 2, 1.2, oavp.STAGE_HEIGHT / 4, 0.00625)
+    .oscillators.zSquare(oavp.STAGE_WIDTH / 2, oavp.STAGE_HEIGHT / 2, 1.3, oavp.STAGE_HEIGHT / 4, 0.003125)
+    .spectrum.mesh(oavp.STAGE_WIDTH / 2, oavp.STAGE_HEIGHT / 2, oavp.STAGE_WIDTH / 2, 2, spectrumInterval)
     .done();
 }
 
 void exampleLinearEmitters() {
-  visualizers.emitters.linearBeat(0, stageWidth / 2, 1.0, Ani.LINEAR, visTrackers);
+  visualizers.emitters.linearBeat(0, oavp.STAGE_WIDTH / 2, 1.0, Ani.LINEAR, visTrackers);
 
   visualizers
     .create()
@@ -55,32 +55,32 @@ void exampleLinearEmitters() {
     .done();
 
   visualizers
-    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (stageHeight * 0.125))
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (oavp.STAGE_HEIGHT * 0.125))
     .rotate(-45, -45, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
 }
 
 void exampleMultiFlatboxGrid() {
   visualizers
-    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (oavp.STAGE_HEIGHT * 0.125))
     .rotate(-45, 135, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
+    .grids.flatbox(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, beatAmplitudeGridInterval)
     .done();
   visualizers
-    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (oavp.STAGE_HEIGHT * 0.125))
     .rotate(-45, -45, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
+    .grids.flatbox(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, beatAmplitudeGridInterval)
     .done();
   visualizers
-    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (oavp.STAGE_HEIGHT * 0.125))
     .rotate(-45, -135, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
+    .grids.flatbox(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, beatAmplitudeGridInterval)
     .done();
   visualizers
-    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (stageHeight * 0.125))
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() + (oavp.STAGE_HEIGHT * 0.125))
     .rotate(-45, 45, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25, beatAmplitudeGridInterval)
+    .grids.flatbox(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, beatAmplitudeGridInterval)
     .done();
 }
 
@@ -89,21 +89,21 @@ void exampleFlatbox() {
     .create()
     .center().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(stageWidth * 0.25, style.flat.red)
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.red)
     .done();
 
   visualizers
     .create()
     .left().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(stageWidth * 0.25, style.flat.blue)
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.blue)
     .done();
 
   visualizers
     .create()
     .right().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(stageWidth * 0.25, style.flat.green)
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.green)
     .done();
 }
 
@@ -143,8 +143,8 @@ void exampleGallery() {
     .create()
     .center().middle()
     .rotate(0, 0, 0)
-    .emitters.linearBeat(0, stageWidth / 2, 1.0, Ani.LINEAR, visTrackers)
-    .floaters.square(stageWidth / 4, visTrackers)
+    .emitters.linearBeat(0, oavp.STAGE_WIDTH / 2, 1.0, Ani.LINEAR, visTrackers)
+    .floaters.square(oavp.STAGE_WIDTH / 4, visTrackers)
     .done();
 
   entityPosition.moveRight();
@@ -152,9 +152,9 @@ void exampleGallery() {
   text.write("Levels/Beat Grid Flatbox");
 
   visualizers
-    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (stageHeight * 0.125))
+    .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (oavp.STAGE_HEIGHT * 0.125))
     .rotate(-45, -45, 0)
-    .grids.flatbox(stageWidth * 0.25, stageWidth * 0.25, stageWidth * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .grids.flatbox(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25 * 0.125, beatAmplitudeGridInterval)
     .done();
 
   entityPosition.moveRight();
@@ -165,14 +165,14 @@ void exampleGallery() {
     .create()
     .center().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(stageWidth * 0.125, style.flat.grey)
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.125, style.flat.grey)
     .done();
 
   visualizers
     .create()
     .center().middle()
     .rotate(-22.5, -45, 0)
-    .beats.flatbox(stageWidth * 0.25, style.flat.grey, beatAmplitude)
+    .beats.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.grey, beatAmplitude)
     .done();
 
   entityPosition.moveRight();
@@ -192,7 +192,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.ghostSquare(0, stageWidth * 0.75, beatAmplitudeInterval, 20)
+    .beats.ghostSquare(0, oavp.STAGE_WIDTH * 0.75, beatAmplitudeInterval, 20)
     .done();
 
   entityPosition.moveRight();
@@ -212,7 +212,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.square(0, stageWidth * 0.4, beatAmplitude)
+    .beats.square(0, oavp.STAGE_WIDTH * 0.4, beatAmplitude)
     .done();
 
   entityPosition.moveRight();
@@ -222,7 +222,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.ghostCircle(0, stageWidth * 0.4, beatAmplitudeInterval, 20)
+    .beats.ghostCircle(0, oavp.STAGE_WIDTH * 0.4, beatAmplitudeInterval, 20)
     .done();
 
   entityPosition.moveRight();
@@ -241,7 +241,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .beats.circle(0, stageWidth * 0.25, beatAmplitude)
+    .beats.circle(0, oavp.STAGE_WIDTH * 0.25, beatAmplitude)
     .done();
 
   entityPosition.moveRight();
@@ -250,7 +250,7 @@ void exampleGallery() {
   visualizers
     .create()
     .left().top()
-    .levels.intervalBars(stageWidth, stageHeight, stageHeight, levelInterval)
+    .levels.intervalBars(oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT, levelInterval)
     .done();
 
   entityPosition.moveRight();
@@ -263,7 +263,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .svg(400.0 / stageWidth, 400, logo)
+    .svg(400.0 / oavp.STAGE_WIDTH, 400, logo)
     .done();
 
   popStyle();
@@ -274,7 +274,7 @@ void exampleGallery() {
   visualizers
     .create()
     .left().top()
-    .spectrum.bars(stageWidth, stageHeight)
+    .spectrum.bars(oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT)
     .done();
 
   entityPosition.moveRight();
@@ -283,7 +283,7 @@ void exampleGallery() {
   visualizers
     .create()
     .left().top()
-    .spectrum.wire(stageWidth, stageHeight)
+    .spectrum.wire(oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT)
     .done();
 
   entityPosition.moveRight();
@@ -292,7 +292,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .spectrum.radialBars(stageWidth * 0.25, stageWidth * 0.33, stageWidth, frameCount * 0.25)
+    .spectrum.radialBars(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.33, oavp.STAGE_WIDTH, frameCount * 0.25)
     .done();
 
   entityPosition.moveRight();
@@ -301,7 +301,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .spectrum.radialWire(stageWidth * 0.25, stageWidth * 1.50, frameCount * 0.25)
+    .spectrum.radialWire(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 1.50, frameCount * 0.25)
     .done();
 
   entityPosition.moveRight();
@@ -310,7 +310,7 @@ void exampleGallery() {
   visualizers
     .create()
     .left().top()
-    .waveform.wire(stageWidth, stageHeight)
+    .waveform.wire(oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT)
     .done();
 
   entityPosition.moveRight();
@@ -319,7 +319,7 @@ void exampleGallery() {
   visualizers
     .create()
     .center().middle()
-    .waveform.radialWire(stageWidth * 0.25, stageWidth * 0.25, 0, frameCount * 0.25)
+    .waveform.radialWire(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, 0, frameCount * 0.25)
     .done();
 
   entityPosition.moveRight();
@@ -328,7 +328,7 @@ void exampleGallery() {
   visualizers
     .create()
     .left().top()
-    .levels.bars(stageWidth, stageHeight)
+    .levels.bars(oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT)
     .done();
 
   entityPosition.moveRight();
@@ -338,11 +338,11 @@ void exampleGallery() {
     .create()
     .center().middle()
     .rotate(frameCount, frameCount)
-    .levels.cube(stageWidth * 0.75)
+    .levels.cube(oavp.STAGE_WIDTH * 0.75)
     .next()
     .center().middle()
     .rotate(-frameCount * 0.25, -frameCount * 0.25)
-    .levels.cube(stageWidth * 0.25)
+    .levels.cube(oavp.STAGE_WIDTH * 0.25)
     .done();
 
   entityPosition.reset();
@@ -352,7 +352,7 @@ void exampleGhostCircle() {
   visualizers
     .create()
     .center().middle()
-    .beats.ghostCircle(0, stageWidth * 0.75, beatAmplitudeInterval, 20)
+    .beats.ghostCircle(0, oavp.STAGE_WIDTH * 0.75, beatAmplitudeInterval, 20)
     .done();
 
   visualizers
@@ -366,10 +366,10 @@ void exampleGhostCircle() {
     .create()
     .center().middle()
     .rotate(frameCount, frameCount)
-    .levels.cube(stageWidth * 0.75)
+    .levels.cube(oavp.STAGE_WIDTH * 0.75)
     .next()
     .center().middle()
     .rotate(-frameCount * 0.25, -frameCount * 0.25)
-    .levels.cube(stageWidth * 0.25)
+    .levels.cube(oavp.STAGE_WIDTH * 0.25)
     .done();
 }

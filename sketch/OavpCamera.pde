@@ -77,7 +77,7 @@ public class OavpCamera {
     float ddm = targetDistanceMultiplier - currDistanceMultiplier;
     currDistanceMultiplier += ddm * cameraEasing;
 
-    float distanceFromCenter = (stageWidth/2.0) * currDistanceMultiplier;
+    float distanceFromCenter = (oavp.STAGE_WIDTH/2.0) * currDistanceMultiplier;
 
     if (mousePressed && keyPressed && keyCode == SHIFT) {
       awaitingRotationUpdate = true;
@@ -105,8 +105,8 @@ public class OavpCamera {
         startXCameraOffset = mouseX;
         startYCameraOffset = mouseY;
         if (mouseButton == RIGHT) {
-          endXCameraOffset = stageWidth/2.0;
-          endYCameraOffset = stageHeight/2.0;
+          endXCameraOffset = oavp.STAGE_WIDTH/2.0;
+          endYCameraOffset = oavp.STAGE_HEIGHT/2.0;
           centerX = endXCameraOffset;
           centerY = endYCameraOffset;
         }
@@ -221,7 +221,7 @@ public class OavpCamera {
   }
 
   void moveForward() {
-    targetCameraZ = max(targetCameraZ - stageWidth / 2, -stageWidth / 2);
+    targetCameraZ = max(targetCameraZ - oavp.STAGE_WIDTH / 2, -oavp.STAGE_WIDTH / 2);
     if (targetOrthoLeft < (-width * orthoScale)) {
       targetOrthoLeft = targetOrthoLeft + (width * orthoScale);
       targetOrthoRight = targetOrthoRight - (width * orthoScale);
@@ -231,7 +231,7 @@ public class OavpCamera {
   }
 
   void moveBackward() {
-    targetCameraZ = min(targetCameraZ + stageWidth / 2, stageWidth * 2);
+    targetCameraZ = min(targetCameraZ + oavp.STAGE_WIDTH / 2, oavp.STAGE_WIDTH * 2);
     if (targetOrthoLeft > (-width * orthoScale * orthoDistanceLimit)) {
       targetOrthoLeft = targetOrthoLeft - (width * orthoScale);
       targetOrthoRight = targetOrthoRight + (width * orthoScale);

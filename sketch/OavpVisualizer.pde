@@ -181,7 +181,7 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer mesh(float w, float h, int specSample, OavpInterval interval) {
+    OavpVisualizer mesh(float w, float h, float scale, int specSample, OavpInterval interval) {
       int rows = interval.getIntervalSize();
       int cols = oavpData.getAvgSize();
 
@@ -193,8 +193,8 @@ class OavpVisualizer {
         for (int j = 0; j < cols; j += specSample) {
           float specValA = oavpData.scaleSpectrumVal(interval.getIntervalData(i)[j]);
           float specValB = oavpData.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
-          vertex(j * colScale, i * rowScale, specValA * stageWidth / 2);
-          vertex(j * colScale, (i + 1) * rowScale, specValB * stageWidth / 2);
+          vertex(j * colScale, i * rowScale, specValA * scale);
+          vertex(j * colScale, (i + 1) * rowScale, specValB * scale);
         }
         endShape();
       }

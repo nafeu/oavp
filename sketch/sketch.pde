@@ -8,6 +8,7 @@ import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 
 Minim minim;
+OavpConfig oavp;
 OavpData oavpData;
 OavpInterval spectrumInterval;
 OavpInterval levelInterval;
@@ -27,48 +28,47 @@ OavpStyle style;
 String introText;
 PShape logo;
 PFont mono;
-JSONObject configs;
-
-float stageWidth = 1000;
-float stageHeight = 1000;
-float gridScale = 1000;
 
 boolean isDayMode = true;
 int defaultStrokeWeight = 2;
 
 void setup() {
-  // size(500, 500, P3D);
+  // Load configs
+  oavp = new OavpConfig();
+
+  // Screen setup
   fullScreen(P3D, 2);
-  configs = loadJSONObject("config.json");
-  frameRate(configs.getInt("frameRate"));
+  frameRate(oavp.FRAMERATE);
 
-
-  style = new OavpStyle(configs.getInt("colorAccent"));
-
-  cameraPosition = new OavpPosition(0, 0, gridScale);
-  entityPosition = new OavpPosition(0, 0, gridScale);
-  camera = new OavpCamera(cameraPosition, entityPosition, style, stageWidth / 2, stageHeight / 2, 0.10);
-  // camera.enableOrthoCamera();
-
+  // Library initialization
   minim = new Minim(this);
   Ani.init(this);
 
-  oavpData = new OavpData(minim,
-                          // configs.getString("audioFile"),
-                          configs.getInt("bufferSize"),
-                          configs.getInt("minBandwidthPerOctave"),
-                          configs.getInt("bandsPerOctave"));
+  // Camera setup
+  cameraPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
+  entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
+  camera = new OavpCamera(cameraPosition, entityPosition, style, oavp.STAGE_WIDTH / 2, oavp.STAGE_HEIGHT / 2, 0.10);
+  if (oavp.ENABLE_ORTHO) {
+    camera.enableOrthoCamera();
+  }
 
-  oavpData.setSpectrumSmoothing(0.80f);
-  oavpData.setLevelSmoothing(0.95f);
-  oavpData.setBufferSmoothing(0.85f);
+  // Style setup
+  style = new OavpStyle(oavp.COLOR_ACCENT);
+
+  // Audio Analysis Tools Setup
+  oavpData = new OavpData(minim,
+                          // oavp.AUDIO_FILE,
+                          oavp.BUFFER_SIZE,
+                          oavp.MIN_BANDWIDTH_PER_OCTAVE,
+                          oavp.BANDS_PER_OCTAVE);
+  oavpData.setSpectrumSmoothing(oavp.SPECTRUM_SMOOTHING);
+  oavpData.setLevelSmoothing(oavp.LEVEL_SMOOTHING);
+  oavpData.setBufferSmoothing(oavp.BUFFER_SMOOTHING);
+
 
   metronome = new OavpRhythm(minim, 120, 1);
 
-  println("AVG: ", oavpData.getAvgSize());
   spectrumInterval = new OavpInterval(40, oavpData.getAvgSize());
-  // spectrumInterval.setDelay(4);
-
   levelInterval = new OavpInterval(20);
   levelGridInterval = new OavpGridInterval(4);
 
@@ -85,7 +85,7 @@ void setup() {
 
   logo = loadShape("test-logo.svg");
   mono = loadFont("RobotoMono-Regular-32.vlw");
-  textFont(mono, configs.getInt("fontUnit") * (Math.round(stageWidth * configs.getFloat("fontScale"))));
+  textFont(mono, oavp.FONT_UNIT * (Math.round(oavp.STAGE_WIDTH * oavp.FONT_SCALE)));
 
   style.setTargetColor(cameraPosition);
 
@@ -96,6 +96,13 @@ void setup() {
 }
 
 void draw() {
+  updateEntities();
+
+  // exampleGallery();
+  sandbox();
+}
+
+void updateEntities() {
   metronome.update();
 
   style.updateColorInterp();
@@ -116,7 +123,4 @@ void draw() {
   beatAmplitude.update(oavpData);
   beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
   beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);
-
-  exampleGallery();
-  // sandbox();
 }
