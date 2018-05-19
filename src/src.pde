@@ -21,8 +21,6 @@ OavpText text;
 OavpSvgManager svgs;
 OavpImageManager images;
 
-int defaultStrokeWeight = 2;
-
 void setup() {
   // Load configs
   oavp = new OavpConfig("config.json");
@@ -100,7 +98,7 @@ void updateEntities() {
   }
   style.updateColorInterp();
   noFill();
-  strokeWeight(2);
+  strokeWeight(style.defaultStrokeWeight);
 
   stroke(style.getPrimaryColor());
   background(style.getSecondaryColor());

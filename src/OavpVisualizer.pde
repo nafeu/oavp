@@ -395,7 +395,7 @@ class OavpVisualizer {
         strokeWeight(i);
         ellipse(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
       }
-      strokeWeight(defaultStrokeWeight);
+      strokeWeight(style.defaultStrokeWeight);
       return OavpVisualizer.this;
     }
 

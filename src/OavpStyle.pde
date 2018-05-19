@@ -5,6 +5,7 @@ public class OavpStyle {
   int currColor = 0;
   int intermediateColor = 0;
   int targetColor;
+  float defaultStrokeWeight;
   float currInterp = 0.0;
   float targetInterp = 1.0;
   float colorEasing = 0.025;
@@ -15,6 +16,7 @@ public class OavpStyle {
 
   OavpStyle(OavpConfig config) {
     colorAccent = config.COLOR_ACCENT % material[config.COLOR_ACCENT].length;
+    defaultStrokeWeight = config.DEFAULT_STROKE_WEIGHT;
     mono = loadFont(config.FONT_FILE);
     textFont(mono, config.FONT_UNIT * (Math.round(config.STAGE_WIDTH * config.FONT_SCALE)));
     flat = new FlatUIColors();
