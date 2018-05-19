@@ -20,6 +20,7 @@ OavpShape shapes;
 OavpText text;
 OavpSvgManager svgs;
 OavpImageManager images;
+OavpColorPalette palette;
 
 void setup() {
   // Load configs
@@ -49,6 +50,7 @@ void setup() {
 
   // Style Setup
   style = new OavpStyle(oavp);
+  palette = new OavpColorPalette();
 
   // Audio Analysis Tools Setup
   oavpData = new OavpData(minim, oavp);
@@ -93,17 +95,6 @@ void draw() {
 void updateEntities() {
   camera.update();
   oavpData.forward();
-
-  if (oavp.ROTATE_COLORS_WITH_CAMERA) {
-    style.updateColor(cameraPosition);
-  }
-  style.updateColorInterp();
-  noFill();
-  strokeWeight(style.defaultStrokeWeight);
-
-  stroke(style.getPrimaryColor());
-  background(style.getSecondaryColor());
-
   if (oavp.SHOW_EXAMPLES) {
     updateExamples();
   } else {

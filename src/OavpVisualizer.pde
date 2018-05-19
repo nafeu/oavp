@@ -36,11 +36,6 @@ class OavpVisualizer {
     this.cursor = cursor;
   }
 
-  OavpVisualizer create() {
-    pushMatrix();
-    return this;
-  }
-
   OavpVisualizer center() {
     translate(cursor.getCenteredX(), 0);
     return this;
@@ -120,6 +115,21 @@ class OavpVisualizer {
     return this;
   }
 
+  OavpVisualizer moveBack(float distance) {
+    translate(0, 0, -distance);
+    return this;
+  }
+
+  OavpVisualizer moveForward(float distance) {
+    translate(0, 0, distance);
+    return this;
+  }
+
+  OavpVisualizer create() {
+    pushMatrix();
+    return this;
+  }
+
   OavpVisualizer create(float x, float y) {
     pushMatrix();
     translate(x, y);
@@ -146,6 +156,41 @@ class OavpVisualizer {
     rotateX(radians(rotationX));
     rotateY(radians(rotationY));
     rotateZ(radians(rotationZ));
+    return this;
+  }
+
+  OavpVisualizer startStyle() {
+    pushStyle();
+    return this;
+  }
+
+  OavpVisualizer endStyle() {
+    popStyle();
+    return this;
+  }
+
+  OavpVisualizer noFillStyle() {
+    noFill();
+    return this;
+  }
+
+  OavpVisualizer noStrokeStyle() {
+    noStroke();
+    return this;
+  }
+
+  OavpVisualizer fillColor(color customColor) {
+    fill(customColor);
+    return this;
+  }
+
+  OavpVisualizer strokeColor(color customColor) {
+    stroke(customColor);
+    return this;
+  }
+
+  OavpVisualizer strokeWeightStyle(float weight) {
+    strokeWeight(weight);
     return this;
   }
 
@@ -312,11 +357,11 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer flatbox(float scale, int inputColor) {
+    OavpVisualizer flatbox(float scale) {
       float rawLeftLevel = oavpData.getLeftLevel();
       float rawRightLevel = oavpData.getRightLevel();
       float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
-      shapes.flatbox(0, 0, 0, scale, -boxLevel, scale, inputColor);
+      shapes.flatbox(0, 0, 0, scale, -boxLevel, scale);
       return OavpVisualizer.this;
     }
 
@@ -353,8 +398,8 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer flatbox(float scale, int inputColor, OavpAmplitude amplitude) {
-      shapes.flatbox(0, 0, 0, scale, -amplitude.getValue() * scale, scale, inputColor);
+    OavpVisualizer flatbox(float scale, OavpAmplitude amplitude) {
+      shapes.flatbox(0, 0, 0, scale, -amplitude.getValue() * scale, scale);
       return OavpVisualizer.this;
     }
 
@@ -453,7 +498,7 @@ class OavpVisualizer {
           float x = (j * colScale);
           float z = (i * rowScale);
           float finalLevel = oavpData.scaleLeftLevel(interval.getData(i, j));
-          shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale, style.flat.grey);
+          shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale);
         }
       }
       return OavpVisualizer.this;

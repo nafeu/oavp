@@ -23,6 +23,13 @@ void setupExamples() {
 }
 
 void updateExamples() {
+  style.updateColor(cameraPosition);
+  style.updateColorInterp();
+  noFill();
+  strokeWeight(style.defaultStrokeWeight);
+  stroke(style.getPrimaryColor());
+  background(style.getSecondaryColor());
+
   metronome.update();
   oavpData.update(visTrackers);
   spectrumInterval.update(oavpData.getSpectrum());
@@ -124,21 +131,27 @@ void exampleFlatbox() {
     .create()
     .center().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.red)
+    .startStyle().fillColor(style.flat.red)
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.25)
+    .endStyle()
     .done();
 
   visualizers
     .create()
     .left().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.blue)
+    .startStyle().fillColor(style.flat.green)
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.25)
+    .endStyle()
     .done();
 
   visualizers
     .create()
     .right().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.green)
+    .startStyle().fillColor(style.flat.blue)
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.25)
+    .endStyle()
     .done();
 }
 
@@ -189,7 +202,9 @@ void gallery() {
   visualizers
     .create(entityPosition.getCenteredX(), entityPosition.getCenteredY() - (oavp.STAGE_HEIGHT * 0.125))
     .rotate(-45, -45, 0)
+    .startStyle().fillColor(style.getSecondaryColor())
     .grids.flatbox(oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25, oavp.STAGE_WIDTH * 0.25 * 0.125, beatAmplitudeGridInterval)
+    .endStyle()
     .done();
 
   entityPosition.moveRight();
@@ -200,14 +215,18 @@ void gallery() {
     .create()
     .center().middle()
     .rotate(-22.5, -45, 0)
-    .levels.flatbox(oavp.STAGE_WIDTH * 0.125, style.flat.grey)
+    .startStyle().fillColor(style.getSecondaryColor())
+    .levels.flatbox(oavp.STAGE_WIDTH * 0.125)
+    .endStyle()
     .done();
 
   visualizers
     .create()
     .center().middle()
     .rotate(-22.5, -45, 0)
-    .beats.flatbox(oavp.STAGE_WIDTH * 0.25, style.flat.grey, beatAmplitude)
+    .startStyle().fillColor(style.getSecondaryColor())
+    .beats.flatbox(oavp.STAGE_WIDTH * 0.25, beatAmplitude)
+    .endStyle()
     .done();
 
   entityPosition.moveRight();

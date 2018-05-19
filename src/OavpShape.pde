@@ -2,7 +2,7 @@ public class OavpShape {
 
   OavpShape() {}
 
-  void flatbox(float x, float y, float z, float width, float height, float depth, int inputColor) {
+  void flatbox(float x, float y, float z, float width, float height, float depth) {
     float[] a = { x, y, z };
     float[] b = { x + width, y, z };
     float[] c = { x + width, y, z + depth };
@@ -11,9 +11,6 @@ public class OavpShape {
     float[] f = { x + width, y + height, z };
     float[] g = { x + width, y + height, z + depth };
     float[] h = { x, y + height, z + depth };
-
-    pushStyle();
-    fill(style.getSecondaryColor());
 
     // Face 1
     beginShape();
@@ -31,6 +28,7 @@ public class OavpShape {
     vertex(h[0], h[1], h[2]);
     endShape(CLOSE);
 
+    pushStyle();
     fill(style.flat.white);
 
     // Face 3

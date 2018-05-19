@@ -222,6 +222,10 @@ public class OavpData {
     return rightLevel;
   }
 
+  public float getLevel() {
+    return (scaleLeftLevel(leftLevel) + scaleRightLevel(rightLevel)) / 2;
+  }
+
   public int getBufferSize() {
     if (isLineIn) {
       return input.bufferSize();

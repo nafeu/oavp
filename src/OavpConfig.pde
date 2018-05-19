@@ -23,7 +23,6 @@ public class OavpConfig {
   public float CAMERA_EASING = 0.10;
 
   public boolean SHOW_EXAMPLES = false;
-  public boolean ROTATE_COLORS_WITH_CAMERA = true;
 
   public float DEFAULT_STROKE_WEIGHT = 2;
 
@@ -60,7 +59,6 @@ public class OavpConfig {
     CAMERA_EASING = config.getFloat("CAMERA_EASING");
 
     SHOW_EXAMPLES = config.getBoolean("SHOW_EXAMPLES");
-    ROTATE_COLORS_WITH_CAMERA = config.getBoolean("ROTATE_COLORS_WITH_CAMERA");
 
     DEFAULT_STROKE_WEIGHT = config.getFloat("DEFAULT_STROKE_WEIGHT");
   }
