@@ -17,24 +17,15 @@ OavpStyle style;
 OavpData oavpData;
 OavpVisualizer visualizers;
 OavpShape shapes;
-OavpInterval spectrumInterval;
-OavpInterval levelInterval;
-OavpGridInterval levelGridInterval;
-OavpAmplitude beatAmplitude;
-OavpInterval beatAmplitudeInterval;
-OavpGridInterval beatAmplitudeGridInterval;
-OavpRhythm metronome;
-List visTrackers;
 OavpText text;
 OavpSvgManager svgs;
 OavpImageManager images;
 
-boolean isDayMode = true;
 int defaultStrokeWeight = 2;
 
 void setup() {
   // Load configs
-  oavp = new OavpConfig();
+  oavp = new OavpConfig("config.json");
 
   // Screen Setup
   fullScreen(P3D, 2);
@@ -68,15 +59,11 @@ void setup() {
   visualizers = new OavpVisualizer(oavpData, entityPosition);
   shapes = new OavpShape();
 
-  // Emitters and Intervals Setup
-  metronome = new OavpRhythm(minim, 120, 1);
-  spectrumInterval = new OavpInterval(40, oavpData.getAvgSize());
-  levelInterval = new OavpInterval(20);
-  levelGridInterval = new OavpGridInterval(4);
-  beatAmplitude = new OavpAmplitude(0, 1, 0.08);
-  beatAmplitudeInterval = new OavpInterval(20);
-  beatAmplitudeGridInterval = new OavpGridInterval(4);
-  visTrackers = new ArrayList();
+  if (oavp.SHOW_EXAMPLES) {
+    setupExamples();
+  } else {
+    setupSketch();
+  }
 
   // Typography Setup
   text = new OavpText(entityPosition);
@@ -91,19 +78,22 @@ void setup() {
 
   style.setTargetColor(cameraPosition);
 
-  sandboxSetup();
   debug();
 }
 
 void draw() {
   updateEntities();
 
-  exampleGallery();
-  // sandbox();
+  if (oavp.SHOW_EXAMPLES) {
+    drawExamples();
+  } else {
+    drawSketch();
+  }
 }
 
 void updateEntities() {
-  metronome.update();
+  camera.update();
+  oavpData.forward();
 
   style.updateColor(cameraPosition);
   style.updateColorInterp();
@@ -114,14 +104,9 @@ void updateEntities() {
   stroke(style.getPrimaryColor());
   background(style.getSecondaryColor());
 
-  camera.update();
-
-  oavpData.forward();
-  oavpData.update(visTrackers);
-  spectrumInterval.update(oavpData.getSpectrum());
-  levelInterval.update(oavpData.getLeftLevel(), 1);
-  levelGridInterval.updateDiagonal(oavpData.getLeftLevel(), 0);
-  beatAmplitude.update(oavpData);
-  beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
-  beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);
+  if (oavp.SHOW_EXAMPLES) {
+    updateExamples();
+  } else {
+    updateSketch();
+  }
 }

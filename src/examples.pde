@@ -1,3 +1,38 @@
+OavpRhythm metronome;
+OavpInterval spectrumInterval;
+OavpInterval levelInterval;
+OavpGridInterval levelGridInterval;
+OavpAmplitude beatAmplitude;
+OavpInterval beatAmplitudeInterval;
+OavpGridInterval beatAmplitudeGridInterval;
+List visTrackers;
+
+void drawExamples() {
+  gallery();
+}
+
+void setupExamples() {
+  metronome = new OavpRhythm(minim, 120, 1);
+  spectrumInterval = new OavpInterval(40, oavpData.getAvgSize());
+  levelInterval = new OavpInterval(20);
+  levelGridInterval = new OavpGridInterval(4);
+  beatAmplitude = new OavpAmplitude(0, 1, 0.08);
+  beatAmplitudeInterval = new OavpInterval(20);
+  beatAmplitudeGridInterval = new OavpGridInterval(4);
+  visTrackers = new ArrayList();
+}
+
+void updateExamples() {
+  metronome.update();
+  oavpData.update(visTrackers);
+  spectrumInterval.update(oavpData.getSpectrum());
+  levelInterval.update(oavpData.getLeftLevel(), 1);
+  levelGridInterval.updateDiagonal(oavpData.getLeftLevel(), 0);
+  beatAmplitude.update(oavpData);
+  beatAmplitudeInterval.update(beatAmplitude.getValue(), 0);
+  beatAmplitudeGridInterval.updateDiagonal(beatAmplitude.getValue(), 0);
+}
+
 void exampleZSquareMesh() {
   visualizers
     .create()
@@ -133,7 +168,7 @@ void exampleDiagonalGrid() {
     .done();
 }
 
-void exampleGallery() {
+void gallery() {
   text.write(text.read("intro.txt"));
   entityPosition.moveRight();
 
