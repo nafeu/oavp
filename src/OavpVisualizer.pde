@@ -586,12 +586,19 @@ class OavpVisualizer {
   }
 
   OavpVisualizer svg(float scaleFactor, PShape shape) {
-    translate(-(shape.width) * scaleFactor / 2, -(shape.width) * scaleFactor / 2);
     pushStyle();
     shape.disableStyle();
     noStroke();
     scale(scaleFactor);
     shape(shape, 0, 0);
+    popStyle();
+    return this;
+  }
+
+  OavpVisualizer img(float scaleFactor, PImage image) {
+    pushStyle();
+    scale(scaleFactor);
+    image(image, 0, 0);
     popStyle();
     return this;
   }

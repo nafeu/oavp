@@ -73,6 +73,7 @@ void setup() {
 
   // Image Loading
   images = new OavpImageManager();
+  images.add("test-image.jpg");
 
   style.setTargetColor(cameraPosition);
 

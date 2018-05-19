@@ -1,21 +1,19 @@
-OavpRhythm mainBeat;
-ArrayList trackers;
-
 void setupSketch() {
-  mainBeat = new OavpRhythm(minim, 120, 1);
-  trackers = new ArrayList();
+
 }
 
 void updateSketch() {
-  mainBeat.update();
-  oavpData.update(trackers);
+
 }
 
 void drawSketch() {
-  visualizers.emitters.linearSpectrumRhythm(0, oavp.STAGE_WIDTH * 2, 1.0, Ani.LINEAR, mainBeat, trackers);
-
+  PImage img = images.get("test-image");
+  float imgScale = img.width / oavp.STAGE_WIDTH;
   visualizers
     .create()
-    .floaters.spectrumWire(oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, trackers)
+    .center().middle()
+    .moveLeft(img.width * imgScale / 2)
+    .moveUp(img.height * imgScale / 2)
+    .img(imgScale, img)
     .done();
 }

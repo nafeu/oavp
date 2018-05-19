@@ -295,10 +295,14 @@ void gallery() {
   noStroke();
 
   text.write("Custom SVG");
+  PShape logo = svgs.get("test-logo");
+  float logoScale = logo.width / oavp.STAGE_WIDTH;
   visualizers
     .create()
     .center().middle()
-    .svg(400.0 / oavp.STAGE_WIDTH, svgs.get("test-logo"))
+    .moveLeft(logo.width * logoScale / 2)
+    .moveUp(logo.height * logoScale / 2)
+    .svg(logoScale, logo)
     .done();
 
   popStyle();
