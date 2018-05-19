@@ -95,9 +95,10 @@ void updateEntities() {
   camera.update();
   oavpData.forward();
 
-  style.updateColor(cameraPosition);
+  if (oavp.ROTATE_COLORS_WITH_CAMERA) {
+    style.updateColor(cameraPosition);
+  }
   style.updateColorInterp();
-  style.getIntermediateColor();
   noFill();
   strokeWeight(2);
 
