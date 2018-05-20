@@ -1,28 +1,32 @@
-void setupSketch() {
-  palette.add("monitor", style.flat.black, style.flat.darkBlue);
+List trackers;
+OavpRhythm metro;
 
-  palette.add("a", style.flat.teal);
-  palette.add("b", style.flat.darkTeal);
-  palette.add("c", style.flat.green);
-  palette.add("d", style.flat.darkGreen);
+void setupSketch() {
+  trackers = new ArrayList();
+  metro = new OavpRhythm(minim, 120, 1);
+  palette.add("background", style.flat.red, style.flat.yellow);
 }
 
 void updateSketch() {
-
+  metro.update();
+  oavpData.update(trackers);
 }
 
 void drawSketch() {
-  background(style.flat.blue);
-  noStroke();
-  fill(palette.get("a"));
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, oavp.STAGE_HEIGHT / 2, 100, mouseX * 0.0001);
-  translate(0, 0, -1);
-  fill(palette.get("b"));
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, oavp.STAGE_HEIGHT / 4, 100, mouseX * 0.0001);
-  translate(0, 0, -1);
-  fill(palette.get("c"));
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, oavp.STAGE_HEIGHT / 8, 100, mouseX * 0.0001);
-  translate(0, 0, -1);
-  fill(palette.get("d"));
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, oavp.STAGE_HEIGHT / 16, 100, mouseX * 0.0001);
+  float interpolation = map(sin(frameCount * 0.01), -1, 1, 0, 1);
+  background(palette.get("background", interpolation));
+  noFill();
+  strokeWeight(1);
+
+  visualizers.emitters.rhythmAngles(0, 1, 2.0, Ani.QUAD_IN_OUT, 2, metro, trackers);
+
+  visualizers
+    .create()
+    .startStyle()
+      .noFillStyle()
+      .strokeColor(style.flat.white)
+    .center().middle()
+    .floaters.connectedRings(oavpData.getLevel() * 100, oavp.STAGE_WIDTH, trackers)
+    .endStyle()
+    .done();
 }

@@ -549,6 +549,17 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    OavpVisualizer rhythmAngles(float start, float end, float duration, Easing easing, int count, OavpRhythm rhythm, List trackers) {
+      if (rhythm.onRhythm()) {
+        float[] payload = new float[count];
+        for (int i = 0; i < count; i++) {
+          payload[i] = random(0, 360);
+        }
+        trackers.add(new OavpTracker(start, end, duration, easing, payload));
+      }
+      return OavpVisualizer.this;
+    }
+
     OavpVisualizer linearSpectrumRhythm(float start, float end, float duration, Easing easing, OavpRhythm rhythm, List trackers) {
       float[] payload = new float[oavpData.getSpectrum().length];
       for (int i = 0; i < oavpData.getSpectrum().length; i++) {
@@ -603,6 +614,34 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    OavpVisualizer connectedRings(float radius, float scale, List trackers) {
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        float xInit = 0;
+        float yInit = 0;
+
+        beginShape();
+        for (int i = 0; i < tracker.payload.length; ++i) {
+          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
+          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+          vertex(x, y);
+          if (i == 0) {
+            xInit = x;
+            yInit = y;
+          }
+        }
+        vertex(xInit, yInit);
+        endShape();
+
+        for (int i = 0; i < tracker.payload.length; ++i) {
+          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
+          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+          ellipse(x, y, radius, radius);
+        }
+      }
+      return OavpVisualizer.this;
+    }
+
     OavpVisualizer splashSquare(List trackers) {
       rectMode(CENTER);
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
@@ -628,6 +667,8 @@ class OavpVisualizer {
       }
       return OavpVisualizer.this;
     }
+
+
   }
 
   OavpVisualizer svg(float scaleFactor, PShape shape) {
