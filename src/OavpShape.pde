@@ -85,4 +85,25 @@ public class OavpShape {
     endShape();
     popStyle();
   }
+
+  void hill(float x, float y, float w, float h, float displacement, float scale, int numPoints, float granularity) {
+
+    float[] points = new float[numPoints];
+    float distance = w / numPoints;
+
+    for (int i = 0; i < numPoints; ++i) {
+      points[i] = (noise(i * granularity) * scale) + displacement;
+    }
+
+    beginShape();
+    vertex(x, points[points.length - 1]);
+    vertex(x, h);
+    vertex(w, h);
+    for (int i = 0; i < points.length; i++) {
+      vertex(w - (i * distance), points[i]);
+    }
+    vertex(x, points[points.length - 1]);
+    endShape();
+
+  }
 }
