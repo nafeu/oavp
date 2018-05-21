@@ -425,9 +425,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer square(float minRadius, float maxRadius, OavpAmplitude amplitude) {
+    OavpVisualizer square(float scale, OavpAmplitude amplitude) {
       rectMode(CENTER);
-      float scale = maxRadius - minRadius;
       rect(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
       rectMode(CORNER);
       return OavpVisualizer.this;

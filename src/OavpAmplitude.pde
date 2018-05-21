@@ -1,12 +1,11 @@
 public class OavpAmplitude {
-  float easing;
-  float min;
-  float max;
-  float value;
+  float value = 0;
+  float duration;
+  Easing easing;
+  Ani ani;
 
-  OavpAmplitude(float min, float max, float easing) {
-    this.min = min;
-    this.max = max;
+  OavpAmplitude(float duration, Easing easing) {
+    this.duration = duration;
     this.easing = easing;
   }
 
@@ -14,19 +13,10 @@ public class OavpAmplitude {
     return value;
   }
 
-  void setValue(float value) {
-    this.value = value;
-  }
-
   void update(Boolean trigger) {
     if (trigger) {
-      value = max;
-    } else {
-      float dv = value - min;
-      value -= dv * easing;
-    }
-    if (value <= min) {
-      value = min;
+      value = 1;
+      ani = Ani.to(this, duration, "value", 0, easing);
     }
   }
 }

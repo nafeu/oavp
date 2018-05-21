@@ -1,12 +1,13 @@
 void setupExamples() {
-  entities.addRhythm("metronome", minim, 120, 1);
-  entities.addTracker("beats");
+  entities.addAmplitude("beat", 1, Ani.LINEAR);
   palette.add("background", style.flat.black);
   palette.add("stroke", style.flat.white);
 }
 
 void updateExamples() {
   entities.update();
+
+  entities.getAmplitude("beat").update(oavpData.isBeatOnset());
 }
 
 void drawExamples() {
@@ -18,7 +19,6 @@ void drawExamples() {
   visualizers
     .create()
     .center().middle()
-    .emitters.rhythm(1, Ani.LINEAR, entities.getRhythm("metronome"), entities.getTracker("beats"))
-    .floaters.splashSquare(oavp.STAGE_WIDTH, entities.getTracker("beats"))
+    .beats.square(oavp.STAGE_WIDTH, entities.getAmplitude("beat"))
     .done();
 }
