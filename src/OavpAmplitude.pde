@@ -18,8 +18,8 @@ public class OavpAmplitude {
     this.value = value;
   }
 
-  void update(OavpData oavpData) {
-    if (oavpData.isBeatOnset()) {
+  void update(Boolean trigger) {
+    if (trigger) {
       value = max;
     } else {
       float dv = value - min;

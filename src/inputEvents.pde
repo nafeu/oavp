@@ -140,10 +140,8 @@ void keyPressed() {
         debug();
         break;
       case '.':
-        metronome.toggleNotes();
         break;
       case ',':
-        metronome.toggleMute();
         break;
       // case '$':
       //   param# += delta#;

@@ -21,6 +21,7 @@ OavpText text;
 OavpSvgManager svgs;
 OavpImageManager images;
 OavpColorPalette palette;
+OavpEntityManager entities;
 
 void setup() {
   // Load configs
@@ -60,6 +61,11 @@ void setup() {
   visualizers = new OavpVisualizer(oavpData, entityPosition);
   shapes = new OavpShape();
 
+  // Entity Setup
+  entities = new OavpEntityManager();
+  entities.addSvg("test-logo.svg");
+  entities.addImg("test-image.jpg");
+
   if (oavp.SHOW_EXAMPLES) {
     setupExamples();
   } else {
@@ -69,14 +75,6 @@ void setup() {
   // Typography Setup
   text = new OavpText(entityPosition);
   text.setPadding(20);
-
-  // SVG Loading
-  svgs = new OavpSvgManager();
-  svgs.add("test-logo");
-
-  // Image Loading
-  images = new OavpImageManager();
-  images.add("test-image.jpg");
 
   style.setTargetColor(cameraPosition);
 

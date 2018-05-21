@@ -453,34 +453,6 @@ class OavpVisualizer {
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
-
-    OavpVisualizer splashCircle(float minRadius, float maxRadius, OavpInterval interval) {
-      pushStyle();
-      int intervalSize = interval.getIntervalSize();
-      for (int i = 0; i < intervalSize; i++) {
-        float position = map(i, 0, intervalSize, minRadius, maxRadius);
-        if (interval.getIntervalData(i)[0] == 1.0) {
-          ellipse(0, 0, position, position);
-        }
-      }
-      popStyle();
-      return OavpVisualizer.this;
-    }
-
-    OavpVisualizer splashSquare(float minRadius, float maxRadius, OavpInterval interval) {
-      rectMode(CENTER);
-      pushStyle();
-      int intervalSize = interval.getIntervalSize();
-      for (int i = 0; i < intervalSize; i++) {
-        float position = map(i, 0, intervalSize, minRadius, maxRadius);
-        if (interval.getIntervalData(i)[0] == 1.0) {
-          rect(0, 0, position, position);
-        }
-      }
-      popStyle();
-      rectMode(CORNER);
-      return OavpVisualizer.this;
-    }
   }
 
   class Grids {
