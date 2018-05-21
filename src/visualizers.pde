@@ -8,8 +8,8 @@ class OavpVisualizer {
   List currTrackers;
   OavpRhythm currRhythm;
 
-  OavpVisualizer(OavpData data, OavpPosition cursor, OavpEntityManager entities) {
-    draw = new Draw(data);
+  OavpVisualizer(OavpAnalysis analysis, OavpPosition cursor, OavpEntityManager entities) {
+    draw = new Draw(analysis);
     this.cursor = cursor;
     this.entities = entities;
   }
@@ -204,10 +204,10 @@ class OavpVisualizer {
 
   class Draw {
 
-    OavpData oavpData;
+    OavpAnalysis analysis;
 
-    Draw(OavpData data) {
-      oavpData = data;
+    Draw(OavpAnalysis analysis) {
+      this.analysis = analysis;
     }
 
     OavpVisualizer basicOscZSquare(float w, float h, float scale, float range, float speed) {
@@ -224,7 +224,7 @@ class OavpVisualizer {
     OavpVisualizer intervalSpectrumMesh(float w, float h, float scale, int specSample) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       int rows = interval.getIntervalSize();
-      int cols = oavpData.getAvgSize();
+      int cols = analysis.getAvgSize();
 
       float rowScale = w / rows;
       float colScale = h / cols;
@@ -232,8 +232,8 @@ class OavpVisualizer {
       for (int i = 0; i < rows - 1; i++) {
         beginShape(TRIANGLE_STRIP);
         for (int j = 0; j < cols; j += specSample) {
-          float specValA = oavpData.scaleSpectrumVal(interval.getIntervalData(i)[j]);
-          float specValB = oavpData.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
+          float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
+          float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
           vertex(j * colScale, i * rowScale, specValA * scale);
           vertex(j * colScale, (i + 1) * rowScale, specValB * scale);
         }
@@ -244,10 +244,10 @@ class OavpVisualizer {
     }
 
     OavpVisualizer basicSpectrumBars(float w, float h) {
-      int avgSize = oavpData.getAvgSize();
+      int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
-        float rawAmplitude = oavpData.getSpectrumVal(i);
-        float displayAmplitude = oavpData.scaleSpectrumVal(rawAmplitude);
+        float rawAmplitude = analysis.getSpectrumVal(i);
+        float displayAmplitude = analysis.scaleSpectrumVal(rawAmplitude);
         rect(i * (w / avgSize), h, (w / avgSize), -h * displayAmplitude);
       }
       return OavpVisualizer.this;
@@ -255,12 +255,12 @@ class OavpVisualizer {
 
     OavpVisualizer basicSpectrumWire(float w, float h) {
       beginShape(LINES);
-      int avgSize = oavpData.getAvgSize();
+      int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
-        float rawSpectrumValA = oavpData.getSpectrumVal(i);
-        float rawSpectrumValB = oavpData.getSpectrumVal(i + 1);
-        vertex(i * (w / avgSize), -h * oavpData.scaleSpectrumVal(rawSpectrumValA) + h);
-        vertex((i + 1) * (w / avgSize), -h * oavpData.scaleSpectrumVal(rawSpectrumValB) + h);
+        float rawSpectrumValA = analysis.getSpectrumVal(i);
+        float rawSpectrumValB = analysis.getSpectrumVal(i + 1);
+        vertex(i * (w / avgSize), -h * analysis.scaleSpectrumVal(rawSpectrumValA) + h);
+        vertex((i + 1) * (w / avgSize), -h * analysis.scaleSpectrumVal(rawSpectrumValB) + h);
       }
       endShape();
       return OavpVisualizer.this;
@@ -268,10 +268,10 @@ class OavpVisualizer {
 
     OavpVisualizer basicSpectrumRadialBars(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape();
-      int avgSize = oavpData.getAvgSize();
+      int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
         float angle = map(i, 0, avgSize, 0, 360) - rotation;
-        float r = map(oavpData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
+        float r = map(analysis.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
         float x1 = h * cos(radians(angle));
         float y1 = h * sin(radians(angle));
         float x2 = r * cos(radians(angle));
@@ -284,14 +284,14 @@ class OavpVisualizer {
 
     OavpVisualizer basiSpectrumRadialWire(float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
-      int avgSize = oavpData.getAvgSize();
+      int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
         float angleA = map(i, 0, avgSize, 0, 360) - rotation;
-        float rA = map(oavpData.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
+        float rA = map(analysis.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
         float xA = rA * cos(radians(angleA));
         float yA = rA * sin(radians(angleA));
         float angleB = map(i + 1, 0, avgSize, 0, 360) - rotation;
-        float rB = map(oavpData.getSpectrumVal(i + 1), 0, 256, rangeStart, rangeEnd);
+        float rB = map(analysis.getSpectrumVal(i + 1), 0, 256, rangeStart, rangeEnd);
         float xB = rB * cos(radians(angleB));
         float yB = rB * sin(radians(angleB));
         vertex(xA, yA);
@@ -302,15 +302,15 @@ class OavpVisualizer {
     }
 
     OavpVisualizer basicWaveformWire(float w, float h) {
-      int audioBufferSize = oavpData.getBufferSize();
+      int audioBufferSize = analysis.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float x1 = map( i, 0, audioBufferSize, 0, w);
         float x2 = map( i + 1, 0, audioBufferSize, 0, w);
         float leftBufferScale = (h / 4);
         float rightBufferScale = (h / 4) * 3;
         float waveformScale = (h / 4);
-        line(x1, leftBufferScale + oavpData.getLeftBuffer(i) * waveformScale, x2, leftBufferScale + oavpData.getLeftBuffer(i + 1) * waveformScale);
-        line(x1, rightBufferScale + oavpData.getRightBuffer(i) * waveformScale, x2, rightBufferScale + oavpData.getRightBuffer(i + 1) * waveformScale);
+        line(x1, leftBufferScale + analysis.getLeftBuffer(i) * waveformScale, x2, leftBufferScale + analysis.getLeftBuffer(i + 1) * waveformScale);
+        line(x1, rightBufferScale + analysis.getRightBuffer(i) * waveformScale, x2, rightBufferScale + analysis.getRightBuffer(i + 1) * waveformScale);
       }
       endShape();
       return OavpVisualizer.this;
@@ -318,15 +318,15 @@ class OavpVisualizer {
 
     OavpVisualizer basicWaveformRadialWire(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
-      int audioBufferSize = oavpData.getBufferSize();
+      int audioBufferSize = analysis.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float angleA = map(i, 0, audioBufferSize, 0, 360) - rotation;
-        float rA = h + map(oavpData.getLeftBuffer(i), -1, 1, rangeStart, rangeEnd);
+        float rA = h + map(analysis.getLeftBuffer(i), -1, 1, rangeStart, rangeEnd);
         float xA = rA * cos(radians(angleA));
         float yA = rA * sin(radians(angleA));
 
         float angleB = map(i + 1, 0, audioBufferSize, 0, 360) - rotation;
-        float rB = h + map(oavpData.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
+        float rB = h + map(analysis.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
         float xB = rB * cos(radians(angleB));
         float yB = rB * sin(radians(angleB));
         vertex(xA, yA);
@@ -337,18 +337,18 @@ class OavpVisualizer {
     }
 
     OavpVisualizer basicLevelFlatbox(float scale) {
-      float rawLeftLevel = oavpData.getLeftLevel();
-      float rawRightLevel = oavpData.getRightLevel();
-      float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
+      float rawLeftLevel = analysis.getLeftLevel();
+      float rawRightLevel = analysis.getRightLevel();
+      float boxLevel = ((analysis.scaleLeftLevel(rawLeftLevel) + analysis.scaleRightLevel(rawRightLevel)) / 2) * scale;
       shapes.flatbox(0, 0, 0, scale, -boxLevel, scale);
       return OavpVisualizer.this;
     }
 
     OavpVisualizer basicLevelBars(float w, float h) {
-      float rawLeftLevel = oavpData.getLeftLevel();
-      float rawRightLevel = oavpData.getRightLevel();
-      rect(0, 0, oavpData.scaleLeftLevel(rawLeftLevel) * w, h / 2);
-      rect(0, h / 2, oavpData.scaleRightLevel(rawRightLevel) * w, h / 2);
+      float rawLeftLevel = analysis.getLeftLevel();
+      float rawRightLevel = analysis.getRightLevel();
+      rect(0, 0, analysis.scaleLeftLevel(rawLeftLevel) * w, h / 2);
+      rect(0, h / 2, analysis.scaleRightLevel(rawRightLevel) * w, h / 2);
       endShape();
       return OavpVisualizer.this;
     }
@@ -357,15 +357,15 @@ class OavpVisualizer {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
-        rect(i * (w / intervalSize), h, (w / intervalSize), -oavpData.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
+        rect(i * (w / intervalSize), h, (w / intervalSize), -analysis.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
       }
       return OavpVisualizer.this;
     }
 
     OavpVisualizer basicLevelCube(float scale) {
-      float rawLeftLevel = oavpData.getLeftLevel();
-      float rawRightLevel = oavpData.getRightLevel();
-      float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
+      float rawLeftLevel = analysis.getLeftLevel();
+      float rawRightLevel = analysis.getRightLevel();
+      float boxLevel = ((analysis.scaleLeftLevel(rawLeftLevel) + analysis.scaleRightLevel(rawRightLevel)) / 2) * scale;
       box(boxLevel, boxLevel, boxLevel);
       return OavpVisualizer.this;
     }
@@ -439,7 +439,7 @@ class OavpVisualizer {
         for (int j = 0; j < gridInterval.numCols; j++) {
           float x = (j * colScale);
           float z = (i * rowScale);
-          float finalLevel = oavpData.scaleLeftLevel(gridInterval.getData(i, j));
+          float finalLevel = analysis.scaleLeftLevel(gridInterval.getData(i, j));
           shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale);
         }
       }
@@ -472,7 +472,7 @@ class OavpVisualizer {
         beginShape();
         float offset = w / tracker.payload.length;
         for (int i = 0; i < tracker.payload.length; i++) {
-          vertex(i * offset, (h / 2) - oavpData.scaleSpectrumVal(tracker.payload[i]) * (h / 2));
+          vertex(i * offset, (h / 2) - analysis.scaleSpectrumVal(tracker.payload[i]) * (h / 2));
         }
         endShape();
         rect(0, 0, w, h);

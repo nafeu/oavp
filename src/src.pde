@@ -14,7 +14,7 @@ OavpPosition entityPosition;
 OavpPosition cameraPosition;
 OavpCamera camera;
 OavpStyle style;
-OavpData oavpData;
+OavpAnalysis analysis;
 OavpVisualizer visualizers;
 OavpEmitter emitters;
 OavpShape shapes;
@@ -55,11 +55,11 @@ void setup() {
   palette = new OavpColorPalette();
 
   // Audio Analysis Tools Setup
-  oavpData = new OavpData(minim, oavp);
+  analysis = new OavpAnalysis(minim, oavp);
 
   // Main Visualizer Setup
-  visualizers = new OavpVisualizer(oavpData, entityPosition, entities);
-  emitters = new OavpEmitter(oavpData, entities);
+  visualizers = new OavpVisualizer(analysis, entityPosition, entities);
+  emitters = new OavpEmitter(analysis, entities);
   shapes = new OavpShape();
 
   // Load Files
@@ -93,7 +93,7 @@ void draw() {
 
 void updateEntities() {
   camera.update();
-  oavpData.forward();
+  analysis.forward();
   if (oavp.SHOW_EXAMPLES) {
     updateExamples();
   } else {

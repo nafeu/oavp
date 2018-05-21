@@ -1,4 +1,4 @@
-public class OavpData {
+public class OavpAnalysis {
   private FFT fft;
   private AudioPlayer player;
   private AudioInput input;
@@ -29,7 +29,7 @@ public class OavpData {
   private boolean useDB = true;
   private boolean isLineIn;
 
-  OavpData (Minim minim, OavpConfig config) {
+  OavpAnalysis (Minim minim, OavpConfig config) {
     beat = new BeatDetect();
     beat.setSensitivity(300);
     if (config.AUDIO_FILE != null) {

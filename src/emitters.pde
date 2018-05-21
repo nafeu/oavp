@@ -1,6 +1,6 @@
 public class OavpEmitter {
 
-  OavpData oavpData;
+  OavpAnalysis analysis;
   OavpEntityManager entities;
   OavpAmplitude currAmplitude;
   OavpInterval currInterval;
@@ -8,8 +8,8 @@ public class OavpEmitter {
   List currTrackers;
   OavpRhythm currRhythm;
 
-  OavpEmitter(OavpData data, OavpEntityManager entities) {
-    this.oavpData = data;
+  OavpEmitter(OavpAnalysis analysis, OavpEntityManager entities) {
+    this.analysis = analysis;
     this.entities = entities;
   }
 
@@ -40,14 +40,14 @@ public class OavpEmitter {
 
 
   OavpEmitter emitBeat(float duration, Easing easing) {
-    if (oavpData.isBeatOnset()) {
+    if (analysis.isBeatOnset()) {
       currTrackers.add(new OavpTracker(duration, easing));
     }
     return this;
   }
 
   OavpEmitter emitBeatAngles(float duration, Easing easing, int count) {
-    if (oavpData.isBeatOnset()) {
+    if (analysis.isBeatOnset()) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
         payload[i] = random(0, 360);
@@ -83,9 +83,9 @@ public class OavpEmitter {
   }
 
   OavpEmitter emitRhythmSpectrum(float duration, Easing easing) {
-    float[] payload = new float[oavpData.getSpectrum().length];
-    for (int i = 0; i < oavpData.getSpectrum().length; i++) {
-      payload[i] = oavpData.getSpectrumVal(i);
+    float[] payload = new float[analysis.getSpectrum().length];
+    for (int i = 0; i < analysis.getSpectrum().length; i++) {
+      payload[i] = analysis.getSpectrumVal(i);
     }
     if (currRhythm.onRhythm()) {
       currTrackers.add(new OavpTracker(duration, easing, payload));
