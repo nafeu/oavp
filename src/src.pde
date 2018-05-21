@@ -18,8 +18,6 @@ OavpData oavpData;
 OavpVisualizer visualizers;
 OavpShape shapes;
 OavpText text;
-OavpSvgManager svgs;
-OavpImageManager images;
 OavpColorPalette palette;
 OavpEntityManager entities;
 
