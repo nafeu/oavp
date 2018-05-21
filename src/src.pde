@@ -19,7 +19,7 @@ OavpVisualizer visualizers;
 OavpEmitter emitters;
 OavpShape shapes;
 OavpText text;
-OavpColorPalette palette;
+OavpPalette palette;
 OavpEntityManager entities;
 
 void setup() {
@@ -52,7 +52,7 @@ void setup() {
 
   // Style Setup
   style = new OavpStyle(oavp);
-  palette = new OavpColorPalette();
+  palette = new OavpPalette();
 
   // Audio Analysis Tools Setup
   analysis = new OavpAnalysis(minim, oavp);

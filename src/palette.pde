@@ -1,8 +1,8 @@
-public class OavpColorPalette {
+public class OavpPalette {
 
   HashMap<String, color[]> storage;
 
-  OavpColorPalette() {
+  OavpPalette() {
     storage = new HashMap<String, color[]>();
   }
 
