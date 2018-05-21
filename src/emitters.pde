@@ -46,7 +46,18 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitBeatAngles(float duration, Easing easing, int count) {
+  OavpEmitter emitBeatAngles(float duration, Easing easing, int count, float angleIncrement) {
+    if (analysis.isBeatOnset()) {
+      float[] payload = new float[count];
+      for (int i = 0; i < count; i++) {
+        payload[i] = i * angleIncrement;
+      }
+      currTrackers.add(new OavpTracker(duration, easing, payload));
+    }
+    return this;
+  }
+
+  OavpEmitter emitRandomBeatAngles(float duration, Easing easing, int count) {
     if (analysis.isBeatOnset()) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
