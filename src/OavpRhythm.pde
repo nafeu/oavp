@@ -17,7 +17,7 @@ public class OavpRhythm {
     out = minim.getLineOut();
     out.setTempo( tempo );
     out.pauseNotes();
-    for (int i = 0; i < 400; ++i) {
+    for (int i = 0; i < 1000; ++i) {
       out.playNote(i * rhythm, 0.25, "C3");
     }
     out.resumeNotes();

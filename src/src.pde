@@ -27,8 +27,8 @@ void setup() {
   oavp = new OavpConfig("config.json");
 
   // Screen Setup
-  size(500, 500, P3D);
-  // fullScreen(P3D, 2);
+  // size(1000, 1000, P3D);
+  fullScreen(P3D, 2);
   frameRate(oavp.FRAMERATE);
 
   // Library initialization

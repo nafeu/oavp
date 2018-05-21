@@ -1,24 +1,17 @@
 List trackers;
-OavpRhythm metro;
 
 void setupSketch() {
   trackers = new ArrayList();
-  metro = new OavpRhythm(minim, 120, 1);
-  palette.add("background", style.flat.red, style.flat.yellow);
+  metronome = new OavpRhythm(minim, 120, 1);
 }
 
 void updateSketch() {
-  metro.update();
+  metronome.update();
   oavpData.update(trackers);
 }
 
 void drawSketch() {
-  float interpolation = map(sin(frameCount * 0.01), -1, 1, 0, 1);
-  background(palette.get("background", interpolation));
-  noFill();
-  strokeWeight(1);
-
-  visualizers.emitters.rhythmAngles(0, 1, 2.0, Ani.QUAD_IN_OUT, 2, metro, trackers);
+  visualizers.emitters.rhythmAngles(4.0, Ani.QUAD_IN_OUT, floor(random(2,5)), metronome, trackers);
 
   visualizers
     .create()
@@ -26,7 +19,8 @@ void drawSketch() {
       .noFillStyle()
       .strokeColor(style.flat.white)
     .center().middle()
-    .floaters.connectedRings(oavpData.getLevel() * 100, oavp.STAGE_WIDTH, trackers)
+    .rotate(0, 0, frameCount * 0.25)
+    .floaters.connectedRings(25 + (oavpData.getLevel() * 100), oavp.STAGE_WIDTH, trackers)
     .endStyle()
     .done();
 }

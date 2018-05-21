@@ -55,45 +55,45 @@ void exampleZSquareMesh() {
 }
 
 void exampleLinearEmitters() {
-  visualizers.emitters.linearBeat(0, oavp.STAGE_WIDTH / 2, 1.0, Ani.LINEAR, visTrackers);
+  visualizers.emitters.beat(1.0, Ani.LINEAR, visTrackers);
 
   visualizers
     .create()
     .center().middle()
     .rotate(0, 0, frameCount * 0.25)
-    .floaters.circle(10, visTrackers)
+    .floaters.circle(10, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.circle(10, visTrackers)
+    .floaters.circle(10, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.circle(10, visTrackers)
+    .floaters.circle(10, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.circle(10, visTrackers)
+    .floaters.circle(10, oavp.STAGE_WIDTH, visTrackers)
     .done();
 
   visualizers
     .create()
     .center().middle()
     .rotate(0, 0, 30 + frameCount * 0.25)
-    .floaters.square(10, visTrackers)
+    .floaters.square(10, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.square(10, visTrackers)
+    .floaters.square(10, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.square(10, visTrackers)
+    .floaters.square(10, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.square(10, visTrackers)
+    .floaters.square(10, oavp.STAGE_WIDTH, visTrackers)
     .done();
 
   visualizers
     .create()
     .center().middle()
     .rotate(0, 0, 60 + frameCount * 0.25)
-    .floaters.chevron(160, 80, visTrackers)
+    .floaters.chevron(160, 80, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.chevron(160, 80, visTrackers)
+    .floaters.chevron(160, 80, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.chevron(160, 80, visTrackers)
+    .floaters.chevron(160, 80, oavp.STAGE_WIDTH, visTrackers)
     .rotate(0, 0, 90)
-    .floaters.chevron(160, 80, visTrackers)
+    .floaters.chevron(160, 80, oavp.STAGE_WIDTH, visTrackers)
     .done();
 
   visualizers
@@ -191,8 +191,8 @@ void gallery() {
     .create()
     .center().middle()
     .rotate(0, 0, 0)
-    .emitters.linearBeat(0, oavp.STAGE_WIDTH / 2, 1.0, Ani.LINEAR, visTrackers)
-    .floaters.square(oavp.STAGE_WIDTH / 4, visTrackers)
+    .emitters.beat(1.0, Ani.LINEAR, visTrackers)
+    .floaters.square(oavp.STAGE_WIDTH / 4, oavp.STAGE_WIDTH, visTrackers)
     .done();
 
   entityPosition.moveRight();
@@ -256,7 +256,7 @@ void gallery() {
   visualizers
     .create()
     .center().middle()
-    .floaters.splashSquare(visTrackers)
+    .floaters.splashSquare(oavp.STAGE_WIDTH, visTrackers)
     .done();
 
   entityPosition.moveRight();
@@ -286,7 +286,7 @@ void gallery() {
   visualizers
     .create()
     .center().middle()
-    .floaters.splashCircle(visTrackers)
+    .floaters.splashCircle(oavp.STAGE_WIDTH, visTrackers)
     .done();
 
   entityPosition.moveRight();
@@ -417,7 +417,7 @@ void exampleGhostCircle() {
     .create()
     .center().middle()
     .rotate(0, 0, frameCount * 0.25)
-    .floaters.splashSquare(visTrackers)
+    .floaters.splashSquare(oavp.STAGE_WIDTH, visTrackers)
     .done();
 
   visualizers

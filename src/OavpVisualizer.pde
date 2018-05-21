@@ -528,45 +528,45 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer linearBeat(float start, float end, float duration, Easing easing, List trackers) {
+    OavpVisualizer beat(float duration, Easing easing, List trackers) {
       if (oavpData.isBeatOnset()) {
-        trackers.add(new OavpTracker(start, end, duration, easing));
+        trackers.add(new OavpTracker(duration, easing));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearDelay(float start, float end, float duration, Easing easing, int frameDelay, List trackers) {
+    OavpVisualizer frameDelayed(float duration, Easing easing, int frameDelay, List trackers) {
       if (frameCount % frameDelay == 0) {
-        trackers.add(new OavpTracker(start, end, duration, easing));
+        trackers.add(new OavpTracker(duration, easing));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearRhythm(float start, float end, float duration, Easing easing, OavpRhythm rhythm, List trackers) {
+    OavpVisualizer rhythm(float duration, Easing easing, OavpRhythm rhythm, List trackers) {
       if (rhythm.onRhythm()) {
-        trackers.add(new OavpTracker(start, end, duration, easing));
+        trackers.add(new OavpTracker(duration, easing));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer rhythmAngles(float start, float end, float duration, Easing easing, int count, OavpRhythm rhythm, List trackers) {
+    OavpVisualizer rhythmAngles(float duration, Easing easing, int count, OavpRhythm rhythm, List trackers) {
       if (rhythm.onRhythm()) {
         float[] payload = new float[count];
         for (int i = 0; i < count; i++) {
           payload[i] = random(0, 360);
         }
-        trackers.add(new OavpTracker(start, end, duration, easing, payload));
+        trackers.add(new OavpTracker(duration, easing, payload));
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer linearSpectrumRhythm(float start, float end, float duration, Easing easing, OavpRhythm rhythm, List trackers) {
+    OavpVisualizer rhythmSpectrum(float duration, Easing easing, OavpRhythm rhythm, List trackers) {
       float[] payload = new float[oavpData.getSpectrum().length];
       for (int i = 0; i < oavpData.getSpectrum().length; i++) {
         payload[i] = oavpData.getSpectrumVal(i);
       }
       if (rhythm.onRhythm()) {
-        trackers.add(new OavpTracker(start, end, duration, easing, payload));
+        trackers.add(new OavpTracker(duration, easing, payload));
       }
       return OavpVisualizer.this;
     }
@@ -579,15 +579,15 @@ class OavpVisualizer {
       oavpData = data;
     }
 
-    OavpVisualizer spectrumWire(float w, float h, List trackers) {
+    OavpVisualizer spectrumWire(float w, float h, float scale, List trackers) {
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         pushMatrix();
-        translate(0, 0, -tracker.value);
+        translate(0, 0, -tracker.value * scale);
         beginShape();
-        float scale = w / tracker.payload.length;
+        float offset = w / tracker.payload.length;
         for (int i = 0; i < tracker.payload.length; i++) {
-          vertex(i * scale, (h / 2) - oavpData.scaleSpectrumVal(tracker.payload[i]) * (h / 2));
+          vertex(i * offset, (h / 2) - oavpData.scaleSpectrumVal(tracker.payload[i]) * (h / 2));
         }
         endShape();
         rect(0, 0, w, h);
@@ -596,20 +596,20 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer square(float size, List trackers) {
+    OavpVisualizer square(float size, float scale, List trackers) {
       rectMode(CENTER);
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        rect(0, -tracker.value, size, size);
+        rect(0, -tracker.value * scale, size, size);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer circle(float size, List trackers) {
+    OavpVisualizer circle(float radius, float scale, List trackers) {
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        ellipse(0, -tracker.value, size, size);
+        ellipse(0, -tracker.value * scale, radius, radius);
       }
       return OavpVisualizer.this;
     }
@@ -642,33 +642,31 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer splashSquare(List trackers) {
+    OavpVisualizer splashSquare(float scale, List trackers) {
       rectMode(CENTER);
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        rect(0, 0, tracker.value, tracker.value);
+        rect(0, 0, tracker.value * scale, tracker.value * scale);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer splashCircle(List trackers) {
+    OavpVisualizer splashCircle(float scale, List trackers) {
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        ellipse(0, 0, tracker.value, tracker.value);
+        ellipse(0, 0, tracker.value * scale, tracker.value * scale);
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer chevron(float w, float h, List trackers) {
+    OavpVisualizer chevron(float w, float h, float scale, List trackers) {
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        shapes.chevron(0, -tracker.value, w, h);
+        shapes.chevron(0, -tracker.value * scale, w, h);
       }
       return OavpVisualizer.this;
     }
-
-
   }
 
   OavpVisualizer svg(float scaleFactor, PShape shape) {

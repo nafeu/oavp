@@ -1,18 +1,14 @@
 public class OavpTracker {
-  float value;
-  float target;
+  float value = 0;
+  float target = 1;
   float[] payload;
   boolean isDead = false;
 
-  OavpTracker(float start, float end, float duration, Easing easing) {
-    this.value = start;
-    this.target = end;
+  OavpTracker(float duration, Easing easing) {
     start(duration, easing);
   }
 
-  OavpTracker(float start, float end, float duration, Easing easing, float[] payload) {
-    this.value = start;
-    this.target = end;
+  OavpTracker(float duration, Easing easing, float[] payload) {
     this.payload = payload;
     start(duration, easing);
   }
