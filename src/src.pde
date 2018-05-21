@@ -16,6 +16,7 @@ OavpCamera camera;
 OavpStyle style;
 OavpData oavpData;
 OavpVisualizer visualizers;
+OavpEmitter emitters;
 OavpShape shapes;
 OavpText text;
 OavpColorPalette palette;
@@ -36,6 +37,7 @@ void setup() {
 
   // Entity Setup
   entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
+  entities = new OavpEntityManager();
 
   // Camera Setup
   cameraPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
@@ -56,11 +58,11 @@ void setup() {
   oavpData = new OavpData(minim, oavp);
 
   // Main Visualizer Setup
-  visualizers = new OavpVisualizer(oavpData, entityPosition);
+  visualizers = new OavpVisualizer(oavpData, entityPosition, entities);
+  emitters = new OavpEmitter(oavpData, entities);
   shapes = new OavpShape();
 
-  // Entity Setup
-  entities = new OavpEntityManager();
+  // Load Files
   entities.addSvg("test-logo.svg");
   entities.addImg("test-image.jpg");
 

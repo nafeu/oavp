@@ -1,13 +1,11 @@
 void setupExamples() {
-  entities.addAmplitude("beat", 1, Ani.LINEAR);
+  entities.addTrackers("beats");
   palette.add("background", style.flat.black);
   palette.add("stroke", style.flat.white);
 }
 
 void updateExamples() {
   entities.update();
-
-  entities.getAmplitude("beat").update(oavpData.isBeatOnset());
 }
 
 void drawExamples() {
@@ -16,9 +14,14 @@ void drawExamples() {
   noFill();
   strokeWeight(style.defaultStrokeWeight);
 
+  emitters
+    .useTrackers("beats")
+      .emitBeatAngles(4, Ani.LINEAR, 3);
+
   visualizers
     .create()
     .center().middle()
-    .beats.square(oavp.STAGE_WIDTH, entities.getAmplitude("beat"))
-    .done();
+    .useTrackers("beats")
+      .draw.trackerConnectedRings(25, oavp.STAGE_WIDTH)
+      .done();
 }

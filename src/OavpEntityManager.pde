@@ -4,7 +4,7 @@ public class OavpEntityManager {
   HashMap<String, OavpAmplitude> amplitudes;
   HashMap<String, OavpInterval> intervals;
   HashMap<String, OavpGridInterval> gridIntervals;
-  HashMap<String, List> trackers;
+  HashMap<String, List> trackersStorage;
   HashMap<String, OavpRhythm> rhythms;
 
   OavpEntityManager() {
@@ -12,7 +12,7 @@ public class OavpEntityManager {
     imgs = new HashMap<String, PImage>();
     amplitudes = new HashMap<String, OavpAmplitude>();
     intervals = new HashMap<String, OavpInterval>();
-    trackers = new HashMap<String, List>();
+    trackersStorage = new HashMap<String, List>();
     rhythms = new HashMap<String, OavpRhythm>();
   }
 
@@ -58,12 +58,12 @@ public class OavpEntityManager {
     return gridIntervals.get(name);
   }
 
-  void addTracker(String name) {
-    trackers.put(name, new ArrayList());
+  void addTrackers(String name) {
+    trackersStorage.put(name, new ArrayList());
   }
 
   void updateTrackers() {
-    for (HashMap.Entry<String, List> entry : trackers.entrySet())
+    for (HashMap.Entry<String, List> entry : trackersStorage.entrySet())
     {
       Iterator<OavpTracker> i = entry.getValue().iterator();
       while(i.hasNext()) {
@@ -76,8 +76,8 @@ public class OavpEntityManager {
     }
   }
 
-  List getTracker(String name) {
-    return trackers.get(name);
+  List getTrackers(String name) {
+    return trackersStorage.get(name);
   }
 
   void addRhythm(String name, Minim minim, float tempo, float rhythm) {

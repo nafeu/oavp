@@ -1,39 +1,17 @@
 class OavpVisualizer {
-  public Spectrum spectrum;
-  public Waveform waveform;
-  public Levels levels;
-  public Beats beats;
-  public Grids grids;
-  public Floaters floaters;
-  public Emitters emitters;
-  public Oscillator oscillators;
-  public OavpPosition cursor;
+  public Draw draw;
+  OavpEntityManager entities;
+  OavpPosition cursor;
+  OavpAmplitude currAmplitude;
+  OavpInterval currInterval;
+  OavpGridInterval currGridInterval;
+  List currTrackers;
+  OavpRhythm currRhythm;
 
-  OavpVisualizer(OavpData data) {
-    spectrum = new Spectrum(oavpData);
-    waveform = new Waveform(oavpData);
-    levels = new Levels(oavpData);
-    beats = new Beats(oavpData);
-    grids = new Grids(oavpData);
-    floaters = new Floaters(oavpData);
-    emitters = new Emitters(oavpData);
-    oscillators = new Oscillator(oavpData);
-  }
-
-  OavpVisualizer(OavpData data, OavpPosition cursor) {
-    spectrum = new Spectrum(oavpData);
-    waveform = new Waveform(oavpData);
-    levels = new Levels(oavpData);
-    beats = new Beats(oavpData);
-    grids = new Grids(oavpData);
-    floaters = new Floaters(oavpData);
-    emitters = new Emitters(oavpData);
-    oscillators = new Oscillator(oavpData);
+  OavpVisualizer(OavpData data, OavpPosition cursor, OavpEntityManager entities) {
+    draw = new Draw(data);
     this.cursor = cursor;
-  }
-
-  void attach(OavpPosition cursor) {
-    this.cursor = cursor;
+    this.entities = entities;
   }
 
   OavpVisualizer center() {
@@ -199,14 +177,40 @@ class OavpVisualizer {
     return this;
   }
 
-  class Oscillator {
+  OavpVisualizer useAmplitude(String name) {
+    currAmplitude = entities.getAmplitude(name);
+    return this;
+  }
+
+  OavpVisualizer useInterval(String name) {
+    currInterval = entities.getInterval(name);
+    return this;
+  }
+
+  OavpVisualizer useGridInterval(String name) {
+    currGridInterval = entities.getGridInterval(name);
+    return this;
+  }
+
+  OavpVisualizer useTrackers(String name) {
+    currTrackers = entities.getTrackers(name);
+    return this;
+  }
+
+  OavpVisualizer useRhythm(String name) {
+    currRhythm = entities.getRhythm(name);
+    return this;
+  }
+
+  class Draw {
+
     OavpData oavpData;
 
-    Oscillator(OavpData data) {
+    Draw(OavpData data) {
       oavpData = data;
     }
 
-    OavpVisualizer zSquare(float w, float h, float scale, float range, float speed) {
+    OavpVisualizer basicOscZSquare(float w, float h, float scale, float range, float speed) {
       rectMode(CENTER);
       pushMatrix();
       translate(0, 0, map(sin(frameCount * speed), -1, 1, 0, range));
@@ -217,16 +221,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-  }
-
-  class Spectrum {
-    OavpData oavpData;
-
-    Spectrum(OavpData data) {
-      oavpData = data;
-    }
-
-    OavpVisualizer mesh(float w, float h, float scale, int specSample, OavpInterval interval) {
+    OavpVisualizer intervalSpectrumMesh(float w, float h, float scale, int specSample) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
       int rows = interval.getIntervalSize();
       int cols = oavpData.getAvgSize();
 
@@ -244,11 +240,10 @@ class OavpVisualizer {
         endShape();
       }
 
-
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer bars(float w, float h) {
+    OavpVisualizer basicSpectrumBars(float w, float h) {
       int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
         float rawAmplitude = oavpData.getSpectrumVal(i);
@@ -258,7 +253,7 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer wire(float w, float h) {
+    OavpVisualizer basicSpectrumWire(float w, float h) {
       beginShape(LINES);
       int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
@@ -271,7 +266,7 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer radialBars(float h, float rangeStart, float rangeEnd, float rotation) {
+    OavpVisualizer basicSpectrumRadialBars(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape();
       int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
@@ -287,7 +282,7 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer radialWire(float rangeStart, float rangeEnd, float rotation) {
+    OavpVisualizer basiSpectrumRadialWire(float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int avgSize = oavpData.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
@@ -305,16 +300,8 @@ class OavpVisualizer {
       endShape();
       return OavpVisualizer.this;
     }
-  }
 
-  class Waveform {
-    OavpData oavpData;
-
-    Waveform(OavpData data) {
-      oavpData = data;
-    }
-
-    OavpVisualizer wire(float w, float h) {
+    OavpVisualizer basicWaveformWire(float w, float h) {
       int audioBufferSize = oavpData.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float x1 = map( i, 0, audioBufferSize, 0, w);
@@ -329,7 +316,7 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer radialWire(float h, float rangeStart, float rangeEnd, float rotation) {
+    OavpVisualizer basicWaveformRadialWire(float h, float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int audioBufferSize = oavpData.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
@@ -348,16 +335,8 @@ class OavpVisualizer {
       endShape();
       return OavpVisualizer.this;
     }
-  }
 
-  class Levels {
-    OavpData oavpData;
-
-    Levels(OavpData data) {
-      oavpData = data;
-    }
-
-    OavpVisualizer flatbox(float scale) {
+    OavpVisualizer basicLevelFlatbox(float scale) {
       float rawLeftLevel = oavpData.getLeftLevel();
       float rawRightLevel = oavpData.getRightLevel();
       float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
@@ -365,7 +344,7 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer bars(float w, float h) {
+    OavpVisualizer basicLevelBars(float w, float h) {
       float rawLeftLevel = oavpData.getLeftLevel();
       float rawRightLevel = oavpData.getRightLevel();
       rect(0, 0, oavpData.scaleLeftLevel(rawLeftLevel) * w, h / 2);
@@ -374,7 +353,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer intervalBars(float w, float h, float scale, OavpInterval interval) {
+    OavpVisualizer intervalLevelBars(float w, float h, float scale) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
         rect(i * (w / intervalSize), h, (w / intervalSize), -oavpData.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
@@ -382,57 +362,54 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer cube(float scale) {
+    OavpVisualizer basicLevelCube(float scale) {
       float rawLeftLevel = oavpData.getLeftLevel();
       float rawRightLevel = oavpData.getRightLevel();
       float boxLevel = ((oavpData.scaleLeftLevel(rawLeftLevel) + oavpData.scaleRightLevel(rawRightLevel)) / 2) * scale;
       box(boxLevel, boxLevel, boxLevel);
       return OavpVisualizer.this;
     }
-  }
 
-  class Beats {
-    OavpData oavpData;
-
-    Beats(OavpData data) {
-      oavpData = data;
-    }
-
-    OavpVisualizer flatbox(float scale, OavpAmplitude amplitude) {
+    OavpVisualizer amplitudeFlatbox(float scale) {
+      OavpAmplitude amplitude = OavpVisualizer.this.currAmplitude;
       shapes.flatbox(0, 0, 0, scale, -amplitude.getValue() * scale, scale);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer gridSquare(float w, float h, OavpGridInterval interval) {
+    OavpVisualizer gridIntervalGridSquare(float w, float h) {
+      OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
-      float colScale = w / interval.numCols;
-      float rowScale = h / interval.numRows;
-      for (int i = 0; i < interval.numRows; i++) {
-        for (int j = 0; j < interval.numCols; j++) {
+      float colScale = w / gridInterval.numCols;
+      float rowScale = h / gridInterval.numRows;
+      for (int i = 0; i < gridInterval.numRows; i++) {
+        for (int j = 0; j < gridInterval.numCols; j++) {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
-          rect(x, y, interval.getData(i, j) * colScale, interval.getData(i, j) * rowScale);
+          rect(x, y, gridInterval.getData(i, j) * colScale, gridInterval.getData(i, j) * rowScale);
         }
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer circle(float minRadius, float maxRadius, OavpAmplitude amplitude) {
+    OavpVisualizer amplitudeCircle(float minRadius, float maxRadius) {
+      OavpAmplitude amplitude = OavpVisualizer.this.currAmplitude;
       ellipseMode(RADIUS);
       float scale = maxRadius - minRadius;
       ellipse(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer square(float scale, OavpAmplitude amplitude) {
+    OavpVisualizer amplitudeSquare(float scale) {
+      OavpAmplitude amplitude = OavpVisualizer.this.currAmplitude;
       rectMode(CENTER);
       rect(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer ghostCircle(float minRadius, float maxRadius, OavpInterval interval, int trailSize) {
+    OavpVisualizer intervalGhostCircle(float minRadius, float maxRadius, int trailSize) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
       ellipseMode(RADIUS);
       float scale = maxRadius - minRadius;
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
@@ -443,7 +420,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer ghostSquare(float minRadius, float maxRadius, OavpInterval interval, int trailSize) {
+    OavpVisualizer intervalGhostSquare(float minRadius, float maxRadius, int trailSize) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
       rectMode(CENTER);
       float scale = maxRadius - minRadius;
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
@@ -452,105 +430,41 @@ class OavpVisualizer {
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
-  }
 
-  class Grids {
-    OavpData oavpData;
-
-    Grids(OavpData data) {
-      oavpData = data;
-    }
-
-    OavpVisualizer flatbox(float w, float h, float scale, OavpGridInterval interval) {
-      float colScale = w / interval.numCols;
-      float rowScale = h / interval.numRows;
-      for (int i = 0; i < interval.numRows; i++) {
-        for (int j = 0; j < interval.numCols; j++) {
+    OavpVisualizer gridIntervalFlatbox(float w, float h, float scale) {
+      OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
+      float colScale = w / gridInterval.numCols;
+      float rowScale = h / gridInterval.numRows;
+      for (int i = 0; i < gridInterval.numRows; i++) {
+        for (int j = 0; j < gridInterval.numCols; j++) {
           float x = (j * colScale);
           float z = (i * rowScale);
-          float finalLevel = oavpData.scaleLeftLevel(interval.getData(i, j));
+          float finalLevel = oavpData.scaleLeftLevel(gridInterval.getData(i, j));
           shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale);
         }
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer square(float w, float h, OavpGridInterval interval) {
+    OavpVisualizer gridIntervalSquare(float w, float h) {
+      OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
-      float colScale = w / interval.numCols;
-      float rowScale = h / interval.numRows;
-      for (int i = 0; i < interval.numRows; i++) {
-        for (int j = 0; j < interval.numCols; j++) {
+      float colScale = w / gridInterval.numCols;
+      float rowScale = h / gridInterval.numRows;
+      for (int i = 0; i < gridInterval.numRows; i++) {
+        for (int j = 0; j < gridInterval.numCols; j++) {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
-          float finalLevel = interval.getData(i, j);
+          float finalLevel = gridInterval.getData(i, j);
           rect(x, y, finalLevel * colScale, finalLevel * rowScale);
         }
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
-  }
 
-  class Emitters {
-    OavpData oavpData;
-
-    Emitters(OavpData data) {
-      oavpData = data;
-    }
-
-    OavpVisualizer beat(float duration, Easing easing, List trackers) {
-      if (oavpData.isBeatOnset()) {
-        trackers.add(new OavpTracker(duration, easing));
-      }
-      return OavpVisualizer.this;
-    }
-
-    OavpVisualizer frameDelayed(float duration, Easing easing, int frameDelay, List trackers) {
-      if (frameCount % frameDelay == 0) {
-        trackers.add(new OavpTracker(duration, easing));
-      }
-      return OavpVisualizer.this;
-    }
-
-    OavpVisualizer rhythm(float duration, Easing easing, OavpRhythm rhythm, List trackers) {
-      if (rhythm.onRhythm()) {
-        trackers.add(new OavpTracker(duration, easing));
-      }
-      return OavpVisualizer.this;
-    }
-
-    OavpVisualizer rhythmAngles(float duration, Easing easing, int count, OavpRhythm rhythm, List trackers) {
-      if (rhythm.onRhythm()) {
-        float[] payload = new float[count];
-        for (int i = 0; i < count; i++) {
-          payload[i] = random(0, 360);
-        }
-        trackers.add(new OavpTracker(duration, easing, payload));
-      }
-      return OavpVisualizer.this;
-    }
-
-    OavpVisualizer rhythmSpectrum(float duration, Easing easing, OavpRhythm rhythm, List trackers) {
-      float[] payload = new float[oavpData.getSpectrum().length];
-      for (int i = 0; i < oavpData.getSpectrum().length; i++) {
-        payload[i] = oavpData.getSpectrumVal(i);
-      }
-      if (rhythm.onRhythm()) {
-        trackers.add(new OavpTracker(duration, easing, payload));
-      }
-      return OavpVisualizer.this;
-    }
-  }
-
-  class Floaters {
-    OavpData oavpData;
-
-    Floaters(OavpData data) {
-      oavpData = data;
-    }
-
-    OavpVisualizer spectrumWire(float w, float h, float scale, List trackers) {
+    OavpVisualizer trackerSpectrumWire(float w, float h, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         pushMatrix();
@@ -567,7 +481,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer square(float size, float scale, List trackers) {
+    OavpVisualizer trackerSquare(float size, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
       rectMode(CENTER);
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
@@ -577,7 +492,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer circle(float radius, float scale, List trackers) {
+    OavpVisualizer trackerCircle(float radius, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         ellipse(0, -tracker.value * scale, radius, radius);
@@ -585,7 +501,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer connectedRings(float radius, float scale, List trackers) {
+    OavpVisualizer trackerConnectedRings(float radius, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         float xInit = 0;
@@ -613,7 +530,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer splashSquare(float scale, List trackers) {
+    OavpVisualizer trackerSplashSquare(float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
       rectMode(CENTER);
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
@@ -623,7 +541,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer splashCircle(float scale, List trackers) {
+    OavpVisualizer trackerSplashCircle(float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         ellipse(0, 0, tracker.value * scale, tracker.value * scale);
@@ -631,7 +550,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer chevron(float w, float h, float scale, List trackers) {
+    OavpVisualizer trackerChevron(float w, float h, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         shapes.chevron(0, -tracker.value * scale, w, h);
