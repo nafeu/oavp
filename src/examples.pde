@@ -1,7 +1,9 @@
 void setupExamples() {
-  entities.addTrackers("beats");
-  palette.add("background", style.flat.black, style.flat.grey);
-  palette.add("stroke", style.flat.white);
+  entities.addTrackers("beatsA");
+  entities.addTrackers("beatsB");
+  entities.addTrackers("beatsC");
+  palette.add("stroke", palette.flat.white);
+  palette.setRotatingColorByPosition(entityPosition, 5, 0.3, Ani.SINE_IN_OUT);
 }
 
 void updateExamples() {
@@ -10,20 +12,42 @@ void updateExamples() {
 
 void drawExamples() {
   stroke(palette.get("stroke"));
-  background(palette.get("background", analysis.getLevel()));
+  background(palette.getRotatingColor());
   noFill();
-  strokeWeight(style.defaultStrokeWeight);
+  strokeWeight(2);
 
   emitters
-    .useTrackers("beats")
-      .emitBeatAngles(4, Ani.CUBIC_IN_OUT, 4, 90);
+    .useTrackers("beatsA")
+      .emitBeatAngles(2, Ani.SINE_IN_OUT, 3, 90)
+    .useTrackers("beatsB")
+      .emitBeatAngles(2, Ani.SINE_IN_OUT, 4, 90)
+    .useTrackers("beatsC")
+      .emitBeatAngles(2, Ani.SINE_IN_OUT, 5, 45);
 
   visualizers
     .create()
     .center().middle()
-    .useTrackers("beats")
-    .draw.trackerConnectedRings(analysis.getLevel() * 100, oavp.STAGE_WIDTH / 2)
-    .rotate(0, 0, 180)
-    .draw.trackerConnectedRings(analysis.getLevel() * 100, oavp.STAGE_WIDTH / 2)
+    .useTrackers("beatsA")
+    .draw.trackerConnectedRings(analysis.getLevel() * oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 4)
     .done();
+
+  entityPosition.moveRight();
+
+  visualizers
+    .create()
+    .center().middle()
+    .useTrackers("beatsB")
+    .draw.trackerConnectedRings(analysis.getLevel() * oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 4)
+    .done();
+
+  entityPosition.moveRight();
+
+  visualizers
+    .create()
+    .center().middle()
+    .useTrackers("beatsC")
+    .draw.trackerConnectedRings(analysis.getLevel() * oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 4)
+    .done();
+
+  entityPosition.reset();
 }

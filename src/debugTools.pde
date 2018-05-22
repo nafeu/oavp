@@ -10,10 +10,9 @@ float paramE = 0;
 float deltaE = 16;
 
 void debug() {
-  // Insert Debug Code
-  // println("paramA:", paramA);
-  // println("paramB:", paramB);
-  // println("paramC:", paramC);
-  // println("paramD:", paramD);
-  // println("paramE:", paramE);
+  println("paramA:", paramA);
+  println("paramB:", paramB);
+  println("paramC:", paramC);
+  println("paramD:", paramD);
+  println("paramE:", paramE);
 }

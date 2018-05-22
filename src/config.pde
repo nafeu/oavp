@@ -9,7 +9,6 @@ public class OavpConfig {
   public String FONT_FILE = "RobotoMono-Regular-32.vlw";
   public int FONT_UNIT = 8;
   public float FONT_SCALE = 0.0033;
-  public int COLOR_ACCENT = 5;
 
   public float STAGE_WIDTH = 1000;
   public float STAGE_HEIGHT = 1000;
@@ -23,8 +22,6 @@ public class OavpConfig {
   public float CAMERA_EASING = 0.10;
 
   public boolean SHOW_EXAMPLES = false;
-
-  public float DEFAULT_STROKE_WEIGHT = 2;
 
   OavpConfig() {}
 
@@ -45,7 +42,6 @@ public class OavpConfig {
     FONT_FILE = config.getString("FONT_FILE");
     FONT_UNIT = config.getInt("FONT_UNIT");
     FONT_SCALE = config.getFloat("FONT_SCALE");
-    COLOR_ACCENT = config.getInt("COLOR_ACCENT");
 
     STAGE_WIDTH = config.getFloat("STAGE_WIDTH");
     STAGE_HEIGHT = config.getFloat("STAGE_HEIGHT");
@@ -59,7 +55,5 @@ public class OavpConfig {
     CAMERA_EASING = config.getFloat("CAMERA_EASING");
 
     SHOW_EXAMPLES = config.getBoolean("SHOW_EXAMPLES");
-
-    DEFAULT_STROKE_WEIGHT = config.getFloat("DEFAULT_STROKE_WEIGHT");
   }
 }

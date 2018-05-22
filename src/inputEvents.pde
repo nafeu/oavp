@@ -7,15 +7,19 @@ void keyPressed() {
     switch (keyCode) {
       case RIGHT:
         camera.moveRight();
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       case LEFT:
         camera.moveLeft();
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       case DOWN:
         camera.moveDown();
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       case UP:
         camera.moveUp();
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       default:
         println("Unhandled code:", keyCode);
@@ -108,9 +112,11 @@ void keyPressed() {
         break;
       case 'w':
         camera.moveUp();
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       case 's':
         camera.moveDown();
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       case 'W':
         camera.moveForward();
@@ -120,37 +126,15 @@ void keyPressed() {
         break;
       case 'a':
         camera.moveLeft();
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       case 'd':
         camera.moveRight();
-        break;
-      case 'z':
-        style.toggleContrastColor();
-        break;
-      case 'x':
-        style.toggleMode();
-        break;
-      case 'c':
-        style.cycleColorOffset(cameraPosition);
-        break;
-      case 'v':
-        style.cycleColorAccent(cameraPosition);
+        palette.setRotatingColorByPosition(cameraPosition, 5, 0.3, Ani.SINE_IN_OUT);
         break;
       case '/':
         debug();
         break;
-      case '.':
-        break;
-      case ',':
-        break;
-      // case '$':
-      //   param# += delta#;
-      //   println("[$] param# : " + param#);
-      //   break;
-      // case '$':
-      //   param# -= delta#;
-      //   println("[$] param# : " + param#);
-      //   break;
       default:
         println("Unhandled key.");
         break;

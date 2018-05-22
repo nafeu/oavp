@@ -13,7 +13,6 @@ Minim minim;
 OavpPosition entityPosition;
 OavpPosition cameraPosition;
 OavpCamera camera;
-OavpStyle style;
 OavpAnalysis analysis;
 OavpVisualizer visualizers;
 OavpEmitter emitters;
@@ -51,8 +50,7 @@ void setup() {
   }
 
   // Style Setup
-  style = new OavpStyle(oavp);
-  palette = new OavpPalette();
+  palette = new OavpPalette(oavp);
 
   // Audio Analysis Tools Setup
   analysis = new OavpAnalysis(minim, oavp);
@@ -75,8 +73,6 @@ void setup() {
   // Typography Setup
   text = new OavpText(entityPosition);
   text.setPadding(20);
-
-  style.setTargetColor(cameraPosition);
 
   debug();
 }

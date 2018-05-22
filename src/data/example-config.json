@@ -7,7 +7,6 @@
   "FONT_FILE": "RobotoMono-Regular-32.vlw",
   "FONT_UNIT": 8,
   "FONT_SCALE": 0.0033,
-  "COLOR_ACCENT": 5,
   "STAGE_WIDTH": 1000,
   "STAGE_HEIGHT": 1000,
   "GRID_SCALE": 1000,
@@ -16,6 +15,5 @@
   "BUFFER_SMOOTHING": 0.85,
   "ENABLE_ORTHO": false,
   "CAMERA_EASING": 0.10,
-  "SHOW_EXAMPLES": true,
-  "DEFAULT_STROKE_WEIGHT": 2
+  "SHOW_EXAMPLES": true
 }

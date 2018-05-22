@@ -412,11 +412,12 @@ class OavpVisualizer {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       ellipseMode(RADIUS);
       float scale = maxRadius - minRadius;
+      pushStyle();
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
         strokeWeight(i);
         ellipse(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
       }
-      strokeWeight(style.defaultStrokeWeight);
+      popStyle();
       return OavpVisualizer.this;
     }
 

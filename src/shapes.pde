@@ -29,7 +29,7 @@ public class OavpShape {
     endShape(CLOSE);
 
     pushStyle();
-    fill(style.flat.white);
+    fill(palette.flat.white);
 
     // Face 3
     beginShape();
@@ -47,7 +47,7 @@ public class OavpShape {
     vertex(d[0], d[1], d[2]);
     endShape(CLOSE);
 
-    fill(style.flat.black);
+    fill(palette.flat.black);
 
     // Face 5
     beginShape();
