@@ -69,6 +69,12 @@ public class OavpPalette {
     setRotatingColor(material[colorAccent][colorIndex], duration, easing);
   }
 
+  color getMaterialColor(int accent, int index) {
+    int colorAccent = accent % material.length;
+    int colorIndex = index % material[colorAccent].length;
+    return material[colorAccent][colorIndex];
+  }
+
   public class FlatUIColors {
     int teal = #1abc9c;
     int darkTeal = #16a085;

@@ -294,6 +294,29 @@ public class OavpRhythm {
   }
 }
 
+public class OavpCounter {
+  int value = 0;
+  int limit;
+
+  OavpCounter(int limit){
+    this.limit = limit;
+  }
+
+  void increment() {
+    value++;
+  }
+
+  void update(Boolean trigger) {
+    if (trigger) {
+      increment();
+    }
+  }
+
+  boolean hasFinished() {
+    return (value % limit == 0);
+  }
+}
+
 public class OavpEntityManager {
   HashMap<String, PShape> svgs;
   HashMap<String, PImage> imgs;
@@ -302,6 +325,7 @@ public class OavpEntityManager {
   HashMap<String, OavpGridInterval> gridIntervals;
   HashMap<String, List> trackersStorage;
   HashMap<String, OavpRhythm> rhythms;
+  HashMap<String, OavpCounter> counters;
 
   OavpEntityManager() {
     svgs = new HashMap<String, PShape>();
@@ -310,6 +334,7 @@ public class OavpEntityManager {
     intervals = new HashMap<String, OavpInterval>();
     trackersStorage = new HashMap<String, List>();
     rhythms = new HashMap<String, OavpRhythm>();
+    counters = new HashMap<String, OavpCounter>();
   }
 
   void addSvg(String filename) {
@@ -387,8 +412,32 @@ public class OavpEntityManager {
     }
   }
 
+  boolean onRhythm(String name) {
+    return rhythms.get(name).onRhythm();
+  }
+
   OavpRhythm getRhythm(String name) {
     return rhythms.get(name);
+  }
+
+  void addCounter(String name, int limit) {
+    counters.put(name, new OavpCounter(limit));
+  }
+
+  void updateCounter(String name, Boolean trigger) {
+    counters.get(name).update(trigger);
+  }
+
+  void incrementCounter(String name) {
+    counters.get(name).increment();
+  }
+
+  boolean checkCounter(String name) {
+    return counters.get(name).hasFinished();
+  }
+
+  OavpCounter getCounter(String name) {
+    return counters.get(name);
   }
 
   void update() {
