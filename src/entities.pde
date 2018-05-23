@@ -313,7 +313,57 @@ public class OavpCounter {
   }
 
   boolean hasFinished() {
-    return (value % limit == 0);
+    if (value % limit == 0) {
+      increment();
+      return true;
+    }
+    return false;
+  }
+}
+
+public class OavpRotator {
+  float value;
+  List storage;
+  int index;
+  Ani ani;
+
+  OavpRotator(){
+    storage = new ArrayList();
+  }
+
+  OavpRotator add(float item) {
+    storage.add(item);
+    if (storage.size() == 0) {
+      value = item;
+    }
+    return this;
+  }
+
+  void rotate(float duration, Easing easing) {
+    int currIndex = index % storage.size();
+    index = index + 1 % storage.size();
+    ani = Ani.to(this, duration, "value", (float) storage.get(currIndex), easing);
+  }
+
+  void randomize(float duration, Easing easing) {
+    index = floor(random(0, storage.size())) % storage.size();
+    ani = Ani.to(this, duration, "value", (float) storage.get(index), easing);
+  }
+
+  void rotateIf(boolean trigger, float duration, Easing easing) {
+    if (trigger) {
+      rotate(duration, easing);
+    }
+  }
+
+  void randomizeIf(boolean trigger, float duration, Easing easing) {
+    if (trigger) {
+      randomize(duration, easing);
+    }
+  }
+
+  float getValue() {
+    return value;
   }
 }
 

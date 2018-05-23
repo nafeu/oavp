@@ -82,7 +82,18 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitRhythmAngles(float duration, Easing easing, int count) {
+  OavpEmitter emitRhythmAngles(float duration, Easing easing, int count, float angleIncrement) {
+    if (currRhythm.onRhythm()) {
+      float[] payload = new float[count];
+      for (int i = 0; i < count; i++) {
+        payload[i] = i * angleIncrement;
+      }
+      currTrackers.add(new OavpTracker(duration, easing, payload));
+    }
+    return this;
+  }
+
+  OavpEmitter emitRandomRhythmAngles(float duration, Easing easing, int count) {
     if (currRhythm.onRhythm()) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
