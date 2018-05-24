@@ -63,6 +63,12 @@ public class OavpPalette {
     ani = Ani.to(this, duration, "rotatingValue", 0, easing);
   }
 
+  void setRotatingColorIf(boolean trigger, color newColor, float duration, Easing easing) {
+    if (trigger) {
+      setRotatingColor(newColor, duration, easing);
+    }
+  }
+
   void setRotatingColorByPosition(OavpPosition position, int accent, float duration, Easing easing) {
     int colorAccent = accent % material.length;
     int colorIndex = abs(position.x + position.y) % material[colorAccent].length;

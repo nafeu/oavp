@@ -93,7 +93,7 @@ class OavpVisualizer {
     return this;
   }
 
-  OavpVisualizer moveBack(float distance) {
+  OavpVisualizer moveBackward(float distance) {
     translate(0, 0, -distance);
     return this;
   }
@@ -208,6 +208,18 @@ class OavpVisualizer {
 
     Draw(OavpAnalysis analysis) {
       this.analysis = analysis;
+    }
+
+    OavpVisualizer basicSquare(float size) {
+      rectMode(CENTER);
+      rect(0, 0, size, size);
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer basicCircle(float radius) {
+      ellipse(0, 0, radius, radius);
+      return OavpVisualizer.this;
     }
 
     OavpVisualizer basicOscZSquare(float w, float h, float scale, float range, float speed) {

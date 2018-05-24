@@ -295,21 +295,58 @@ public class OavpRhythm {
 }
 
 public class OavpCounter {
-  int value = 0;
-  int limit;
+  float value = 0;
+  int count = 0;
+  int limit = 0;
+  Ani ani;
+  float duration;
+  Easing easing;
 
-  OavpCounter(int limit){
+  OavpCounter(){}
+
+  OavpCounter duration(float duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  OavpCounter easing(Easing easing) {
+    this.easing = easing;
+    return this;
+  }
+
+  OavpCounter limit(int limit) {
     this.limit = limit;
+    return this;
   }
 
   void increment() {
-    value++;
+    count++;
+    ani = Ani.to(this, duration, "value", count, easing);
   }
 
-  void update(Boolean trigger) {
+  void increment(float duration, Easing easing) {
+    count++;
+    ani = Ani.to(this, duration, "value", count, easing);
+  }
+
+  void incrementIf(Boolean trigger) {
     if (trigger) {
       increment();
     }
+  }
+
+  void incrementIf(Boolean trigger, float duration, Easing easing) {
+    if (trigger) {
+      increment(duration, easing);
+    }
+  }
+
+  float getValue() {
+    return value;
+  }
+
+  int getCount() {
+    return count;
   }
 
   boolean hasFinished() {
@@ -324,6 +361,8 @@ public class OavpCounter {
 public class OavpRotator {
   float value;
   List storage;
+  float duration;
+  Easing easing;
   int index;
   Ani ani;
 
@@ -339,6 +378,22 @@ public class OavpRotator {
     return this;
   }
 
+  OavpRotator duration(float duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  OavpRotator easing(Easing easing) {
+    this.easing = easing;
+    return this;
+  }
+
+  void rotate() {
+    int currIndex = index % storage.size();
+    index = index + 1 % storage.size();
+    ani = Ani.to(this, duration, "value", (float) storage.get(currIndex), easing);
+  }
+
   void rotate(float duration, Easing easing) {
     int currIndex = index % storage.size();
     index = index + 1 % storage.size();
@@ -350,9 +405,21 @@ public class OavpRotator {
     ani = Ani.to(this, duration, "value", (float) storage.get(index), easing);
   }
 
+  void rotateIf(boolean trigger) {
+    if (trigger) {
+      rotate(duration, easing);
+    }
+  }
+
   void rotateIf(boolean trigger, float duration, Easing easing) {
     if (trigger) {
       rotate(duration, easing);
+    }
+  }
+
+  void randomizeIf(boolean trigger) {
+    if (trigger) {
+      randomize(duration, easing);
     }
   }
 
@@ -376,6 +443,7 @@ public class OavpEntityManager {
   HashMap<String, List> trackersStorage;
   HashMap<String, OavpRhythm> rhythms;
   HashMap<String, OavpCounter> counters;
+  HashMap<String, OavpRotator> rotators;
 
   OavpEntityManager() {
     svgs = new HashMap<String, PShape>();
@@ -385,6 +453,7 @@ public class OavpEntityManager {
     trackersStorage = new HashMap<String, List>();
     rhythms = new HashMap<String, OavpRhythm>();
     counters = new HashMap<String, OavpCounter>();
+    rotators = new HashMap<String, OavpRotator>();
   }
 
   void addSvg(String filename) {
@@ -470,12 +539,13 @@ public class OavpEntityManager {
     return rhythms.get(name);
   }
 
-  void addCounter(String name, int limit) {
-    counters.put(name, new OavpCounter(limit));
+  OavpCounter addCounter(String name) {
+    counters.put(name, new OavpCounter());
+    return counters.get(name);
   }
 
-  void updateCounter(String name, Boolean trigger) {
-    counters.get(name).update(trigger);
+  void incrementCounterIf(String name, Boolean trigger) {
+    counters.get(name).incrementIf(trigger);
   }
 
   void incrementCounter(String name) {
@@ -488,6 +558,23 @@ public class OavpEntityManager {
 
   OavpCounter getCounter(String name) {
     return counters.get(name);
+  }
+
+  OavpRotator addRotator(String name) {
+    rotators.put(name, new OavpRotator());
+    return rotators.get(name);
+  }
+
+  OavpRotator getRotator(String name) {
+    return rotators.get(name);
+  }
+
+  void rotateRotator(String name) {
+    rotators.get(name).rotate();
+  }
+
+  void rotateRotatorIf(String name, boolean trigger) {
+    rotators.get(name).rotateIf(trigger);
   }
 
   void update() {
