@@ -68,6 +68,11 @@ class OavpVisualizer {
     return this;
   }
 
+  OavpVisualizer move(float x, float y) {
+    translate(x, y);
+    return this;
+  }
+
   OavpVisualizer move(float x, float y, float z) {
     translate(x, y, z);
     return this;
@@ -212,6 +217,13 @@ class OavpVisualizer {
 
     OavpVisualizer basicSquare(float size) {
       rectMode(CENTER);
+      rect(0, 0, size, size);
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer basicSquare(float size, int mode) {
+      rectMode(mode);
       rect(0, 0, size, size);
       rectMode(CORNER);
       return OavpVisualizer.this;

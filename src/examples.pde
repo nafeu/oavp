@@ -1,100 +1,27 @@
 void setupExamples() {
   entities.addRhythm("beats", minim, 60, 1);
-  entities.addTrackers("beats");
-  entities.addRotator("beats")
-    .duration(1)
-    .easing(Ani.SINE_IN_OUT)
-    .add(250)
-    .add(500)
-    .add(100);
   entities.addCounter("beats")
-    .duration(1)
-    .easing(Ani.SINE_IN_OUT);
-
-  palette.add("background", palette.flat.black, palette.flat.white);
+    .limit(4);
+  entities.addRotator("beats")
+    .addCombinations(0, 1, 4);
 }
 
 void updateExamples() {
   entities.update();
-  entities.rotateRotatorIf("beats", analysis.isBeatOnset());
-  entities.incrementCounterIf("beats", analysis.isBeatOnset());
-  emitters
-    .useTrackers("beats")
-    .emitBeatAngles(2, Ani.SINE_IN_OUT, 3, 90);
-  palette.setRotatingColorIf(analysis.isBeatOnset(), palette.getRandomColor(), 0.5, Ani.SINE_IN_OUT);
+  entities.rotateRotatorIf("beats", entities.onRhythm("beats"));
+  entities.incrementCounterIf("beats", entities.onRhythm("beats"));
 }
 
 void drawExamples() {
-  stroke(palette.getRotatingColor());
-  background(palette.flat.black);
+  stroke(palette.flat.black);
+  background(palette.flat.white);
   noFill();
   strokeWeight(2);
 
   visualizers
     .create()
-    .left().middle()
-    .moveRight(entities.getRotator("beats").getValue())
-    .rotate(0, 0, entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 4)
-    .done()
-    .create()
-    .right().middle()
-    .moveLeft(entities.getRotator("beats").getValue())
-    .rotate(0, 0, -entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 4)
-    .done()
-    .create()
-    .left().middle()
-    .moveRight(entities.getRotator("beats").getValue() * 0.5)
-    .rotate(0, 0, entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 8)
-    .done()
-    .create()
-    .right().middle()
-    .moveLeft(entities.getRotator("beats").getValue() * 0.5)
-    .rotate(0, 0, -entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 8)
-    .done();
-
-  visualizers
-    .create()
-    .center().top()
-    .moveDown(entities.getRotator("beats").getValue())
-    .rotate(0, 0, entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 4)
-    .done()
-    .create()
-    .center().bottom()
-    .moveUp(entities.getRotator("beats").getValue())
-    .rotate(0, 0, -entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 4)
-    .done()
-    .create()
-    .center().top()
-    .moveDown(entities.getRotator("beats").getValue() * 0.5)
-    .rotate(0, 0, entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 8)
-    .done()
-    .create()
-    .center().bottom()
-    .moveUp(entities.getRotator("beats").getValue() * 0.5)
-    .rotate(0, 0, -entities.getCounter("beats").getValue() * 45)
-    .draw.basicSquare(oavp.STAGE_WIDTH / 8)
-    .done();
-
-  visualizers
-    .create()
     .center().middle()
-    .rotate(0, 0, 90)
-    .useTrackers("beats")
-    .draw.trackerConnectedRings(analysis.getLevel() * 100, oavp.STAGE_WIDTH / 2)
-    .done();
-
-  visualizers
-    .create()
-    .center().middle()
-    .rotate(0, 0, -90)
-    .useTrackers("beats")
-    .draw.trackerConnectedRings(analysis.getLevel() * 100, oavp.STAGE_WIDTH / 2)
+    .move(entities.getRotator("beats").getX() * oavp.STAGE_WIDTH / 2, entities.getRotator("beats").getY() * oavp.STAGE_WIDTH / 2)
+    .draw.basicSquare(oavp.STAGE_WIDTH / 8)
     .done();
 }
