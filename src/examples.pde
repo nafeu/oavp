@@ -1,33 +1,62 @@
 void setupExamples() {
-  entities.addOscillator("spinner")
+  entities.addTrackers("beats");
+  entities.addOscillator("beats")
     .start();
-  entities.addRhythm("seconds")
-    .start();
-  entities.addColorRotator("rainbow")
-    .add(palette.flat.red)
-    .add(palette.flat.purple)
+  entities.addColorRotator("beats")
+    .duration(0.5)
+    .easing(Ani.SINE_IN_OUT)
     .add(palette.flat.blue)
-    .add(palette.flat.green)
-    .add(palette.flat.yellow)
-    .add(palette.flat.orange);
+    .add(palette.flat.red)
+    .add(palette.flat.purple);
+  entities.addColorRotator("chevrons")
+    .duration(0.5)
+    .easing(Ani.SINE_IN_OUT)
+    .add(palette.flat.black)
+    .add(palette.flat.white);
 }
 
 void updateExamples() {
   entities.update();
-  entities.rotateColorRotatorIf("rainbow", entities.onRhythm("seconds"));
+  entities.rotateColorRotatorIf("beats", analysis.isBeatOnset());
+  entities.rotateColorRotatorIf("chevrons", analysis.isBeatOnset());
+  emitters
+    .useTrackers("beats")
+    .duration(2)
+    .easing(Ani.SINE_IN_OUT)
+    .emitBeatColor(entities.getColorRotator("chevrons").getColor());
 }
 
 void drawExamples() {
-  stroke(palette.flat.white);
-  background(entities.getColorRotator("rainbow").getColor());
-  noFill();
-  strokeWeight(2);
+  background(entities.getColorRotator("beats").getColor());
+  noStroke();
+  strokeWeight(3);
 
   visualizers
     .create()
     .center().middle()
-    .moveDown(oavp.STAGE_WIDTH / 8)
-    .rotate(65, 0, 45)
-    .draw.basicZSquare(oavp.STAGE_WIDTH / 4, entities.getOscillator("spinner").getValue() * oavp.STAGE_WIDTH / 4)
+    .useTrackers("beats")
+    .moveUp(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 4, oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 2)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 2 * 0.75)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 32, oavp.STAGE_WIDTH / 2 * 0.5)
+    .moveDown(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
+    .rotate(0, 0, 90)
+    .moveUp(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 4, oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 2)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 2 * 0.75)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 32, oavp.STAGE_WIDTH / 2 * 0.5)
+    .moveDown(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
+    .rotate(0, 0, 90)
+    .moveUp(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 4, oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 2)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 2 * 0.75)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 32, oavp.STAGE_WIDTH / 2 * 0.5)
+    .moveDown(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
+    .rotate(0, 0, 90)
+    .moveUp(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 4, oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 2)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 8, oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 2 * 0.75)
+    .draw.trackerColorChevron(oavp.STAGE_WIDTH / 16, oavp.STAGE_WIDTH / 32, oavp.STAGE_WIDTH / 2 * 0.5)
+    .moveDown(entities.getOscillator("beats").getValue() * oavp.STAGE_WIDTH / 4)
     .done();
 }

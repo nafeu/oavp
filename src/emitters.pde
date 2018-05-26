@@ -7,10 +7,22 @@ public class OavpEmitter {
   OavpGridInterval currGridInterval;
   List currTrackers;
   OavpRhythm currRhythm;
+  float duration = 1;
+  Easing easing = Ani.LINEAR;
 
   OavpEmitter(OavpAnalysis analysis, OavpEntityManager entities) {
     this.analysis = analysis;
     this.entities = entities;
+  }
+
+  OavpEmitter duration(float duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  OavpEmitter easing(Easing easing) {
+    this.easing = easing;
+    return this;
   }
 
   OavpEmitter useAmplitude(String name) {
@@ -39,14 +51,14 @@ public class OavpEmitter {
   }
 
 
-  OavpEmitter emitBeat(float duration, Easing easing) {
+  OavpEmitter emitBeat() {
     if (analysis.isBeatOnset()) {
       currTrackers.add(new OavpTracker(duration, easing));
     }
     return this;
   }
 
-  OavpEmitter emitBeatAngles(float duration, Easing easing, int count, float angleIncrement) {
+  OavpEmitter emitBeatAngles(int count, float angleIncrement) {
     if (analysis.isBeatOnset()) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
@@ -57,7 +69,7 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitRandomBeatAngles(float duration, Easing easing, int count) {
+  OavpEmitter emitRandomBeatAngles(int count) {
     if (analysis.isBeatOnset()) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
@@ -68,21 +80,29 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitFrameDelayed(float duration, Easing easing, int frameDelay) {
+  OavpEmitter emitBeatColor(color inputColor) {
+    if (analysis.isBeatOnset()) {
+      float[] payload = new float[]{ inputColor };
+      currTrackers.add(new OavpTracker(duration, easing, payload));
+    }
+    return this;
+  }
+
+  OavpEmitter emitFrameDelayed(int frameDelay) {
     if (frameCount % frameDelay == 0) {
       currTrackers.add(new OavpTracker(duration, easing));
     }
     return this;
   }
 
-  OavpEmitter emitRhythm(float duration, Easing easing) {
+  OavpEmitter emitRhythm() {
     if (currRhythm.onRhythm()) {
       currTrackers.add(new OavpTracker(duration, easing));
     }
     return this;
   }
 
-  OavpEmitter emitRhythmAngles(float duration, Easing easing, int count, float angleIncrement) {
+  OavpEmitter emitRhythmAngles(int count, float angleIncrement) {
     if (currRhythm.onRhythm()) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
@@ -93,7 +113,7 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitRandomRhythmAngles(float duration, Easing easing, int count) {
+  OavpEmitter emitRandomRhythmAngles(int count) {
     if (currRhythm.onRhythm()) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
@@ -104,7 +124,7 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitRhythmSpectrum(float duration, Easing easing) {
+  OavpEmitter emitRhythmSpectrum() {
     float[] payload = new float[analysis.getSpectrum().length];
     for (int i = 0; i < analysis.getSpectrum().length; i++) {
       payload[i] = analysis.getSpectrumVal(i);

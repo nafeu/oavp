@@ -517,6 +517,39 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    OavpVisualizer trackerColorSquare(float size, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
+      rectMode(CENTER);
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        pushStyle();
+        fill((color) tracker.payload[0]);
+        rect(0, -tracker.value * scale, size, size);
+        popStyle();
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer trackerColorDiamond(float size, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
+      rectMode(CENTER);
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        pushStyle();
+        fill((color) tracker.payload[0]);
+        beginShape();
+        vertex(0, -size + tracker.value * scale);
+        vertex(size, tracker.value * scale);
+        vertex(0, size + tracker.value * scale);
+        vertex(-size, tracker.value * scale);
+        endShape();
+        popStyle();
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
     OavpVisualizer trackerCircle(float radius, float scale) {
       List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
@@ -580,6 +613,18 @@ class OavpVisualizer {
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         shapes.chevron(0, -tracker.value * scale, w, h);
+      }
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer trackerColorChevron(float w, float h, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        pushStyle();
+        stroke((color) tracker.payload[0]);
+        shapes.chevron(0, -tracker.value * scale, w, h);
+        popStyle();
       }
       return OavpVisualizer.this;
     }
