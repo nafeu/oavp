@@ -239,22 +239,38 @@ public class OavpRhythm {
   AudioOutput out;
   BeatDetect beat;
   boolean isPlaying;
-  float rhythm;
+  float tempo = 60;
+  float rhythm = 1;
+  int limit = 1000;
   Minim minim;
 
-  OavpRhythm(Minim minim, float tempo, float rhythm) {
+  OavpRhythm(Minim minim) {
     this.minim = minim;
     this.rhythm = rhythm;
     beat = new BeatDetect();
     beat.setSensitivity(100);
-    start(tempo);
   }
 
-  void start(float tempo) {
+  OavpRhythm tempo(float tempo) {
+    this.tempo = tempo;
+    return this;
+  }
+
+  OavpRhythm rhythm(float rhythm) {
+    this.rhythm = rhythm;
+    return this;
+  }
+
+  OavpRhythm limit(int limit) {
+    this.limit = limit;
+    return this;
+  }
+
+  void start() {
     out = minim.getLineOut();
-    out.setTempo( tempo );
+    out.setTempo(tempo);
     out.pauseNotes();
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < limit; ++i) {
       out.playNote(i * rhythm, 0.25, "C3");
     }
     out.resumeNotes();
@@ -274,11 +290,6 @@ public class OavpRhythm {
       out.resumeNotes();
       isPlaying = true;
     }
-  }
-
-  void setTempo(float tempo) {
-    out = null;
-    start(tempo);
   }
 
   boolean onRhythm() {
@@ -462,6 +473,7 @@ public class OavpRotator {
 }
 
 public class OavpEntityManager {
+  Minim minim;
   HashMap<String, PShape> svgs;
   HashMap<String, PImage> imgs;
   HashMap<String, OavpAmplitude> amplitudes;
@@ -472,7 +484,8 @@ public class OavpEntityManager {
   HashMap<String, OavpCounter> counters;
   HashMap<String, OavpRotator> rotators;
 
-  OavpEntityManager() {
+  OavpEntityManager(Minim minim) {
+    this.minim = minim;
     svgs = new HashMap<String, PShape>();
     imgs = new HashMap<String, PImage>();
     amplitudes = new HashMap<String, OavpAmplitude>();
@@ -547,8 +560,9 @@ public class OavpEntityManager {
     return trackersStorage.get(name);
   }
 
-  void addRhythm(String name, Minim minim, float tempo, float rhythm) {
-    rhythms.put(name, new OavpRhythm(minim, tempo, rhythm));
+  OavpRhythm addRhythm(String name) {
+    rhythms.put(name, new OavpRhythm(minim));
+    return rhythms.get(name);
   }
 
   void updateRhythms() {

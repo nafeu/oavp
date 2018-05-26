@@ -1,9 +1,16 @@
 void setupExamples() {
-  entities.addRhythm("beats", minim, 60, 1);
+  entities.addRhythm("beats")
+    .start();
   entities.addCounter("beats")
-    .limit(4);
+    .duration(0.5)
+    .easing(Ani.BOUNCE_OUT);
   entities.addRotator("beats")
-    .addCombinations(0, 1, 4);
+    .duration(1)
+    .easing(Ani.SINE_IN_OUT)
+    .add(0, 0)
+    .add(1, 0)
+    .add(1, 1)
+    .add(0, 1);
 }
 
 void updateExamples() {
@@ -20,8 +27,11 @@ void drawExamples() {
 
   visualizers
     .create()
-    .center().middle()
+    .left().top()
+    .moveRight(oavp.STAGE_WIDTH / 8)
+    .moveDown(oavp.STAGE_WIDTH / 8)
     .move(entities.getRotator("beats").getX() * oavp.STAGE_WIDTH / 2, entities.getRotator("beats").getY() * oavp.STAGE_WIDTH / 2)
+    .rotate(0, 0, entities.getCounter("beats").getValue() * 45)
     .draw.basicSquare(oavp.STAGE_WIDTH / 8)
     .done();
 }

@@ -36,7 +36,7 @@ void setup() {
 
   // Entity Setup
   entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
-  entities = new OavpEntityManager();
+  entities = new OavpEntityManager(minim);
 
   // Camera Setup
   cameraPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
