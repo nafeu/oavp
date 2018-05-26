@@ -1,17 +1,25 @@
 void setupExamples() {
   entities.addOscillator("spinner")
-    .duration(2)
-    .easing(Ani.BOUNCE_OUT)
     .start();
+  entities.addRhythm("seconds")
+    .start();
+  entities.addColorRotator("rainbow")
+    .add(palette.flat.red)
+    .add(palette.flat.purple)
+    .add(palette.flat.blue)
+    .add(palette.flat.green)
+    .add(palette.flat.yellow)
+    .add(palette.flat.orange);
 }
 
 void updateExamples() {
   entities.update();
+  entities.rotateColorRotatorIf("rainbow", entities.onRhythm("seconds"));
 }
 
 void drawExamples() {
-  stroke(palette.flat.black);
-  background(palette.flat.white);
+  stroke(palette.flat.white);
+  background(entities.getColorRotator("rainbow").getColor());
   noFill();
   strokeWeight(2);
 

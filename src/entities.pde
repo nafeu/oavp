@@ -251,6 +251,11 @@ public class OavpRhythm {
     beat.setSensitivity(100);
   }
 
+  OavpRhythm duration(float duration) {
+    this.tempo = 60 / duration;
+    return this;
+  }
+
   OavpRhythm tempo(float tempo) {
     this.tempo = tempo;
     return this;
@@ -472,6 +477,71 @@ public class OavpRotator {
   }
 }
 
+public class OavpColorRotator {
+  float value = 0;
+  List storage;
+  color colorA;
+  color colorB;
+  float duration = 1;
+  Easing easing = Ani.LINEAR;
+  int index;
+  Ani ani;
+
+  OavpColorRotator(){
+    storage = new ArrayList();
+  }
+
+  OavpColorRotator add(color value) {
+    storage.add(value);
+    return this;
+  }
+
+  OavpColorRotator duration(float duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  OavpColorRotator easing(Easing easing) {
+    this.easing = easing;
+    return this;
+  }
+
+  void rotate() {
+    colorA = (color) storage.get(index % storage.size());
+    index = index + 1 % storage.size();
+    colorB = (color) storage.get(index % storage.size());
+    animate();
+  }
+
+  void randomize() {
+    colorA = (color) storage.get(index % storage.size());
+    index = floor(random(0, storage.size())) % storage.size();
+    colorB = (color) storage.get(index % storage.size());
+    animate();
+  }
+
+  void animate() {
+    value = 0;
+    ani = Ani.to(this, duration, "value", 1, easing);
+  }
+
+  void rotateIf(boolean trigger) {
+    if (trigger) {
+      rotate();
+    }
+  }
+
+  void randomizeIf(boolean trigger) {
+    if (trigger) {
+      randomize();
+    }
+  }
+
+  color getColor() {
+    return lerpColor(colorA, colorB, value);
+  }
+}
+
 public class OavpOscillator {
   float duration = 1;
   Easing easing = Ani.LINEAR;
@@ -522,6 +592,7 @@ public class OavpEntityManager {
   HashMap<String, OavpRhythm> rhythms;
   HashMap<String, OavpCounter> counters;
   HashMap<String, OavpRotator> rotators;
+  HashMap<String, OavpColorRotator> colorRotators;
   HashMap<String, OavpOscillator> oscillators;
 
   OavpEntityManager(Minim minim) {
@@ -534,6 +605,7 @@ public class OavpEntityManager {
     rhythms = new HashMap<String, OavpRhythm>();
     counters = new HashMap<String, OavpCounter>();
     rotators = new HashMap<String, OavpRotator>();
+    colorRotators = new HashMap<String, OavpColorRotator>();
     oscillators = new HashMap<String, OavpOscillator>();
   }
 
@@ -665,6 +737,31 @@ public class OavpEntityManager {
 
   void randomizeRotatorIf(String name, boolean trigger) {
     rotators.get(name).randomizeIf(trigger);
+  }
+
+  OavpColorRotator addColorRotator(String name) {
+    colorRotators.put(name, new OavpColorRotator());
+    return colorRotators.get(name);
+  }
+
+  OavpColorRotator getColorRotator(String name) {
+    return colorRotators.get(name);
+  }
+
+  void rotateColorRotator(String name) {
+    colorRotators.get(name).rotate();
+  }
+
+  void rotateColorRotatorIf(String name, boolean trigger) {
+    colorRotators.get(name).rotateIf(trigger);
+  }
+
+  void randomizeColorRotator(String name) {
+    colorRotators.get(name).randomize();
+  }
+
+  void randomizeColorRotatorIf(String name, boolean trigger) {
+    colorRotators.get(name).randomizeIf(trigger);
   }
 
   OavpOscillator addOscillator(String name) {
