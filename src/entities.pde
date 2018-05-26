@@ -472,6 +472,45 @@ public class OavpRotator {
   }
 }
 
+public class OavpOscillator {
+  float duration = 1;
+  Easing easing = Ani.LINEAR;
+  Ani ani;
+  float value = 0;
+
+  OavpOscillator duration(float duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  OavpOscillator easing(Easing easing) {
+    this.easing = easing;
+    return this;
+  }
+
+  OavpOscillator(){}
+
+  void start() {
+    loop();
+  }
+
+  void loop() {
+    if (value == 0) {
+      ani = Ani.to(this, duration, "value", 1, easing, "onEnd:loop");
+    } else {
+      ani = Ani.to(this, duration, "value", 0, easing, "onEnd:loop");
+    }
+  }
+
+  float getValue() {
+    return value;
+  }
+
+  float getValue(float start, float end) {
+    return map(value, 0, 1, start, end);
+  }
+}
+
 public class OavpEntityManager {
   Minim minim;
   HashMap<String, PShape> svgs;
@@ -483,6 +522,7 @@ public class OavpEntityManager {
   HashMap<String, OavpRhythm> rhythms;
   HashMap<String, OavpCounter> counters;
   HashMap<String, OavpRotator> rotators;
+  HashMap<String, OavpOscillator> oscillators;
 
   OavpEntityManager(Minim minim) {
     this.minim = minim;
@@ -494,6 +534,7 @@ public class OavpEntityManager {
     rhythms = new HashMap<String, OavpRhythm>();
     counters = new HashMap<String, OavpCounter>();
     rotators = new HashMap<String, OavpRotator>();
+    oscillators = new HashMap<String, OavpOscillator>();
   }
 
   void addSvg(String filename) {
@@ -624,6 +665,15 @@ public class OavpEntityManager {
 
   void randomizeRotatorIf(String name, boolean trigger) {
     rotators.get(name).randomizeIf(trigger);
+  }
+
+  OavpOscillator addOscillator(String name) {
+    oscillators.put(name, new OavpOscillator());
+    return oscillators.get(name);
+  }
+
+  OavpOscillator getOscillator(String name) {
+    return oscillators.get(name);
   }
 
   void update() {

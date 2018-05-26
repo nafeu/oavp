@@ -234,11 +234,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basicOscZSquare(float w, float h, float scale, float range, float speed) {
+    OavpVisualizer basicZSquare(float size, float distance) {
       rectMode(CENTER);
       pushMatrix();
-      translate(0, 0, map(sin(frameCount * speed), -1, 1, 0, range));
-      rect(w / 2, h / 2, w * scale, h * scale);
+      translate(0, 0, distance);
+      rect(0, 0, size, size);
       popMatrix();
       rectMode(CORNER);
 
