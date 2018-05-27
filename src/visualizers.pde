@@ -588,6 +588,38 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    OavpVisualizer trackerColorConnectedRings(float radius, float scale) {
+      List trackers = OavpVisualizer.this.currTrackers;
+      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
+        OavpTracker tracker = iter.next();
+        float xInit = 0;
+        float yInit = 0;
+
+        pushStyle();
+        stroke((color) tracker.payload[tracker.payload.length - 1]);
+        beginShape();
+        for (int i = 0; i < tracker.payload.length - 1; ++i) {
+          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
+          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+          vertex(x, y);
+          if (i == 0) {
+            xInit = x;
+            yInit = y;
+          }
+        }
+        vertex(xInit, yInit);
+        endShape();
+
+        for (int i = 0; i < tracker.payload.length - 1; ++i) {
+          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
+          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+          ellipse(x, y, radius, radius);
+        }
+        popStyle();
+      }
+      return OavpVisualizer.this;
+    }
+
     OavpVisualizer trackerSplashSquare(float scale) {
       List trackers = OavpVisualizer.this.currTrackers;
       rectMode(CENTER);

@@ -6,7 +6,6 @@ public class OavpEmitter {
   OavpInterval currInterval;
   OavpGridInterval currGridInterval;
   List currTrackers;
-  OavpRhythm currRhythm;
   float duration = 1;
   Easing easing = Ani.LINEAR;
 
@@ -45,21 +44,15 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter useRhythm(String name) {
-    currRhythm = entities.getRhythm(name);
-    return this;
-  }
-
-
-  OavpEmitter emitBeat() {
-    if (analysis.isBeatOnset()) {
+  OavpEmitter emit(boolean trigger) {
+    if (trigger) {
       currTrackers.add(new OavpTracker(duration, easing));
     }
     return this;
   }
 
-  OavpEmitter emitBeatAngles(int count, float angleIncrement) {
-    if (analysis.isBeatOnset()) {
+  OavpEmitter emitAngles(int count, float angleIncrement, boolean trigger) {
+    if (trigger) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
         payload[i] = i * angleIncrement;
@@ -69,8 +62,20 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitRandomBeatAngles(int count) {
-    if (analysis.isBeatOnset()) {
+  OavpEmitter emitColorAngles(color inputColor, int count, float angleIncrement, boolean trigger) {
+    if (trigger) {
+      float[] payload = new float[count + 1];
+      for (int i = 0; i < count - 1; i++) {
+        payload[i] = i * angleIncrement;
+      }
+      payload[count] = inputColor;
+      currTrackers.add(new OavpTracker(duration, easing, payload));
+    }
+    return this;
+  }
+
+  OavpEmitter emitRandomAngles(int count, boolean trigger) {
+    if (trigger) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
         payload[i] = random(0, 360);
@@ -80,56 +85,33 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitBeatColor(color inputColor) {
-    if (analysis.isBeatOnset()) {
+  OavpEmitter emitRandomColorAngles(color inputColor, int count, boolean trigger) {
+    if (trigger) {
+      float[] payload = new float[count + 1];
+      for (int i = 0; i < count - 1; i++) {
+        payload[i] = random(0, 360);
+      }
+      payload[count] = inputColor;
+      currTrackers.add(new OavpTracker(duration, easing, payload));
+    }
+    return this;
+  }
+
+
+  OavpEmitter emitColor(color inputColor, boolean trigger) {
+    if (trigger) {
       float[] payload = new float[]{ inputColor };
       currTrackers.add(new OavpTracker(duration, easing, payload));
     }
     return this;
   }
 
-  OavpEmitter emitFrameDelayed(int frameDelay) {
-    if (frameCount % frameDelay == 0) {
-      currTrackers.add(new OavpTracker(duration, easing));
-    }
-    return this;
-  }
-
-  OavpEmitter emitRhythm() {
-    if (currRhythm.onRhythm()) {
-      currTrackers.add(new OavpTracker(duration, easing));
-    }
-    return this;
-  }
-
-  OavpEmitter emitRhythmAngles(int count, float angleIncrement) {
-    if (currRhythm.onRhythm()) {
-      float[] payload = new float[count];
-      for (int i = 0; i < count; i++) {
-        payload[i] = i * angleIncrement;
-      }
-      currTrackers.add(new OavpTracker(duration, easing, payload));
-    }
-    return this;
-  }
-
-  OavpEmitter emitRandomRhythmAngles(int count) {
-    if (currRhythm.onRhythm()) {
-      float[] payload = new float[count];
-      for (int i = 0; i < count; i++) {
-        payload[i] = random(0, 360);
-      }
-      currTrackers.add(new OavpTracker(duration, easing, payload));
-    }
-    return this;
-  }
-
-  OavpEmitter emitRhythmSpectrum() {
+  OavpEmitter emitSpectrum(boolean trigger) {
     float[] payload = new float[analysis.getSpectrum().length];
     for (int i = 0; i < analysis.getSpectrum().length; i++) {
       payload[i] = analysis.getSpectrumVal(i);
     }
-    if (currRhythm.onRhythm()) {
+    if (trigger) {
       currTrackers.add(new OavpTracker(duration, easing, payload));
     }
     return this;
