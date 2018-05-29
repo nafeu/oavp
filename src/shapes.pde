@@ -86,13 +86,13 @@ public class OavpShape {
     popStyle();
   }
 
-  void hill(float x, float y, float w, float h, float displacement, float scale, int numPoints, float granularity) {
+  void hill(float x, float y, float w, float h, float displacement, float scale, int numPoints, float granularity, float variance) {
 
     float[] points = new float[numPoints];
     float distance = w / numPoints;
 
     for (int i = 0; i < numPoints; ++i) {
-      points[i] = (noise(i * granularity) * scale) + displacement;
+      points[i] = (noise((i + variance) * granularity) * scale) + displacement;
     }
 
     beginShape();
