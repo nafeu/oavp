@@ -89,10 +89,31 @@ public class OavpShape {
   void hill(float x, float y, float w, float h, float displacement, float scale, int numPoints, float granularity, float variance) {
 
     float[] points = new float[numPoints];
+    int[] structures = new int[numPoints];
     float distance = w / numPoints;
 
     for (int i = 0; i < numPoints; ++i) {
-      points[i] = (noise((i + variance) * granularity) * scale) + displacement;
+      points[i] = refinedNoise(i, variance, granularity) * scale + displacement;
+      structures[i] = quantizedNoise(i, variance, granularity, 5);
+    }
+
+    for (int i = 1; i < numPoints - 1; i++) {
+      if (
+        (structures[i] == 1 && structures[i - 1] != 1)
+        ||
+        (structures[i] == 2 && structures[i - 1] != 2)
+      ) {
+        float radius;
+        if (structures[i + 1] == 1) {
+          radius = 10;
+        } else if (structures[i + 1] == 2) {
+          radius = 30;
+        } else {
+          radius = 20;
+        }
+        line(w - (i * distance), points[i], w - (i * distance), points[i] - 30);
+        ellipse(w - (i * distance), points[i] - 30, radius, radius);
+      }
     }
 
     beginShape();
@@ -104,6 +125,26 @@ public class OavpShape {
     }
     vertex(x, points[points.length - 1]);
     endShape();
+  }
 
+  void trapezoid(float x, float y, float w, float h, float displacementA, float displacementB) {
+    pushStyle();
+    fill(palette.flat.black);
+    beginShape();
+    vertex(x, y + displacementA);
+    vertex(x, y + h);
+    vertex(x + w, y + h);
+    vertex(x + w, y + displacementB);
+    vertex(x, y + displacementA);
+    endShape(CLOSE);
+    popStyle();
+  }
+
+  void cylinder(float x, float y, float h, float radius, int numCircles) {
+    float distance = h / numCircles;
+    for (int i = 0; i < numCircles; i++) {
+      float mult = cos(radians(map(i, 0, numCircles, 0, 360)));
+      ellipse(x, y + (i * distance), (radius / 2) + (radius / 2) * mult, distance * 1.25);
+    }
   }
 }
