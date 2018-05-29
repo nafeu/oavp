@@ -86,45 +86,40 @@ public class OavpShape {
     popStyle();
   }
 
-  void hill(float x, float y, float w, float h, float displacement, float scale, int numPoints, float granularity, float variance) {
-
-    float[] points = new float[numPoints];
-    int[] structures = new int[numPoints];
-    float distance = w / numPoints;
-
-    for (int i = 0; i < numPoints; ++i) {
-      points[i] = refinedNoise(i, variance, granularity) * scale + displacement;
-      structures[i] = quantizedNoise(i, variance, granularity, 5);
+  void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
+    float distance = w / terrain.length;
+    beginShape();
+    vertex(x, terrain[terrain.length - 1] * scale + displacement);
+    vertex(x, h);
+    vertex(w, h);
+    for (int i = 0; i < terrain.length; i++) {
+      vertex(w - (i * distance), terrain[i] * scale + displacement);
     }
+    vertex(x, terrain[terrain.length - 1] * scale + displacement);
+    endShape();
+  }
 
-    for (int i = 1; i < numPoints - 1; i++) {
+  void trees(float x, float y, float w, float h, float scale, float displacement, float[] terrain, int[] structure) {
+    float distance = w / terrain.length;
+    for (int i = 1; i < terrain.length - 1; i++) {
       if (
-        (structures[i] == 1 && structures[i - 1] != 1)
+        (structure[i] == 1 && structure[i - 1] != 1)
         ||
-        (structures[i] == 2 && structures[i - 1] != 2)
+        (structure[i] == 2 && structure[i - 1] != 2)
       ) {
         float radius;
-        if (structures[i + 1] == 1) {
+        if (structure[i + 1] == 1) {
           radius = 10;
-        } else if (structures[i + 1] == 2) {
+        } else if (structure[i + 1] == 2) {
           radius = 30;
         } else {
           radius = 20;
         }
-        line(w - (i * distance), points[i], w - (i * distance), points[i] - 30);
-        ellipse(w - (i * distance), points[i] - 30, radius, radius);
+        float point = terrain[i] * scale + displacement;
+        line(w - (i * distance), point, w - (i * distance), point - 30);
+        ellipse(w - (i * distance), point - 30, radius, radius);
       }
     }
-
-    beginShape();
-    vertex(x, points[points.length - 1]);
-    vertex(x, h);
-    vertex(w, h);
-    for (int i = 0; i < points.length; i++) {
-      vertex(w - (i * distance), points[i]);
-    }
-    vertex(x, points[points.length - 1]);
-    endShape();
   }
 
   void trapezoid(float x, float y, float w, float h, float displacementA, float displacementB) {

@@ -581,6 +581,80 @@ public class OavpOscillator {
   }
 }
 
+public class OavpNoise {
+  HashMap<String, float[]> terrains;
+  HashMap<String, int[]> structures;
+  int numPoints = 100;
+  float granularity = 0.01;
+  int variance = 10;
+
+  OavpNoise() {
+    terrains = new HashMap<String, float[]>();
+    structures = new HashMap<String, int[]>();
+  }
+
+  OavpNoise generate(String name) {
+    terrains.put(name, new float[numPoints]);
+    structures.put(name, new int[numPoints]);
+    return this;
+  }
+
+  OavpNoise granularity(float granularity) {
+    this.granularity = granularity;
+    return this;
+  }
+
+  OavpNoise variance(int variance) {
+    this.variance = variance;
+    return this;
+  }
+
+  OavpNoise numPoints(int numPoints) {
+    this.numPoints = numPoints;
+    return this;
+  }
+
+  void update(String name, float phase) {
+    for (int i = 0; i < numPoints; i++) {
+      float point = refinedNoise(i + phase, granularity);
+      terrains.get(name)[i] = point;
+      structures.get(name)[i] = int(point * variance);
+    }
+  }
+
+  float[] getTerrain(String name) {
+    return terrains.get(name);
+  }
+
+  float[] getTerrain(float phase, float granularity) {
+    float[] out = new float[numPoints];
+    for (int i = 0; i < numPoints; i++) {
+      out[i] = refinedNoise(i + phase, granularity);
+    }
+    return out;
+  }
+
+  int[] getStructure(String name) {
+    return structures.get(name);
+  }
+
+  int[] getStructure(float phase, float granularity, int variance) {
+    int[] out = new int[numPoints];
+    for (int i = 0; i < numPoints; i++) {
+      out[i] = quantizedNoise(i + phase, granularity, variance);
+    }
+    return out;
+  }
+
+  float getNoise(float phase) {
+    return refinedNoise(phase, granularity);
+  }
+
+  int getQuantizedNoise(float phase, int variance) {
+    return quantizedNoise(phase, granularity, variance);
+  }
+}
+
 public class OavpEntityManager {
   Minim minim;
   HashMap<String, PShape> svgs;
@@ -594,6 +668,7 @@ public class OavpEntityManager {
   HashMap<String, OavpRotator> rotators;
   HashMap<String, OavpColorRotator> colorRotators;
   HashMap<String, OavpOscillator> oscillators;
+  HashMap<String, OavpNoise> noises;
 
   OavpEntityManager(Minim minim) {
     this.minim = minim;
@@ -607,6 +682,7 @@ public class OavpEntityManager {
     rotators = new HashMap<String, OavpRotator>();
     colorRotators = new HashMap<String, OavpColorRotator>();
     oscillators = new HashMap<String, OavpOscillator>();
+    noises = new HashMap<String, OavpNoise>();
   }
 
   void addSvg(String filename) {
@@ -771,6 +847,19 @@ public class OavpEntityManager {
 
   OavpOscillator getOscillator(String name) {
     return oscillators.get(name);
+  }
+
+  OavpNoise addNoise(String name) {
+    noises.put(name, new OavpNoise());
+    return noises.get(name);
+  }
+
+  OavpNoise getNoise(String name) {
+    return noises.get(name);
+  }
+
+  void updateNoise(String name, String instance, float phase) {
+    noises.get(name).update(instance, phase);
   }
 
   void update() {

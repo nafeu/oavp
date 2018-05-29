@@ -78,6 +78,7 @@ void setup() {
 }
 
 void draw() {
+  updateHelpers();
   updateEntities();
 
   if (oavp.SHOW_EXAMPLES) {

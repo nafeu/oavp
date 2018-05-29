@@ -1,67 +1,44 @@
 void setupExamples() {
-  entities.addOscillator("wave")
-    .duration(20)
-    .easing(Ani.SINE_IN_OUT)
-    .start();
   noiseSeed(1);
-  randomSeed(1);
 
-  entities.addColorRotator("colors")
-    .duration(0.5)
-    .easing(Ani.SINE_IN_OUT)
-    .add(palette.flat.red)
-    .add(palette.flat.purple)
-    .add(palette.flat.blue);
-
-  palette.add("background", palette.flat.black);
-  palette.add("stroke", palette.flat.red);
+  entities.addNoise("landscape")
+    .numPoints(100)
+    .granularity(0.015)
+    .variance(5)
+    .generate("hill_a")
+    .generate("hill_b")
+    .generate("hill_c")
+    .generate("hill_d");
 }
 
 void updateExamples() {
-  entities.rotateColorRotatorIf("colors", analysis.isBeatOnset());
+  entities.updateNoise("landscape", "hill_a", normalMouseX * 250 + 250);
+  entities.updateNoise("landscape", "hill_b", normalMouseX * 500 + 500);
+  entities.updateNoise("landscape", "hill_c", normalMouseX * 750 + 750);
+  entities.updateNoise("landscape", "hill_d", normalMouseX * 1000 + 1000);
 }
 
 void drawExamples() {
-  float mappedMouseX = map(mouseX, 0, width, 0, 1);
-  float mappedMouseY = map(mouseY, 0, height, 0, 1);
-  float mappedOsc = entities.getOscillator("wave").getValue();
-  float granularity = 0.015;
-  float sunX = 125 + mappedOsc * (oavp.STAGE_WIDTH - 250);
-  float sunY = mappedMouseY * 100 + 150;
-  int numDataPoints = 100;
+  float sunX = 125 + normalMouseX * (oavp.STAGE_WIDTH - 250);
+  float sunY = normalMouseY * 100 + 150;
 
-  background(palette.get("background"));
-  stroke(entities.getColorRotator("colors").getColor());
-  fill(palette.get("background"));
+  background(palette.flat.white);
+  stroke(palette.flat.black);
+  fill(palette.flat.white);
   strokeWeight(2);
 
-  visualizers
-    .create()
-    .move(sunX, sunY)
-    .draw.basicSpectrumRadialBars(50 + paramA, 100 + paramB, 200 + paramC, frameCount * 0.25)
-    .done();
-
-  ellipse(sunX, sunY, 10 + mappedMouseY * 100 + analysis.getLevel() * 50, 10 + mappedMouseY * 100 + analysis.getLevel() * 50);
-
-  shapes.trapezoid(sunX * 0.25, oavp.STAGE_HEIGHT * 0.25, 200, 450, 100, 0);
-  shapes.trapezoid(sunX * 0.25, oavp.STAGE_HEIGHT * 0.25, 200, 450, 50, 0);
-  shapes.trapezoid(sunX * 0.50 + 250, oavp.STAGE_HEIGHT * 0.30, 125, 350, 0, 50);
-  shapes.trapezoid(sunX * 0.50 + 250, oavp.STAGE_HEIGHT * 0.30, 125, 350, 0, 25);
-  shapes.cylinder(sunX * 0.15 + 750, oavp.STAGE_HEIGHT * 0.30, 400, 200, 40);
-
-  visualizers
-    .create()
-    .move(sunX * 0.15 + 750, oavp.STAGE_HEIGHT * 0.25, 20)
-    .rotate(frameCount * 0.25, frameCount * 0.25, frameCount * 0.25)
-    .draw.basicLevelCube(100)
-    .done();
+  ellipse(sunX, sunY, 10 + normalMouseY * 100 , 10 + normalMouseY * 100);
 
   translate(0, 0, 2);
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, mappedMouseY * oavp.STAGE_HEIGHT * 0.25, numDataPoints, granularity, mappedOsc * 250 + 250);
+  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.25, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_a"));
+  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.25, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_a"), entities.getNoise("landscape").getStructure("hill_a"));
   translate(0, 0, 2);
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, mappedMouseY * oavp.STAGE_HEIGHT * 0.5, numDataPoints, granularity, mappedOsc * 500 + 500);
+  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.5, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_b"));
+  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.5, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_b"), entities.getNoise("landscape").getStructure("hill_b"));
   translate(0, 0, 2);
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, mappedMouseY * oavp.STAGE_HEIGHT * 0.75, numDataPoints, granularity, mappedOsc * 750 + 750);
+  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.75, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_c"));
+  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.75, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_c"), entities.getNoise("landscape").getStructure("hill_c"));
   translate(0, 0, 2);
-  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, oavp.STAGE_HEIGHT / 2, mappedMouseY * oavp.STAGE_HEIGHT * 1, numDataPoints, granularity, mappedOsc * 1000 + 1000);
+  shapes.hill(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 1, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_d"));
+  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 1, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_d"), entities.getNoise("landscape").getStructure("hill_d"));
 }
