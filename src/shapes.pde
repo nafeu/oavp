@@ -99,6 +99,15 @@ public class OavpShape {
     endShape();
   }
 
+  void dots(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
+    float distance = w / terrain.length;
+    beginShape(POINTS);
+    for (int i = 0; i < terrain.length; i++) {
+      vertex(w - (i * distance), terrain[i] * scale + displacement);
+    }
+    endShape();
+  }
+
   void trees(float x, float y, float w, float h, float scale, float displacement, float[] terrain, int[] structure) {
     float distance = w / terrain.length;
     for (int i = 1; i < terrain.length - 1; i++) {
