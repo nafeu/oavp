@@ -581,35 +581,26 @@ public class OavpOscillator {
   }
 }
 
-public class OavpNoise {
-  HashMap<String, float[]> terrains;
-  HashMap<String, int[]> structures;
+public class OavpNoiseInterval {
+  HashMap<String, float[]> storage;
   int numPoints = 100;
   float granularity = 0.01;
-  int variance = 10;
 
-  OavpNoise() {
-    terrains = new HashMap<String, float[]>();
-    structures = new HashMap<String, int[]>();
+  OavpNoiseInterval() {
+    storage = new HashMap<String, float[]>();
   }
 
-  OavpNoise generate(String name) {
-    terrains.put(name, new float[numPoints]);
-    structures.put(name, new int[numPoints]);
+  OavpNoiseInterval generate(String name) {
+    storage.put(name, new float[numPoints]);
     return this;
   }
 
-  OavpNoise granularity(float granularity) {
+  OavpNoiseInterval granularity(float granularity) {
     this.granularity = granularity;
     return this;
   }
 
-  OavpNoise variance(int variance) {
-    this.variance = variance;
-    return this;
-  }
-
-  OavpNoise numPoints(int numPoints) {
+  OavpNoiseInterval numPoints(int numPoints) {
     this.numPoints = numPoints;
     return this;
   }
@@ -617,16 +608,15 @@ public class OavpNoise {
   void update(String name, float phase) {
     for (int i = 0; i < numPoints; i++) {
       float point = refinedNoise(i + phase, granularity);
-      terrains.get(name)[i] = point;
-      structures.get(name)[i] = int(point * variance);
+      storage.get(name)[i] = point;
     }
   }
 
-  float[] getTerrain(String name) {
-    return terrains.get(name);
+  float[] getValues(String name) {
+    return storage.get(name);
   }
 
-  float[] getTerrain(float phase, float granularity) {
+  float[] getValues(float phase, float granularity) {
     float[] out = new float[numPoints];
     for (int i = 0; i < numPoints; i++) {
       out[i] = refinedNoise(i + phase, granularity);
@@ -634,25 +624,83 @@ public class OavpNoise {
     return out;
   }
 
-  int[] getStructure(String name) {
-    return structures.get(name);
-  }
-
-  int[] getStructure(float phase, float granularity, int variance) {
-    int[] out = new int[numPoints];
-    for (int i = 0; i < numPoints; i++) {
-      out[i] = quantizedNoise(i + phase, granularity, variance);
-    }
-    return out;
-  }
-
   float getNoise(float phase) {
     return refinedNoise(phase, granularity);
   }
+}
 
-  int getQuantizedNoise(float phase, int variance) {
-    return quantizedNoise(phase, granularity, variance);
+public class OavpTerrainPoint {
+  float x;
+  float y;
+  color indicator;
+  float start;
+  int numPoints;
+  int index;
+  float distance;
+  Point prev;
+  Point next;
+
+  OavpTerrainPoint(float curr, int numPoints, float distance, int index) {
+    start = curr;
+    indicator = palette.getRandomColor();
+    this.numPoints = numPoints;
+    this.distance = distance;
+    this.index = index;
+    x = (index * distance / numPoints);
+    y = refinedNoise(index, 0.15);
   }
+
+  void update(float curr, List points) {
+    float spacing = distance / numPoints;
+
+    if (curr - start >= 1.0) {
+      increase(curr, points);
+      start += 1.0;
+    } else if (curr - start < 0.0) {
+      decrease(curr);
+      start -= 1.0;
+    }
+
+    float displacement = curr - start;
+    x = (index * spacing) + (displacement * spacing);
+  }
+
+  void increase(float curr, List points) {
+    if (index == 0) {
+      for (int i = points.size() - 1; i > 0; i--) {
+        Point p = (Point) points.get(i);
+        p.y = p.prev.y;
+      }
+      y = refinedNoise(curr, 0.15);
+    }
+  }
+
+  void decrease(float curr) {
+    if (index == 0) {
+      y = next.y;
+    } else if (index < numPoints - 1) {
+      y = next.y;
+    } else {
+      y = refinedNoise(curr - index, 0.15);
+    }
+  }
+
+  void linkPrev(Point prev) {
+    this.prev = prev;
+  }
+
+  void linkNext(Point next) {
+    this.next = next;
+  }
+
+  void link(Point prev, Point next) {
+    this.prev = prev;
+    this.next = next;
+  }
+}
+
+public class OavpTerrain {
+
 }
 
 public class OavpEntityManager {
@@ -668,7 +716,7 @@ public class OavpEntityManager {
   HashMap<String, OavpRotator> rotators;
   HashMap<String, OavpColorRotator> colorRotators;
   HashMap<String, OavpOscillator> oscillators;
-  HashMap<String, OavpNoise> noises;
+  HashMap<String, OavpNoiseInterval> noiseIntervals;
 
   OavpEntityManager(Minim minim) {
     this.minim = minim;
@@ -682,7 +730,7 @@ public class OavpEntityManager {
     rotators = new HashMap<String, OavpRotator>();
     colorRotators = new HashMap<String, OavpColorRotator>();
     oscillators = new HashMap<String, OavpOscillator>();
-    noises = new HashMap<String, OavpNoise>();
+    noiseIntervals = new HashMap<String, OavpNoiseInterval>();
   }
 
   void addSvg(String filename) {
@@ -849,17 +897,17 @@ public class OavpEntityManager {
     return oscillators.get(name);
   }
 
-  OavpNoise addNoise(String name) {
-    noises.put(name, new OavpNoise());
-    return noises.get(name);
+  OavpNoiseInterval addNoiseIntervals(String name) {
+    noiseIntervals.put(name, new OavpNoiseInterval());
+    return noiseIntervals.get(name);
   }
 
-  OavpNoise getNoise(String name) {
-    return noises.get(name);
+  OavpNoiseInterval getNoiseIntervals(String name) {
+    return noiseIntervals.get(name);
   }
 
-  void updateNoise(String name, String instance, float phase) {
-    noises.get(name).update(instance, phase);
+  void updateNoiseIntervals(String name, String instance, float phase) {
+    noiseIntervals.get(name).update(instance, phase);
   }
 
   void update() {

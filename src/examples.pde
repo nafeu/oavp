@@ -1,47 +1,132 @@
+List<Point> points = new ArrayList<Point>();
+int numPoints = 10;
+float phase;
+
+public class Point {
+  float x;
+  float y;
+  color indicator;
+  float start;
+  int numPoints;
+  int index;
+  float distance;
+  Point prev;
+  Point next;
+
+  Point(float curr, int numPoints, float distance, int index) {
+    start = curr;
+    indicator = palette.getRandomColor();
+    this.numPoints = numPoints;
+    this.distance = distance;
+    this.index = index;
+    x = (index * distance / numPoints);
+    y = refinedNoise(index, 0.15);
+  }
+
+  void update(float curr, List points) {
+    float spacing = distance / numPoints;
+
+    if (curr - start >= 1.0) {
+      increase(curr, points);
+      start += 1.0;
+    } else if (curr - start < 0.0) {
+      decrease(curr);
+      start -= 1.0;
+    }
+
+    float displacement = curr - start;
+    x = (index * spacing) + (displacement * spacing);
+  }
+
+  void increase(float curr, List points) {
+    if (index == 0) {
+      for (int i = points.size() - 1; i > 0; i--) {
+        Point p = (Point) points.get(i);
+        p.y = p.prev.y;
+      }
+      y = refinedNoise(curr, 0.15);
+    }
+  }
+
+  void decrease(float curr) {
+    if (index == 0) {
+      y = next.y;
+    } else if (index < numPoints - 1) {
+      y = next.y;
+    } else {
+      y = refinedNoise(curr - index, 0.15);
+    }
+  }
+
+  void linkPrev(Point prev) {
+    this.prev = prev;
+  }
+
+  void linkNext(Point next) {
+    this.next = next;
+  }
+
+  void link(Point prev, Point next) {
+    this.prev = prev;
+    this.next = next;
+  }
+}
+
 void setupExamples() {
   noiseSeed(1);
 
-  entities.addRhythm("clock")
+  entities.addOscillator("rotation")
+    .duration(40)
+    .easing(Ani.SINE_IN_OUT)
     .start();
 
-  entities.addCounter("shifter")
-    .duration(1)
-    .easing(Ani.SINE_IN_OUT);
+  phase = entities.getOscillator("rotation").getValue() * numPoints * 10;
 
-  entities.addNoise("landscape")
-    .numPoints(100)
-    .granularity(0.015)
-    .variance(5)
-    .generate("hill_a")
-    .generate("hill_b")
-    .generate("hill_c")
-    .generate("hill_d");
+  for (int i = 0; i < numPoints; ++i) {
+    points.add(new Point(phase, numPoints, oavp.STAGE_WIDTH, i));
+  }
+
+  for (int i = 0; i < points.size(); i++) {
+    Point p = points.get(i);
+
+    if (i == 0) {
+      p.linkNext(points.get(i + 1));
+    } else if (i < points.size() - 1) {
+      p.link(points.get(i - 1), points.get(i + 1));
+    } else {
+      p.linkPrev(points.get(i - 1));
+    }
+  }
 }
 
 void updateExamples() {
+  phase = entities.getOscillator("rotation").getValue() * numPoints * 10;
+
   entities.update();
-  entities.incrementCounterIf("shifter", entities.onRhythm("clock"));
-  entities.updateNoise("landscape", "hill_a", entities.getCounter("shifter").getValue() * 10);
-  entities.updateNoise("landscape", "hill_b", entities.getCounter("shifter").getValue() * 20);
-  entities.updateNoise("landscape", "hill_c", entities.getCounter("shifter").getValue() * 30);
-  entities.updateNoise("landscape", "hill_d", entities.getCounter("shifter").getValue() * 40);
+  for (Point p : points) {
+    p.update(phase, points);
+  }
 }
 
 void drawExamples() {
-  background(palette.flat.white);
-  stroke(palette.flat.black);
-  fill(palette.flat.white);
+  background(palette.flat.black);
+  stroke(palette.flat.white);
+  noFill();
   strokeWeight(2);
 
-  shapes.dots(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.25, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_a"));
-  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.25, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_a"), entities.getNoise("landscape").getStructure("hill_a"));
-  translate(0, 0, 20);
-  shapes.dots(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.5, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_b"));
-  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.5, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_b"), entities.getNoise("landscape").getStructure("hill_b"));
-  translate(0, 0, 20);
-  shapes.dots(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.75, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_c"));
-  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 0.75, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_c"), entities.getNoise("landscape").getStructure("hill_c"));
-  translate(0, 0, 20);
-  shapes.dots(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 1, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_d"));
-  shapes.trees(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, normalMouseY * oavp.STAGE_HEIGHT * 1, oavp.STAGE_HEIGHT / 2, entities.getNoise("landscape").getTerrain("hill_d"), entities.getNoise("landscape").getStructure("hill_d"));
+  rect(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT);
+
+  beginShape();
+  for (Point p : points) {
+    curveVertex(p.x, p.y * oavp.STAGE_HEIGHT);
+  }
+  endShape();
+
+  beginShape();
+  for (Point p : points) {
+    if (int(p.y * 10) == 4) {
+      ellipse(p.x, p.y * oavp.STAGE_HEIGHT, 10, 10);
+    }
+  }
+  endShape();
 }
