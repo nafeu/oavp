@@ -629,102 +629,25 @@ public class OavpNoiseInterval {
   }
 }
 
-public class OavpTerrainPoint {
-  float x;
-  float y;
-  float start;
-  int numPoints;
-  int index;
-  float distance;
-  OavpTerrainPoint prev;
-  OavpTerrainPoint next;
-
-  OavpTerrainPoint(float curr, int numPoints, float distance, int index) {
-    start = curr;
-    this.numPoints = numPoints;
-    this.distance = distance;
-    this.index = index;
-    x = (index * distance / numPoints);
-    y = refinedNoise(index, 0.15);
-  }
-
-  void update(float curr, List points) {
-    float spacing = distance / numPoints;
-
-    if (curr - start >= 1.0) {
-      increase(curr, points);
-      start += 1.0;
-    } else if (curr - start < 0.0) {
-      decrease(curr);
-      start -= 1.0;
-    }
-
-    float displacement = curr - start;
-    x = (index * spacing) + (displacement * spacing);
-  }
-
-  void increase(float curr, List<OavpTerrainPoint> points) {
-    if (index == 0) {
-      for (int i = points.size() - 1; i > 0; i--) {
-        OavpTerrainPoint p = points.get(i);
-        p.y = p.prev.y;
-      }
-      y = refinedNoise(curr, 0.15);
-    }
-  }
-
-  void decrease(float curr) {
-    if (index == 0) {
-      y = next.y;
-    } else if (index < numPoints - 1) {
-      y = next.y;
-    } else {
-      y = refinedNoise(curr - index, 0.15);
-    }
-  }
-
-  void linkPrev(OavpTerrainPoint prev) {
-    this.prev = prev;
-  }
-
-  void linkNext(OavpTerrainPoint next) {
-    this.next = next;
-  }
-
-  void link(OavpTerrainPoint prev, OavpTerrainPoint next) {
-    this.prev = prev;
-    this.next = next;
-  }
-}
-
 public class OavpTerrain {
-  HashMap<String, List<OavpTerrainPoint>> storage;
-  int numPoints = 10;
+  float[] values;
+  int[] structures;
+  int size = 10000;
   float granularity = 0.01;
-  float distance = 100;
 
   OavpTerrain() {
-    storage = new HashMap<String, List<OavpTerrainPoint>>();
+    values = new float[size];
+    structures = new int[size];
+    generate();
   }
 
-  OavpTerrain generate(String name, float curr) {
-    List<OavpTerrainPoint> points = new ArrayList<OavpTerrainPoint>();
-    for (int i = 0; i < numPoints; ++i) {
-      // TODO: Consider reworking the first argument to generate these points
-      points.add(new OavpTerrainPoint(curr - i, numPoints, distance, i));
+  OavpTerrain generate() {
+    for (int i = 0; i < size; ++i) {
+      values[i] = refinedNoise(i, granularity);
     }
-    for (int i = 0; i < points.size(); i++) {
-      OavpTerrainPoint p = points.get(i);
-
-      if (i == 0) {
-        p.linkNext(points.get(i + 1));
-      } else if (i < points.size() - 1) {
-        p.link(points.get(i - 1), points.get(i + 1));
-      } else {
-        p.linkPrev(points.get(i - 1));
-      }
+    for (int i = 0; i < size; ++i) {
+      structures[i] = floor(random(0, 20));
     }
-    storage.put(name, points);
     return this;
   }
 
@@ -733,25 +656,41 @@ public class OavpTerrain {
     return this;
   }
 
-  OavpTerrain distance(float distance) {
-    this.distance = distance;
+  OavpTerrain size(int size) {
+    this.size = size;
     return this;
   }
 
-  OavpTerrain numPoints(int numPoints) {
-    this.numPoints = numPoints;
-    return this;
-  }
-
-  void update(String name, float phase) {
-    List<OavpTerrainPoint> points = storage.get(name);
-    for (OavpTerrainPoint p : points) {
-      p.update(phase, points);
+  float[] getWindow(float position, int windowSize, int shift) {
+    int index = floor(position);
+    float[] out = new float[windowSize];
+    if (index + windowSize + shift <= size) {
+      for (int i = 0; i < windowSize; ++i) {
+        out[i] = values[i + index + shift];
+      }
+      return out;
+    } else {
+      for (int i = 0; i < windowSize; i++) {
+        out[(windowSize - 1) - i] = values[(size - 1) - i];
+      }
+      return out;
     }
   }
 
-  List<OavpTerrainPoint> getValues(String name) {
-    return storage.get(name);
+  int[] getStructures(float position, int windowSize, int shift) {
+    int index = floor(position);
+    int[] out = new int[windowSize];
+    if (index + windowSize + shift <= size) {
+      for (int i = 0; i < windowSize; ++i) {
+        out[i] = structures[i + index + shift];
+      }
+      return out;
+    } else {
+      for (int i = 0; i < windowSize; i++) {
+        out[(windowSize - 1) - i] = structures[(size - 1) - i];
+      }
+      return out;
+    }
   }
 }
 
@@ -979,10 +918,6 @@ public class OavpEntityManager {
 
   OavpTerrain getTerrain(String name) {
     return terrains.get(name);
-  }
-
-  void updateTerrain(String name, String instance, float phase) {
-    terrains.get(name).update(instance, phase);
   }
 
   void update() {

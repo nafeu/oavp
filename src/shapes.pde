@@ -99,6 +99,48 @@ public class OavpShape {
     endShape();
   }
 
+  void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain, float position) {
+    float distance = w / terrain.length;
+    beginShape();
+    vertex(x, terrain[0] * scale + displacement);
+    for (int i = 0; i < terrain.length; i++) {
+      float xPos = (1 + i - floorPosDiff(position)) * distance;
+      float yPos = terrain[i] * scale + displacement;
+      vertex(xPos, yPos);
+    }
+    vertex(w, terrain[terrain.length - 1] * scale + displacement);
+    vertex(w, h);
+    vertex(x, h);
+    vertex(x, terrain[0] * scale + displacement);
+    endShape();
+  }
+
+  void trees(float x, float y, float w, float h, float scale, float displacement, float[] terrain, int[] structures, float position) {
+    float distance = w / terrain.length;
+    for (int i = 0; i < terrain.length; i++) {
+      float xPos = (1 + i - floorPosDiff(position)) * distance;
+      float yPos = terrain[i] * scale + displacement;
+
+      switch(structures[i]) {
+        case 1:
+          line(xPos, yPos, xPos, yPos - 20);
+          ellipse(xPos, yPos - 20, 10, 10);
+          break;
+        case 2:
+          line(xPos, yPos, xPos, yPos - 40);
+          ellipse(xPos, yPos - 40, 20, 20);
+          break;
+        case 3:
+          line(xPos, yPos, xPos, yPos - 60);
+          ellipse(xPos, yPos - 60, 30, 30);
+          break;
+        default:
+          break;
+      }
+    }
+    endShape();
+  }
+
   void dots(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
     float distance = w / terrain.length;
     beginShape(POINTS);

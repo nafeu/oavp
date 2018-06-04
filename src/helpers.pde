@@ -17,3 +17,8 @@ void updateHelpers() {
   normalMouseX = map(mouseX, 0, width, 0, 1);
   normalMouseY = map(mouseY, 0, height, 0, 1);
 }
+
+float floorPosDiff(float pos) {
+  float out = pos - floor(pos);
+  return out;
+}

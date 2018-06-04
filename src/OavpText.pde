@@ -18,6 +18,12 @@ public class OavpText {
     popStyle();
   }
 
+  void write(String text, float x, float y) {
+    pushStyle();
+    text(text, x, y, 100, 50);
+    popStyle();
+  }
+
   String read(String path) {
     String[] lines = loadStrings(path);
     String text = String.join("\n", lines);
