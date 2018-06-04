@@ -787,6 +787,14 @@ public class OavpEntityManager {
     terrains = new HashMap<String, OavpTerrain>();
   }
 
+  float mouseX(float start, float end) {
+    return map(mouseX, 0, width, start, end);
+  }
+
+  float mouseY(float start, float end) {
+    return map(mouseY, 0, height, start, end);
+  }
+
   void addSvg(String filename) {
     String[] fn = filename.split("\\.");
     svgs.put(fn[0], loadShape(filename));

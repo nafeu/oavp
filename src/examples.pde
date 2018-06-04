@@ -1,22 +1,15 @@
-float position;
-
 void setupExamples() {
-  position = map(mouseX, 0, width, 0, 1) * 100;
-
   noiseSeed(1);
 
   entities.addTerrain("terrain")
     .distance(oavp.STAGE_WIDTH)
-    .generate("hill_a", 0)
-    .generate("hill_b", 100);
+    .numPoints(20)
+    .generate("hill_a", 0);
 }
 
 void updateExamples() {
-  position = map(mouseX, 0, width, 0, 1) * 100;
-
   entities.update();
-  entities.updateTerrain("terrain", "hill_a", position);
-  entities.updateTerrain("terrain", "hill_b", position + 100);
+  entities.updateTerrain("terrain", "hill_a", entities.mouseX(0, 40));
 }
 
 void drawExamples() {
@@ -25,19 +18,15 @@ void drawExamples() {
   noFill();
   strokeWeight(2);
 
+  pushStyle();
+  fill(palette.flat.white);
+  noStroke();
+  text.write(String.valueOf(floor(entities.mouseX(0, 40))), 0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT, 50);
+  popStyle();
+
   rect(0, 0, oavp.STAGE_WIDTH, oavp.STAGE_HEIGHT);
 
-  stroke(palette.flat.red);
-  beginShape();
   for (OavpTerrainPoint p : entities.getTerrain("terrain").getValues("hill_a")) {
-    curveVertex(p.x, p.y * oavp.STAGE_HEIGHT);
+    ellipse(p.x, oavp.STAGE_HEIGHT / 2 + p.y * oavp.STAGE_HEIGHT / 2, 10, 10);
   }
-  endShape();
-
-  stroke(palette.flat.blue);
-  beginShape();
-  for (OavpTerrainPoint p : entities.getTerrain("terrain").getValues("hill_b")) {
-    vertex(p.x, p.y * oavp.STAGE_HEIGHT);
-  }
-  endShape();
 }
