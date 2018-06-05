@@ -16,6 +16,26 @@ public class OavpPalette {
     flat = new FlatUIColors();
   }
 
+  void reset(color background, color primary, color secondary, float strokeWeight) {
+    background(background);
+    fill(primary);
+    stroke(secondary);
+    strokeWeight(strokeWeight);
+  }
+
+  void reset(color background, color primary, float strokeWeight) {
+    background(background);
+    noFill();
+    stroke(primary);
+    strokeWeight(strokeWeight);
+  }
+
+  void reset(color background, color primary) {
+    background(background);
+    fill(primary);
+    noStroke();
+  }
+
   void add(String name, color colorA) {
     color[] colors = new color[1];
     colors[0] = colorA;

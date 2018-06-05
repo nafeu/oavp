@@ -5,6 +5,7 @@ class OavpVisualizer {
   OavpAmplitude currAmplitude;
   OavpInterval currInterval;
   OavpGridInterval currGridInterval;
+  OavpTerrain currTerrain;
   List currTrackers;
   OavpRhythm currRhythm;
 
@@ -59,6 +60,11 @@ class OavpVisualizer {
     rotateX(radians(x));
     rotateY(radians(y));
     rotateZ(radians(z));
+    return this;
+  }
+
+  OavpVisualizer rotateClockwise(float x) {
+    rotateZ(radians(x));
     return this;
   }
 
@@ -207,12 +213,25 @@ class OavpVisualizer {
     return this;
   }
 
+  OavpVisualizer useTerrain(String name) {
+    currTerrain = entities.getTerrain(name);
+    return this;
+  }
+
   class Draw {
 
     OavpAnalysis analysis;
 
     Draw(OavpAnalysis analysis) {
       this.analysis = analysis;
+    }
+
+    OavpVisualizer basicHills(float w, float h, float scale, float displacement, int windowSize, int phaseShift, float position) {
+      shapes.hill(0, 0, w, h, scale, displacement,
+                  currTerrain.getValues(position, windowSize, phaseShift), position);
+      shapes.trees(0, 0, w, h, scale, displacement,
+                   currTerrain.getWindow(position, windowSize, phaseShift), position);
+      return OavpVisualizer.this;
     }
 
     OavpVisualizer basicSquare(float size) {

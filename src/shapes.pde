@@ -72,15 +72,9 @@ public class OavpShape {
     noFill();
     beginShape();
 
-    // Centered
     vertex(x - w/2, y + h/2);
     vertex(x, y - h/2);
     vertex(x + w/2, y + h/2);
-
-    // Cornered
-    // vertex(x, y + h);
-    // vertex(x + w/2, y);
-    // vertex(x + w, y + h);
 
     endShape();
     popStyle();

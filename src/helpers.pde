@@ -22,3 +22,7 @@ float floorPosDiff(float pos) {
   float out = pos - floor(pos);
   return out;
 }
+
+float frameCount(float scale) {
+  return frameCount * scale;
+}

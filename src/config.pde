@@ -12,6 +12,8 @@ public class OavpConfig {
 
   public float STAGE_WIDTH = 1000;
   public float STAGE_HEIGHT = 1000;
+  public float w = 1000;
+  public float h = 1000;
   public float GRID_SCALE = 1000;
 
   public float SPECTRUM_SMOOTHING = 0.80f;
@@ -45,6 +47,8 @@ public class OavpConfig {
 
     STAGE_WIDTH = config.getFloat("STAGE_WIDTH");
     STAGE_HEIGHT = config.getFloat("STAGE_HEIGHT");
+    w = STAGE_WIDTH;
+    h = STAGE_HEIGHT;
     GRID_SCALE = config.getFloat("GRID_SCALE");
 
     SPECTRUM_SMOOTHING = config.getFloat("SPECTRUM_SMOOTHING");
@@ -55,5 +59,21 @@ public class OavpConfig {
     CAMERA_EASING = config.getFloat("CAMERA_EASING");
 
     SHOW_EXAMPLES = config.getBoolean("SHOW_EXAMPLES");
+  }
+
+  float width(float scale) {
+    return w * scale;
+  }
+
+  float width() {
+    return w;
+  }
+
+  float height(float scale) {
+    return h * scale;
+  }
+
+  float height() {
+    return h;
   }
 }
