@@ -6,6 +6,8 @@ class OavpVisualizer {
   OavpInterval currInterval;
   OavpGridInterval currGridInterval;
   OavpTerrain currTerrain;
+  float currWidth;
+  float currHeight;
   List currTrackers;
   OavpRhythm currRhythm;
 
@@ -218,6 +220,12 @@ class OavpVisualizer {
     return this;
   }
 
+  OavpVisualizer dimensions(float w, float h) {
+    currWidth = w;
+    currHeight = h;
+    return this;
+  }
+
   class Draw {
 
     OavpAnalysis analysis;
@@ -226,10 +234,10 @@ class OavpVisualizer {
       this.analysis = analysis;
     }
 
-    OavpVisualizer basicHills(float w, float h, float scale, float displacement, int windowSize, int phaseShift, float position) {
-      shapes.hill(0, 0, w, h, scale, displacement,
+    OavpVisualizer basicHills(float scale, float displacement, int windowSize, int phaseShift, float position) {
+      shapes.hill(0, 0, currWidth, currHeight, scale, displacement,
                   currTerrain.getValues(position, windowSize, phaseShift), position);
-      shapes.trees(0, 0, w, h, scale, displacement,
+      shapes.trees(0, 0, currWidth, currHeight, scale, displacement,
                    currTerrain.getWindow(position, windowSize, phaseShift), position);
       return OavpVisualizer.this;
     }
@@ -264,13 +272,13 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer intervalSpectrumMesh(float w, float h, float scale, int specSample) {
+    OavpVisualizer intervalSpectrumMesh(float scale, int specSample) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       int rows = interval.getIntervalSize();
       int cols = analysis.getAvgSize();
 
-      float rowScale = w / rows;
-      float colScale = h / cols;
+      float rowScale = currWidth / rows;
+      float colScale = currHeight / cols;
 
       for (int i = 0; i < rows - 1; i++) {
         beginShape(TRIANGLE_STRIP);
@@ -286,37 +294,37 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basicSpectrumBars(float w, float h) {
+    OavpVisualizer basicSpectrumBars() {
       int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
         float rawAmplitude = analysis.getSpectrumVal(i);
         float displayAmplitude = analysis.scaleSpectrumVal(rawAmplitude);
-        rect(i * (w / avgSize), h, (w / avgSize), -h * displayAmplitude);
+        rect(i * (currWidth / avgSize), currHeight, (currWidth / avgSize), -currHeight * displayAmplitude);
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basicSpectrumWire(float w, float h) {
+    OavpVisualizer basicSpectrumWire() {
       beginShape(LINES);
       int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
         float rawSpectrumValA = analysis.getSpectrumVal(i);
         float rawSpectrumValB = analysis.getSpectrumVal(i + 1);
-        vertex(i * (w / avgSize), -h * analysis.scaleSpectrumVal(rawSpectrumValA) + h);
-        vertex((i + 1) * (w / avgSize), -h * analysis.scaleSpectrumVal(rawSpectrumValB) + h);
+        vertex(i * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValA) + currHeight);
+        vertex((i + 1) * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValB) + currHeight);
       }
       endShape();
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basicSpectrumRadialBars(float h, float rangeStart, float rangeEnd, float rotation) {
+    OavpVisualizer basicSpectrumRadialBars(float scale, float rangeStart, float rangeEnd, float rotation) {
       beginShape();
       int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
         float angle = map(i, 0, avgSize, 0, 360) - rotation;
         float r = map(analysis.getSpectrumVal(i), 0, 256, rangeStart, rangeEnd);
-        float x1 = h * cos(radians(angle));
-        float y1 = h * sin(radians(angle));
+        float x1 = scale * cos(radians(angle));
+        float y1 = scale * sin(radians(angle));
         float x2 = r * cos(radians(angle));
         float y2 = r * sin(radians(angle));
         line(x1, y1, x2, y2);
@@ -325,7 +333,7 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basiSpectrumRadialWire(float rangeStart, float rangeEnd, float rotation) {
+    OavpVisualizer basicSpectrumRadialWire(float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize - 1; i++) {
@@ -344,14 +352,14 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basicWaveformWire(float w, float h) {
+    OavpVisualizer basicWaveformWire() {
       int audioBufferSize = analysis.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
-        float x1 = map( i, 0, audioBufferSize, 0, w);
-        float x2 = map( i + 1, 0, audioBufferSize, 0, w);
-        float leftBufferScale = (h / 4);
-        float rightBufferScale = (h / 4) * 3;
-        float waveformScale = (h / 4);
+        float x1 = map( i, 0, audioBufferSize, 0, currWidth);
+        float x2 = map( i + 1, 0, audioBufferSize, 0, currWidth);
+        float leftBufferScale = (currHeight / 4);
+        float rightBufferScale = (currHeight / 4) * 3;
+        float waveformScale = (currHeight / 4);
         line(x1, leftBufferScale + analysis.getLeftBuffer(i) * waveformScale, x2, leftBufferScale + analysis.getLeftBuffer(i + 1) * waveformScale);
         line(x1, rightBufferScale + analysis.getRightBuffer(i) * waveformScale, x2, rightBufferScale + analysis.getRightBuffer(i + 1) * waveformScale);
       }
@@ -359,17 +367,17 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basicWaveformRadialWire(float h, float rangeStart, float rangeEnd, float rotation) {
+    OavpVisualizer basicWaveformRadialWire(float scale, float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int audioBufferSize = analysis.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float angleA = map(i, 0, audioBufferSize, 0, 360) - rotation;
-        float rA = h + map(analysis.getLeftBuffer(i), -1, 1, rangeStart, rangeEnd);
+        float rA = scale + map(analysis.getLeftBuffer(i), -1, 1, rangeStart, rangeEnd);
         float xA = rA * cos(radians(angleA));
         float yA = rA * sin(radians(angleA));
 
         float angleB = map(i + 1, 0, audioBufferSize, 0, 360) - rotation;
-        float rB = h + map(analysis.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
+        float rB = scale + map(analysis.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
         float xB = rB * cos(radians(angleB));
         float yB = rB * sin(radians(angleB));
         vertex(xA, yA);
@@ -387,20 +395,20 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer basicLevelBars(float w, float h) {
+    OavpVisualizer basicLevelBars() {
       float rawLeftLevel = analysis.getLeftLevel();
       float rawRightLevel = analysis.getRightLevel();
-      rect(0, 0, analysis.scaleLeftLevel(rawLeftLevel) * w, h / 2);
-      rect(0, h / 2, analysis.scaleRightLevel(rawRightLevel) * w, h / 2);
+      rect(0, 0, analysis.scaleLeftLevel(rawLeftLevel) * currWidth, currHeight / 2);
+      rect(0, currHeight / 2, analysis.scaleRightLevel(rawRightLevel) * currWidth, currHeight / 2);
       endShape();
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer intervalLevelBars(float w, float h, float scale) {
+    OavpVisualizer intervalLevelBars(float scale) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
-        rect(i * (w / intervalSize), h, (w / intervalSize), -analysis.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
+        rect(i * (currWidth / intervalSize), currHeight, (currWidth / intervalSize), -analysis.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
       }
       return OavpVisualizer.this;
     }
@@ -419,11 +427,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer gridIntervalGridSquare(float w, float h) {
+    OavpVisualizer gridIntervalGridSquare() {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
-      float colScale = w / gridInterval.numCols;
-      float rowScale = h / gridInterval.numRows;
+      float colScale = currWidth / gridInterval.numCols;
+      float rowScale = currHeight / gridInterval.numRows;
       for (int i = 0; i < gridInterval.numRows; i++) {
         for (int j = 0; j < gridInterval.numCols; j++) {
           float x = (j * colScale) + (colScale * 0.5);
@@ -475,10 +483,10 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer gridIntervalFlatbox(float w, float h, float scale) {
+    OavpVisualizer gridIntervalFlatbox(float scale) {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
-      float colScale = w / gridInterval.numCols;
-      float rowScale = h / gridInterval.numRows;
+      float colScale = currWidth / gridInterval.numCols;
+      float rowScale = currHeight / gridInterval.numRows;
       for (int i = 0; i < gridInterval.numRows; i++) {
         for (int j = 0; j < gridInterval.numCols; j++) {
           float x = (j * colScale);
@@ -490,11 +498,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer gridIntervalSquare(float w, float h) {
+    OavpVisualizer gridIntervalSquare() {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
-      float colScale = w / gridInterval.numCols;
-      float rowScale = h / gridInterval.numRows;
+      float colScale = currWidth / gridInterval.numCols;
+      float rowScale = currHeight / gridInterval.numRows;
       for (int i = 0; i < gridInterval.numRows; i++) {
         for (int j = 0; j < gridInterval.numCols; j++) {
           float x = (j * colScale) + (colScale * 0.5);
@@ -507,19 +515,19 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerSpectrumWire(float w, float h, float scale) {
+    OavpVisualizer trackerSpectrumWire(float scale) {
       List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         pushMatrix();
         translate(0, 0, -tracker.value * scale);
         beginShape();
-        float offset = w / tracker.payload.length;
+        float offset = currWidth / tracker.payload.length;
         for (int i = 0; i < tracker.payload.length; i++) {
-          vertex(i * offset, (h / 2) - analysis.scaleSpectrumVal(tracker.payload[i]) * (h / 2));
+          vertex(i * offset, (currHeight / 2) - analysis.scaleSpectrumVal(tracker.payload[i]) * (currHeight / 2));
         }
         endShape();
-        rect(0, 0, w, h);
+        rect(0, 0, currWidth, currHeight);
         popMatrix();
       }
       return OavpVisualizer.this;
@@ -659,22 +667,22 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerChevron(float w, float h, float scale) {
+    OavpVisualizer trackerChevron(float scale) {
       List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
-        shapes.chevron(0, -tracker.value * scale, w, h);
+        shapes.chevron(0, -tracker.value * scale, currWidth, currHeight);
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerColorChevron(float w, float h, float scale) {
+    OavpVisualizer trackerColorChevron(float scale) {
       List trackers = OavpVisualizer.this.currTrackers;
       for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
         OavpTracker tracker = iter.next();
         pushStyle();
         stroke((color) tracker.payload[0]);
-        shapes.chevron(0, -tracker.value * scale, w, h);
+        shapes.chevron(0, -tracker.value * scale, currWidth, currHeight);
         popStyle();
       }
       return OavpVisualizer.this;
@@ -692,10 +700,10 @@ class OavpVisualizer {
   }
 
   OavpVisualizer img(float scaleFactor, PImage image) {
-    pushStyle();
+    pushMatrix();
     scale(scaleFactor);
     image(image, 0, 0);
-    popStyle();
+    popMatrix();
     return this;
   }
 }

@@ -90,6 +90,7 @@ void draw() {
 
 void updateEntities() {
   camera.update();
+  entities.update();
   analysis.forward();
   if (oavp.SHOW_EXAMPLES) {
     updateExamples();
