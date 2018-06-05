@@ -661,7 +661,7 @@ public class OavpTerrain {
     return this;
   }
 
-  float[] getWindow(float position, int windowSize, int shift) {
+  float[] getValues(float position, int windowSize, int shift) {
     int index = floor(position);
     float[] out = new float[windowSize];
     if (index + windowSize + shift <= size) {
@@ -677,9 +677,9 @@ public class OavpTerrain {
     }
   }
 
-  int[] getStructures(float position, int windowSize, int shift) {
+  float[] getStructures(float position, int windowSize, int shift) {
     int index = floor(position);
-    int[] out = new int[windowSize];
+    float[] out = new float[windowSize];
     if (index + windowSize + shift <= size) {
       for (int i = 0; i < windowSize; ++i) {
         out[i] = structures[i + index + shift];
@@ -689,6 +689,30 @@ public class OavpTerrain {
       for (int i = 0; i < windowSize; i++) {
         out[(windowSize - 1) - i] = structures[(size - 1) - i];
       }
+      return out;
+    }
+  }
+
+  float[][] getWindow(float position, int windowSize, int shift) {
+    int index = floor(position);
+    float[] valuesWindow = new float[windowSize];
+    float[] structuresWindow = new float[windowSize];
+    float[][] out = new float[2][windowSize];
+    if (index + windowSize + shift <= size) {
+      for (int i = 0; i < windowSize; ++i) {
+        valuesWindow[i] = values[i + index + shift];
+        structuresWindow[i] = structures[i + index + shift];
+      }
+      out[0] = valuesWindow;
+      out[1] = structuresWindow;
+      return out;
+    } else {
+      for (int i = 0; i < windowSize; i++) {
+        valuesWindow[(windowSize - 1) - i] = values[(size - 1) - i];
+        structuresWindow[(windowSize - 1) - i] = structures[(size - 1) - i];
+      }
+      out[0] = valuesWindow;
+      out[1] = structuresWindow;
       return out;
     }
   }

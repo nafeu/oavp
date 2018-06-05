@@ -115,24 +115,32 @@ public class OavpShape {
     endShape();
   }
 
-  void trees(float x, float y, float w, float h, float scale, float displacement, float[] terrain, int[] structures, float position) {
-    float distance = w / terrain.length;
-    for (int i = 0; i < terrain.length; i++) {
+  void trees(float x, float y, float w, float h, float scale, float displacement, float[][] values, float position) {
+    float distance = w / values[0].length;
+    for (int i = 0; i < values[0].length; i++) {
       float xPos = (1 + i - floorPosDiff(position)) * distance;
-      float yPos = terrain[i] * scale + displacement;
-
-      switch(structures[i]) {
+      float yPos = values[0][i] * scale + displacement;
+      switch(int(values[1][i])) {
         case 1:
           line(xPos, yPos, xPos, yPos - 20);
+          pushMatrix();
+          translate(0, 0, 2);
           ellipse(xPos, yPos - 20, 10, 10);
+          popMatrix();
           break;
         case 2:
           line(xPos, yPos, xPos, yPos - 40);
+          pushMatrix();
+          translate(0, 0, 2);
           ellipse(xPos, yPos - 40, 20, 20);
+          popMatrix();
           break;
         case 3:
           line(xPos, yPos, xPos, yPos - 60);
+          pushMatrix();
+          translate(0, 0, 2);
           ellipse(xPos, yPos - 60, 30, 30);
+          popMatrix();
           break;
         default:
           break;
@@ -148,29 +156,6 @@ public class OavpShape {
       vertex(w - (i * distance), terrain[i] * scale + displacement);
     }
     endShape();
-  }
-
-  void trees(float x, float y, float w, float h, float scale, float displacement, float[] terrain, int[] structure) {
-    float distance = w / terrain.length;
-    for (int i = 1; i < terrain.length - 1; i++) {
-      if (
-        (structure[i] == 1 && structure[i - 1] != 1)
-        ||
-        (structure[i] == 2 && structure[i - 1] != 2)
-      ) {
-        float radius;
-        if (structure[i + 1] == 1) {
-          radius = 10;
-        } else if (structure[i + 1] == 2) {
-          radius = 30;
-        } else {
-          radius = 20;
-        }
-        float point = terrain[i] * scale + displacement;
-        line(w - (i * distance), point, w - (i * distance), point - 30);
-        ellipse(w - (i * distance), point - 30, radius, radius);
-      }
-    }
   }
 
   void trapezoid(float x, float y, float w, float h, float displacementA, float displacementB) {
