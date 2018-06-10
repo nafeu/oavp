@@ -1,9 +1,18 @@
 void setupExamples() {
+  entities.addCamera("default");
   entities.addTerrain("example");
+  entities.addOscillator("camera")
+    .duration(5)
+    .easing(Ani.SINE_IN_OUT)
+    .start();
 }
 
 void updateExamples() {
+  entities.getCamera("default").updateEye(0, 0, entities.getOscillator("camera").getValue(-250, 250));
+  entities.getCamera("default").updateCenter(0, 0, entities.getOscillator("camera").getValue(-250, 250));
+  entities.getCamera("default").rotateAroundCenter(frameCount(0.5));
 
+  entities.useCamera("default");
 }
 
 void drawExamples() {

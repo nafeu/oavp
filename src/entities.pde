@@ -733,6 +733,7 @@ public class OavpEntityManager {
   HashMap<String, OavpOscillator> oscillators;
   HashMap<String, OavpNoiseInterval> noiseIntervals;
   HashMap<String, OavpTerrain> terrains;
+  HashMap<String, OavpCamera> cameras;
 
   OavpEntityManager(Minim minim) {
     this.minim = minim;
@@ -748,6 +749,7 @@ public class OavpEntityManager {
     oscillators = new HashMap<String, OavpOscillator>();
     noiseIntervals = new HashMap<String, OavpNoiseInterval>();
     terrains = new HashMap<String, OavpTerrain>();
+    cameras = new HashMap<String, OavpCamera>();
   }
 
   float mouseX(float start, float end) {
@@ -942,6 +944,19 @@ public class OavpEntityManager {
 
   OavpTerrain getTerrain(String name) {
     return terrains.get(name);
+  }
+
+  OavpCamera addCamera(String name) {
+    cameras.put(name, new OavpCamera());
+    return cameras.get(name);
+  }
+
+  OavpCamera getCamera(String name) {
+    return cameras.get(name);
+  }
+
+  void useCamera(String name) {
+    cameras.get(name).view();
   }
 
   void update() {

@@ -11,8 +11,7 @@ import de.looksgood.ani.easing.*;
 OavpConfig oavp;
 Minim minim;
 OavpPosition entityPosition;
-OavpPosition cameraPosition;
-OavpCamera camera;
+OavpCamera defaultCamera;
 OavpAnalysis analysis;
 OavpVisualizer visualizers;
 OavpEmitter emitters;
@@ -38,16 +37,9 @@ void setup() {
   entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
   entities = new OavpEntityManager(minim);
 
-  // Camera Setup
-  cameraPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
-  camera = new OavpCamera(cameraPosition,
-                          entityPosition,
-                          oavp.STAGE_WIDTH / 2,
-                          oavp.STAGE_HEIGHT / 2,
-                          oavp.CAMERA_EASING);
-  if (oavp.ENABLE_ORTHO) {
-    camera.enableOrthoCamera();
-  }
+  // Default Camera Setup
+  defaultCamera = new OavpCamera();
+  defaultCamera.view();
 
   // Style Setup
   palette = new OavpPalette(oavp);
@@ -89,7 +81,6 @@ void draw() {
 }
 
 void updateEntities() {
-  camera.update();
   entities.update();
   analysis.forward();
   if (oavp.SHOW_EXAMPLES) {
