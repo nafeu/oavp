@@ -65,8 +65,6 @@ void setup() {
   // Typography Setup
   text = new OavpText(entityPosition);
   text.setPadding(20);
-
-  debug();
 }
 
 void draw() {

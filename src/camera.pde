@@ -55,13 +55,6 @@ public class OavpCamera {
     eyeMovement.set(x, y, z);
   }
 
-  void rotateAroundCenter(float angle) {
-    float h = (oavp.w/2.0) / tan(PI*30.0 / 180.0);
-
-    eye.x = center.x + cos(radians(angle)) * h;
-    eye.z = sin(radians(angle)) * h;
-  }
-
   void updateCenter(float x, float y, float z) {
     centerMovement.set(x, y, z);
   }
@@ -70,5 +63,27 @@ public class OavpCamera {
     upMovement.set(x, y, z);
   }
 
+  void rotateAroundY(float angle, float distance) {
+    float h = distance / tan(PI*30.0 / 180.0);
+    eye.x = center.x + cos(radians(angle)) * h;
+    eye.z = center.z + sin(radians(angle)) * h;
+  }
+
+  void rotateAroundX(float angle, float distance) {
+    float h = distance / tan(PI*30.0 / 180.0);
+    eye.z = center.z + cos(radians(angle)) * h;
+    eye.y = center.y + sin(radians(angle)) * h;
+    up.z = -sin(radians(angle));
+    up.y = cos(radians(angle));
+  }
+
+  void rotateAroundZ(float angle) {
+    up.x = sin(radians(angle));
+    up.y = cos(radians(angle));
+  }
+
+  void distance(float distance) {
+    eye.z = center.z + distance;
+  }
 }
 
