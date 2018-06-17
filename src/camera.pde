@@ -7,6 +7,30 @@ public class OavpCamera {
   PVector centerMovement = new PVector(0, 0, 0);
   PVector upMovement = new PVector(0, 0, 0);
 
+  Ani aniEyeX;
+  Ani aniEyeY;
+  Ani aniEyeZ;
+  Ani aniEyeMovementX;
+  Ani aniEyeMovementY;
+  Ani aniEyeMovementZ;
+
+  Ani aniCenterX;
+  Ani aniCenterY;
+  Ani aniCenterZ;
+  Ani aniCenterMovementX;
+  Ani aniCenterMovementY;
+  Ani aniCenterMovementZ;
+
+  Ani aniUpX;
+  Ani aniUpY;
+  Ani aniUpZ;
+  Ani aniUpMovementX;
+  Ani aniUpMovementY;
+  Ani aniUpMovementZ;
+
+  float duration = 1;
+  Easing easing = Ani.LINEAR;
+
   OavpCamera() {
     eye = new PVector();
     center = new PVector();
@@ -51,6 +75,16 @@ public class OavpCamera {
            up.z + upMovement.z);
   }
 
+  OavpCamera duration(float duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  OavpCamera easing(Easing easing) {
+    this.easing = easing;
+    return this;
+  }
+
   void updateEye(float x, float y, float z) {
     eyeMovement.set(x, y, z);
   }
@@ -84,6 +118,36 @@ public class OavpCamera {
 
   void distance(float distance) {
     eye.z = center.z + distance;
+  }
+
+  void moveBackward(float distance) {
+    aniEyeMovementZ = Ani.to(this.eyeMovement, duration, "z", eyeMovement.z + distance, easing);
+    aniCenterMovementZ = Ani.to(this.centerMovement, duration, "z", centerMovement.z + distance, easing);
+  }
+
+  void moveForward(float distance) {
+    aniEyeMovementZ = Ani.to(this.eyeMovement, duration, "z", eyeMovement.z - distance, easing);
+    aniCenterMovementZ = Ani.to(this.centerMovement, duration, "z", centerMovement.z - distance, easing);
+  }
+
+  void moveLeft(float distance) {
+    aniEyeMovementX = Ani.to(this.eyeMovement, duration, "x", eyeMovement.x - distance, easing);
+    aniCenterMovementX = Ani.to(this.centerMovement, duration, "x", centerMovement.x - distance, easing);
+  }
+
+  void moveRight(float distance) {
+    aniEyeMovementX = Ani.to(this.eyeMovement, duration, "x", eyeMovement.x + distance, easing);
+    aniCenterMovementX = Ani.to(this.centerMovement, duration, "x", centerMovement.x + distance, easing);
+  }
+
+  void moveUp(float distance) {
+    aniEyeMovementY = Ani.to(this.eyeMovement, duration, "y", eyeMovement.y - distance, easing);
+    aniCenterMovementY = Ani.to(this.centerMovement, duration, "y", centerMovement.y - distance, easing);
+  }
+
+  void moveDown(float distance) {
+    aniEyeMovementY = Ani.to(this.eyeMovement, duration, "y", eyeMovement.y + distance, easing);
+    aniCenterMovementY = Ani.to(this.centerMovement, duration, "y", centerMovement.y + distance, easing);
   }
 }
 
