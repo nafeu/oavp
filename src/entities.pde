@@ -1,19 +1,26 @@
 public class OavpAmplitude {
-  float value = 0;
-  float duration;
-  Easing easing;
-  Ani ani;
+  private float value = 0;
+  private float duration = 1;
+  private Easing easing = Ani.LINEAR;
+  private Ani ani;
 
-  OavpAmplitude(float duration, Easing easing) {
+  OavpAmplitude() {}
+
+  public OavpAmplitude duration(float duration) {
     this.duration = duration;
-    this.easing = easing;
+    return this;
   }
 
-  float getValue() {
+  public OavpAmplitude easing(Easing easing) {
+    this.easing = easing;
+    return this;
+  }
+
+  public float getValue() {
     return value;
   }
 
-  void update(Boolean trigger) {
+  public void update(Boolean trigger) {
     if (trigger) {
       value = 1;
       ani = Ani.to(this, duration, "value", 0, easing);
@@ -778,8 +785,9 @@ public class OavpEntityManager {
     return imgs.get(name);
   }
 
-  void addAmplitude(String name, float duration, Easing easing) {
-    amplitudes.put(name, new OavpAmplitude(duration, easing));
+  OavpAmplitude addAmplitude(String name) {
+    amplitudes.put(name, new OavpAmplitude());
+    return amplitudes.get(name);
   }
 
   OavpAmplitude getAmplitude(String name) {
