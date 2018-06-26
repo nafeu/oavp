@@ -76,7 +76,7 @@ public class OavpAnalysis {
     }
   }
 
-  void detectBeat() {
+  private void detectBeat() {
     if (isLineIn) {
       beat.detect(input.mix);
     } else {
@@ -84,35 +84,35 @@ public class OavpAnalysis {
     }
   }
 
-  float getCurrLeftLevel() {
+  public float getCurrLeftLevel() {
     if (isLineIn) {
       return input.left.level();
     }
     return player.left.level();
   }
 
-  float getCurrRightLevel() {
+  public float getCurrRightLevel() {
     if (isLineIn) {
       return input.right.level();
     }
     return player.right.level();
   }
 
-  float getCurrLeftBuffer(int i) {
+  public float getCurrLeftBuffer(int i) {
     if (isLineIn) {
       return input.left.get(i);
     }
     return player.left.get(i);
   }
 
-  float getCurrRightBuffer(int i) {
+  public float getCurrRightBuffer(int i) {
     if (isLineIn) {
       return input.right.get(i);
     }
     return player.right.get(i);
   }
 
-  void forwardMix() {
+  private void forwardMix() {
     if (isLineIn) {
       fft.forward( input.mix );
     } else {
@@ -282,16 +282,5 @@ public class OavpAnalysis {
 
   public boolean isBeatOnset() {
     return beat.isOnset();
-  }
-
-  public void update(List trackers) {
-    Iterator<OavpTracker> i = trackers.iterator();
-    while(i.hasNext()) {
-      OavpTracker item = i.next();
-      item.update();
-      if (item.isDead) {
-        i.remove();
-      }
-    }
   }
 }
