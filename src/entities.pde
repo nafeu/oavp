@@ -1,17 +1,17 @@
-public class OavpAmplitude {
+public class OavpPulser {
   private float value = 0;
   private float duration = 1;
   private Easing easing = Ani.LINEAR;
   private Ani ani;
 
-  OavpAmplitude() {}
+  OavpPulser() {}
 
-  public OavpAmplitude duration(float duration) {
+  public OavpPulser duration(float duration) {
     this.duration = duration;
     return this;
   }
 
-  public OavpAmplitude easing(Easing easing) {
+  public OavpPulser easing(Easing easing) {
     this.easing = easing;
     return this;
   }
@@ -20,10 +20,14 @@ public class OavpAmplitude {
     return value;
   }
 
-  public void update(Boolean trigger) {
+  public void pulse() {
+    value = 1;
+    ani = Ani.to(this, duration, "value", 0, easing);
+  }
+
+  public void pulseIf(boolean trigger) {
     if (trigger) {
-      value = 1;
-      ani = Ani.to(this, duration, "value", 0, easing);
+      pulse();
     }
   }
 }
@@ -729,7 +733,7 @@ public class OavpEntityManager {
   Minim minim;
   HashMap<String, PShape> svgs;
   HashMap<String, PImage> imgs;
-  HashMap<String, OavpAmplitude> amplitudes;
+  HashMap<String, OavpPulser> pulsers;
   HashMap<String, OavpInterval> intervals;
   HashMap<String, OavpGridInterval> gridIntervals;
   HashMap<String, List> trackersStorage;
@@ -746,7 +750,7 @@ public class OavpEntityManager {
     this.minim = minim;
     svgs = new HashMap<String, PShape>();
     imgs = new HashMap<String, PImage>();
-    amplitudes = new HashMap<String, OavpAmplitude>();
+    pulsers = new HashMap<String, OavpPulser>();
     intervals = new HashMap<String, OavpInterval>();
     trackersStorage = new HashMap<String, List>();
     rhythms = new HashMap<String, OavpRhythm>();
@@ -785,13 +789,13 @@ public class OavpEntityManager {
     return imgs.get(name);
   }
 
-  OavpAmplitude addAmplitude(String name) {
-    amplitudes.put(name, new OavpAmplitude());
-    return amplitudes.get(name);
+  OavpPulser addPulser(String name) {
+    pulsers.put(name, new OavpPulser());
+    return pulsers.get(name);
   }
 
-  OavpAmplitude getAmplitude(String name) {
-    return amplitudes.get(name);
+  OavpPulser getPulser(String name) {
+    return pulsers.get(name);
   }
 
   void addInterval(String name, int storageSize, int snapshotSize) {

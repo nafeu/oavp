@@ -2,7 +2,7 @@ class OavpVisualizer {
   public Draw draw;
   OavpEntityManager entities;
   OavpPosition cursor;
-  OavpAmplitude currAmplitude;
+  OavpPulser currPulser;
   OavpInterval currInterval;
   OavpGridInterval currGridInterval;
   OavpTerrain currTerrain;
@@ -190,8 +190,8 @@ class OavpVisualizer {
     return this;
   }
 
-  OavpVisualizer useAmplitude(String name) {
-    currAmplitude = entities.getAmplitude(name);
+  OavpVisualizer usePulser(String name) {
+    currPulser = entities.getPulser(name);
     return this;
   }
 
@@ -297,9 +297,9 @@ class OavpVisualizer {
     OavpVisualizer basicSpectrumBars() {
       int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
-        float rawAmplitude = analysis.getSpectrumVal(i);
-        float displayAmplitude = analysis.scaleSpectrumVal(rawAmplitude);
-        rect(i * (currWidth / avgSize), currHeight, (currWidth / avgSize), -currHeight * displayAmplitude);
+        float rawPulser = analysis.getSpectrumVal(i);
+        float displayPulser = analysis.scaleSpectrumVal(rawPulser);
+        rect(i * (currWidth / avgSize), currHeight, (currWidth / avgSize), -currHeight * displayPulser);
       }
       return OavpVisualizer.this;
     }
@@ -421,9 +421,9 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer amplitudeFlatbox(float scale) {
-      OavpAmplitude amplitude = OavpVisualizer.this.currAmplitude;
-      shapes.flatbox(0, 0, 0, scale, -amplitude.getValue() * scale, scale);
+    OavpVisualizer pulserFlatbox(float scale) {
+      OavpPulser pulser = OavpVisualizer.this.currPulser;
+      shapes.flatbox(0, 0, 0, scale, -pulser.getValue() * scale, scale);
       return OavpVisualizer.this;
     }
 
@@ -443,18 +443,18 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer amplitudeCircle(float minRadius, float maxRadius) {
-      OavpAmplitude amplitude = OavpVisualizer.this.currAmplitude;
+    OavpVisualizer pulserCircle(float minRadius, float maxRadius) {
+      OavpPulser pulser = OavpVisualizer.this.currPulser;
       ellipseMode(RADIUS);
       float scale = maxRadius - minRadius;
-      ellipse(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
+      ellipse(0, 0, pulser.getValue() * scale, pulser.getValue() * scale);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer amplitudeSquare(float scale) {
-      OavpAmplitude amplitude = OavpVisualizer.this.currAmplitude;
+    OavpVisualizer pulserSquare(float scale) {
+      OavpPulser pulser = OavpVisualizer.this.currPulser;
       rectMode(CENTER);
-      rect(0, 0, amplitude.getValue() * scale, amplitude.getValue() * scale);
+      rect(0, 0, pulser.getValue() * scale, pulser.getValue() * scale);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }

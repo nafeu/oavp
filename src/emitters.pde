@@ -2,7 +2,7 @@ public class OavpEmitter {
 
   OavpAnalysis analysis;
   OavpEntityManager entities;
-  OavpAmplitude currAmplitude;
+  OavpPulser currPulser;
   OavpInterval currInterval;
   OavpGridInterval currGridInterval;
   List currTrackers;
@@ -24,8 +24,8 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter useAmplitude(String name) {
-    currAmplitude = entities.getAmplitude(name);
+  OavpEmitter usePulser(String name) {
+    currPulser = entities.getPulser(name);
     return this;
   }
 
