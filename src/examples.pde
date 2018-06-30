@@ -1,12 +1,10 @@
 void setupExamples() {
-  entities.addPulser("example")
-    .duration(0.5)
-    .easing(Ani.QUAD_IN_OUT);
+  entities.addInterval("example", 100, 1);
 }
 
 void updateExamples() {
 
-  entities.getPulser("example").pulseIf(analysis.isBeatOnset());
+  entities.getInterval("example").update(analysis.getLevel(), 1);
 }
 
 void drawExamples() {
@@ -14,8 +12,9 @@ void drawExamples() {
 
   visualizers
     .create()
-    .center().middle()
-    .usePulser("example")
-    .draw.pulserSquare(oavp.width(0.5))
+    .left().middle()
+    .useInterval("example")
+    .dimensions(oavp.w, oavp.height(0.5))
+    .draw.intervalLevelBars(oavp.width(0.5))
     .done();
 }

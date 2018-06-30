@@ -33,20 +33,24 @@ public class OavpPulser {
 }
 
 public class OavpInterval {
-  float[][] intervalData;
-  int storageSize;
-  int snapshotSize;
-  int frameDelayCount = 0;
-  int delay;
+  private float[][] intervalData;
+  private int storageSize;
+  private int snapshotSize;
+  private int frameDelayCount = 0;
+  private int delay = 1;
 
   OavpInterval(int storageSize, int snapshotSize) {
     this.storageSize = storageSize;
     this.snapshotSize = snapshotSize;
-    this.delay = 1;
     intervalData = new float[storageSize][snapshotSize];
   }
 
-  void update(float[] snapshot) {
+  public OavpInterval delay(int delay) {
+    this.delay = delay;
+    return this;
+  }
+
+  public void update(float[] snapshot) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[storageSize][snapshotSize];
       for (int i = 1; i < storageSize; i++) {
@@ -62,7 +66,7 @@ public class OavpInterval {
     }
   }
 
-  void update(float snapshot, float averageWeight) {
+  public void update(float snapshot, float averageWeight) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[storageSize][snapshotSize];
       for (int i = 1; i < storageSize; i++) {
@@ -76,7 +80,7 @@ public class OavpInterval {
     }
   }
 
-  void update(boolean rawSnapshot) {
+  public void update(boolean rawSnapshot) {
     float snapshot;
     if (rawSnapshot) {
       snapshot = 1.0;
@@ -96,23 +100,19 @@ public class OavpInterval {
     }
   }
 
-  float[] getIntervalData(int i) {
+  public float[] getIntervalData(int i) {
     return intervalData[i];
   }
 
-  int getIntervalSize() {
+  public int getIntervalSize() {
     return intervalData.length;
   }
 
-  void setDelay(int delay) {
-    this.delay = delay;
-  }
-
-  float average(float a, float b, float weight) {
+  private float average(float a, float b, float weight) {
     return (a + (weight * b)) / (1 + weight);
   }
 
-  float average(float a, float b) {
+  private float average(float a, float b) {
     return (a + b) / 2;
   }
 }
