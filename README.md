@@ -2,7 +2,11 @@
 
 A set of tools to help build interactive audio visualizers with [processing](https://processing.org), written in Java using the Processing java-applet library with the help of Minim, Ani and the Beads project libraries.
 
-# Installation / Usage
+# Getting Started / Docs
+
+Check out the full guide and docs available [at the repo's wiki here](https://github.com/nafeu/oavp/wiki). Documentation is a still a huge work-in-progress and I would greatly appreciate if anyone was interested in helping out :)
+
+# Setup and Installation
 
 - Download and install the [`Processing IDE`](https://processing.org/download/)
 - Using the Processing IDE, install the following packages:
