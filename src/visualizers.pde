@@ -427,13 +427,13 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer gridIntervalGridSquare() {
+    OavpVisualizer gridIntervalLevelSquare() {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
-      float colScale = currWidth / gridInterval.numCols;
-      float rowScale = currHeight / gridInterval.numRows;
-      for (int i = 0; i < gridInterval.numRows; i++) {
-        for (int j = 0; j < gridInterval.numCols; j++) {
+      float colScale = currWidth / gridInterval.getNumCols();
+      float rowScale = currHeight / gridInterval.getNumRows();
+      for (int i = 0; i < gridInterval.getNumRows(); i++) {
+        for (int j = 0; j < gridInterval.getNumCols(); j++) {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
           rect(x, y, gridInterval.getData(i, j) * colScale, gridInterval.getData(i, j) * rowScale);
@@ -485,10 +485,10 @@ class OavpVisualizer {
 
     OavpVisualizer gridIntervalFlatbox(float scale) {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
-      float colScale = currWidth / gridInterval.numCols;
-      float rowScale = currHeight / gridInterval.numRows;
-      for (int i = 0; i < gridInterval.numRows; i++) {
-        for (int j = 0; j < gridInterval.numCols; j++) {
+      float colScale = currWidth / gridInterval.getNumCols();
+      float rowScale = currHeight / gridInterval.getNumRows();
+      for (int i = 0; i < gridInterval.getNumRows(); i++) {
+        for (int j = 0; j < gridInterval.getNumCols(); j++) {
           float x = (j * colScale);
           float z = (i * rowScale);
           float finalLevel = analysis.scaleLeftLevel(gridInterval.getData(i, j));
@@ -501,10 +501,10 @@ class OavpVisualizer {
     OavpVisualizer gridIntervalSquare() {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
-      float colScale = currWidth / gridInterval.numCols;
-      float rowScale = currHeight / gridInterval.numRows;
-      for (int i = 0; i < gridInterval.numRows; i++) {
-        for (int j = 0; j < gridInterval.numCols; j++) {
+      float colScale = currWidth / gridInterval.getNumCols();
+      float rowScale = currHeight / gridInterval.getNumRows();
+      for (int i = 0; i < gridInterval.getNumRows(); i++) {
+        for (int j = 0; j < gridInterval.getNumCols(); j++) {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
           float finalLevel = gridInterval.getData(i, j);

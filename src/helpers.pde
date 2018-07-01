@@ -13,6 +13,13 @@ int quantizedNoise(float phase, float granularity, int variance) {
   return int(noise(phase * granularity) * variance);
 }
 
+float castBoolean(boolean bool, float valTrue, float valFalse) {
+  if (bool) {
+    return valTrue;
+  }
+  return valFalse;
+}
+
 void updateHelpers() {
   normalMouseX = map(mouseX, 0, width, 0, 1);
   normalMouseY = map(mouseY, 0, height, 0, 1);

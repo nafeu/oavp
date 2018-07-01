@@ -1,11 +1,11 @@
 void setupExamples() {
   entities.addCamera("default");
 
-  entities.addInterval("spectrumMesh", 30, analysis.getAvgSize());
+  entities.addGridInterval("example", 10, 10);
 }
 
 void updateExamples() {
-  entities.getInterval("spectrumMesh").update(analysis.getSpectrum());
+  entities.getGridInterval("example").updateDiagonal(analysis.getLevel());
 
   entities.useCamera("default");
 }
@@ -14,13 +14,11 @@ void drawExamples() {
   palette.reset(palette.flat.black, palette.flat.white, 2);
 
   visualizers
-    .useInterval("spectrumMesh")
+    .useGridInterval("example")
     .create()
-    .center().middle()
-    .moveUp(oavp.width(0.125))
-    .rotate(45, 0, 45)
-    .dimensions(oavp.width(0.25), oavp.height(0.25))
-    .draw.intervalSpectrumMesh(oavp.width(0.25), 2)
+    .left().top()
+    .dimensions(oavp.w, oavp.h)
+    .draw.gridIntervalSquare()
     .done();
 }
 

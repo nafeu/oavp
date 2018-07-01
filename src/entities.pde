@@ -38,6 +38,7 @@ public class OavpInterval {
   private int snapshotSize;
   private int frameDelayCount = 0;
   private int delay = 1;
+  private float averageWeight = 1;
 
   OavpInterval(int storageSize, int snapshotSize) {
     this.storageSize = storageSize;
@@ -47,6 +48,11 @@ public class OavpInterval {
 
   public OavpInterval delay(int delay) {
     this.delay = delay;
+    return this;
+  }
+
+  public OavpInterval averageWeight(float averageWeight) {
+    this.averageWeight = averageWeight;
     return this;
   }
 
@@ -66,7 +72,7 @@ public class OavpInterval {
     }
   }
 
-  public void update(float snapshot, float averageWeight) {
+  public void update(float snapshot) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[storageSize][snapshotSize];
       for (int i = 1; i < storageSize; i++) {
@@ -118,20 +124,30 @@ public class OavpInterval {
 }
 
 public class OavpGridInterval {
-  float[][] data;
-  public int numRows;
-  public int numCols;
-  int frameDelayCount = 0;
-  int delay;
+  private float[][] data;
+  private int numRows;
+  private int numCols;
+  private int frameDelayCount = 0;
+  private int delay = 1;
+  private float averageWeight = 1;
 
   OavpGridInterval(int numRows, int numCols) {
     this.numRows = numRows;
     this.numCols = numCols;
-    this.delay = 1;
     data = new float[numRows][numCols];
   }
 
-  void update(float value, float averageWeight) {
+  public OavpGridInterval delay(int delay) {
+    this.delay = delay;
+    return this;
+  }
+
+  public OavpGridInterval averageWeight(float averageWeight) {
+    this.averageWeight = averageWeight;
+    return this;
+  }
+
+  public void update(float value) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[numRows][numCols];
       for (int i = 0; i < numRows; i++) {
@@ -154,7 +170,7 @@ public class OavpGridInterval {
     }
   }
 
-  void updateDiagonal(float value, float averageWeight) {
+  public void updateDiagonal(float value) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[numRows][numCols];
       for (int i = 0; i < numRows; i++) {
@@ -181,7 +197,7 @@ public class OavpGridInterval {
     }
   }
 
-  void updateDimensional(float value, float averageWeight) {
+  public void updateDimensional(float value) {
     if (frameDelayCount == delay) {
       float[][] temp = new float[numRows][numCols];
       for (int i = 0; i < numRows; i++) {
@@ -200,22 +216,19 @@ public class OavpGridInterval {
     }
   }
 
-  float castBoolean(boolean bool) {
-    if (bool) {
-      return 1.0;
-    }
-    return 0.0;
-  }
-
-  float getData(int i, int j) {
+  public float getData(int i, int j) {
     return data[i][j];
   }
 
-  void setDelay(int delay) {
-    this.delay = delay;
+  public int getNumCols() {
+    return numCols;
   }
 
-  float average(float a, float b, float weight) {
+  public int getNumRows() {
+    return numRows;
+  }
+
+  private float average(float a, float b, float weight) {
     return (a + (weight * b)) / (1 + weight);
   }
 }
@@ -752,6 +765,7 @@ public class OavpEntityManager {
     imgs = new HashMap<String, PImage>();
     pulsers = new HashMap<String, OavpPulser>();
     intervals = new HashMap<String, OavpInterval>();
+    gridIntervals = new HashMap<String, OavpGridInterval>();
     trackersStorage = new HashMap<String, List>();
     rhythms = new HashMap<String, OavpRhythm>();
     counters = new HashMap<String, OavpCounter>();
