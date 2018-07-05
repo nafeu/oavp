@@ -260,42 +260,48 @@ public class OavpEmission {
 }
 
 public class OavpRhythm {
-  AudioOutput out;
-  BeatDetect beat;
-  boolean isPlaying;
-  float tempo = 60;
-  float rhythm = 1;
-  int limit = 1000;
-  Minim minim;
+  private AudioOutput out;
+  private BeatDetect beat;
+  private boolean isPlaying;
+  private float tempo = 60;
+  private float rhythm = 1;
+  private int limit = 1000;
+  private int sensitivity = 100;
+  private Minim minim;
 
   OavpRhythm(Minim minim) {
     this.minim = minim;
     this.rhythm = rhythm;
     beat = new BeatDetect();
-    beat.setSensitivity(100);
+    beat.setSensitivity(sensitivity);
   }
 
-  OavpRhythm duration(float duration) {
+  public OavpRhythm duration(float duration) {
     this.tempo = 60 / duration;
     return this;
   }
 
-  OavpRhythm tempo(float tempo) {
+  public OavpRhythm tempo(float tempo) {
     this.tempo = tempo;
     return this;
   }
 
-  OavpRhythm rhythm(float rhythm) {
+  public OavpRhythm rhythm(float rhythm) {
     this.rhythm = rhythm;
     return this;
   }
 
-  OavpRhythm limit(int limit) {
+  public OavpRhythm limit(int limit) {
     this.limit = limit;
     return this;
   }
 
-  void start() {
+  public OavpRhythm sensitivity(int sensitivity) {
+    this.sensitivity = sensitivity;
+    return this;
+  }
+
+  public void start() {
     out = minim.getLineOut();
     out.setTempo(tempo);
     out.pauseNotes();
@@ -307,11 +313,11 @@ public class OavpRhythm {
     out.mute();
   }
 
-  void update() {
+  public void update() {
     beat.detect(out.mix);
   }
 
-  void toggleNotes() {
+  public void toggleNotes() {
     if (isPlaying) {
       out.pauseNotes();
       isPlaying = false;
@@ -321,11 +327,11 @@ public class OavpRhythm {
     }
   }
 
-  boolean onRhythm() {
+  public boolean onRhythm() {
     return beat.isOnset();
   }
 
-  void toggleMute() {
+  public void toggleMute() {
     if (out.isMuted()) {
       out.unmute();
     } else {

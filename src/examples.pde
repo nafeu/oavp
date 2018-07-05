@@ -1,9 +1,17 @@
 void setupExamples() {
   entities.addCamera("default");
-  entities.addEmissions("example");
+
+  entities.addRhythm("example")
+    .start();
+
+  entities.addPulser("example")
+    .duration(0.5)
+    .easing(Ani.QUAD_IN_OUT);
 }
 
 void updateExamples() {
+
+  entities.getPulser("example").pulseIf(entities.onRhythm("example"));
 
   entities.useCamera("default");
 }
@@ -11,17 +19,11 @@ void updateExamples() {
 void drawExamples() {
   palette.reset(palette.flat.black, palette.flat.white, 2);
 
-  emitters
-    .useEmissions("example")
-    .duration(2)
-    .easing(Ani.QUAD_IN_OUT)
-    .emitIf(analysis.isBeatOnset());
-
   visualizers
-    .useEmissions("example")
     .create()
     .center().middle()
-    .draw.emissionSquare(oavp.width(0.25), oavp.width(0.5))
+    .rotateClockwise(frameCount(0.25))
+    .draw.basicSquare(oavp.width(0.5) * entities.getPulser("example").getValue())
     .done();
 }
 
