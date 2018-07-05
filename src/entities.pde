@@ -574,28 +574,28 @@ public class OavpColorRotator {
 }
 
 public class OavpOscillator {
-  float duration = 1;
-  Easing easing = Ani.LINEAR;
-  Ani ani;
-  float value = 0;
+  private float duration = 1;
+  private Easing easing = Ani.LINEAR;
+  private Ani ani;
+  private float value = 0;
 
-  OavpOscillator duration(float duration) {
+  public OavpOscillator duration(float duration) {
     this.duration = duration;
     return this;
   }
 
-  OavpOscillator easing(Easing easing) {
+  public OavpOscillator easing(Easing easing) {
     this.easing = easing;
     return this;
   }
 
   OavpOscillator(){}
 
-  void start() {
+  public void start() {
     loop();
   }
 
-  void loop() {
+  private void loop() {
     if (value == 0) {
       ani = Ani.to(this, duration, "value", 1, easing, "onEnd:loop");
     } else {
@@ -603,11 +603,11 @@ public class OavpOscillator {
     }
   }
 
-  float getValue() {
+  public float getValue() {
     return value;
   }
 
-  float getValue(float start, float end) {
+  public float getValue(float start, float end) {
     return map(value, 0, 1, start, end);
   }
 }
