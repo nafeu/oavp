@@ -8,7 +8,7 @@ class OavpVisualizer {
   OavpTerrain currTerrain;
   float currWidth;
   float currHeight;
-  List currTrackers;
+  List currEmissions;
   OavpRhythm currRhythm;
 
   OavpVisualizer(OavpAnalysis analysis, OavpPosition cursor, OavpEntityManager entities) {
@@ -205,8 +205,8 @@ class OavpVisualizer {
     return this;
   }
 
-  OavpVisualizer useTrackers(String name) {
-    currTrackers = entities.getTrackers(name);
+  OavpVisualizer useEmissions(String name) {
+    currEmissions = entities.getEmissions(name);
     return this;
   }
 
@@ -515,16 +515,16 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerSpectrumWire(float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
+    OavpVisualizer emissionSpectrumWire(float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
         pushMatrix();
-        translate(0, 0, -tracker.value * scale);
+        translate(0, 0, -emission.value * scale);
         beginShape();
-        float offset = currWidth / tracker.payload.length;
-        for (int i = 0; i < tracker.payload.length; i++) {
-          vertex(i * offset, (currHeight / 2) - analysis.scaleSpectrumVal(tracker.payload[i]) * (currHeight / 2));
+        float offset = currWidth / emission.payload.length;
+        for (int i = 0; i < emission.payload.length; i++) {
+          vertex(i * offset, (currHeight / 2) - analysis.scaleSpectrumVal(emission.payload[i]) * (currHeight / 2));
         }
         endShape();
         rect(0, 0, currWidth, currHeight);
@@ -533,43 +533,43 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerSquare(float size, float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
+    OavpVisualizer emissionSquare(float size, float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
-        rect(0, -tracker.value * scale, size, size);
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
+        rect(0, -emission.value * scale, size, size);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerColorSquare(float size, float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
+    OavpVisualizer emissionColorSquare(float size, float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
         pushStyle();
-        fill((color) tracker.payload[0]);
-        rect(0, -tracker.value * scale, size, size);
+        fill((color) emission.payload[0]);
+        rect(0, -emission.value * scale, size, size);
         popStyle();
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerColorDiamond(float size, float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
+    OavpVisualizer emissionColorDiamond(float size, float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
         pushStyle();
-        fill((color) tracker.payload[0]);
+        fill((color) emission.payload[0]);
         beginShape();
-        vertex(0, -size + tracker.value * scale);
-        vertex(size, tracker.value * scale);
-        vertex(0, size + tracker.value * scale);
-        vertex(-size, tracker.value * scale);
+        vertex(0, -size + emission.value * scale);
+        vertex(size, emission.value * scale);
+        vertex(0, size + emission.value * scale);
+        vertex(-size, emission.value * scale);
         endShape();
         popStyle();
       }
@@ -577,26 +577,26 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerCircle(float radius, float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
-        ellipse(0, -tracker.value * scale, radius, radius);
+    OavpVisualizer emissionCircle(float radius, float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
+        ellipse(0, -emission.value * scale, radius, radius);
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerConnectedRings(float radius, float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
+    OavpVisualizer emissionConnectedRings(float radius, float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
         float xInit = 0;
         float yInit = 0;
 
         beginShape();
-        for (int i = 0; i < tracker.payload.length; ++i) {
-          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
-          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+        for (int i = 0; i < emission.payload.length; ++i) {
+          float x = (emission.value * scale) * cos(radians(emission.payload[i]));
+          float y = (emission.value * scale) * sin(radians(emission.payload[i]));
           vertex(x, y);
           if (i == 0) {
             xInit = x;
@@ -606,28 +606,28 @@ class OavpVisualizer {
         vertex(xInit, yInit);
         endShape();
 
-        for (int i = 0; i < tracker.payload.length; ++i) {
-          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
-          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+        for (int i = 0; i < emission.payload.length; ++i) {
+          float x = (emission.value * scale) * cos(radians(emission.payload[i]));
+          float y = (emission.value * scale) * sin(radians(emission.payload[i]));
           ellipse(x, y, radius, radius);
         }
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerColorConnectedRings(float radius, float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
+    OavpVisualizer emissionColorConnectedRings(float radius, float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
         float xInit = 0;
         float yInit = 0;
 
         pushStyle();
-        stroke((color) tracker.payload[tracker.payload.length - 1]);
+        stroke((color) emission.payload[emission.payload.length - 1]);
         beginShape();
-        for (int i = 0; i < tracker.payload.length - 1; ++i) {
-          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
-          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+        for (int i = 0; i < emission.payload.length - 1; ++i) {
+          float x = (emission.value * scale) * cos(radians(emission.payload[i]));
+          float y = (emission.value * scale) * sin(radians(emission.payload[i]));
           vertex(x, y);
           if (i == 0) {
             xInit = x;
@@ -637,9 +637,9 @@ class OavpVisualizer {
         vertex(xInit, yInit);
         endShape();
 
-        for (int i = 0; i < tracker.payload.length - 1; ++i) {
-          float x = (tracker.value * scale) * cos(radians(tracker.payload[i]));
-          float y = (tracker.value * scale) * sin(radians(tracker.payload[i]));
+        for (int i = 0; i < emission.payload.length - 1; ++i) {
+          float x = (emission.value * scale) * cos(radians(emission.payload[i]));
+          float y = (emission.value * scale) * sin(radians(emission.payload[i]));
           ellipse(x, y, radius, radius);
         }
         popStyle();
@@ -647,42 +647,42 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerSplashSquare(float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
+    OavpVisualizer emissionSplashSquare(float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
-        rect(0, 0, tracker.value * scale, tracker.value * scale);
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
+        rect(0, 0, emission.value * scale, emission.value * scale);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerSplashCircle(float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
-        ellipse(0, 0, tracker.value * scale, tracker.value * scale);
+    OavpVisualizer emissionSplashCircle(float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
+        ellipse(0, 0, emission.value * scale, emission.value * scale);
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerChevron(float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
-        shapes.chevron(0, -tracker.value * scale, currWidth, currHeight);
+    OavpVisualizer emissionChevron(float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
+        shapes.chevron(0, -emission.value * scale, currWidth, currHeight);
       }
       return OavpVisualizer.this;
     }
 
-    OavpVisualizer trackerColorChevron(float scale) {
-      List trackers = OavpVisualizer.this.currTrackers;
-      for (ListIterator<OavpTracker> iter = trackers.listIterator(); iter.hasNext();) {
-        OavpTracker tracker = iter.next();
+    OavpVisualizer emissionColorChevron(float scale) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
         pushStyle();
-        stroke((color) tracker.payload[0]);
-        shapes.chevron(0, -tracker.value * scale, currWidth, currHeight);
+        stroke((color) emission.payload[0]);
+        shapes.chevron(0, -emission.value * scale, currWidth, currHeight);
         popStyle();
       }
       return OavpVisualizer.this;

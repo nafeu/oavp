@@ -5,7 +5,7 @@ public class OavpEmitter {
   OavpPulser currPulser;
   OavpInterval currInterval;
   OavpGridInterval currGridInterval;
-  List currTrackers;
+  List currEmissions;
   float duration = 1;
   Easing easing = Ani.LINEAR;
 
@@ -39,14 +39,19 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter useTrackers(String name) {
-    currTrackers = entities.getTrackers(name);
+  OavpEmitter useEmissions(String name) {
+    currEmissions = entities.getEmissions(name);
     return this;
   }
 
-  OavpEmitter emit(boolean trigger) {
+  OavpEmitter emit() {
+    currEmissions.add(new OavpEmission(duration, easing));
+    return this;
+  }
+
+  OavpEmitter emitIf(boolean trigger) {
     if (trigger) {
-      currTrackers.add(new OavpTracker(duration, easing));
+      currEmissions.add(new OavpEmission(duration, easing));
     }
     return this;
   }
@@ -57,7 +62,7 @@ public class OavpEmitter {
       for (int i = 0; i < count; i++) {
         payload[i] = i * angleIncrement;
       }
-      currTrackers.add(new OavpTracker(duration, easing, payload));
+      currEmissions.add(new OavpEmission(duration, easing, payload));
     }
     return this;
   }
@@ -69,7 +74,7 @@ public class OavpEmitter {
         payload[i] = i * angleIncrement;
       }
       payload[count] = inputColor;
-      currTrackers.add(new OavpTracker(duration, easing, payload));
+      currEmissions.add(new OavpEmission(duration, easing, payload));
     }
     return this;
   }
@@ -80,7 +85,7 @@ public class OavpEmitter {
       for (int i = 0; i < count; i++) {
         payload[i] = random(0, 360);
       }
-      currTrackers.add(new OavpTracker(duration, easing, payload));
+      currEmissions.add(new OavpEmission(duration, easing, payload));
     }
     return this;
   }
@@ -92,7 +97,7 @@ public class OavpEmitter {
         payload[i] = random(0, 360);
       }
       payload[count] = inputColor;
-      currTrackers.add(new OavpTracker(duration, easing, payload));
+      currEmissions.add(new OavpEmission(duration, easing, payload));
     }
     return this;
   }
@@ -101,7 +106,7 @@ public class OavpEmitter {
   OavpEmitter emitColor(color inputColor, boolean trigger) {
     if (trigger) {
       float[] payload = new float[]{ inputColor };
-      currTrackers.add(new OavpTracker(duration, easing, payload));
+      currEmissions.add(new OavpEmission(duration, easing, payload));
     }
     return this;
   }
@@ -112,7 +117,7 @@ public class OavpEmitter {
       payload[i] = analysis.getSpectrumVal(i);
     }
     if (trigger) {
-      currTrackers.add(new OavpTracker(duration, easing, payload));
+      currEmissions.add(new OavpEmission(duration, easing, payload));
     }
     return this;
   }

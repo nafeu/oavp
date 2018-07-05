@@ -1,11 +1,9 @@
 void setupExamples() {
   entities.addCamera("default");
-
-  entities.addGridInterval("example", 10, 10);
+  entities.addEmissions("example");
 }
 
 void updateExamples() {
-  entities.getGridInterval("example").updateDiagonal(analysis.getLevel());
 
   entities.useCamera("default");
 }
@@ -13,12 +11,17 @@ void updateExamples() {
 void drawExamples() {
   palette.reset(palette.flat.black, palette.flat.white, 2);
 
+  emitters
+    .useEmissions("example")
+    .duration(2)
+    .easing(Ani.QUAD_IN_OUT)
+    .emitIf(analysis.isBeatOnset());
+
   visualizers
-    .useGridInterval("example")
+    .useEmissions("example")
     .create()
-    .left().top()
-    .dimensions(oavp.w, oavp.h)
-    .draw.gridIntervalSquare()
+    .center().middle()
+    .draw.emissionSquare(oavp.width(0.25), oavp.width(0.5))
     .done();
 }
 

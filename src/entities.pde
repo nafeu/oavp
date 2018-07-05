@@ -233,26 +233,26 @@ public class OavpGridInterval {
   }
 }
 
-public class OavpTracker {
-  float value = 0;
-  float target = 1;
-  float[] payload;
-  boolean isDead = false;
+public class OavpEmission {
+  public float value = 0;
+  private final float target = 1;
+  public float[] payload;
+  public boolean isDead = false;
 
-  OavpTracker(float duration, Easing easing) {
+  OavpEmission(float duration, Easing easing) {
     start(duration, easing);
   }
 
-  OavpTracker(float duration, Easing easing, float[] payload) {
+  OavpEmission(float duration, Easing easing, float[] payload) {
     this.payload = payload;
     start(duration, easing);
   }
 
-  void start(float duration, Easing easing) {
+  private void start(float duration, Easing easing) {
     Ani.to(this, duration, "value", target, easing);
   }
 
-  void update() {
+  public void update() {
     if (value == target) {
       isDead = true;
     }
@@ -749,7 +749,7 @@ public class OavpEntityManager {
   HashMap<String, OavpPulser> pulsers;
   HashMap<String, OavpInterval> intervals;
   HashMap<String, OavpGridInterval> gridIntervals;
-  HashMap<String, List> trackersStorage;
+  HashMap<String, List> emissionsStorage;
   HashMap<String, OavpRhythm> rhythms;
   HashMap<String, OavpCounter> counters;
   HashMap<String, OavpRotator> rotators;
@@ -766,7 +766,7 @@ public class OavpEntityManager {
     pulsers = new HashMap<String, OavpPulser>();
     intervals = new HashMap<String, OavpInterval>();
     gridIntervals = new HashMap<String, OavpGridInterval>();
-    trackersStorage = new HashMap<String, List>();
+    emissionsStorage = new HashMap<String, List>();
     rhythms = new HashMap<String, OavpRhythm>();
     counters = new HashMap<String, OavpCounter>();
     rotators = new HashMap<String, OavpRotator>();
@@ -828,16 +828,16 @@ public class OavpEntityManager {
     return gridIntervals.get(name);
   }
 
-  void addTrackers(String name) {
-    trackersStorage.put(name, new ArrayList());
+  void addEmissions(String name) {
+    emissionsStorage.put(name, new ArrayList());
   }
 
-  void updateTrackers() {
-    for (HashMap.Entry<String, List> entry : trackersStorage.entrySet())
+  void updateEmissions() {
+    for (HashMap.Entry<String, List> entry : emissionsStorage.entrySet())
     {
-      Iterator<OavpTracker> i = entry.getValue().iterator();
+      Iterator<OavpEmission> i = entry.getValue().iterator();
       while(i.hasNext()) {
-        OavpTracker item = i.next();
+        OavpEmission item = i.next();
         item.update();
         if (item.isDead) {
           i.remove();
@@ -846,8 +846,8 @@ public class OavpEntityManager {
     }
   }
 
-  List getTrackers(String name) {
-    return trackersStorage.get(name);
+  List getEmissions(String name) {
+    return emissionsStorage.get(name);
   }
 
   OavpRhythm addRhythm(String name) {
@@ -987,6 +987,6 @@ public class OavpEntityManager {
 
   void update() {
     updateRhythms();
-    updateTrackers();
+    updateEmissions();
   }
 }
