@@ -4,14 +4,17 @@ void setupExamples() {
   entities.addRhythm("clock")
     .start();
 
-  entities.addCounter("spinner")
+  entities.addRotator("movement")
     .duration(0.5)
-    .easing(Ani.QUAD_IN_OUT);
+    .easing(Ani.QUAD_IN_OUT)
+    .add(0, 0)
+    .add(0, 1)
+    .add(1, 1)
+    .add(1, 0);
 }
 
 void updateExamples() {
-
-  entities.getCounter("spinner").incrementIf(entities.onRhythm("clock"));
+  entities.getRotator("movement").rotateIf(entities.onRhythm("clock"));
 
   entities.useCamera("default");
 }
@@ -22,15 +25,11 @@ void drawExamples() {
   visualizers
     .create()
     .center().middle()
-    .rotateClockwise(entities.getCounter("spinner").getValue() * 22.5)
-    .draw.basicSquare(oavp.width(0.5))
-    .done();
-
-  visualizers
-    .create()
-    .center().middle()
-    .rotateClockwise(entities.getCounter("spinner").getCount() * 22.5)
-    .draw.basicSquare(oavp.width(0.5))
+    .moveLeft(oavp.width(0.25))
+    .moveUp(oavp.width(0.25))
+    .moveRight(entities.getRotator("movement").getX() * oavp.width(0.5))
+    .moveDown(entities.getRotator("movement").getY() * oavp.width(0.5))
+    .draw.basicSquare(oavp.width(0.25))
     .done();
 }
 

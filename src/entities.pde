@@ -405,29 +405,29 @@ public class OavpCounter {
 }
 
 public class OavpRotator {
-  float x = 0;
-  float y = 0;
-  float z = 0;
-  List storage;
-  float duration = 1;
-  Easing easing = Ani.LINEAR;
-  int index;
-  Ani aniX;
-  Ani aniY;
-  Ani aniZ;
+  private float x = 0;
+  private float y = 0;
+  private float z = 0;
+  private List storage;
+  private float duration = 1;
+  private Easing easing = Ani.LINEAR;
+  private int index;
+  private Ani aniX;
+  private Ani aniY;
+  private Ani aniZ;
 
   OavpRotator(){
     storage = new ArrayList();
   }
 
-  OavpRotator add(float x) {
+  public OavpRotator add(float x) {
     float[] values = new float[3];
     values[0] = x;
     storage.add(values);
     return this;
   }
 
-  OavpRotator add(float x, float y) {
+  public OavpRotator add(float x, float y) {
     float[] values = new float[3];
     values[0] = x;
     values[1] = y;
@@ -435,7 +435,7 @@ public class OavpRotator {
     return this;
   }
 
-  OavpRotator add(float x, float y, float z) {
+  public OavpRotator add(float x, float y, float z) {
     float[] values = new float[3];
     values[0] = x;
     values[1] = y;
@@ -444,28 +444,29 @@ public class OavpRotator {
     return this;
   }
 
-  OavpRotator addCombinations(float start, float end, int granularity) {
+  public OavpRotator addCombinations(float start, float end, int granularity) {
     float interpolation = (end - start) / max((granularity - 1), 1);
     for (int i = 0; i < max(granularity, 2); i++) {
       for (int j = 0; j < max(granularity, 2); j++) {
         float values[] = new float[]{i * interpolation, j * interpolation, 0};
+        println(values);
         storage.add(values);
       }
     }
     return this;
   }
 
-  OavpRotator duration(float duration) {
+  public OavpRotator duration(float duration) {
     this.duration = duration;
     return this;
   }
 
-  OavpRotator easing(Easing easing) {
+  public OavpRotator easing(Easing easing) {
     this.easing = easing;
     return this;
   }
 
-  void rotate() {
+  public void rotate() {
     int currIndex = index % storage.size();
     index = index + 1 % storage.size();
     float[] values = (float[]) storage.get(currIndex);
@@ -474,7 +475,7 @@ public class OavpRotator {
     aniZ = Ani.to(this, duration, "z", values[2], easing);
   }
 
-  void randomize() {
+  public void randomize() {
     index = floor(random(0, storage.size())) % storage.size();
     float[] values = (float[]) storage.get(index);
     aniX = Ani.to(this, duration, "x", values[0], easing);
@@ -482,27 +483,27 @@ public class OavpRotator {
     aniZ = Ani.to(this, duration, "z", values[2], easing);
   }
 
-  void rotateIf(boolean trigger) {
+  public void rotateIf(boolean trigger) {
     if (trigger) {
       rotate();
     }
   }
 
-  void randomizeIf(boolean trigger) {
+  public void randomizeIf(boolean trigger) {
     if (trigger) {
       randomize();
     }
   }
 
-  float getX() {
+  public float getX() {
     return x;
   }
 
-  float getY() {
+  public float getY() {
     return y;
   }
 
-  float getZ() {
+  public float getZ() {
     return z;
   }
 }
