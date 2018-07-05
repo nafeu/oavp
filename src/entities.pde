@@ -509,66 +509,66 @@ public class OavpRotator {
 }
 
 public class OavpColorRotator {
-  float value = 0;
-  List storage;
-  color colorA;
-  color colorB;
-  float duration = 1;
-  Easing easing = Ani.LINEAR;
-  int index;
-  Ani ani;
+  private float value = 0;
+  private List storage;
+  private color colorA;
+  private color colorB;
+  private float duration = 1;
+  private Easing easing = Ani.LINEAR;
+  private int index;
+  private Ani ani;
 
   OavpColorRotator(){
     storage = new ArrayList();
   }
 
-  OavpColorRotator add(color value) {
+  public OavpColorRotator add(color value) {
     storage.add(value);
     return this;
   }
 
-  OavpColorRotator duration(float duration) {
+  public OavpColorRotator duration(float duration) {
     this.duration = duration;
     return this;
   }
 
-  OavpColorRotator easing(Easing easing) {
+  public OavpColorRotator easing(Easing easing) {
     this.easing = easing;
     return this;
   }
 
-  void rotate() {
+  public void rotate() {
     colorA = (color) storage.get(index % storage.size());
     index = index + 1 % storage.size();
     colorB = (color) storage.get(index % storage.size());
     animate();
   }
 
-  void randomize() {
+  public void randomize() {
     colorA = (color) storage.get(index % storage.size());
     index = floor(random(0, storage.size())) % storage.size();
     colorB = (color) storage.get(index % storage.size());
     animate();
   }
 
-  void animate() {
+  private void animate() {
     value = 0;
     ani = Ani.to(this, duration, "value", 1, easing);
   }
 
-  void rotateIf(boolean trigger) {
+  public void rotateIf(boolean trigger) {
     if (trigger) {
       rotate();
     }
   }
 
-  void randomizeIf(boolean trigger) {
+  public void randomizeIf(boolean trigger) {
     if (trigger) {
       randomize();
     }
   }
 
-  color getColor() {
+  public color getColor() {
     return lerpColor(colorA, colorB, value);
   }
 }

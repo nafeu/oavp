@@ -4,33 +4,23 @@ void setupExamples() {
   entities.addRhythm("clock")
     .start();
 
-  entities.addRotator("movement")
+  entities.addColorRotator("example")
     .duration(0.5)
     .easing(Ani.QUAD_IN_OUT)
-    .add(0, 0)
-    .add(0, 1)
-    .add(1, 1)
-    .add(1, 0);
+    .add(palette.flat.red)
+    .add(palette.flat.green)
+    .add(palette.flat.blue);
 }
 
 void updateExamples() {
-  entities.getRotator("movement").rotateIf(entities.onRhythm("clock"));
+  entities.getColorRotator("example").rotateIf(entities.onRhythm("clock"));
 
   entities.useCamera("default");
 }
 
 void drawExamples() {
-  palette.reset(palette.flat.black, palette.flat.white, 2);
-
-  visualizers
-    .create()
-    .center().middle()
-    .moveLeft(oavp.width(0.25))
-    .moveUp(oavp.width(0.25))
-    .moveRight(entities.getRotator("movement").getX() * oavp.width(0.5))
-    .moveDown(entities.getRotator("movement").getY() * oavp.width(0.5))
-    .draw.basicSquare(oavp.width(0.25))
-    .done();
+  // palette.reset(palette.flat.black, palette.flat.white, 2);
+  background(entities.getColorRotator("example").getColor());
 }
 
 void keyPressed() {
