@@ -341,57 +341,57 @@ public class OavpRhythm {
 }
 
 public class OavpCounter {
-  float value = 0;
-  int count = 0;
-  int limit = 0;
-  Ani ani;
-  float duration = 1;
-  Easing easing = Ani.LINEAR;
+  private float value = 0;
+  private int count = 0;
+  private int limit = 0;
+  private Ani ani;
+  private float duration = 1;
+  private Easing easing = Ani.LINEAR;
 
   OavpCounter(){}
 
-  OavpCounter duration(float duration) {
+  public OavpCounter duration(float duration) {
     this.duration = duration;
     return this;
   }
 
-  OavpCounter easing(Easing easing) {
+  public OavpCounter easing(Easing easing) {
     this.easing = easing;
     return this;
   }
 
-  OavpCounter limit(int limit) {
+  public OavpCounter limit(int limit) {
     this.limit = limit;
     return this;
   }
 
-  void increment() {
+  public void increment() {
     count++;
     ani = Ani.to(this, duration, "value", count, easing);
   }
 
-  void increment(float duration, Easing easing) {
+  public void increment(float duration, Easing easing) {
     count++;
     ani = Ani.to(this, duration, "value", count, easing);
   }
 
-  void incrementIf(Boolean trigger) {
+  public void incrementIf(Boolean trigger) {
     if (trigger) {
       increment();
     }
   }
 
-  void incrementIf(Boolean trigger, float duration, Easing easing) {
+  public void incrementIf(Boolean trigger, float duration, Easing easing) {
     if (trigger) {
       increment(duration, easing);
     }
   }
 
-  float getValue() {
+  public float getValue() {
     return value;
   }
 
-  int getCount() {
+  public int getCount() {
     return count;
   }
 

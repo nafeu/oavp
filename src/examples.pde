@@ -1,17 +1,17 @@
 void setupExamples() {
   entities.addCamera("default");
 
-  entities.addRhythm("example")
+  entities.addRhythm("clock")
     .start();
 
-  entities.addPulser("example")
+  entities.addCounter("spinner")
     .duration(0.5)
     .easing(Ani.QUAD_IN_OUT);
 }
 
 void updateExamples() {
 
-  entities.getPulser("example").pulseIf(entities.onRhythm("example"));
+  entities.getCounter("spinner").incrementIf(entities.onRhythm("clock"));
 
   entities.useCamera("default");
 }
@@ -22,8 +22,15 @@ void drawExamples() {
   visualizers
     .create()
     .center().middle()
-    .rotateClockwise(frameCount(0.25))
-    .draw.basicSquare(oavp.width(0.5) * entities.getPulser("example").getValue())
+    .rotateClockwise(entities.getCounter("spinner").getValue() * 22.5)
+    .draw.basicSquare(oavp.width(0.5))
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotateClockwise(entities.getCounter("spinner").getCount() * 22.5)
+    .draw.basicSquare(oavp.width(0.5))
     .done();
 }
 
