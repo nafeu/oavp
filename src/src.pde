@@ -56,11 +56,7 @@ void setup() {
   entities.addSvg("test-logo.svg");
   entities.addImg("test-image.jpg");
 
-  if (oavp.SHOW_EXAMPLES) {
-    setupExamples();
-  } else {
-    setupSketch();
-  }
+  setupSketch();
 
   // Typography Setup
   text = new OavpText(entityPosition);
@@ -70,20 +66,11 @@ void setup() {
 void draw() {
   updateHelpers();
   updateEntities();
-
-  if (oavp.SHOW_EXAMPLES) {
-    drawExamples();
-  } else {
-    drawSketch();
-  }
+  drawSketch();
 }
 
 void updateEntities() {
   entities.update();
   analysis.forward();
-  if (oavp.SHOW_EXAMPLES) {
-    updateExamples();
-  } else {
-    updateSketch();
-  }
+  updateSketch();
 }

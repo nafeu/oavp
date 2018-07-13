@@ -21,9 +21,6 @@ public class OavpConfig {
   public float BUFFER_SMOOTHING = 0.85f;
 
   public boolean ENABLE_ORTHO = false;
-  public float CAMERA_EASING = 0.10;
-
-  public boolean SHOW_EXAMPLES = false;
 
   OavpConfig() {}
 
@@ -56,9 +53,6 @@ public class OavpConfig {
     BUFFER_SMOOTHING = config.getFloat("BUFFER_SMOOTHING");
 
     ENABLE_ORTHO = config.getBoolean("ENABLE_ORTHO");
-    CAMERA_EASING = config.getFloat("CAMERA_EASING");
-
-    SHOW_EXAMPLES = config.getBoolean("SHOW_EXAMPLES");
   }
 
   float width(float scale) {
