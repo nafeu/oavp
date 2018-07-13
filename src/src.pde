@@ -62,7 +62,7 @@ void setup() {
 
     setupSketch();
   } catch (Exception e) {
-    println("[ src.pde ] Error during setup");
+    println("[ oavp ] Error during setup");
     exit();
   }
 
@@ -77,7 +77,7 @@ void draw() {
     updateEntities();
     drawSketch();
   } catch (Exception e) {
-    println("[ src.pde ] Error during draw loop");
+    println("[ oavp ] Error during draw loop");
     exit();
   }
 }
@@ -88,7 +88,7 @@ void updateEntities() {
     analysis.forward();
     updateSketch();
   } catch (Exception e) {
-    println("[ src.pde ] Error during update loop");
+    println("[ oavp ] Error during update loop");
     exit();
   }
 }
