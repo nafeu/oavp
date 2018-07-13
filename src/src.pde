@@ -56,9 +56,28 @@ void setup() {
     emitters = new OavpEmitter(analysis, entities);
     shapes = new OavpShape();
 
-    // Load Files
-    entities.addSvg("test-logo.svg");
-    entities.addImg("test-image.jpg");
+    // Autoload Files
+    File[] files = new File(dataPath("")).listFiles();
+    String filenames[] = new String[files.length];
+
+    for (int i = 0; i < files.length; i++) {
+      String extension = getFileExtension(files[i]);
+      String name = files[i].getName();
+
+      switch(extension) {
+        case "svg":
+          println("Adding svg: " + name);
+          entities.addSvg(name);
+          break;
+        case "jpg":
+        case "png":
+          println("Adding image: " + name);
+          entities.addImg(name);
+          break;
+        default:
+          break;
+      }
+    }
 
     setupSketch();
   } catch (Exception e) {

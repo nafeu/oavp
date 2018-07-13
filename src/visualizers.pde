@@ -688,23 +688,26 @@ class OavpVisualizer {
                    terrain.getWindow(position, windowSize, phaseShift), position);
       return OavpVisualizer.this;
     }
+
+    public OavpVisualizer centeredSvg(String svgName, float scaleFactor) {
+      PShape shape = entities.getSvg(svgName);
+      pushStyle();
+      shape.disableStyle();
+      noStroke();
+      scale(scaleFactor);
+      shape(shape, -(shape.width / 2), -(shape.height / 2));
+      popStyle();
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer img(String imgName, float scaleFactor) {
+      PImage image = entities.getImg(imgName);
+      pushMatrix();
+      scale(scaleFactor);
+      image(image, 0, 0);
+      popMatrix();
+      return OavpVisualizer.this;
+    }
   }
 
-  public OavpVisualizer svg(float scaleFactor, PShape shape) {
-    pushStyle();
-    shape.disableStyle();
-    noStroke();
-    scale(scaleFactor);
-    shape(shape, 0, 0);
-    popStyle();
-    return this;
-  }
-
-  public OavpVisualizer img(float scaleFactor, PImage image) {
-    pushMatrix();
-    scale(scaleFactor);
-    image(image, 0, 0);
-    popMatrix();
-    return this;
-  }
 }

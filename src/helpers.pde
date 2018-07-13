@@ -33,3 +33,13 @@ float floorPosDiff(float pos) {
 float frameCount(float scale) {
   return frameCount * scale;
 }
+
+String getFileExtension(File file) {
+    if (file == null) {
+        return "";
+    }
+    String name = file.getName();
+    int i = name.lastIndexOf('.');
+    String ext = i > 0 ? name.substring(i + 1) : "";
+    return ext;
+}
