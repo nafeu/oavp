@@ -2,7 +2,7 @@ public class OavpShape {
 
   OavpShape() {}
 
-  void flatbox(float x, float y, float z, float width, float height, float depth) {
+  public void flatbox(float x, float y, float z, float width, float height, float depth) {
     float[] a = { x, y, z };
     float[] b = { x + width, y, z };
     float[] c = { x + width, y, z + depth };
@@ -67,7 +67,7 @@ public class OavpShape {
     popStyle();
   }
 
-  void chevron(float x, float y, float w, float h) {
+  public void chevron(float x, float y, float w, float h) {
     pushStyle();
     noFill();
     beginShape();
@@ -80,7 +80,7 @@ public class OavpShape {
     popStyle();
   }
 
-  void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
+  public void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
     float distance = w / terrain.length;
     beginShape();
     vertex(x, terrain[terrain.length - 1] * scale + displacement);
@@ -93,7 +93,7 @@ public class OavpShape {
     endShape();
   }
 
-  void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain, float position) {
+  public void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain, float position) {
     float distance = w / terrain.length;
     beginShape();
     vertex(x, terrain[0] * scale + displacement);
@@ -109,7 +109,7 @@ public class OavpShape {
     endShape();
   }
 
-  void trees(float x, float y, float w, float h, float scale, float displacement, float[][] values, float position) {
+  public void trees(float x, float y, float w, float h, float scale, float displacement, float[][] values, float position) {
     float distance = w / values[0].length;
     for (int i = 0; i < values[0].length; i++) {
       float xPos = (1 + i - floorPosDiff(position)) * distance;
@@ -143,7 +143,7 @@ public class OavpShape {
     endShape();
   }
 
-  void dots(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
+  public void dots(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
     float distance = w / terrain.length;
     beginShape(POINTS);
     for (int i = 0; i < terrain.length; i++) {
@@ -152,7 +152,7 @@ public class OavpShape {
     endShape();
   }
 
-  void trapezoid(float x, float y, float w, float h, float displacementA, float displacementB) {
+  public void trapezoid(float x, float y, float w, float h, float displacementA, float displacementB) {
     pushStyle();
     fill(palette.flat.black);
     beginShape();
@@ -165,7 +165,7 @@ public class OavpShape {
     popStyle();
   }
 
-  void cylinder(float x, float y, float h, float radius, int numCircles) {
+  public void cylinder(float x, float y, float h, float radius, int numCircles) {
     float distance = h / numCircles;
     for (int i = 0; i < numCircles; i++) {
       float mult = cos(radians(map(i, 0, numCircles, 0, 360)));

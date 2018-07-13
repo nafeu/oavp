@@ -1,36 +1,36 @@
 public class OavpText {
 
-  OavpPosition cursor;
-  float padding;
+  private OavpPosition cursor;
+  private float padding;
 
   OavpText(OavpPosition cursor) {
     this.cursor = cursor;
     this.padding = 50;
   }
 
-  void setPadding(float padding) {
+  public void setPadding(float padding) {
     this.padding = padding;
   }
 
-  void write(String text, float x, float y, float w, float h, float padding) {
+  public void write(String text, float x, float y, float w, float h, float padding) {
     pushStyle();
     text(text, x + padding, y + padding, w - padding * 2, h - padding * 2);
     popStyle();
   }
 
-  void write(String text, float x, float y) {
+  public void write(String text, float x, float y) {
     pushStyle();
     text(text, x, y, 100, 50);
     popStyle();
   }
 
-  void write(String text) {
+  public void write(String text) {
     pushStyle();
     text(text, cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.scale - padding * 2, cursor.scale - padding * 2);
     popStyle();
   }
 
-  void write(String text, color inputColor) {
+  public void write(String text, color inputColor) {
     pushStyle();
     noStroke();
     fill(inputColor);
@@ -38,7 +38,7 @@ public class OavpText {
     popStyle();
   }
 
-  void write(float value, color inputColor) {
+  public void write(float value, color inputColor) {
     pushStyle();
     noStroke();
     fill(inputColor);

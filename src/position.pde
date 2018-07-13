@@ -17,69 +17,69 @@ public class OavpPosition {
     yRange[1] = y;
     scale = initialScale;
   }
-  float getScaledX() {
+  public float getScaledX() {
     return x * scale;
   }
-  float getCenteredX() {
+  public float getCenteredX() {
     return x * scale + (scale / 2);
   }
-  float getScaledY() {
+  public float getScaledY() {
     return y * scale;
   }
-  float getCenteredY() {
+  public float getCenteredY() {
     return y * scale + (scale / 2);
   }
-  int getLowerBoundX() {
+  public int getLowerBoundX() {
     return xRange[0];
   }
-  int getUpperBoundX() {
+  public int getUpperBoundX() {
     return xRange[1];
   }
-  int getLowerBoundY() {
+  public int getLowerBoundY() {
     return yRange[0];
   }
-  int getUpperBoundY() {
+  public int getUpperBoundY() {
     return yRange[1];
   }
-  void moveLeft() {
+  public void moveLeft() {
     x -= 1;
     if (x < xRange[0]) {
       xRange[0] = x;
     }
   }
-  void moveRight() {
+  public void moveRight() {
     x += 1;
     if (x > xRange[1]) {
       xRange[1] = x;
     }
   }
-  void moveUp() {
+  public void moveUp() {
     y -= 1;
     if (y < yRange[0]) {
       yRange[0] = y;
     }
   }
-  void moveDown() {
+  public void moveDown() {
     y += 1;
     if (y > yRange[1]) {
       yRange[0] = y;
     }
   }
-  void moveToNextLine() {
+  public void moveToNextLine() {
     x = xRange[0];
     y += 1;
     if (y > yRange[1]) {
       yRange[1] = y;
     }
   }
-  void moveToPrevLine() {
+  public void moveToPrevLine() {
     x = xRange[1];
     y -= 1;
     if (y < yRange[0]) {
       yRange[0] = y;
     }
   }
-  boolean moveLeft(int boundary) {
+  public boolean moveLeft(int boundary) {
     if (x > boundary) {
       x -= 1;
       if (x < xRange[0]) {
@@ -89,7 +89,7 @@ public class OavpPosition {
     }
     return false;
   }
-  boolean moveRight(int boundary) {
+  public boolean moveRight(int boundary) {
     if (x < boundary) {
       x += 1;
       if (x > xRange[1]) {
@@ -99,7 +99,7 @@ public class OavpPosition {
     }
     return false;
   }
-  boolean moveUp(int boundary) {
+  public boolean moveUp(int boundary) {
     if (y > boundary) {
       y -= 1;
       if (y < yRange[0]) {
@@ -109,7 +109,7 @@ public class OavpPosition {
     }
     return false;
   }
-  boolean moveDown(int boundary) {
+  public boolean moveDown(int boundary) {
     if (y < boundary) {
       y += 1;
       if (y > yRange[1]) {
@@ -119,7 +119,7 @@ public class OavpPosition {
     }
     return false;
   }
-  boolean moveToNextLine(int boundary) {
+  public boolean moveToNextLine(int boundary) {
     if (y < boundary) {
       x = xRange[0];
       y += 1;
@@ -130,7 +130,7 @@ public class OavpPosition {
     }
     return false;
   }
-  boolean moveToPrevLine(int boundary) {
+  public boolean moveToPrevLine(int boundary) {
     if (y > boundary) {
       x = xRange[1];
       y -= 1;
@@ -141,7 +141,7 @@ public class OavpPosition {
     }
     return false;
   }
-  void reset() {
+  public void reset() {
     x = startingX;
     y = startingY;
   }
