@@ -612,54 +612,6 @@ public class OavpOscillator {
   }
 }
 
-public class OavpNoiseInterval {
-  HashMap<String, float[]> storage;
-  int numPoints = 100;
-  float granularity = 0.01;
-
-  OavpNoiseInterval() {
-    storage = new HashMap<String, float[]>();
-  }
-
-  OavpNoiseInterval generate(String name) {
-    storage.put(name, new float[numPoints]);
-    return this;
-  }
-
-  OavpNoiseInterval granularity(float granularity) {
-    this.granularity = granularity;
-    return this;
-  }
-
-  OavpNoiseInterval numPoints(int numPoints) {
-    this.numPoints = numPoints;
-    return this;
-  }
-
-  void update(String name, float phase) {
-    for (int i = 0; i < numPoints; i++) {
-      float point = refinedNoise(i + phase, granularity);
-      storage.get(name)[i] = point;
-    }
-  }
-
-  float[] getValues(String name) {
-    return storage.get(name);
-  }
-
-  float[] getValues(float phase, float granularity) {
-    float[] out = new float[numPoints];
-    for (int i = 0; i < numPoints; i++) {
-      out[i] = refinedNoise(i + phase, granularity);
-    }
-    return out;
-  }
-
-  float getNoise(float phase) {
-    return refinedNoise(phase, granularity);
-  }
-}
-
 public class OavpTerrain {
   float[] values;
   int[] structures;
@@ -762,7 +714,6 @@ public class OavpEntityManager {
   HashMap<String, OavpRotator> rotators;
   HashMap<String, OavpColorRotator> colorRotators;
   HashMap<String, OavpOscillator> oscillators;
-  HashMap<String, OavpNoiseInterval> noiseIntervals;
   HashMap<String, OavpTerrain> terrains;
   HashMap<String, OavpCamera> cameras;
 
@@ -779,7 +730,6 @@ public class OavpEntityManager {
     rotators = new HashMap<String, OavpRotator>();
     colorRotators = new HashMap<String, OavpColorRotator>();
     oscillators = new HashMap<String, OavpOscillator>();
-    noiseIntervals = new HashMap<String, OavpNoiseInterval>();
     terrains = new HashMap<String, OavpTerrain>();
     cameras = new HashMap<String, OavpCamera>();
   }
@@ -955,19 +905,6 @@ public class OavpEntityManager {
 
   OavpOscillator getOscillator(String name) {
     return oscillators.get(name);
-  }
-
-  OavpNoiseInterval addNoiseIntervals(String name) {
-    noiseIntervals.put(name, new OavpNoiseInterval());
-    return noiseIntervals.get(name);
-  }
-
-  OavpNoiseInterval getNoiseIntervals(String name) {
-    return noiseIntervals.get(name);
-  }
-
-  void updateNoiseIntervals(String name, String instance, float phase) {
-    noiseIntervals.get(name).update(instance, phase);
   }
 
   OavpTerrain addTerrain(String name) {
