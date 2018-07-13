@@ -22,6 +22,8 @@ public class OavpConfig {
 
   public boolean ENABLE_ORTHO = false;
 
+  public String FRAME_TITLE = "oavp";
+
   OavpConfig() {}
 
   OavpConfig(String path) {
@@ -53,6 +55,8 @@ public class OavpConfig {
     BUFFER_SMOOTHING = config.getFloat("BUFFER_SMOOTHING");
 
     ENABLE_ORTHO = config.getBoolean("ENABLE_ORTHO");
+
+    FRAME_TITLE = config.getString("FRAME_TITLE");
   }
 
   public float width(float scale) {

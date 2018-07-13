@@ -21,42 +21,50 @@ OavpPalette palette;
 OavpEntityManager entities;
 
 void setup() {
-  // Load configs
-  oavp = new OavpConfig("config.json");
-
-  // Screen Setup
+  // Display Setup
   // size(1000, 1000, P3D);
   fullScreen(P3D, 2);
-  frameRate(oavp.FRAMERATE);
 
-  // Library initialization
-  minim = new Minim(this);
-  Ani.init(this);
+  try {
+    // Load configs
+    oavp = new OavpConfig("config.json");
 
-  // Entity Setup
-  entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
-  entities = new OavpEntityManager(minim);
+    // Frame Setup
+    frameRate(oavp.FRAMERATE);
+    surface.setTitle(oavp.FRAME_TITLE);
 
-  // Default Camera Setup
-  defaultCamera = new OavpCamera();
-  defaultCamera.view();
+    // Library initialization
+    minim = new Minim(this);
+    Ani.init(this);
 
-  // Style Setup
-  palette = new OavpPalette(oavp);
+    // Entity Setup
+    entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
+    entities = new OavpEntityManager(minim);
 
-  // Audio Analysis Tools Setup
-  analysis = new OavpAnalysis(minim, oavp);
+    // Default Camera Setup
+    defaultCamera = new OavpCamera();
+    defaultCamera.view();
 
-  // Main Visualizer Setup
-  visualizers = new OavpVisualizer(analysis, entityPosition, entities);
-  emitters = new OavpEmitter(analysis, entities);
-  shapes = new OavpShape();
+    // Style Setup
+    palette = new OavpPalette(oavp);
 
-  // Load Files
-  entities.addSvg("test-logo.svg");
-  entities.addImg("test-image.jpg");
+    // Audio Analysis Tools Setup
+    analysis = new OavpAnalysis(minim, oavp);
 
-  setupSketch();
+    // Main Visualizer Setup
+    visualizers = new OavpVisualizer(analysis, entityPosition, entities);
+    emitters = new OavpEmitter(analysis, entities);
+    shapes = new OavpShape();
+
+    // Load Files
+    entities.addSvg("test-logo.svg");
+    entities.addImg("test-image.jpg");
+
+    setupSketch();
+  } catch (Exception e) {
+    println("[ src.pde ] Error during setup");
+    exit();
+  }
 
   // Typography Setup
   text = new OavpText(entityPosition);
@@ -64,13 +72,23 @@ void setup() {
 }
 
 void draw() {
-  updateHelpers();
-  updateEntities();
-  drawSketch();
+  try {
+    updateHelpers();
+    updateEntities();
+    drawSketch();
+  } catch (Exception e) {
+    println("[ src.pde ] Error during draw loop");
+    exit();
+  }
 }
 
 void updateEntities() {
-  entities.update();
-  analysis.forward();
-  updateSketch();
+  try {
+    entities.update();
+    analysis.forward();
+    updateSketch();
+  } catch (Exception e) {
+    println("[ src.pde ] Error during update loop");
+    exit();
+  }
 }

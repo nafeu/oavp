@@ -13,5 +13,6 @@
   "SPECTRUM_SMOOTHING": 0.80,
   "LEVEL_SMOOTHING": 0.95,
   "BUFFER_SMOOTHING": 0.85,
-  "ENABLE_ORTHO": false
+  "ENABLE_ORTHO": false,
+  "FRAME_TITLE": "oavp | Open Audio Visualizers for Processing"
 }
