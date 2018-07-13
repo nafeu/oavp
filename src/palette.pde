@@ -1,13 +1,13 @@
 public class OavpPalette {
 
-  HashMap<String, color[]> storage;
-  FlatUIColors flat;
-  Ani ani;
-  float rotatingValue = 0;
-  int rotatingColorIndex = 0;
-  color colorA = 0;
-  color colorB = 0;
-  PFont mono;
+  private HashMap<String, color[]> storage;
+  public FlatUIColors flat;
+  private Ani ani;
+  private float rotatingValue = 0;
+  private int rotatingColorIndex = 0;
+  private color colorA = 0;
+  private color colorB = 0;
+  private PFont mono;
 
   OavpPalette(OavpConfig config) {
     storage = new HashMap<String, color[]>();
@@ -16,44 +16,44 @@ public class OavpPalette {
     flat = new FlatUIColors();
   }
 
-  void reset(color background, color primary, color secondary, float strokeWeight) {
+  public void reset(color background, color primary, color secondary, float strokeWeight) {
     background(background);
     fill(primary);
     stroke(secondary);
     strokeWeight(strokeWeight);
   }
 
-  void reset(color background, color primary, float strokeWeight) {
+  public void reset(color background, color primary, float strokeWeight) {
     background(background);
     noFill();
     stroke(primary);
     strokeWeight(strokeWeight);
   }
 
-  void reset(color background, color primary) {
+  public void reset(color background, color primary) {
     background(background);
     fill(primary);
     noStroke();
   }
 
-  void add(String name, color colorA) {
+  public void add(String name, color colorA) {
     color[] colors = new color[1];
     colors[0] = colorA;
     storage.put(name, colors);
   }
 
-  void add(String name, color colorA, color colorB) {
+  public void add(String name, color colorA, color colorB) {
     color[] colors = new color[2];
     colors[0] = colorA;
     colors[1] = colorB;
     storage.put(name, colors);
   }
 
-  color get(String name) {
+  public color get(String name) {
     return storage.get(name)[0];
   }
 
-  color get(String name, float interpolation) {
+  public color get(String name, float interpolation) {
     color[] colors = storage.get(name);
     if (colors.length == 1) {
       return colors[0];
@@ -61,41 +61,41 @@ public class OavpPalette {
     return lerpColor(colors[0], colors[1], interpolation);
   }
 
-  int getRandomColor(int accent) {
+  public int getRandomColor(int accent) {
     int randomIndex = new Random().nextInt(material[accent % material.length].length);
     return material[accent % material.length][randomIndex];
   }
 
-  int getRandomColor() {
+  public int getRandomColor() {
     int randomAccent = new Random().nextInt(material.length);
     int randomIndex = new Random().nextInt(material[randomAccent].length);
     return material[randomAccent][randomIndex];
   }
 
-  color getRotatingColor() {
+  public color getRotatingColor() {
     return lerpColor(colorA, colorB, rotatingValue);
   }
 
-  void setRotatingColor(color newColor, float duration, Easing easing) {
+  public void setRotatingColor(color newColor, float duration, Easing easing) {
     colorB = colorA;
     colorA = newColor;
     rotatingValue = 1;
     ani = Ani.to(this, duration, "rotatingValue", 0, easing);
   }
 
-  void setRotatingColorIf(boolean trigger, color newColor, float duration, Easing easing) {
+  public void setRotatingColorIf(boolean trigger, color newColor, float duration, Easing easing) {
     if (trigger) {
       setRotatingColor(newColor, duration, easing);
     }
   }
 
-  void setRotatingColorByPosition(OavpPosition position, int accent, float duration, Easing easing) {
+  public void setRotatingColorByPosition(OavpPosition position, int accent, float duration, Easing easing) {
     int colorAccent = accent % material.length;
     int colorIndex = abs(position.x + position.y) % material[colorAccent].length;
     setRotatingColor(material[colorAccent][colorIndex], duration, easing);
   }
 
-  color getMaterialColor(int accent, int index) {
+  public color getMaterialColor(int accent, int index) {
     int colorAccent = accent % material.length;
     int colorIndex = index % material[colorAccent].length;
     return material[colorAccent][colorIndex];
@@ -127,7 +127,7 @@ public class OavpPalette {
     FlatUIColors() {}
   }
 
-  int[][] material = {
+  public int[][] material = {
     // 50
     {
       #ffebee, #fce4ec, #f3e5f5, #ede7f6, #e8eaf6, #e3f2fd,

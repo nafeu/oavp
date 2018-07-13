@@ -1,62 +1,62 @@
 public class OavpEmitter {
 
-  OavpAnalysis analysis;
-  OavpEntityManager entities;
-  OavpPulser currPulser;
-  OavpInterval currInterval;
-  OavpGridInterval currGridInterval;
-  List currEmissions;
-  float duration = 1;
-  Easing easing = Ani.LINEAR;
+  private OavpAnalysis analysis;
+  private OavpEntityManager entities;
+  private OavpPulser currPulser;
+  private OavpInterval currInterval;
+  private OavpGridInterval currGridInterval;
+  private List currEmissions;
+  private float duration = 1;
+  private Easing easing = Ani.LINEAR;
 
   OavpEmitter(OavpAnalysis analysis, OavpEntityManager entities) {
     this.analysis = analysis;
     this.entities = entities;
   }
 
-  OavpEmitter duration(float duration) {
+  public OavpEmitter duration(float duration) {
     this.duration = duration;
     return this;
   }
 
-  OavpEmitter easing(Easing easing) {
+  public OavpEmitter easing(Easing easing) {
     this.easing = easing;
     return this;
   }
 
-  OavpEmitter usePulser(String name) {
+  public OavpEmitter usePulser(String name) {
     currPulser = entities.getPulser(name);
     return this;
   }
 
-  OavpEmitter useInterval(String name) {
+  public OavpEmitter useInterval(String name) {
     currInterval = entities.getInterval(name);
     return this;
   }
 
-  OavpEmitter useGridInterval(String name) {
+  public OavpEmitter useGridInterval(String name) {
     currGridInterval = entities.getGridInterval(name);
     return this;
   }
 
-  OavpEmitter useEmissions(String name) {
+  public OavpEmitter useEmissions(String name) {
     currEmissions = entities.getEmissions(name);
     return this;
   }
 
-  OavpEmitter emit() {
+  public OavpEmitter emit() {
     currEmissions.add(new OavpEmission(duration, easing));
     return this;
   }
 
-  OavpEmitter emitIf(boolean trigger) {
+  public OavpEmitter emitIf(boolean trigger) {
     if (trigger) {
       currEmissions.add(new OavpEmission(duration, easing));
     }
     return this;
   }
 
-  OavpEmitter emitAngles(int count, float angleIncrement, boolean trigger) {
+  public OavpEmitter emitAngles(int count, float angleIncrement, boolean trigger) {
     if (trigger) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
@@ -67,7 +67,7 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitColorAngles(color inputColor, int count, float angleIncrement, boolean trigger) {
+  public OavpEmitter emitColorAngles(color inputColor, int count, float angleIncrement, boolean trigger) {
     if (trigger) {
       float[] payload = new float[count + 1];
       for (int i = 0; i < count - 1; i++) {
@@ -79,7 +79,7 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitRandomAngles(int count, boolean trigger) {
+  public OavpEmitter emitRandomAngles(int count, boolean trigger) {
     if (trigger) {
       float[] payload = new float[count];
       for (int i = 0; i < count; i++) {
@@ -90,7 +90,7 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitRandomColorAngles(color inputColor, int count, boolean trigger) {
+  public OavpEmitter emitRandomColorAngles(color inputColor, int count, boolean trigger) {
     if (trigger) {
       float[] payload = new float[count + 1];
       for (int i = 0; i < count - 1; i++) {
@@ -102,8 +102,7 @@ public class OavpEmitter {
     return this;
   }
 
-
-  OavpEmitter emitColor(color inputColor, boolean trigger) {
+  public OavpEmitter emitColor(color inputColor, boolean trigger) {
     if (trigger) {
       float[] payload = new float[]{ inputColor };
       currEmissions.add(new OavpEmission(duration, easing, payload));
@@ -111,7 +110,7 @@ public class OavpEmitter {
     return this;
   }
 
-  OavpEmitter emitSpectrum(boolean trigger) {
+  public OavpEmitter emitSpectrum(boolean trigger) {
     float[] payload = new float[analysis.getSpectrum().length];
     for (int i = 0; i < analysis.getSpectrum().length; i++) {
       payload[i] = analysis.getSpectrumVal(i);

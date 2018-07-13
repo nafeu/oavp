@@ -55,19 +55,19 @@ public class OavpConfig {
     ENABLE_ORTHO = config.getBoolean("ENABLE_ORTHO");
   }
 
-  float width(float scale) {
+  public float width(float scale) {
     return w * scale;
   }
 
-  float width() {
+  public float width() {
     return w;
   }
 
-  float height(float scale) {
+  public float height(float scale) {
     return h * scale;
   }
 
-  float height() {
+  public float height() {
     return h;
   }
 }
