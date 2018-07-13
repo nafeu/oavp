@@ -613,10 +613,10 @@ public class OavpOscillator {
 }
 
 public class OavpTerrain {
-  float[] values;
-  int[] structures;
-  int size = 10000;
-  float granularity = 0.01;
+  private float[] values;
+  private int[] structures;
+  private int size = 10000;
+  private float granularity = 0.01;
 
   OavpTerrain() {
     values = new float[size];
@@ -624,7 +624,7 @@ public class OavpTerrain {
     generate();
   }
 
-  OavpTerrain generate() {
+  public OavpTerrain generate() {
     for (int i = 0; i < size; ++i) {
       values[i] = refinedNoise(i, granularity);
     }
@@ -634,17 +634,17 @@ public class OavpTerrain {
     return this;
   }
 
-  OavpTerrain granularity(float granularity) {
+  public OavpTerrain granularity(float granularity) {
     this.granularity = granularity;
     return this;
   }
 
-  OavpTerrain size(int size) {
+  public OavpTerrain size(int size) {
     this.size = size;
     return this;
   }
 
-  float[] getValues(float position, int windowSize, int shift) {
+  public float[] getValues(float position, int windowSize, int shift) {
     int index = floor(position);
     float[] out = new float[windowSize];
     if (index + windowSize + shift <= size) {
@@ -660,7 +660,7 @@ public class OavpTerrain {
     }
   }
 
-  float[] getStructures(float position, int windowSize, int shift) {
+  public float[] getStructures(float position, int windowSize, int shift) {
     int index = floor(position);
     float[] out = new float[windowSize];
     if (index + windowSize + shift <= size) {
@@ -676,7 +676,7 @@ public class OavpTerrain {
     }
   }
 
-  float[][] getWindow(float position, int windowSize, int shift) {
+  public float[][] getWindow(float position, int windowSize, int shift) {
     int index = floor(position);
     float[] valuesWindow = new float[windowSize];
     float[] structuresWindow = new float[windowSize];

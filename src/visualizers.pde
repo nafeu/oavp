@@ -234,14 +234,6 @@ class OavpVisualizer {
       this.analysis = analysis;
     }
 
-    OavpVisualizer basicHills(float scale, float displacement, int windowSize, int phaseShift, float position) {
-      shapes.hill(0, 0, currWidth, currHeight, scale, displacement,
-                  currTerrain.getValues(position, windowSize, phaseShift), position);
-      shapes.trees(0, 0, currWidth, currHeight, scale, displacement,
-                   currTerrain.getWindow(position, windowSize, phaseShift), position);
-      return OavpVisualizer.this;
-    }
-
     OavpVisualizer basicSquare(float size) {
       rectMode(CENTER);
       rect(0, 0, size, size);
@@ -685,6 +677,15 @@ class OavpVisualizer {
         shapes.chevron(0, -emission.value * scale, currWidth, currHeight);
         popStyle();
       }
+      return OavpVisualizer.this;
+    }
+
+    OavpVisualizer terrainHills(float scale, float displacement, int windowSize, int phaseShift, float position) {
+      OavpTerrain terrain = OavpVisualizer.this.currTerrain;
+      shapes.hill(0, 0, currWidth, currHeight, scale, displacement,
+                  terrain.getValues(position, windowSize, phaseShift), position);
+      shapes.trees(0, 0, currWidth, currHeight, scale, displacement,
+                   terrain.getWindow(position, windowSize, phaseShift), position);
       return OavpVisualizer.this;
     }
   }

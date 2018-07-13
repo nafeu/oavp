@@ -1,6 +1,8 @@
 void setupExamples() {
   entities.addCamera("default");
 
+  entities.addTerrain("example");
+
   entities.addOscillator("example")
     .duration(2)
     .easing(Ani.QUAD_IN_OUT)
@@ -16,12 +18,15 @@ void drawExamples() {
   palette.reset(palette.flat.black, palette.flat.white, 2);
 
   visualizers
+    .useTerrain("example")
     .create()
+    .dimensions(oavp.w, oavp.h)
     .top().left()
-    .moveDown(oavp.width(0.25))
-    .moveRight(oavp.width(0.25))
-    .moveRight(oavp.width(0.5) * entities.getOscillator("example").getValue())
-    .draw.basicSquare(oavp.width(0.25))
+      .draw.terrainHills(oavp.height(0.1), oavp.height(0.5), 100, 0, frameCount(0.1))
+      .moveForward(2)
+      .draw.terrainHills(oavp.height(0.3), oavp.height(0.55), 100, 1000, frameCount(0.3))
+      .moveForward(2)
+      .draw.terrainHills(oavp.height(0.2), oavp.height(0.7), 100, 2000, frameCount(0.7))
     .done();
 }
 
