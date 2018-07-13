@@ -702,20 +702,20 @@ public class OavpTerrain {
 }
 
 public class OavpEntityManager {
-  Minim minim;
-  HashMap<String, PShape> svgs;
-  HashMap<String, PImage> imgs;
-  HashMap<String, OavpPulser> pulsers;
-  HashMap<String, OavpInterval> intervals;
-  HashMap<String, OavpGridInterval> gridIntervals;
-  HashMap<String, List> emissionsStorage;
-  HashMap<String, OavpRhythm> rhythms;
-  HashMap<String, OavpCounter> counters;
-  HashMap<String, OavpRotator> rotators;
-  HashMap<String, OavpColorRotator> colorRotators;
-  HashMap<String, OavpOscillator> oscillators;
-  HashMap<String, OavpTerrain> terrains;
-  HashMap<String, OavpCamera> cameras;
+  private Minim minim;
+  private HashMap<String, PShape> svgs;
+  private HashMap<String, PImage> imgs;
+  private HashMap<String, OavpPulser> pulsers;
+  private HashMap<String, OavpInterval> intervals;
+  private HashMap<String, OavpGridInterval> gridIntervals;
+  private HashMap<String, List> emissionsStorage;
+  private HashMap<String, OavpRhythm> rhythms;
+  private HashMap<String, OavpCounter> counters;
+  private HashMap<String, OavpRotator> rotators;
+  private HashMap<String, OavpColorRotator> colorRotators;
+  private HashMap<String, OavpOscillator> oscillators;
+  private HashMap<String, OavpTerrain> terrains;
+  private HashMap<String, OavpCamera> cameras;
 
   OavpEntityManager(Minim minim) {
     this.minim = minim;
@@ -734,62 +734,62 @@ public class OavpEntityManager {
     cameras = new HashMap<String, OavpCamera>();
   }
 
-  float mouseX(float start, float end) {
+  public float mouseX(float start, float end) {
     return map(mouseX, 0, width, start, end);
   }
 
-  float mouseY(float start, float end) {
+  public float mouseY(float start, float end) {
     return map(mouseY, 0, height, start, end);
   }
 
-  void addSvg(String filename) {
+  public void addSvg(String filename) {
     String[] fn = filename.split("\\.");
     svgs.put(fn[0], loadShape(filename));
   }
 
-  PShape getSvg(String name) {
+  public PShape getSvg(String name) {
     return svgs.get(name);
   }
 
-  void addImg(String filename) {
+  public void addImg(String filename) {
     String[] fn = filename.split("\\.");
     imgs.put(fn[0], loadImage(filename));
   }
 
-  PImage getImg(String name) {
+  public PImage getImg(String name) {
     return imgs.get(name);
   }
 
-  OavpPulser addPulser(String name) {
+  public OavpPulser addPulser(String name) {
     pulsers.put(name, new OavpPulser());
     return pulsers.get(name);
   }
 
-  OavpPulser getPulser(String name) {
+  public OavpPulser getPulser(String name) {
     return pulsers.get(name);
   }
 
-  void addInterval(String name, int storageSize, int snapshotSize) {
+  public void addInterval(String name, int storageSize, int snapshotSize) {
     intervals.put(name, new OavpInterval(storageSize, snapshotSize));
   }
 
-  OavpInterval getInterval(String name) {
+  public OavpInterval getInterval(String name) {
     return intervals.get(name);
   }
 
-  void addGridInterval(String name, int numRows, int numCols) {
+  public void addGridInterval(String name, int numRows, int numCols) {
     gridIntervals.put(name, new OavpGridInterval(numRows, numCols));
   }
 
-  OavpGridInterval getGridInterval(String name) {
+  public OavpGridInterval getGridInterval(String name) {
     return gridIntervals.get(name);
   }
 
-  void addEmissions(String name) {
+  public void addEmissions(String name) {
     emissionsStorage.put(name, new ArrayList());
   }
 
-  void updateEmissions() {
+  public void updateEmissions() {
     for (HashMap.Entry<String, List> entry : emissionsStorage.entrySet())
     {
       Iterator<OavpEmission> i = entry.getValue().iterator();
@@ -803,133 +803,133 @@ public class OavpEntityManager {
     }
   }
 
-  List getEmissions(String name) {
+  public List getEmissions(String name) {
     return emissionsStorage.get(name);
   }
 
-  OavpRhythm addRhythm(String name) {
+  public OavpRhythm addRhythm(String name) {
     rhythms.put(name, new OavpRhythm(minim));
     return rhythms.get(name);
   }
 
-  void updateRhythms() {
+  public void updateRhythms() {
     for (HashMap.Entry<String, OavpRhythm> entry : rhythms.entrySet())
     {
       entry.getValue().update();
     }
   }
 
-  boolean onRhythm(String name) {
+  public boolean onRhythm(String name) {
     return rhythms.get(name).onRhythm();
   }
 
-  OavpRhythm getRhythm(String name) {
+  public OavpRhythm getRhythm(String name) {
     return rhythms.get(name);
   }
 
-  OavpCounter addCounter(String name) {
+  public OavpCounter addCounter(String name) {
     counters.put(name, new OavpCounter());
     return counters.get(name);
   }
 
-  void incrementCounterIf(String name, Boolean trigger) {
+  public void incrementCounterIf(String name, Boolean trigger) {
     counters.get(name).incrementIf(trigger);
   }
 
-  void incrementCounter(String name) {
+  public void incrementCounter(String name) {
     counters.get(name).increment();
   }
 
-  boolean checkCounter(String name) {
+  public boolean checkCounter(String name) {
     return counters.get(name).hasFinished();
   }
 
-  OavpCounter getCounter(String name) {
+  public OavpCounter getCounter(String name) {
     return counters.get(name);
   }
 
-  OavpRotator addRotator(String name) {
+  public OavpRotator addRotator(String name) {
     rotators.put(name, new OavpRotator());
     return rotators.get(name);
   }
 
-  OavpRotator getRotator(String name) {
+  public OavpRotator getRotator(String name) {
     return rotators.get(name);
   }
 
-  void rotateRotator(String name) {
+  public void rotateRotator(String name) {
     rotators.get(name).rotate();
   }
 
-  void rotateRotatorIf(String name, boolean trigger) {
+  public void rotateRotatorIf(String name, boolean trigger) {
     rotators.get(name).rotateIf(trigger);
   }
 
-  void randomizeRotator(String name) {
+  public void randomizeRotator(String name) {
     rotators.get(name).randomize();
   }
 
-  void randomizeRotatorIf(String name, boolean trigger) {
+  public void randomizeRotatorIf(String name, boolean trigger) {
     rotators.get(name).randomizeIf(trigger);
   }
 
-  OavpColorRotator addColorRotator(String name) {
+  public OavpColorRotator addColorRotator(String name) {
     colorRotators.put(name, new OavpColorRotator());
     return colorRotators.get(name);
   }
 
-  OavpColorRotator getColorRotator(String name) {
+  public OavpColorRotator getColorRotator(String name) {
     return colorRotators.get(name);
   }
 
-  void rotateColorRotator(String name) {
+  public void rotateColorRotator(String name) {
     colorRotators.get(name).rotate();
   }
 
-  void rotateColorRotatorIf(String name, boolean trigger) {
+  public void rotateColorRotatorIf(String name, boolean trigger) {
     colorRotators.get(name).rotateIf(trigger);
   }
 
-  void randomizeColorRotator(String name) {
+  public void randomizeColorRotator(String name) {
     colorRotators.get(name).randomize();
   }
 
-  void randomizeColorRotatorIf(String name, boolean trigger) {
+  public void randomizeColorRotatorIf(String name, boolean trigger) {
     colorRotators.get(name).randomizeIf(trigger);
   }
 
-  OavpOscillator addOscillator(String name) {
+  public OavpOscillator addOscillator(String name) {
     oscillators.put(name, new OavpOscillator());
     return oscillators.get(name);
   }
 
-  OavpOscillator getOscillator(String name) {
+  public OavpOscillator getOscillator(String name) {
     return oscillators.get(name);
   }
 
-  OavpTerrain addTerrain(String name) {
+  public OavpTerrain addTerrain(String name) {
     terrains.put(name, new OavpTerrain());
     return terrains.get(name);
   }
 
-  OavpTerrain getTerrain(String name) {
+  public OavpTerrain getTerrain(String name) {
     return terrains.get(name);
   }
 
-  OavpCamera addCamera(String name) {
+  public OavpCamera addCamera(String name) {
     cameras.put(name, new OavpCamera());
     return cameras.get(name);
   }
 
-  OavpCamera getCamera(String name) {
+  public OavpCamera getCamera(String name) {
     return cameras.get(name);
   }
 
-  void useCamera(String name) {
+  public void useCamera(String name) {
     cameras.get(name).view();
   }
 
-  void update() {
+  public void update() {
     updateRhythms();
     updateEmissions();
   }
