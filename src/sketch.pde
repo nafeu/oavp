@@ -8,23 +8,22 @@ void updateSketch() {
 }
 
 void drawSketch() {
-  palette.reset(palette.flat.black, palette.flat.white, 2);
-  fill(palette.flat.white);
+  palette.reset(palette.flat.black, palette.flat.white, palette.flat.white, 2);
 
   visualizers
     .create()
     .center().middle()
-    .draw.centeredSvg("test-logo", normalMouseX)
+    .draw.centeredSvg("test-logo", 2)
     .done();
 
   visualizers
     .create()
     .center().middle()
     .moveBackward(5)
-    .moveUp(analysis.getLevel() * 100)
+    .moveRight(analysis.getLevel() * 100)
     .startStyle()
-      .fillColor(palette.flat.red)
-      .draw.centeredSvg("test-logo", normalMouseY)
+      .fillColor(palette.flat.blue, oscillate(0, 1, 0.025))
+      .draw.centeredSvg("test-logo", 2)
     .endStyle()
     .done();
 
@@ -32,10 +31,10 @@ void drawSketch() {
     .create()
     .center().middle()
     .moveBackward(10)
-    .moveDown(analysis.getLevel() * 100)
+    .moveLeft(analysis.getLevel() * 100)
     .startStyle()
-      .fillColor(palette.flat.yellow)
-      .draw.centeredSvg("test-logo", normalMouseY)
+      .fillColor(palette.flat.red, oscillate(0, 1, 0.05))
+      .draw.centeredSvg("test-logo", 2)
     .endStyle()
     .done();
 }

@@ -175,8 +175,18 @@ class OavpVisualizer {
     return this;
   }
 
+  public OavpVisualizer fillColor(color customColor, float opacity) {
+    fill(opacity(customColor, opacity));
+    return this;
+  }
+
   public OavpVisualizer strokeColor(color customColor) {
     stroke(customColor);
+    return this;
+  }
+
+  public OavpVisualizer strokeColor(color customColor, float opacity) {
+    stroke(opacity(customColor, opacity));
     return this;
   }
 

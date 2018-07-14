@@ -43,3 +43,8 @@ String getFileExtension(File file) {
     String ext = i > 0 ? name.substring(i + 1) : "";
     return ext;
 }
+
+color opacity(color c, float alpha) {
+  color out = color(red(c), green(c), blue(c), alpha * 255);
+  return out;
+}
