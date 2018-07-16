@@ -1,5 +1,6 @@
 void setupSketch() {
   entities.addCamera("default");
+  entities.addToggle("a");
 }
 
 void updateSketch() {
@@ -22,7 +23,7 @@ void drawSketch() {
     .moveBackward(5)
     .moveRight(analysis.getLevel() * 100)
     .startStyle()
-      .fillColor(palette.flat.blue, oscillate(0, 1, 0.025))
+      .fillColor(palette.flat.blue, entities.getToggle("a").getValue())
       .draw.centeredSvg("test-logo", 2)
     .endStyle()
     .done();
@@ -33,7 +34,7 @@ void drawSketch() {
     .moveBackward(10)
     .moveLeft(analysis.getLevel() * 100)
     .startStyle()
-      .fillColor(palette.flat.red, oscillate(0, 1, 0.05))
+      .fillColor(palette.flat.red, entities.getToggle("a").getValue())
       .draw.centeredSvg("test-logo", 2)
     .endStyle()
     .done();
@@ -57,5 +58,11 @@ void keyPressed() {
   }
   if (key == 'd') {
     entities.getCamera("default").moveRight(250);
+  }
+  if (key == 'q') {
+    entities.getToggle("a").softToggle();
+  }
+  if (key == 'e') {
+    entities.getToggle("a").toggle();
   }
 }

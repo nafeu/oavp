@@ -21,6 +21,8 @@ OavpPalette palette;
 OavpEntityManager entities;
 
 void setup() {
+  println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
+
   // Display Setup
   // size(1000, 1000, P3D);
   fullScreen(P3D, 2);
@@ -66,12 +68,12 @@ void setup() {
 
       switch(extension) {
         case "svg":
-          println("Adding svg: " + name);
+          println("[ oavp ] Loading svg: " + name);
           entities.addSvg(name);
           break;
         case "jpg":
         case "png":
-          println("Adding image: " + name);
+          println("[ oavp ] Loading image: " + name);
           entities.addImg(name);
           break;
         default:

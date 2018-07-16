@@ -579,6 +579,8 @@ public class OavpOscillator {
   private Ani ani;
   private float value = 0;
 
+  OavpOscillator(){}
+
   public OavpOscillator duration(float duration) {
     this.duration = duration;
     return this;
@@ -588,8 +590,6 @@ public class OavpOscillator {
     this.easing = easing;
     return this;
   }
-
-  OavpOscillator(){}
 
   public void start() {
     loop();
@@ -701,6 +701,62 @@ public class OavpTerrain {
   }
 }
 
+public class OavpToggle {
+  private float duration = 1;
+  private Easing easing = Ani.LINEAR;
+  private Ani ani;
+  private float value = 0;
+  private float target = 1;
+
+  OavpToggle(){}
+
+  public OavpToggle duration(float duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  public OavpToggle easing(Easing easing) {
+    this.easing = easing;
+    return this;
+  }
+
+  public void softToggle() {
+    if (target == 1) {
+      ani = Ani.to(this, duration, "value", target, easing);
+      target = 0;
+    } else {
+      ani = Ani.to(this, duration, "value", target, easing);
+      target = 1;
+    }
+  }
+
+  public void toggle() {
+    if (target == 1) {
+      value = 1;
+      target = 0;
+    } else {
+      value = 0;
+      target = 1;
+    }
+  }
+
+  public void softToggleIf(boolean trigger) {
+    if (trigger) {
+      softToggle();
+    }
+  }
+
+  public void toggleIf(boolean trigger) {
+    if (trigger) {
+      toggle();
+    }
+  }
+
+  public float getValue() {
+    return value;
+  }
+}
+
 public class OavpEntityManager {
   private Minim minim;
   private HashMap<String, PShape> svgs;
@@ -716,6 +772,7 @@ public class OavpEntityManager {
   private HashMap<String, OavpOscillator> oscillators;
   private HashMap<String, OavpTerrain> terrains;
   private HashMap<String, OavpCamera> cameras;
+  private HashMap<String, OavpToggle> toggles;
 
   OavpEntityManager(Minim minim) {
     this.minim = minim;
@@ -732,6 +789,7 @@ public class OavpEntityManager {
     oscillators = new HashMap<String, OavpOscillator>();
     terrains = new HashMap<String, OavpTerrain>();
     cameras = new HashMap<String, OavpCamera>();
+    toggles = new HashMap<String, OavpToggle>();
   }
 
   public float mouseX(float start, float end) {
@@ -927,6 +985,15 @@ public class OavpEntityManager {
 
   public void useCamera(String name) {
     cameras.get(name).view();
+  }
+
+  public OavpToggle addToggle(String name) {
+    toggles.put(name, new OavpToggle());
+    return toggles.get(name);
+  }
+
+  public OavpToggle getToggle(String name) {
+    return toggles.get(name);
   }
 
   public void update() {

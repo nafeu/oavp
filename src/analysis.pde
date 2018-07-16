@@ -33,6 +33,7 @@ public class OavpAnalysis {
     beat = new BeatDetect();
     beat.setSensitivity(300);
     if (config.AUDIO_FILE != null) {
+      println("[ oavp ] Loading audio file: " + config.AUDIO_FILE);
       player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
       player.loop();
       isLineIn = false;
