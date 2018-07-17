@@ -758,9 +758,11 @@ public class OavpToggle {
 }
 
 public class OavpEntityManager {
+  private PApplet context;
   private Minim minim;
   private HashMap<String, PShape> svgs;
   private HashMap<String, PImage> imgs;
+  private HashMap<String, Movie> movies;
   private HashMap<String, OavpPulser> pulsers;
   private HashMap<String, OavpInterval> intervals;
   private HashMap<String, OavpGridInterval> gridIntervals;
@@ -774,10 +776,12 @@ public class OavpEntityManager {
   private HashMap<String, OavpCamera> cameras;
   private HashMap<String, OavpToggle> toggles;
 
-  OavpEntityManager(Minim minim) {
+  OavpEntityManager(PApplet context, Minim minim) {
+    this.context = context;
     this.minim = minim;
     svgs = new HashMap<String, PShape>();
     imgs = new HashMap<String, PImage>();
+    movies = new HashMap<String, Movie>();
     pulsers = new HashMap<String, OavpPulser>();
     intervals = new HashMap<String, OavpInterval>();
     gridIntervals = new HashMap<String, OavpGridInterval>();
@@ -816,6 +820,16 @@ public class OavpEntityManager {
 
   public PImage getImg(String name) {
     return imgs.get(name);
+  }
+
+  public void addMovie(String filename) {
+    String[] fn = filename.split("\\.");
+    movies.put(fn[0], new Movie(context, filename));
+    movies.get(fn[0]).loop();
+  }
+
+  public Movie getMovie(String name) {
+    return movies.get(name);
   }
 
   public OavpPulser addPulser(String name) {

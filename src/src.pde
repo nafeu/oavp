@@ -7,7 +7,9 @@ import java.util.ListIterator;
 import java.util.HashMap;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
+import processing.video.*;
 
+PApplet context;
 OavpConfig oavp;
 Minim minim;
 OavpPosition entityPosition;
@@ -21,6 +23,7 @@ OavpPalette palette;
 OavpEntityManager entities;
 
 void setup() {
+  context = this;
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // Display Setup
@@ -36,12 +39,12 @@ void setup() {
     surface.setTitle(oavp.FRAME_TITLE);
 
     // Library initialization
-    minim = new Minim(this);
-    Ani.init(this);
+    minim = new Minim(context);
+    Ani.init(context);
 
     // Entity Setup
     entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
-    entities = new OavpEntityManager(minim);
+    entities = new OavpEntityManager(context, minim);
 
     // Default Camera Setup
     defaultCamera = new OavpCamera();
@@ -75,6 +78,10 @@ void setup() {
         case "png":
           println("[ oavp ] Loading image: " + name);
           entities.addImg(name);
+          break;
+        case "mov":
+          println("[ oavp ] Loading movie: " + name);
+          entities.addMovie(name);
           break;
         default:
           break;
@@ -124,4 +131,8 @@ void updateEntities() {
     println("---");
     exit();
   }
+}
+
+void movieEvent(Movie m) {
+  m.read();
 }

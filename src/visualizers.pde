@@ -195,6 +195,26 @@ class OavpVisualizer {
     return this;
   }
 
+  public OavpVisualizer imageTint(float a, float b) {
+    tint(a, b);
+    return this;
+  }
+
+  public OavpVisualizer imageTint(float a, float b, float c) {
+    tint(a, b, c);
+    return this;
+  }
+
+  public OavpVisualizer imageTint(float a, float b, float c, float d) {
+    tint(a, b, c, d);
+    return this;
+  }
+
+  public OavpVisualizer imageTint(color customColor, float alpha) {
+    tint(red(customColor), green(customColor), blue(customColor), alpha);
+    return this;
+  }
+
   public OavpVisualizer done() {
     popMatrix();
     return this;
@@ -715,6 +735,15 @@ class OavpVisualizer {
       pushMatrix();
       scale(scaleFactor);
       image(image, 0, 0);
+      popMatrix();
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer movie(String movieName, float scaleFactor) {
+      Movie movie = entities.getMovie(movieName);
+      pushMatrix();
+      scale(scaleFactor);
+      image(movie, 0, 0);
       popMatrix();
       return OavpVisualizer.this;
     }
