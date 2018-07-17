@@ -1,6 +1,6 @@
 void setupSketch() {
   entities.addCamera("default");
-  entities.addToggle("a");
+  entities.addToggle("example");
 }
 
 void updateSketch() {
@@ -9,32 +9,22 @@ void updateSketch() {
 }
 
 void drawSketch() {
-  palette.reset(palette.flat.black, palette.flat.white, palette.flat.white, 2);
+
+  palette.reset(palette.flat.white, palette.flat.black, palette.flat.black, 2);
 
   visualizers
-    .create()
-    .center().middle()
+    .create().center().middle()
     .draw.centeredSvg("test-logo", 2)
-    .done();
-
-  visualizers
-    .create()
-    .center().middle()
-    .moveBackward(5)
-    .moveRight(analysis.getLevel() * 100)
+    .next().center().middle()
+    .moveBackward(20).moveRight(analysis.getLevel() * 50)
     .startStyle()
-      .fillColor(palette.flat.blue, entities.getToggle("a").getValue())
+      .fillColor(palette.flat.blue, entities.getToggle("example").getValue())
       .draw.centeredSvg("test-logo", 2)
     .endStyle()
-    .done();
-
-  visualizers
-    .create()
-    .center().middle()
-    .moveBackward(10)
-    .moveLeft(analysis.getLevel() * 100)
+    .next().center().middle()
+    .moveBackward(40).moveLeft(analysis.getLevel() * 50)
     .startStyle()
-      .fillColor(palette.flat.red, entities.getToggle("a").getValue())
+      .fillColor(palette.flat.red, entities.getToggle("example").getValue())
       .draw.centeredSvg("test-logo", 2)
     .endStyle()
     .done();
@@ -60,9 +50,9 @@ void keyPressed() {
     entities.getCamera("default").moveRight(250);
   }
   if (key == 'q') {
-    entities.getToggle("a").softToggle();
+    entities.getToggle("example").softToggle();
   }
   if (key == 'e') {
-    entities.getToggle("a").toggle();
+    entities.getToggle("example").toggle();
   }
 }
