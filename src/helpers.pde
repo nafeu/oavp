@@ -48,3 +48,15 @@ color opacity(color c, float alpha) {
   color out = color(red(c), green(c), blue(c), alpha * 255);
   return out;
 }
+
+void debugError(Exception e) {
+  StackTraceElement element = e.getStackTrace()[0];
+  int lineNumber = element.getLineNumber();
+  String[] source = loadStrings("../build-tmp/source/src.java");
+  println(e.toString() + " @ " + element);
+  if (element.getFileName() == "src.java") {
+    println(lineNumber + ":" + source[lineNumber - 1]);
+  }
+  println("---");
+  exit();
+}

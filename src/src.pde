@@ -90,11 +90,8 @@ void setup() {
 
     setupSketch();
   } catch (Exception e) {
-    StackTraceElement element = e.getStackTrace()[0];
     println("[ oavp ] Error during setup");
-    println(e.toString() + " @ " + element);
-    println(element.getLineNumber() + ":" + loadStrings("../build-tmp/source/src.java")[element.getLineNumber() - 1]);
-    println("---");
+    debugError(e);
     exit();
   }
 
@@ -109,11 +106,8 @@ void draw() {
     updateEntities();
     drawSketch();
   } catch (Exception e) {
-    StackTraceElement element = e.getStackTrace()[0];
     println("[ oavp ] Error during draw loop");
-    println(e.toString() + " @ " + element);
-    println(element.getLineNumber() + ":" + loadStrings("../build-tmp/source/src.java")[element.getLineNumber() - 1]);
-    println("---");
+    debugError(e);
     exit();
   }
 }
@@ -124,11 +118,8 @@ void updateEntities() {
     analysis.forward();
     updateSketch();
   } catch (Exception e) {
-    StackTraceElement element = e.getStackTrace()[0];
     println("[ oavp ] Error during update loop");
-    println(e.toString() + " @ " + element);
-    println(element.getLineNumber() + ":" + loadStrings("../build-tmp/source/src.java")[element.getLineNumber() - 1]);
-    println("---");
+    debugError(e);
     exit();
   }
 }
