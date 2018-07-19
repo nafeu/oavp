@@ -51,21 +51,23 @@ color opacity(color c, float alpha) {
 
 // @question Do we want this to always run after an exception? If so then we
 // can remove exit() call since that's handled by the entry function.
+// @answer calling exit() prevents the Java Applet from hanging in the background
+// after an exception is thrown, otherwise you have to manually end process
 void debugError(Exception e) {
-  try {
-    StackTraceElement element = e.getStackTrace()[0];
-    int lineNumber = element.getLineNumber();
-    // @improve This can fail if the build-tmp folder doesn't exist. Maybe we
-    // have to call sketchPath() outside of setup() to find the build location.
-    // There may also be some Java function that returns this path.
-    String[] source = loadStrings("../build-tmp/source/src.java");
-    println(e.toString() + " @ " + element);
-    if (element.getFileName() == "src.java") {
-      println(lineNumber + ":" + source[lineNumber - 1]);
-    }
-  } catch (Exception bad) {
-    println("[ oavp ] debugError() failed!");
-  }
+  StackTraceElement element = e.getStackTrace()[0];
+  println(e.toString() + " @ " + element);
+  /*
+   * @improve This can fail if the build-tmp folder doesn't exist. Maybe we
+   * have to call sketchPath() outside of setup() to find the build location.
+   * There may also be some Java function that returns this path.
+   *
+   */
+  // TODO: Improve stack trace and error handling
+  // String[] source = loadStrings("../build-tmp/source/src.java");
+  // int lineNumber = element.getLineNumber();
+  // if (element.getFileName() == "src.java") {
+  //   println(lineNumber + ":" + source[lineNumber - 1]);
+  // }
   println("---");
   exit();
 }
