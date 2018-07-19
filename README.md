@@ -13,6 +13,7 @@ Check out the full guide and docs available [at the repo's wiki here](https://gi
   - [`Minim`](https://github.com/ddf/Minim) (for realtime audio analysis)
   - [`Ani`](https://github.com/b-g/Ani) (for tweening and smooth animations)
   - [`Beads`](https://github.com/orsjb/beads) (for time/tempo synced rhythmic operations)
+  - You may also need to install the [`Processing Video`](https://github.com/processing/processing-video) package.
 
 ## Using Sublime
 
