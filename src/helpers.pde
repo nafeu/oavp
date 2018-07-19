@@ -49,13 +49,22 @@ color opacity(color c, float alpha) {
   return out;
 }
 
+// @question Do we want this to always run after an exception? If so then we
+// can remove exit() call since that's handled by the entry function.
 void debugError(Exception e) {
-  StackTraceElement element = e.getStackTrace()[0];
-  int lineNumber = element.getLineNumber();
-  String[] source = loadStrings("../build-tmp/source/src.java");
-  println(e.toString() + " @ " + element);
-  if (element.getFileName() == "src.java") {
-    println(lineNumber + ":" + source[lineNumber - 1]);
+  try {
+    StackTraceElement element = e.getStackTrace()[0];
+    int lineNumber = element.getLineNumber();
+    // @improve This can fail if the build-tmp folder doesn't exist. Maybe we
+    // have to call sketchPath() outside of setup() to find the build location.
+    // There may also be some Java function that returns this path.
+    String[] source = loadStrings("../build-tmp/source/src.java");
+    println(e.toString() + " @ " + element);
+    if (element.getFileName() == "src.java") {
+      println(lineNumber + ":" + source[lineNumber - 1]);
+    }
+  } catch (Exception bad) {
+    println("[ oavp ] debugError() failed!");
   }
   println("---");
   exit();
