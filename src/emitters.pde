@@ -111,11 +111,11 @@ public class OavpEmitter {
   }
 
   public OavpEmitter emitSpectrum(boolean trigger) {
-    float[] payload = new float[analysis.getSpectrum().length];
-    for (int i = 0; i < analysis.getSpectrum().length; i++) {
-      payload[i] = analysis.getSpectrumVal(i);
-    }
     if (trigger) {
+      float[] payload = new float[analysis.getSpectrum().length];
+      for (int i = 0; i < analysis.getSpectrum().length; i++) {
+        payload[i] = analysis.getSpectrumVal(i);
+      }
       currEmissions.add(new OavpEmission(duration, easing, payload));
     }
     return this;
