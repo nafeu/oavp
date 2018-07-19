@@ -26,37 +26,47 @@ public class OavpConfig {
 
   OavpConfig() {}
 
-  OavpConfig(String path) {
-    JSONObject config;
-    config = loadJSONObject(path);
-    FRAMERATE = config.getInt("FRAMERATE");
+  public boolean loadConfig(String path) {
+    boolean result = false;
 
-    AUDIO_FILE = config.getString("AUDIO_FILE");
-    if (AUDIO_FILE.length() < 1) {
-      AUDIO_FILE = null;
+    File config_f = new File(path);
+    if (config_f.exists()) {
+      JSONObject config = loadJSONObject(path);
+
+      FRAMERATE = config.getInt("FRAMERATE");
+
+      AUDIO_FILE = config.getString("AUDIO_FILE");
+      if (AUDIO_FILE.length() < 1) {
+        AUDIO_FILE = null;
+      }
+
+      BUFFER_SIZE = config.getInt("BUFFER_SIZE");
+      MIN_BANDWIDTH_PER_OCTAVE = config.getInt("MIN_BANDWIDTH_PER_OCTAVE");
+      BANDS_PER_OCTAVE = config.getInt("BANDS_PER_OCTAVE");
+
+      FONT_FILE = config.getString("FONT_FILE");
+      FONT_UNIT = config.getInt("FONT_UNIT");
+      FONT_SCALE = config.getFloat("FONT_SCALE");
+
+      STAGE_WIDTH = config.getFloat("STAGE_WIDTH");
+      STAGE_HEIGHT = config.getFloat("STAGE_HEIGHT");
+      w = STAGE_WIDTH;
+      h = STAGE_HEIGHT;
+      GRID_SCALE = config.getFloat("GRID_SCALE");
+
+      SPECTRUM_SMOOTHING = config.getFloat("SPECTRUM_SMOOTHING");
+      LEVEL_SMOOTHING = config.getFloat("LEVEL_SMOOTHING");
+      BUFFER_SMOOTHING = config.getFloat("BUFFER_SMOOTHING");
+
+      ENABLE_ORTHO = config.getBoolean("ENABLE_ORTHO");
+
+      FRAME_TITLE = config.getString("FRAME_TITLE");
+    }
+    else {
+      System.err.println("[ oavp ] Unable to find the Oavp config file at '" + path + "'");
     }
 
-    BUFFER_SIZE = config.getInt("BUFFER_SIZE");
-    MIN_BANDWIDTH_PER_OCTAVE = config.getInt("MIN_BANDWIDTH_PER_OCTAVE");
-    BANDS_PER_OCTAVE = config.getInt("BANDS_PER_OCTAVE");
-
-    FONT_FILE = config.getString("FONT_FILE");
-    FONT_UNIT = config.getInt("FONT_UNIT");
-    FONT_SCALE = config.getFloat("FONT_SCALE");
-
-    STAGE_WIDTH = config.getFloat("STAGE_WIDTH");
-    STAGE_HEIGHT = config.getFloat("STAGE_HEIGHT");
-    w = STAGE_WIDTH;
-    h = STAGE_HEIGHT;
-    GRID_SCALE = config.getFloat("GRID_SCALE");
-
-    SPECTRUM_SMOOTHING = config.getFloat("SPECTRUM_SMOOTHING");
-    LEVEL_SMOOTHING = config.getFloat("LEVEL_SMOOTHING");
-    BUFFER_SMOOTHING = config.getFloat("BUFFER_SMOOTHING");
-
-    ENABLE_ORTHO = config.getBoolean("ENABLE_ORTHO");
-
-    FRAME_TITLE = config.getString("FRAME_TITLE");
+    return result;
   }
 
   public float width(float scale) {

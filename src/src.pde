@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.HashMap;
+import java.io.File;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 import processing.video.*;
@@ -24,6 +25,9 @@ OavpEntityManager entities;
 
 void setup() {
   context = this;
+  // @improve Use a path joining function.
+  String data_path = sketchPath() + "\\data";
+
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // Display Setup
@@ -31,8 +35,10 @@ void setup() {
   fullScreen(P3D, 2);
 
   try {
-    // Load configs
-    oavp = new OavpConfig("config.json");
+    oavp = new OavpConfig();
+    if (!oavp.loadConfig(data_path + "\\config.json")) {
+      throw new Exception();
+    }
 
     // Frame Setup
     frameRate(oavp.FRAMERATE);
@@ -90,7 +96,7 @@ void setup() {
 
     setupSketch();
   } catch (Exception e) {
-    println("[ oavp ] Error during setup");
+    System.err.println("[ oavp ] Error during setup");
     debugError(e);
     exit();
   }
