@@ -1,56 +1,90 @@
 void setupSketch() {
   entities.addCamera("default");
-  entities.addCounter("a").duration(0.5).easing(Ani.QUAD_IN_OUT);
-  entities.addCounter("b").duration(1).easing(Ani.QUAD_IN_OUT);
-  entities.addCounter("c").duration(1.5).easing(Ani.QUAD_IN_OUT);
-  entities.addCounter("d").duration(2).easing(Ani.QUAD_IN_OUT);
-  entities.addCounter("e").duration(2.5).easing(Ani.QUAD_IN_OUT);
-  entities.addToggle("a").duration(0.5).easing(Ani.QUAD_IN_OUT);
-  entities.addToggle("b").duration(1).easing(Ani.QUAD_IN_OUT);
-  entities.addToggle("c").duration(1.5).easing(Ani.QUAD_IN_OUT);
-  entities.addToggle("d").duration(2).easing(Ani.QUAD_IN_OUT);
-  entities.addToggle("e").duration(2.5).easing(Ani.QUAD_IN_OUT);
+
+  entities.addPulser("a").duration(1).easing(Ani.QUAD_IN_OUT);
+  entities.addGridInterval("a", 5, 5).delay(1);
+
+  palette.add("a", palette.getRandomColor());
+  palette.add("b", palette.getRandomColor());
+  palette.add("c", palette.getRandomColor());
+  palette.add("d", palette.getRandomColor());
+  palette.add("bg", palette.getRandomColor());
+  println(palette.get("a"));
+  println(palette.get("b"));
+  println(palette.get("c"));
+  println(palette.get("d"));
+  println(palette.get("bg"));
 }
 
 void updateSketch() {
+  entities.getGridInterval("a").updateDimensional(entities.getPulser("a").getValue());
+
   entities.useCamera("default");
 }
 
 void drawSketch() {
-  palette.reset(palette.flat.black, palette.flat.white, 2);
+  palette.reset(palette.get("bg"), palette.flat.white, 2);
 
   visualizers
     .create()
-    .top().left()
-    .moveLeft(500)
+    .center().middle()
+    .moveRight(10)
+    .dimensions(oavp.width(0.4), oavp.height(0.4))
+    .useGridInterval("a")
     .startStyle()
-      .imageTint(palette.flat.blue, 70)
-      .draw.movie("test-video", 1)
+    .noStrokeStyle()
+      .fillColor(palette.get("a"))
+      .draw.gridIntervalDiamond()
+    .moveLeft(oavp.width(0.4))
+      .fillColor(palette.get("b"))
+      .draw.gridIntervalDiamond()
+    .rotate(0, 0, -180)
+    .moveLeft(oavp.width(0.4))
+      .fillColor(palette.get("c"))
+      .draw.gridIntervalDiamond()
+    .moveLeft(oavp.width(0.4))
+      .fillColor(palette.get("d"))
+      .draw.gridIntervalDiamond()
     .endStyle()
     .done();
 
   visualizers
-    .create().center().middle().rotate(0, 0, entities.getCounter("a").getValue() * 45).draw.basicSquare(50 + (entities.getToggle("a").getValue() * 50))
-    .next().center().middle().rotate(0, 0, entities.getCounter("b").getValue() * 45).draw.basicSquare(100 + (entities.getToggle("b").getValue() * 100))
-    .next().center().middle().rotate(0, 0, entities.getCounter("c").getValue() * 45).draw.basicSquare(150 + (entities.getToggle("c").getValue() * 150))
-    .next().center().middle().rotate(0, 0, entities.getCounter("d").getValue() * 45).draw.basicSquare(200 + (entities.getToggle("d").getValue() * 200))
-    .next().center().middle().rotate(0, 0, entities.getCounter("e").getValue() * 45).draw.basicSquare(250 + (entities.getToggle("e").getValue() * 250))
+    .create()
+    .center().middle()
+    .dimensions(oavp.width(0.4), oavp.height(0.4))
+    .useGridInterval("a")
+    .startStyle()
+    .noStrokeStyle()
+      .fillColor(palette.get("d"))
+      .draw.gridIntervalDiamond()
+    .moveLeft(oavp.width(0.4))
+      .fillColor(palette.get("a"))
+      .draw.gridIntervalDiamond()
+    .rotate(0, 0, -180)
+    .moveLeft(oavp.width(0.4))
+      .fillColor(palette.get("b"))
+      .draw.gridIntervalDiamond()
+    .moveLeft(oavp.width(0.4))
+      .fillColor(palette.get("c"))
+      .draw.gridIntervalDiamond()
+    .endStyle()
     .done();
 }
 
 void keyPressed() {
   if (key == 'q') {
-    entities.getCounter("a").increment();
-    entities.getCounter("b").increment();
-    entities.getCounter("c").increment();
-    entities.getCounter("d").increment();
-    entities.getCounter("e").increment();
+    entities.getPulser("a").pulse();
   }
-  if (key == 'e') {
-    entities.getToggle("a").softToggle();
-    entities.getToggle("b").softToggle();
-    entities.getToggle("c").softToggle();
-    entities.getToggle("d").softToggle();
-    entities.getToggle("e").softToggle();
+  if (key == 'w') {
+    palette.add("a", palette.getRandomColor());
+    palette.add("b", palette.getRandomColor());
+    palette.add("c", palette.getRandomColor());
+    palette.add("d", palette.getRandomColor());
+    palette.add("bg", palette.getRandomColor());
+    println(palette.get("a"));
+    println(palette.get("b"));
+    println(palette.get("c"));
+    println(palette.get("d"));
+    println(palette.get("bg"));
   }
 }

@@ -849,8 +849,9 @@ public class OavpEntityManager {
     return intervals.get(name);
   }
 
-  public void addGridInterval(String name, int numRows, int numCols) {
+  public OavpGridInterval addGridInterval(String name, int numRows, int numCols) {
     gridIntervals.put(name, new OavpGridInterval(numRows, numCols));
+    return gridIntervals.get(name);
   }
 
   public OavpGridInterval getGridInterval(String name) {

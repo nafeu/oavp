@@ -465,6 +465,25 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer gridIntervalDiamond() {
+      OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
+      float colScale = currWidth / gridInterval.getNumCols();
+      float rowScale = currHeight / gridInterval.getNumRows();
+      for (int i = 0; i < gridInterval.getNumRows(); i++) {
+        for (int j = 0; j < gridInterval.getNumCols(); j++) {
+          float x = (j * colScale) + (colScale * 0.5);
+          float y = (i * rowScale) + (rowScale * 0.5);
+          beginShape();
+          vertex(x - (gridInterval.getData(i, j) * colScale * 0.5), y);
+          vertex(x, y - (gridInterval.getData(i, j) * rowScale * 0.5));
+          vertex(x + (gridInterval.getData(i, j) * colScale * 0.5), y);
+          vertex(x, y + (gridInterval.getData(i, j) * rowScale * 0.5));
+          endShape(CLOSE);
+        }
+      }
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer pulserCircle(float minRadius, float maxRadius) {
       OavpPulser pulser = OavpVisualizer.this.currPulser;
       ellipseMode(RADIUS);
