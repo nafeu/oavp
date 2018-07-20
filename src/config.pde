@@ -26,12 +26,20 @@ public class OavpConfig {
 
   OavpConfig() {}
 
-  public boolean loadConfig(String path) {
+  public boolean loadConfig(String fileName) {
     boolean result = false;
 
-    File config_f = new File(path);
-    if (config_f.exists()) {
-      JSONObject config = loadJSONObject(path);
+    String filePath = sketchPath("data/") + fileName;
+
+    // TODO: Automatically create 'config.json' if it doesn't exist
+    File configFile = new File(filePath);
+    if (configFile.exists()) {
+      result = true;
+
+      // @improve Processing's file load functions automatically start from the
+      // project's "data" folder, to improve this would require either a
+      // manual rewrite or using a separate library to load JSONObjects
+      JSONObject config = loadJSONObject(fileName);
 
       FRAMERATE = config.getInt("FRAMERATE");
 
@@ -63,7 +71,7 @@ public class OavpConfig {
       FRAME_TITLE = config.getString("FRAME_TITLE");
     }
     else {
-      System.err.println("[ oavp ] Unable to find the Oavp config file at '" + path + "'");
+      System.err.println("[ oavp ] Unable to find the Oavp config file at '" + filePath + "'");
     }
 
     return result;

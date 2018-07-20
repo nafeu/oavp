@@ -25,8 +25,6 @@ OavpEntityManager entities;
 
 void setup() {
   context = this;
-  // @improve Use a path joining function.
-  String data_path = sketchPath() + "\\data";
 
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
@@ -36,7 +34,7 @@ void setup() {
 
   try {
     oavp = new OavpConfig();
-    if (!oavp.loadConfig(data_path + "\\config.json")) {
+    if (!oavp.loadConfig("config.json")) {
       throw new Exception();
     }
 
