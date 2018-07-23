@@ -7,7 +7,7 @@ public class OavpEmitter {
   private OavpGridInterval currGridInterval;
   private List currEmissions;
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
 
   OavpEmitter(OavpAnalysis analysis, OavpEntityManager entities) {
     this.analysis = analysis;

@@ -36,17 +36,23 @@ public class OavpPalette {
     noStroke();
   }
 
-  public void add(String name, color colorA) {
+  public OavpPalette add(String name, color colorA) {
     color[] colors = new color[1];
     colors[0] = colorA;
     storage.put(name, colors);
+    return this;
   }
 
-  public void add(String name, color colorA, color colorB) {
+  public OavpPalette add(String name, color colorA, color colorB) {
     color[] colors = new color[2];
     colors[0] = colorA;
     colors[1] = colorB;
     storage.put(name, colors);
+    return this;
+  }
+
+  public HashMap<String, color[]> getStorage() {
+    return storage;
   }
 
   public color get(String name) {

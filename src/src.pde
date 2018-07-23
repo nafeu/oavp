@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.HashMap;
+import java.util.Collections;
 import java.io.File;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;

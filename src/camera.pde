@@ -29,7 +29,7 @@ public class OavpCamera {
   private Ani aniUpMovementZ;
 
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
 
   OavpCamera() {
     eye = new PVector();

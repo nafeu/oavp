@@ -278,6 +278,16 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicDiamond(float size) {
+      beginShape();
+      vertex(-(size * 0.5), 0);
+      vertex(0, -(size * 0.5));
+      vertex((size * 0.5), 0);
+      vertex(0, (size * 0.5));
+      endShape(CLOSE);
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer basicCircle(float radius) {
       ellipse(0, 0, radius, radius);
       return OavpVisualizer.this;

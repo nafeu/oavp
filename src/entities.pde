@@ -1,7 +1,7 @@
 public class OavpPulser {
   private float value = 0;
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
   private Ani ani;
 
   OavpPulser() {}
@@ -346,7 +346,7 @@ public class OavpCounter {
   private int limit = 0;
   private Ani ani;
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
 
   OavpCounter(){}
 
@@ -410,7 +410,7 @@ public class OavpRotator {
   private float z = 0;
   private List storage;
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
   private int index;
   private Ani aniX;
   private Ani aniY;
@@ -449,7 +449,6 @@ public class OavpRotator {
     for (int i = 0; i < max(granularity, 2); i++) {
       for (int j = 0; j < max(granularity, 2); j++) {
         float values[] = new float[]{i * interpolation, j * interpolation, 0};
-        println(values);
         storage.add(values);
       }
     }
@@ -514,7 +513,7 @@ public class OavpColorRotator {
   private color colorA;
   private color colorB;
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
   private int index;
   private Ani ani;
 
@@ -524,6 +523,20 @@ public class OavpColorRotator {
 
   public OavpColorRotator add(color value) {
     storage.add(value);
+    return this;
+  }
+
+  public OavpColorRotator add(OavpPalette palette) {
+    HashMap<String, color[]> paletteStorage = palette.getStorage();
+    for (HashMap.Entry<String, color[]> entry : paletteStorage.entrySet())
+    {
+      storage.add(entry.getValue()[0]);
+    }
+    return this;
+  }
+
+  public OavpColorRotator displace(int distance) {
+    Collections.rotate(storage, distance);
     return this;
   }
 
@@ -575,7 +588,7 @@ public class OavpColorRotator {
 
 public class OavpOscillator {
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
   private Ani ani;
   private float value = 0;
 
@@ -601,6 +614,11 @@ public class OavpOscillator {
     } else {
       ani = Ani.to(this, duration, "value", 0, easing, "onEnd:loop");
     }
+  }
+
+  private void restart() {
+    value = 0;
+    ani = Ani.to(this, duration, "value", 1, easing, "onEnd:loop");
   }
 
   public float getValue() {
@@ -703,7 +721,7 @@ public class OavpTerrain {
 
 public class OavpToggle {
   private float duration = 1;
-  private Easing easing = Ani.LINEAR;
+  private Easing easing = Ani.QUAD_IN_OUT;
   private Ani ani;
   private float value = 0;
   private float target = 1;
@@ -837,6 +855,13 @@ public class OavpEntityManager {
     return pulsers.get(name);
   }
 
+  public OavpEntityManager addPulsers(String... names) {
+    for (String name : names) {
+      pulsers.put(name, new OavpPulser());
+    }
+    return this;
+  }
+
   public OavpPulser getPulser(String name) {
     return pulsers.get(name);
   }
@@ -862,6 +887,13 @@ public class OavpEntityManager {
     emissionsStorage.put(name, new ArrayList());
   }
 
+  public OavpEntityManager addEmissions(String... names) {
+    for (String name : names) {
+      emissionsStorage.put(name, new ArrayList());
+    }
+    return this;
+  }
+
   public void updateEmissions() {
     for (HashMap.Entry<String, List> entry : emissionsStorage.entrySet())
     {
@@ -885,6 +917,13 @@ public class OavpEntityManager {
     return rhythms.get(name);
   }
 
+  public OavpEntityManager addRhythms(String... names) {
+    for (String name : names) {
+      rhythms.put(name, new OavpRhythm(minim));
+    }
+    return this;
+  }
+
   public void updateRhythms() {
     for (HashMap.Entry<String, OavpRhythm> entry : rhythms.entrySet())
     {
@@ -903,6 +942,13 @@ public class OavpEntityManager {
   public OavpCounter addCounter(String name) {
     counters.put(name, new OavpCounter());
     return counters.get(name);
+  }
+
+  public OavpEntityManager addCounters(String... names) {
+    for (String name : names) {
+      counters.put(name, new OavpCounter());
+    }
+    return this;
   }
 
   public void incrementCounterIf(String name, Boolean trigger) {
@@ -924,6 +970,13 @@ public class OavpEntityManager {
   public OavpRotator addRotator(String name) {
     rotators.put(name, new OavpRotator());
     return rotators.get(name);
+  }
+
+  public OavpEntityManager addRotators(String... names) {
+    for (String name : names) {
+      rotators.put(name, new OavpRotator());
+    }
+    return this;
   }
 
   public OavpRotator getRotator(String name) {
@@ -951,6 +1004,13 @@ public class OavpEntityManager {
     return colorRotators.get(name);
   }
 
+  public OavpEntityManager addColorRotators(String... names) {
+    for (String name : names) {
+      colorRotators.put(name, new OavpColorRotator());
+    }
+    return this;
+  }
+
   public OavpColorRotator getColorRotator(String name) {
     return colorRotators.get(name);
   }
@@ -976,6 +1036,13 @@ public class OavpEntityManager {
     return oscillators.get(name);
   }
 
+  public OavpEntityManager addOscillators(String... names) {
+    for (String name : names) {
+      oscillators.put(name, new OavpOscillator());
+    }
+    return this;
+  }
+
   public OavpOscillator getOscillator(String name) {
     return oscillators.get(name);
   }
@@ -985,6 +1052,13 @@ public class OavpEntityManager {
     return terrains.get(name);
   }
 
+  public OavpEntityManager addTerrains(String... names) {
+    for (String name : names) {
+      terrains.put(name, new OavpTerrain());
+    }
+    return this;
+  }
+
   public OavpTerrain getTerrain(String name) {
     return terrains.get(name);
   }
@@ -992,6 +1066,13 @@ public class OavpEntityManager {
   public OavpCamera addCamera(String name) {
     cameras.put(name, new OavpCamera());
     return cameras.get(name);
+  }
+
+  public OavpEntityManager addCameras(String... names) {
+    for (String name : names) {
+      cameras.put(name, new OavpCamera());
+    }
+    return this;
   }
 
   public OavpCamera getCamera(String name) {
@@ -1005,6 +1086,13 @@ public class OavpEntityManager {
   public OavpToggle addToggle(String name) {
     toggles.put(name, new OavpToggle());
     return toggles.get(name);
+  }
+
+  public OavpEntityManager addToggles(String... names) {
+    for (String name : names) {
+      toggles.put(name, new OavpToggle());
+    }
+    return this;
   }
 
   public OavpToggle getToggle(String name) {
