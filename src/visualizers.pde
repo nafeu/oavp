@@ -17,36 +17,58 @@ class OavpVisualizer {
     this.entities = entities;
   }
 
+  /**
+   * Center the drawing origin horizontally
+   */
   public OavpVisualizer center() {
     translate(cursor.getCenteredX(), 0);
     return this;
   }
 
+  /**
+   * Center the drawing origin vertically
+   */
   public OavpVisualizer middle() {
     translate(0, cursor.getCenteredY());
     return this;
   }
 
+  /**
+   * Set horizontal drawing origin to left of screen
+   */
   public OavpVisualizer left() {
     translate(cursor.getScaledX(), 0);
     return this;
   }
 
+  /**
+   * Set horizontal drawing origin to right of screen
+   */
   public OavpVisualizer right() {
     translate(cursor.getScaledX() + cursor.scale, 0);
     return this;
   }
 
+  /**
+   * Set vertical drawing origin to top of screen
+   */
   public OavpVisualizer top() {
     translate(0, cursor.getScaledY());
     return this;
   }
 
+  /**
+   * Set vertical drawing origin to bottom of screen
+   */
   public OavpVisualizer bottom() {
     translate(0, cursor.getScaledY() + cursor.scale);
     return this;
   }
 
+  /**
+   * Rotate around relative position to origin
+   * @param x the x coordinate
+   */
   public OavpVisualizer rotate(float x) {
     rotateX(radians(x));
     return this;
