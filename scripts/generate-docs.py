@@ -32,6 +32,15 @@ def buildDocument(comment):
             declaration = comment[index].split("(")
             document["name"] = declaration[0].split()[-1]
             document["invocation"] = "(" + declaration[-1] + ")"
+            args = [arg.strip() for arg in declaration[-1].split(",")]
+            for index, value in enumerate(document['params']):
+                try:
+                    document['params'][index][0] = args[index]
+                except IndexError:
+                    print("Parameter mismatch for method '" + document['name'] + "':")
+                    print("Documented params: " + str(document['params']))
+                    print("Arguments: " + str(args))
+                    exit()
         else:
             document["desc"] += comment[index] + " "
     document["desc"] = document["desc"].strip()

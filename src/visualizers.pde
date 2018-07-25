@@ -67,19 +67,30 @@ class OavpVisualizer {
 
   /**
    * Rotate around relative position to origin
-   * @param x the x coordinate
+   * @param x the x angle
    */
   public OavpVisualizer rotate(float x) {
     rotateX(radians(x));
     return this;
   }
 
+  /**
+   * Rotate around relative position to origin
+   * @param x the x angle
+   * @param y the y angle
+   */
   public OavpVisualizer rotate(float x, float y) {
     rotateX(radians(x));
     rotateY(radians(y));
     return this;
   }
 
+  /**
+   * Rotate around relative position to origin
+   * @param x the x angle
+   * @param y the y angle
+   * @param z the z angle
+   */
   public OavpVisualizer rotate(float x, float y, float z) {
     rotateX(radians(x));
     rotateY(radians(y));
@@ -87,6 +98,10 @@ class OavpVisualizer {
     return this;
   }
 
+  /**
+   * Rotate around relative position to origin
+   * @param x the x angle
+   */
   public OavpVisualizer rotateClockwise(float x) {
     rotateZ(radians(x));
     return this;
