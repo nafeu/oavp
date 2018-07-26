@@ -35,6 +35,7 @@ def buildDocument(comment):
             continue
         elif index == len(comment) - 1:
             declaration = comment[index].split("(")
+            document["return"] = declaration[0].split()[1] + "<br>" + document["return"]
             document["name"] = declaration[0].split()[-1]
             document["invocation"] = "(" + declaration[-1] + ")"
             args = [arg.strip() for arg in declaration[-1].split(",")]
@@ -61,15 +62,22 @@ def generateDocumentation(documents):
         file.write("\r\n---\r\n\r\n")
         file.write("<a name=\"" + camelToKebab(document["name"]) + "\"/>\r\n")
         file.write("\r\n")
-        file.write("| " + document["name"] + " | |\r\n")
+        file.write("| | " + document["name"] + " |\r\n")
         file.write("| :--- | :--- |\r\n")
         file.write("| Description | " + document["desc"] + " |\r\n")
         file.write("| Syntax | `" + document["name"] + document["invocation"] + "` |\r\n")
-        file.write("| Parameters | ")
-        for param in document["params"]:
-            file.write("**" + param[0].split()[-1] + "** - " + param[0].split()[0] + ": " + param[1] + "<br>")
-        file.write(" |\r\n")
+        if len(document["params"]) > 0:
+            file.write("| Parameters | ")
+            for param in document["params"]:
+                file.write("**" + param[0].split()[-1] + "** - " + param[0].split()[0] + ": " + param[1] + "<br>")
+            file.write(" |\r\n")
         file.write("| Returns | " + document["return"] + " |\r\n")
+
+        if len(document["references"]) > 0:
+            file.write("| References | ")
+            for reference in document["references"]:
+                file.write(reference + "<br>")
+            file.write(" |\r\n")
     file.close()
 
 def camelToKebab(s):
