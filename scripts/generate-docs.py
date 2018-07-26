@@ -17,7 +17,7 @@ def processLine(inputLine):
 def buildDocument(comment):
     document = {
       "name": "",
-      "invocation": "",
+      "syntax": [],
       "desc": "",
       "params": [],
       "return": "",
@@ -35,10 +35,14 @@ def buildDocument(comment):
             continue
         elif index == len(comment) - 1:
             declaration = comment[index].split("(")
-            document["return"] = declaration[0].split()[1] + "<br>" + document["return"]
-            document["name"] = declaration[0].split()[-1]
-            document["invocation"] = "(" + declaration[-1] + ")"
+            name = declaration[0].split()[-1]
+            returnInfo = declaration[0].split()[1] + "<br>" + document["return"]
+            syntax = name + "(" + declaration[-1] + ")"
             args = [arg.strip() for arg in declaration[-1].split(",")]
+
+            document["return"] = returnInfo
+            document["name"] = name
+            document["syntax"].append(syntax)
             for index, value in enumerate(document['params']):
                 try:
                     document['params'][index][0] = args[index]
@@ -50,7 +54,13 @@ def buildDocument(comment):
         else:
             document["desc"] += comment[index] + " "
     document["desc"] = document["desc"].strip()
-    documents.append(document)
+
+    if (len(documents) > 0) and (documents[-1]["name"] == declaration[0].split()[-1]):
+        documents[-1]["syntax"].append(document["syntax"][0])
+        documents[-1]["params"] = document["params"]
+        documents[-1]["references"] = document["references"]
+    else:
+        documents.append(document)
 
 def generateDocumentation(documents):
     print("Generative docs...")
@@ -65,7 +75,10 @@ def generateDocumentation(documents):
         file.write("| | " + document["name"] + " |\r\n")
         file.write("| :--- | :--- |\r\n")
         file.write("| Description | " + document["desc"] + " |\r\n")
-        file.write("| Syntax | `" + document["name"] + document["invocation"] + "` |\r\n")
+        file.write("| Syntax | ")
+        for syntax in document["syntax"]:
+            file.write("`" + syntax + "`<br>")
+        file.write(" |\r\n")
         if len(document["params"]) > 0:
             file.write("| Parameters | ")
             for param in document["params"]:
