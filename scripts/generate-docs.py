@@ -6,10 +6,21 @@ content = ""
 documents = []
 kebabCompilerA = re.compile(r'(.)([A-Z][a-z]+)')
 kebabCompilerB = re.compile('([a-z0-9])([A-Z])')
+wikiUrl = "https://github.com/nafeu/oavp/wiki/"
 
 def getComments(text):
     for comment in re.findall(r'\*\*(.*?)\)\ \{', text, re.S):
         yield re.sub('\n+', '|', re.sub(r'[ *]+', ' ', comment).strip())
+
+def camelToKebab(s):
+    subbed = kebabCompilerA.sub(r'\1-\2', s)
+    return kebabCompilerB.sub(r'\1-\2', subbed).lower()
+
+def getLink(pageName):
+    selection = pageName
+    if "oavp" in pageName.lower():
+        selection = pageName[4:]
+    return "[" + selection + "](" + wikiUrl + selection + ")"
 
 def processLine(inputLine):
     return list(filter(None, [line.strip() for line in inputLine.split("|")]))
@@ -55,7 +66,7 @@ def buildDocument(comment):
             document["desc"] += comment[index] + " "
     document["desc"] = document["desc"].strip()
 
-    if (len(documents) > 0) and (documents[-1]["name"] == declaration[0].split()[-1]):
+    if (len(documents) > 0) and (documents[-1]["name"] == document["name"]):
         documents[-1]["syntax"].append(document["syntax"][0])
         documents[-1]["params"] = document["params"]
         documents[-1]["references"] = document["references"]
@@ -63,16 +74,18 @@ def buildDocument(comment):
         documents.append(document)
 
 def generateDocumentation(documents):
-    print("Generative docs...")
+    print("Generating docs...")
     file = open("doc-export.md", "w+")
-    file.write("## Contents\r\n")
+    file.write("#### Contents\r\n")
     for document in documents:
         file.write("* <a href=\"#" + camelToKebab(document["name"]) +"\">" + document["name"] + "</a>\r\n")
+
+    file.write("\r\n---\r\n")
     for document in documents:
-        file.write("\r\n---\r\n\r\n")
+        file.write("\r\n")
         file.write("<a name=\"" + camelToKebab(document["name"]) + "\"/>\r\n")
         file.write("\r\n")
-        file.write("| | " + document["name"] + " |\r\n")
+        file.write("| | <h2>" + document["name"] + "</h2> |\r\n")
         file.write("| :--- | :--- |\r\n")
         file.write("| Description | " + document["desc"] + " |\r\n")
         file.write("| Syntax | ")
@@ -84,18 +97,14 @@ def generateDocumentation(documents):
             for param in document["params"]:
                 file.write("**" + param[0].split()[-1] + "** - " + param[0].split()[0] + ": " + param[1] + "<br>")
             file.write(" |\r\n")
-        file.write("| Returns | " + document["return"] + " |\r\n")
+        file.write("| Returns | **" + document["return"] + "** |\r\n")
 
         if len(document["references"]) > 0:
             file.write("| References | ")
             for reference in document["references"]:
-                file.write(reference + "<br>")
+                file.write(getLink(reference) + "<br>")
             file.write(" |\r\n")
     file.close()
-
-def camelToKebab(s):
-    subbed = kebabCompilerA.sub(r'\1-\2', s)
-    return kebabCompilerB.sub(r'\1-\2', subbed).lower()
 
 def main():
     if (len(sys.argv) > 1):
@@ -106,10 +115,11 @@ def main():
 
         for comment in comments:
             buildDocument(comment)
-    else:
-        print("No path given")
 
-    generateDocumentation(documents)
+        generateDocumentation(documents)
+    else:
+        print("Missing arguments.")
+
 
 if __name__ == '__main__':
     main()
