@@ -107,63 +107,117 @@ class OavpVisualizer {
     return this;
   }
 
+  /**
+   * Instantiates the next visualization
+   */
   public OavpVisualizer next() {
     popMatrix();
     pushMatrix();
     return this;
   }
 
+  /**
+   * Translate the drawing origin for the visualizer
+   * @param x the x translation
+   * @param y the y translation
+   */
   public OavpVisualizer move(float x, float y) {
     translate(x, y);
     return this;
   }
 
+  /**
+   * Translate the drawing origin for the visualizer
+   * @param x the x translation
+   * @param y the y translation
+   * @param z the z translation
+   */
   public OavpVisualizer move(float x, float y, float z) {
     translate(x, y, z);
     return this;
   }
 
+  /**
+   * Translate the drawing origin upwards
+   * @param distance the displacement
+   */
   public OavpVisualizer moveUp(float distance) {
     translate(0, -distance);
     return this;
   }
+
+  /**
+   * Translate the drawing origin downwards
+   * @param distance the displacement
+   */
 
   public OavpVisualizer moveDown(float distance) {
     translate(0, distance);
     return this;
   }
 
+  /**
+   * Translate the drawing origin to the left
+   * @param distance the displacement
+   */
   public OavpVisualizer moveLeft(float distance) {
     translate(-distance, 0);
     return this;
   }
 
+  /**
+   * Translate the drawing origin to the right
+   * @param distance the displacement
+   */
   public OavpVisualizer moveRight(float distance) {
     translate(distance, 0);
     return this;
   }
 
+  /**
+   * Translate the drawing origin backwards
+   * @param distance the displacement
+   */
   public OavpVisualizer moveBackward(float distance) {
     translate(0, 0, -distance);
     return this;
   }
 
+  /**
+   * Translate the drawing origin forwards
+   * @param distance the displacement
+   */
   public OavpVisualizer moveForward(float distance) {
     translate(0, 0, distance);
     return this;
   }
 
+  /**
+   * Instantiate a new visualization
+   */
   public OavpVisualizer create() {
     pushMatrix();
     return this;
   }
 
+  /**
+   * Instantiate a new visualization
+   * @param x the x translation
+   * @param y the y translation
+   */
   public OavpVisualizer create(float x, float y) {
     pushMatrix();
     translate(x, y);
     return this;
   }
 
+  /**
+   * Instantiate a new visualization
+   * @param x the x translation
+   * @param y the y translation
+   * @param rotationX the X rotation
+   * @param rotationY the Y rotation
+   */
   public OavpVisualizer create(float x, float y, float rotationX, float rotationY) {
     pushMatrix();
     translate(x, y);
@@ -172,12 +226,27 @@ class OavpVisualizer {
     return this;
   }
 
+  /**
+   * Instantiate a new visualization
+   * @param x the x translation
+   * @param y the y translation
+   * @param z the z translation
+   */
   public OavpVisualizer create(float x, float y, float z) {
     pushMatrix();
     translate(x, y, z);
     return this;
   }
 
+  /**
+   * Instantiate a new visualization
+   * @param x the x translation
+   * @param y the y translation
+   * @param z the z translation
+   * @param rotationX the X rotation
+   * @param rotationY the Y rotation
+   * @param rotationZ the Z rotation
+   */
   public OavpVisualizer create(float x, float y, float z, float rotationX, float rotationY, float rotationZ) {
     pushMatrix();
     translate(x, y, z);
@@ -187,71 +256,131 @@ class OavpVisualizer {
     return this;
   }
 
+  /**
+   * Instantiate a new drawing style
+   */
   public OavpVisualizer startStyle() {
     pushStyle();
     return this;
   }
 
+  /**
+   * Conclude a drawing style
+   */
   public OavpVisualizer endStyle() {
     popStyle();
     return this;
   }
 
+  /**
+   * Set no fill styling
+   */
   public OavpVisualizer noFillStyle() {
     noFill();
     return this;
   }
 
+  /**
+   * Set no stroke styling
+   */
   public OavpVisualizer noStrokeStyle() {
     noStroke();
     return this;
   }
 
+  /**
+   * Set fill color
+   * @param customColor the color
+   */
   public OavpVisualizer fillColor(color customColor) {
     fill(customColor);
     return this;
   }
 
+  /**
+   * Set fill color
+   * @param customColor the color
+   * @param opacity the opacity value
+   */
   public OavpVisualizer fillColor(color customColor, float opacity) {
     fill(opacity(customColor, opacity));
     return this;
   }
 
+  /**
+   * Set stroke color
+   * @param customColor the color
+   */
   public OavpVisualizer strokeColor(color customColor) {
     stroke(customColor);
     return this;
   }
 
+  /**
+   * Set stroke color
+   * @param customColor the color
+   * @param opacity the opacity value
+   */
   public OavpVisualizer strokeColor(color customColor, float opacity) {
     stroke(opacity(customColor, opacity));
     return this;
   }
 
+  /**
+   * Set stroke weight style
+   * @param weight the stroke weight value
+   */
   public OavpVisualizer strokeWeightStyle(float weight) {
     strokeWeight(weight);
     return this;
   }
 
+  /**
+   * Set image tint
+   * @param a the red or hue value
+   * @param b the green or saturation value
+   */
   public OavpVisualizer imageTint(float a, float b) {
     tint(a, b);
     return this;
   }
 
+  /**
+   * Set image tint
+   * @param a the red or hue value
+   * @param b the green or saturation value
+   * @param c the blue or brightness value
+   */
   public OavpVisualizer imageTint(float a, float b, float c) {
     tint(a, b, c);
     return this;
   }
 
+  /**
+   * Set image tint
+   * @param a the red or hue value
+   * @param b the green or saturation value
+   * @param c the blue or brightness value
+   * @param d the alpha value
+   */
   public OavpVisualizer imageTint(float a, float b, float c, float d) {
     tint(a, b, c, d);
     return this;
   }
 
+  /**
+   * Set image tint
+   * @param customColor the color value
+   * @param alpha the alpha value
+   */
   public OavpVisualizer imageTint(color customColor, float alpha) {
     tint(red(customColor), green(customColor), blue(customColor), alpha);
     return this;
   }
 
+  /**
+   * Conclude a visualization draw routine
+   */
   public OavpVisualizer done() {
     popMatrix();
     return this;
