@@ -386,36 +386,65 @@ class OavpVisualizer {
     return this;
   }
 
+  /**
+   * Select a Pulser entity to use
+   * @param name the name of the Pulser entity
+   */
   public OavpVisualizer usePulser(String name) {
     currPulser = entities.getPulser(name);
     return this;
   }
 
+  /**
+   * Select an Interval entity to use
+   * @param name the name of the interval entity
+   */
   public OavpVisualizer useInterval(String name) {
     currInterval = entities.getInterval(name);
     return this;
   }
 
+  /**
+   * Select a GridInterval entity to use
+   * @param name the name of the GridInterval entity
+   */
   public OavpVisualizer useGridInterval(String name) {
     currGridInterval = entities.getGridInterval(name);
     return this;
   }
 
+  /**
+   * Select an Emissions entity to use
+   * @param name the name of the Emissions entity
+   */
   public OavpVisualizer useEmissions(String name) {
     currEmissions = entities.getEmissions(name);
     return this;
   }
 
+  /**
+   * Select a Rhythm entity to use
+   * @param name the name of the Rhythm entity
+   */
   public OavpVisualizer useRhythm(String name) {
     currRhythm = entities.getRhythm(name);
     return this;
   }
 
+  /**
+   * Select a Terrain entity to use
+   * @param name the name of the Terrain entity
+   */
   public OavpVisualizer useTerrain(String name) {
     currTerrain = entities.getTerrain(name);
     return this;
   }
 
+  /**
+   * Set the current width and height of the visualization
+   * @param w the width
+   * @param h the height
+   */
   public OavpVisualizer dimensions(float w, float h) {
     currWidth = w;
     currHeight = h;
@@ -430,6 +459,11 @@ class OavpVisualizer {
       this.analysis = analysis;
     }
 
+    /**
+     * Draw a basic square
+     * @param size the length and width of the square
+     * @use draw
+     */
     public OavpVisualizer basicSquare(float size) {
       rectMode(CENTER);
       rect(0, 0, size, size);
@@ -437,6 +471,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic square
+     * @param size the length and width of the square
+     * @param mode the rectangle mode
+     * @use draw
+     */
     public OavpVisualizer basicSquare(float size, int mode) {
       rectMode(mode);
       rect(0, 0, size, size);
@@ -444,6 +484,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic diamond
+     * @param size the length and width of the diamond
+     * @use draw
+     */
     public OavpVisualizer basicDiamond(float size) {
       beginShape();
       vertex(-(size * 0.5), 0);
@@ -454,11 +499,22 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic circle
+     * @param radius the radius of the circle
+     * @use draw
+     */
     public OavpVisualizer basicCircle(float radius) {
       ellipse(0, 0, radius, radius);
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic square with displacement in the Z dimension
+     * @param size the length and width of the square
+     * @param distance the distance in the Z dimension
+     * @use draw
+     */
     public OavpVisualizer basicZSquare(float size, float distance) {
       rectMode(CENTER);
       pushMatrix();
@@ -470,6 +526,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a mesh generated with an interval of incoming spectrum values
+     * @param scale the scale of the mesh
+     * @param specSample the sample size to use from incoming spectrum values
+     * @use draw
+     */
     public OavpVisualizer intervalSpectrumMesh(float scale, int specSample) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       int rows = interval.getIntervalSize();
@@ -492,6 +554,10 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a spectrum visualizer with bars
+     * @use draw
+     */
     public OavpVisualizer basicSpectrumBars() {
       int avgSize = analysis.getAvgSize();
       for (int i = 0; i < avgSize; i++) {
@@ -502,6 +568,10 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a spectrum visualizer as a wire
+     * @use draw
+     */
     public OavpVisualizer basicSpectrumWire() {
       beginShape(LINES);
       int avgSize = analysis.getAvgSize();
@@ -515,6 +585,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a radial spectrum visualizer as bars
+     * @param scale the scale of the visualizer
+     * @param rangeStart the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer basicSpectrumRadialBars(float scale, float rangeStart, float rangeEnd, float rotation) {
       beginShape();
       int avgSize = analysis.getAvgSize();

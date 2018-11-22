@@ -38,6 +38,16 @@ git clone https://github.com/nafeu/oavp.git [PROJECT_NAME]
 
 Open the `sketch.pde` file in Processing and run it.
 
+## Generating Documentation
+
+From the `scripts` directory, use `generate-docs.py` and run as follows:
+
+```
+python generate-docs.py [PATH_TO_PDE_FILE] [BASE_CLASS_NAME]
+```
+
+For example, if you wanted to generate docs for the
+
 ## Credits
 
 Nafeu Nasir

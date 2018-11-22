@@ -29,6 +29,7 @@ def buildDocument(comment, baseClass, defaultReturnDesc):
     document = {
       "name": "",
       "syntax": [],
+      "usage": "",
       "desc": "",
       "params": [],
       "return": {
@@ -46,14 +47,20 @@ def buildDocument(comment, baseClass, defaultReturnDesc):
             document["return"]["desc"] = comment[index][8:]
         elif key == "@see":
             document["references"].append(comment[index][4:].strip())
+        elif key == "@use":
+            document["usage"] = comment[index][4:].strip()
         elif key == "/" or key[0] == "@":
             continue
         elif index == len(comment) - 1:
             declaration = comment[index].split("(")
 
-            document["name"] = declaration[0].split()[-1]
-            document["return"]["type"] = declaration[0].split()[1]
+            if len(document["usage"]) > 0:
+                document["name"] = document["usage"] + "." + declaration[0].split()[-1]
+            else:
+                document["name"] = declaration[0].split()[-1]
+
             document["syntax"].append(document["name"] + "(" + declaration[-1] + ")")
+            document["return"]["type"] = declaration[0].split()[1]
 
             args = [arg.strip() for arg in declaration[-1].split(",")]
             for index, value in enumerate(document['params']):
@@ -84,7 +91,7 @@ def buildDocument(comment, baseClass, defaultReturnDesc):
         documents.append(document)
 
 def generateDocumentation(documents):
-    print("Generating docs...")
+    print("Generating docs -> doc-export.md")
 
     file = open("doc-export.md", "w+")
     file.write("#### Contents\r\n")
@@ -95,8 +102,6 @@ def generateDocumentation(documents):
     file.write("\r\n---\r\n")
 
     for document in documents:
-        print(document)
-        print("--------")
         file.write("\r\n")
         file.write("<a name=\"" + camelToKebab(document["name"]) + "\"/>\r\n")
         file.write("\r\n")
