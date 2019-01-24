@@ -588,7 +588,9 @@ class OavpVisualizer {
     /**
      * Draw a radial spectrum visualizer as bars
      * @param scale the scale of the visualizer
-     * @param rangeStart the scale of the visualizer
+     * @param rangeStart the starting radius
+     * @param rangeEnd the ending radius
+     * @param rotation the degree rotation
      * @use draw
      */
     public OavpVisualizer basicSpectrumRadialBars(float scale, float rangeStart, float rangeEnd, float rotation) {
@@ -607,6 +609,13 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a radial spectrum visualizer as a wire
+     * @param rangeStart the starting radius
+     * @param rangeEnd the ending radius
+     * @param rotation the degree rotation
+     * @use draw
+     */
     public OavpVisualizer basicSpectrumRadialWire(float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int avgSize = analysis.getAvgSize();
@@ -626,6 +635,10 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic waveform as a wire
+     * @use draw
+     */
     public OavpVisualizer basicWaveformWire() {
       int audioBufferSize = analysis.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
@@ -641,6 +654,14 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a radial waveform visualizer as a wire
+     * @param scale the scale of the visualizer
+     * @param rangeStart the starting radius
+     * @param rangeEnd the ending radius
+     * @param rotation the degree rotation
+     * @use draw
+     */
     public OavpVisualizer basicWaveformRadialWire(float scale, float rangeStart, float rangeEnd, float rotation) {
       beginShape(LINES);
       int audioBufferSize = analysis.getBufferSize();
@@ -661,6 +682,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic level flatbox
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer basicLevelFlatbox(float scale) {
       float rawLeftLevel = analysis.getLeftLevel();
       float rawRightLevel = analysis.getRightLevel();
@@ -669,6 +695,10 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic level bars
+     * @use draw
+     */
     public OavpVisualizer basicLevelBars() {
       float rawLeftLevel = analysis.getLeftLevel();
       float rawRightLevel = analysis.getRightLevel();
@@ -678,6 +708,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw interval level bars
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer intervalLevelBars(float scale) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       int intervalSize = interval.getIntervalSize();
@@ -687,6 +722,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a basic level cube
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer basicLevelCube(float scale) {
       float rawLeftLevel = analysis.getLeftLevel();
       float rawRightLevel = analysis.getRightLevel();
@@ -695,12 +735,21 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a pulsing flatbox
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer pulserFlatbox(float scale) {
       OavpPulser pulser = OavpVisualizer.this.currPulser;
       shapes.flatbox(0, 0, 0, scale, -pulser.getValue() * scale, scale);
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a grid interval level square
+     * @use draw
+     */
     public OavpVisualizer gridIntervalLevelSquare() {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
@@ -717,6 +766,10 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a grid interval diamond
+     * @use draw
+     */
     public OavpVisualizer gridIntervalDiamond() {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       float colScale = currWidth / gridInterval.getNumCols();
@@ -736,6 +789,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a pulser circle
+     * @param minRadius the minimum radius of the circle
+     * @param maxRadius the maximum radius of the circle
+     * @use draw
+     */
     public OavpVisualizer pulserCircle(float minRadius, float maxRadius) {
       OavpPulser pulser = OavpVisualizer.this.currPulser;
       ellipseMode(RADIUS);
@@ -744,6 +803,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a pulser square
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer pulserSquare(float scale) {
       OavpPulser pulser = OavpVisualizer.this.currPulser;
       rectMode(CENTER);
@@ -752,6 +816,13 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an interval based ghost circle
+     * @param minRadius the minimum radius of the circle
+     * @param maxRadius the maximum radius of the circle
+     * @param trailSize the number of trailing circles
+     * @use draw
+     */
     public OavpVisualizer intervalGhostCircle(float minRadius, float maxRadius, int trailSize) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       ellipseMode(RADIUS);
@@ -765,10 +836,17 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer intervalGhostSquare(float minRadius, float maxRadius, int trailSize) {
+    /**
+     * Draw an interval based ghost square
+     * @param minSize the minimum size of the square
+     * @param maxSize the maximum size of the square
+     * @param trailSize the number of trailing squares
+     * @use draw
+     */
+    public OavpVisualizer intervalGhostSquare(float minSize, float maxSize, int trailSize) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       rectMode(CENTER);
-      float scale = maxRadius - minRadius;
+      float scale = maxSize - minSize;
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
         rect(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
       }
@@ -776,6 +854,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a grid interval based grid flatbox
+     * @param scale the scale (height) of the visualizer
+     * @use draw
+     */
     public OavpVisualizer gridIntervalFlatbox(float scale) {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       float colScale = currWidth / gridInterval.getNumCols();
@@ -791,6 +874,10 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a grid interval based square
+     * @use draw
+     */
     public OavpVisualizer gridIntervalSquare() {
       OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
       rectMode(CENTER);
@@ -808,6 +895,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based spectrum wire
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionSpectrumWire(float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {

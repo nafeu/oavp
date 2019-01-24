@@ -1,24 +1,26 @@
 void setupSketch() {
-  entities.addInterval("spectrum", 30, analysis.getAvgSize());
+  entities.addEmissions("example");
+  emitters.useEmissions("example").duration(2);
 }
 
 void updateSketch() {
-  entities.getInterval("spectrum").update(analysis.getSpectrum());
+  emitters.useEmissions("example").emitSpectrum(analysis.isBeatOnset());
 }
 
 void drawSketch() {
-  palette.reset(palette.flat.white, palette.flat.black, 2);
+  palette.reset(palette.flat.white, palette.flat.red, 2);
 
   visualizers
-    .useInterval("spectrum")
+    .useEmissions("example")
+    .dimensions(oavp.width(0.4), oavp.width(0.4))
     .create()
     .center().middle()
-    .moveUp(oavp.width(0.125))
+    .moveUp(oavp.width(0.4))
     .rotate(45, 0, 45)
-    .dimensions(oavp.width(0.25), oavp.height(0.25))
-    .draw.intervalSpectrumMesh(oavp.width(0.25), 1)
-    .draw.basicZSquare(oavp.width(0.4), oscillate(-100, 100, 0.005))
-    .draw.basicZSquare(oavp.width(0.45), oscillate(-100, 100, 0.010))
-    .draw.basicZSquare(oavp.width(0.5), oscillate(-100, 100, 0.015))
+    .draw.emissionSpectrumWire(oavp.width(0.4))
     .done();
+}
+
+void keyPressed() {
+  if (key == 'q') { emitters.useEmissions("example").emitSpectrum(true); }
 }

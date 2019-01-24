@@ -31,7 +31,7 @@ void setup() {
 
   // Display Setup
   // size(1000, 1000, P3D);
-  fullScreen(P3D, 2);
+  fullScreen(P3D, 3);
 
   try {
     oavp = new OavpConfig();
