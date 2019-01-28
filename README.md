@@ -9,12 +9,13 @@ Check out the full guide and docs available [at the repo's wiki here](https://gi
 # Setup and Installation
 
 - Download and install the [`Processing IDE`](https://processing.org/download/)
-- Using the Processing IDE, install the following packages:
-  - [`Minim`](https://github.com/ddf/Minim) (for realtime audio analysis)
-  - [`Ani`](https://github.com/b-g/Ani) (for tweening and smooth animations)
-  - [`Beads`](https://github.com/orsjb/beads) (for time/tempo synced rhythmic operations)
-  - You may also need to install the [`Processing Video`](https://github.com/processing/processing-video) package.
-- Setup your config.json file in `src/data`. An example file is provided to get you started.
+- Open the Processing IDE (create a new sketch if one isn't already create for you) and do the following:
+  - Go to `Tools` > `Install "processing-java"`
+  - Go to `Sketch` > `Add Library` > `Import Library` and install the following libraries:
+    - [`Minim`](https://github.com/ddf/Minim) (for realtime audio analysis)
+    - [`Ani`](https://github.com/b-g/Ani) (for tweening and smooth animations)
+    - [`Beads`](https://github.com/orsjb/beads) (for time/tempo synced rhythmic operations)
+    - [`video`](https://github.com/processing/processing-video) (for incorporation of video)
 
 ## Using Sublime
 
@@ -36,7 +37,9 @@ Open the `sketch.pde` file and use the build command to run the sketch.
 git clone https://github.com/nafeu/oavp.git [PROJECT_NAME]
 ```
 
-Open the `sketch.pde` file in Processing and run it.
+Open the `sketch.pde` file in **Processing** and run it.
+
+# Development
 
 ## Generating Documentation
 
@@ -46,7 +49,11 @@ From the `scripts` directory, use `generate-docs.py` and run as follows:
 python generate-docs.py [PATH_TO_PDE_FILE] [BASE_CLASS_NAME]
 ```
 
-For example, if you wanted to generate docs for the
+For example:
+
+```
+python3 generate-docs.py ../src/visualizers.pde OavpVisualizer
+```
 
 ## Credits
 

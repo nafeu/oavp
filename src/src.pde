@@ -35,9 +35,6 @@ void setup() {
 
   try {
     oavp = new OavpConfig();
-    if (!oavp.loadConfig("config.json")) {
-      throw new Exception();
-    }
 
     // Frame Setup
     frameRate(oavp.FRAMERATE);
@@ -68,7 +65,6 @@ void setup() {
 
     // Autoload Files
     File[] files = new File(dataPath("")).listFiles();
-    String filenames[] = new String[files.length];
 
     for (int i = 0; i < files.length; i++) {
       String extension = getFileExtension(files[i]);
