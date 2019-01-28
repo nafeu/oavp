@@ -918,6 +918,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based square
+     * @param size the size of the shape
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionSquare(float size, float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
@@ -929,6 +935,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based square
+     * @param size the size of the shape
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionColorSquare(float size, float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
@@ -943,6 +955,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based diamond
+     * @param size the size of the shape
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionColorDiamond(float size, float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
@@ -962,6 +980,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based circle
+     * @param radius the radius of the circle
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionCircle(float radius, float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
@@ -971,6 +995,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw emission based connected rings
+     * @param radius the radius of the rings
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionConnectedRings(float radius, float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
@@ -1000,6 +1030,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw emission based colored connected rings
+     * @param radius the radius of the rings
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionColorConnectedRings(float radius, float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
@@ -1032,6 +1068,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based splash square
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionSplashSquare(float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       rectMode(CENTER);
@@ -1043,6 +1084,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based splash circle
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionSplashCircle(float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
@@ -1052,6 +1098,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based chevron
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionChevron(float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
@@ -1061,6 +1112,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an emission based colored chevron
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer emissionColorChevron(float scale) {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
@@ -1073,6 +1129,15 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw terrain hills
+     * @param scale the scale of the visualizer
+     * @param displacement the displacement from starting terrain data
+     * @param windowSize the window of the terrain data
+     * @param phaseShift the phase shift through terrain data
+     * @param position the position in terrain data
+     * @use draw
+     */
     public OavpVisualizer terrainHills(float scale, float displacement, int windowSize, int phaseShift, float position) {
       OavpTerrain terrain = OavpVisualizer.this.currTerrain;
       shapes.hill(0, 0, currWidth, currHeight, scale, displacement,
@@ -1082,6 +1147,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a centered svg
+     * @param svgName the name of the svg file
+     * @param scaleFactor the scale factor of the svg
+     * @use draw
+     */
     public OavpVisualizer centeredSvg(String svgName, float scaleFactor) {
       PShape shape = entities.getSvg(svgName);
       pushStyle();
@@ -1093,6 +1164,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw an image
+     * @param imgName the name of the img file
+     * @param scaleFactor the scale factor of the image
+     * @use draw
+     */
     public OavpVisualizer img(String imgName, float scaleFactor) {
       PImage image = entities.getImg(imgName);
       pushMatrix();
@@ -1102,6 +1179,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    /**
+     * Draw a movie
+     * @param movieName the name of the movie file
+     * @param scaleFactor the scale factor of the movie
+     * @use draw
+     */
     public OavpVisualizer movie(String movieName, float scaleFactor) {
       Movie movie = entities.getMovie(movieName);
       pushMatrix();
