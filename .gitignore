@@ -6,4 +6,4 @@ application.*
 **/config.json
 devnotes.txt
 **/doc-export.md
-**/sketch.pde
+**/*.oavp
