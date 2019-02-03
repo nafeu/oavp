@@ -106,9 +106,6 @@ def process_line(input_line):
 
 
 def build_documentation(comment, base_class):
-    if args.return_desc:
-        default_return_desc = args.return_desc
-
     document = {
         "name": "",
         "syntax": [],
@@ -186,7 +183,7 @@ def generate_documentation(documents):
     if args.export_to:
         export_path = args.export_to[0]
     else:
-        export_path = "doc-export.md"
+        export_path = "doc-export"
     print("Exporting docs to: %s" % export_path)
 
     file = open("%s.md" % export_path, "w+")
@@ -236,6 +233,9 @@ def generate_documentation(documents):
 
 
 def main():
+    if args.return_desc:
+        default_return_desc = args.return_desc
+
     if args.new_sketch:
         with open("sketches/%s.oavp" % args.new_sketch[0], "w") as new_sketch:
             new_sketch.write(SKETCH_TEMPLATE)
@@ -248,11 +248,13 @@ def main():
         with open(final_path, "r") as sketch:
             with open("src/sketch.pde", "w") as dest:
                 dest.write(sketch.read())
-
-        subprocess.run(["processing-java",
-                        "--sketch=%s/src/" % os.getcwd(),
-                        "--force",
-                        "--run"])
+        try:
+            process = subprocess.run(["processing-java",
+                                      "--sketch=%s/src/" % os.getcwd(),
+                                      "--force",
+                                      "--run"])
+        except KeyboardInterrupt:
+            pass
     elif args.generate_docs:
         with open(args.generate_docs[0], 'r') as file:
             content = file.read()
