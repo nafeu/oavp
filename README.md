@@ -6,6 +6,10 @@ A set of tools to help build interactive audio visualizers with [processing](htt
 
 Check out the full guide and docs available [at the repo's wiki here](https://github.com/nafeu/oavp/wiki). Documentation is a still a huge work-in-progress and I would greatly appreciate if anyone was interested in helping out :)
 
+# Requirements
+
+- **Python 3**
+
 # Setup and Installation
 
 - Download and install the [`Processing IDE`](https://processing.org/download/)
@@ -17,42 +21,21 @@ Check out the full guide and docs available [at the repo's wiki here](https://gi
     - [`Beads`](https://github.com/orsjb/beads) (for time/tempo synced rhythmic operations)
     - [`video`](https://github.com/processing/processing-video) (for incorporation of video)
 
-## Using Sublime
-
-- Download and follow the instructions to set up [processing-sublime](https://github.com/b-g/processing-sublime)
-
 ```
 git clone https://github.com/nafeu/oavp.git [PROJECT_NAME]
 cd [PROJECT_NAME]
-subl .
 ```
 
-Open the `sketch.pde` file and use the build command to run the sketch.
+## Creating & Running Sketches
 
-`CTRL/CMD + BUILD`
-
-## Using Processing (IDE)
-
-```
-git clone https://github.com/nafeu/oavp.git [PROJECT_NAME]
-```
-
-Open the `sketch.pde` file in **Processing** and run it.
-
-# Development
+- Run `python3 oavp.py --new-sketch [SKETCH_NAME]`
+- Open/edit the generated `.oavp` file from `sketches/`
+- Use `python3 oavp.py [SKETCH_NAME]` to run the sketch.
 
 ## Generating Documentation
 
-From the `scripts` directory, use `generate-docs.py` and run as follows:
-
 ```
-python generate-docs.py [PATH_TO_PDE_FILE] [BASE_CLASS_NAME]
-```
-
-For example:
-
-```
-python3 generate-docs.py ../src/visualizers.pde OavpVisualizer
+python3 oavp.py --generate-docs [PATH_TO_PDE_FILE] [BASE_CLASS_NAME] --export-to [DOC_FILE_NAME]
 ```
 
 ## Credits

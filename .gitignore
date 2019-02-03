@@ -3,6 +3,7 @@
 sandbox/
 sample.mp3
 application.*
+src/sketch.pde
 **/config.json
 devnotes.txt
 **/doc-export.md

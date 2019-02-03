@@ -29,6 +29,24 @@ content = ""
 documents = []
 default_return_desc = "Reference to self"
 WIKI_URL = "https://github.com/nafeu/oavp/wiki/"
+SKETCH_TEMPLATE = """
+void setupSketch() {
+
+}
+
+void updateSketch() {
+
+}
+
+void drawSketch() {
+
+}
+
+void keyPressed() {
+
+}
+
+"""
 
 parser = argparse.ArgumentParser(
     description='Run, manage, configure and export Oavp sketches.')
@@ -39,6 +57,12 @@ parser.add_argument('sketch_path',
                     nargs='?')
 
 # Optional Arguments
+parser.add_argument("-n", "--new-sketch",
+                    help=("create a brand new sketch "
+                          "inside the sketches directory"),
+                    type=str,
+                    metavar="sketch_name",
+                    nargs=1)
 parser.add_argument("-e", "--export-to",
                     help=("specify export path for compiled "
                           "processing app or generated docs"),
@@ -165,7 +189,7 @@ def generate_documentation(documents):
         export_path = "doc-export.md"
     print("Exporting docs to: %s" % export_path)
 
-    file = open(export_path, "w+")
+    file = open("%s.md" % export_path, "w+")
     file.write("#### Contents\r\n")
 
     for document in documents:
@@ -212,8 +236,16 @@ def generate_documentation(documents):
 
 
 def main():
-    if args.sketch_path:
-        with open(args.sketch_path, "r") as sketch:
+    if args.new_sketch:
+        with open("sketches/%s.oavp" % args.new_sketch[0], "w") as new_sketch:
+            new_sketch.write(SKETCH_TEMPLATE)
+            print("New sketch '%s' created at sketches/%s.oavp"
+                  % (args.new_sketch[0], args.new_sketch[0]))
+    elif args.sketch_path:
+        final_path = args.sketch_path
+        if (os.path.exists("./sketches/%s.oavp" % args.sketch_path)):
+            final_path = "./sketches/%s.oavp" % args.sketch_path
+        with open(final_path, "r") as sketch:
             with open("src/sketch.pde", "w") as dest:
                 dest.write(sketch.read())
 
