@@ -218,6 +218,9 @@ def generate_documentation(documents):
 
         if (document["return"]["type"] == "void"):
             file.write("| Returns | void |\r\n")
+        elif ("oavp" not in document["return"]["type"].lower()):
+            file.write("| Returns | %s<br>%s |\r\n" % (document["return"]["type"],
+                                                   document["return"]["desc"]))
         else:
             file.write('| Returns | **%s**<br>%s |\r\n' %
                        (get_link(document["return"]["type"]),

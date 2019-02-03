@@ -58,6 +58,10 @@ public class OavpAnalysis {
     levelSmoothing = config.LEVEL_SMOOTHING;
   }
 
+  /**
+   * Pause/play any queued audio track
+   * @return none
+   */
   public void toggleLoop() {
     if (!isLineIn) {
       if (player.isPlaying()) {
@@ -68,6 +72,10 @@ public class OavpAnalysis {
     }
   }
 
+  /**
+   * Get the logarithmic dB value of x
+   * @param x the input value
+   */
   private float dB(float x) {
     if (x == 0) {
       return 0;
@@ -77,6 +85,10 @@ public class OavpAnalysis {
     }
   }
 
+  /**
+   * Run beat detection algorithm
+   * @return none
+   */
   private void detectBeat() {
     if (isLineIn) {
       beat.detect(input.mix);
@@ -85,6 +97,10 @@ public class OavpAnalysis {
     }
   }
 
+  /**
+   * Get current left channel audio level
+   * @return the left level value
+   */
   public float getCurrLeftLevel() {
     if (isLineIn) {
       return input.left.level();
@@ -92,6 +108,10 @@ public class OavpAnalysis {
     return player.left.level();
   }
 
+  /**
+   * Get current right channel audio level
+   * @return the right level value
+   */
   public float getCurrRightLevel() {
     if (isLineIn) {
       return input.right.level();
@@ -99,6 +119,11 @@ public class OavpAnalysis {
     return player.right.level();
   }
 
+  /**
+   * Get current ith value in left channel buffer
+   * @param i the index
+   * @return the current ith value in left channel buffer
+   */
   public float getCurrLeftBuffer(int i) {
     if (isLineIn) {
       return input.left.get(i);
@@ -106,6 +131,11 @@ public class OavpAnalysis {
     return player.left.get(i);
   }
 
+  /**
+   * Get current ith value in right channel buffer
+   * @param i the index
+   * @return the current ith value in right channel buffer
+   */
   public float getCurrRightBuffer(int i) {
     if (isLineIn) {
       return input.right.get(i);
@@ -113,6 +143,9 @@ public class OavpAnalysis {
     return player.right.get(i);
   }
 
+  /**
+   * Apply fast-fourier transform on currently active mix
+   */
   private void forwardMix() {
     if (isLineIn) {
       fft.forward( input.mix );
@@ -121,6 +154,9 @@ public class OavpAnalysis {
     }
   }
 
+  /**
+   * Apply fast-fourier transform and spectrum smoothing on audio
+   */
   public void forward() {
     detectBeat();
 
@@ -191,42 +227,85 @@ public class OavpAnalysis {
 
   }
 
+  /**
+   * Get spectrum values
+   * @return array of float values for spectrum
+   */
   public float[] getSpectrum() {
     return spectrum;
   }
 
+  /**
+   * Get left channel buffer
+   * @return array of float values for left buffer
+   */
   public float[] getLeftBuffer() {
     return leftBuffer;
   }
 
+  /**
+   * Get right channel buffer
+   * @return array of float values for right buffer
+   */
   public float[] getRightBuffer() {
     return rightBuffer;
   }
 
+  /**
+   * Get ith spectrum value
+   * @param i the index
+   * @return the ith spectrum value
+   */
   public float getSpectrumVal(int i) {
     return spectrum[i];
   }
 
+  /**
+   * Get ith left buffer value
+   * @param i the index
+   * @return the ith left buffer value
+   */
   public float getLeftBuffer(int i) {
     return leftBuffer[i];
   }
 
+  /**
+   * Get ith right buffer value
+   * @param i the index
+   * @return the ith right buffer value
+   */
   public float getRightBuffer(int i) {
     return rightBuffer[i];
   }
 
+  /**
+   * Get left channel level
+   * @return the left channel level
+   */
   public float getLeftLevel() {
     return leftLevel;
   }
 
+  /**
+   * Get right channel level
+   * @return the right channel level
+   */
   public float getRightLevel() {
     return rightLevel;
   }
 
+  /**
+   * Get the scaled average left/right channel level
+   * @return the scaled average left/right channel level
+   */
   public float getLevel() {
     return (scaleLeftLevel(leftLevel) + scaleRightLevel(rightLevel)) / 2;
   }
 
+  /**
+   * Get the current active input buffer size
+   * @return the current active input buffer size
+   */
   public int getBufferSize() {
     if (isLineIn) {
       return input.bufferSize();
@@ -234,53 +313,101 @@ public class OavpAnalysis {
     return player.bufferSize();
   }
 
+  /**
+   * Get the current averaging size
+   * @return the current averaging size
+   */
   public int getAvgSize() {
     return avgSize;
   }
 
+  /**
+   * Get the max spectrum value
+   * @return the max spectrum value
+   */
   public float getMaxSpectrumVal() {
     return maxSpectrumVal;
   }
 
+  /**
+   * Get the min spectrum value
+   * @return the min spectrum value
+   */
   public float getMinSpectrumVal() {
     return minSpectrumVal;
   }
 
+  /**
+   * Get the scaled input spectrum value
+   * @param x the input spectrum value
+   * @return the scaled input spectrum value
+   */
   public float scaleSpectrumVal(float x) {
     float scaleFactor = (maxSpectrumVal - minSpectrumVal) + 0.00001f;
     return (x - minSpectrumVal) / scaleFactor;
   }
 
+  /**
+   * Get the scaled input left level
+   * @param x the input left level
+   * @return the scaled input left level
+   */
   public float scaleLeftLevel(float x) {
     float scaleFactor = (maxLeftLevel - minLeftLevel) + 0.00001f;
     return (x - minLeftLevel) / scaleFactor;
   }
 
+  /**
+   * Get the scaled input right level
+   * @param x the input right level
+   * @return the scaled input right level
+   */
   public float scaleRightLevel(float x) {
     float scaleFactor = (maxRightLevel - minRightLevel) + 0.00001f;
     return (x - minRightLevel) / scaleFactor;
   }
 
+  /**
+   * Toggle decible usage
+   */
   public void toggleUseDB() {
     useDB = !useDB;
   }
 
+  /**
+   * Toggle first min done
+   */
   public void toggleFirstMinDone() {
     firstMinDone = !firstMinDone;
   }
 
+  /**
+   * Set spectrum smoothing value
+   * @param newSmoothing the smoothing value
+   */
   public void setSpectrumSmoothing(float newSmoothing) {
     spectrumSmoothing = newSmoothing;
   }
 
+  /**
+   * Set level smoothing value
+   * @param newSmoothing the smoothing value
+   */
   public void setLevelSmoothing(float newSmoothing) {
     levelSmoothing = newSmoothing;
   }
 
+  /**
+   * Set buffer smoothing value
+   * @param newSmoothing the smoothing value
+   */
   public void setBufferSmoothing(float newSmoothing) {
     bufferSmoothing = newSmoothing;
   }
 
+  /**
+   * Check if current slice is a beat onset
+   */
   public boolean isBeatOnset() {
     return beat.isOnset();
   }
