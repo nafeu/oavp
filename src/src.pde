@@ -10,6 +10,7 @@ import java.io.File;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 import processing.video.*;
+import com.hamoid.*;
 
 PApplet context;
 OavpConfig oavp;
@@ -23,6 +24,7 @@ OavpShape shapes;
 OavpText text;
 OavpPalette palette;
 OavpEntityManager entities;
+VideoExport videoExport;
 
 void setup() {
   context = this;
@@ -89,6 +91,12 @@ void setup() {
       }
     }
 
+    // Activate Video Export
+    if (oavp.ENABLE_VIDEO_RENDER) {
+      videoExport = new VideoExport(this);
+      videoExport.startMovie();
+    }
+
     setupSketch();
   } catch (Exception e) {
     System.err.println("[ oavp ] Error during setup");
@@ -106,6 +114,9 @@ void draw() {
     updateHelpers();
     updateEntities();
     drawSketch();
+    if (oavp.ENABLE_VIDEO_RENDER) {
+      videoExport.saveFrame();
+    }
   } catch (Exception e) {
     println("[ oavp ] Error during draw loop");
     debugError(e);

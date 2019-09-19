@@ -9,6 +9,7 @@ Check out the full guide and docs available [at the repo's wiki here](https://gi
 # Requirements
 
 - **Python 3**
+- [`ffmpeg`](https://evermeet.cx/ffmpeg/)
 
 # Setup and Installation
 
@@ -20,6 +21,7 @@ Check out the full guide and docs available [at the repo's wiki here](https://gi
     - [`Ani`](https://github.com/b-g/Ani) (for tweening and smooth animations)
     - [`Beads`](https://github.com/orsjb/beads) (for time/tempo synced rhythmic operations)
     - [`video`](https://github.com/processing/processing-video) (for incorporation of video)
+    - [`VideoExport`](https://funprogramming.org/VideoExport-for-Processing/)
 
 ```
 git clone https://github.com/nafeu/oavp.git [PROJECT_NAME]

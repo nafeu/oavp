@@ -21,6 +21,7 @@ public class OavpConfig {
   public float BUFFER_SMOOTHING = 0.85f;
 
   public boolean ENABLE_ORTHO = false;
+  public boolean ENABLE_VIDEO_RENDER = false;
 
   public String FRAME_TITLE = "oavp";
 

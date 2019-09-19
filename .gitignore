@@ -8,3 +8,5 @@ src/sketch.pde
 devnotes.txt
 **/doc-export.md
 **/*.oavp
+*.mp4
+ffmpeg.txt
