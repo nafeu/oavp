@@ -5,7 +5,7 @@ VideoExport videoExport;
 // This sketch ends automatically.
 // Run and wait for 10 seconds.
 
-float movieFPS = 30;
+float movieFPS = 60;
 float soundDuration = 10.03; // in seconds
 
 void setup() {
@@ -14,20 +14,20 @@ void setup() {
   videoExport = new VideoExport(this);
   videoExport.setFrameRate(movieFPS);
   videoExport.setAudioFileName("test-sound.mp3");
-  videoExport.startMovie();  
+  videoExport.startMovie();
 }
 void draw() {
   background(#888888);
   rect(frameCount * frameCount % width, 0, 40, height);
 
   videoExport.saveFrame();
-  
-  // End when we have exported enough frames 
+
+  // End when we have exported enough frames
   // to match the sound duration.
   if(frameCount > round(movieFPS * soundDuration)) {
     videoExport.endMovie();
     exit();
-  }  
+  }
 }
 
 /*

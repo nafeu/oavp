@@ -1,5 +1,6 @@
 import ddf.minim.analysis.*;
 import ddf.minim.*;
+import ddf.minim.spi.*;
 import java.util.Random;
 import java.util.List;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ void setup() {
 
   // Display Setup
   // size(1000, 1000, P3D);
-  fullScreen(P3D, 3);
+  fullScreen(P3D, 1);
 
   try {
     oavp = new OavpConfig();
@@ -93,8 +94,10 @@ void setup() {
 
     // Activate Video Export
     if (oavp.ENABLE_VIDEO_RENDER) {
-      videoExport = new VideoExport(this);
-      videoExport.startMovie();
+      // videoExport = new VideoExport(this);
+      // videoExport.setFrameRate(oavp.MOVIE_FPS);
+      // videoExport.setAudioFileName(oavp.AUDIO_FILE);
+      // videoExport.startMovie();
     }
 
     setupSketch();
@@ -115,7 +118,7 @@ void draw() {
     updateEntities();
     drawSketch();
     if (oavp.ENABLE_VIDEO_RENDER) {
-      videoExport.saveFrame();
+      // videoExport.saveFrame();
     }
   } catch (Exception e) {
     println("[ oavp ] Error during draw loop");

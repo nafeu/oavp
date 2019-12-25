@@ -8,7 +8,7 @@ VideoExport videoExport;
 String audioFilePath = "jingle.mp3";
 
 String SEP = "|";
-float movieFPS = 30;
+float movieFPS = 60;
 float frameDuration = 1 / movieFPS;
 BufferedReader reader;
 
@@ -115,19 +115,10 @@ void draw() {
         // sizes, colors, angles, etc)
         pushMatrix();
         translate(width/2, height/2);
-        if(i%2 == 1) {
-          // Left channel value
-          fill(255, 50, 20);
-          rotate(i * 0.05);
-          translate(50, 0);
-          rect(value * 5, -5, value * 4, 10);
-        } else {
-          // Right channel value
-          fill(20, 100, 250);
-          rotate(-i * 0.05);
-          translate(50, 0);
-          rect(value * 5, -5, value * 4, 10);
-        }
+        fill(255, 50, 20);
+        rotate(i * 0.05);
+        translate(50, 0);
+        rect(value * 5, -5, value * 4, 10);
         popMatrix();
       }
       videoExport.saveFrame();
@@ -150,48 +141,37 @@ void audioToTextFile(String fileName) {
   int fftSize = 1024;
   float sampleRate = track.sampleRate();
 
-  float[] fftSamplesL = new float[fftSize];
-  float[] fftSamplesR = new float[fftSize];
+  float[] fftSamples = new float[fftSize];
 
-  float[] samplesL = track.getChannel(AudioSample.LEFT);
-  float[] samplesR = track.getChannel(AudioSample.RIGHT);
+  float[] samples = track.getChannel(AudioSample.LEFT);
 
-  FFT fftL = new FFT(fftSize, sampleRate);
-  FFT fftR = new FFT(fftSize, sampleRate);
+  FFT fft = new FFT(fftSize, sampleRate);
 
-  fftL.logAverages(22, 3);
-  fftR.logAverages(22, 3);
+  fft.logAverages(22, 3);
 
-  int totalChunks = (samplesL.length / fftSize) + 1;
-  int fftSlices = fftL.avgSize();
+  int totalChunks = (samples.length / fftSize) + 1;
+  int fftSlices = fft.avgSize();
 
   for (int ci = 0; ci < totalChunks; ++ci) {
     int chunkStartIndex = ci * fftSize;
-    int chunkSize = min( samplesL.length - chunkStartIndex, fftSize );
+    int chunkSize = min( samples.length - chunkStartIndex, fftSize );
 
-    System.arraycopy( samplesL, chunkStartIndex, fftSamplesL, 0, chunkSize);
-    System.arraycopy( samplesR, chunkStartIndex, fftSamplesR, 0, chunkSize);
+    System.arraycopy( samples, chunkStartIndex, fftSamples, 0, chunkSize);
     if ( chunkSize < fftSize ) {
-      java.util.Arrays.fill( fftSamplesL, chunkSize, fftSamplesL.length - 1, 0.0 );
-      java.util.Arrays.fill( fftSamplesR, chunkSize, fftSamplesR.length - 1, 0.0 );
+      java.util.Arrays.fill( fftSamples, chunkSize, fftSamples.length - 1, 0.0 );
     }
 
-    fftL.forward( fftSamplesL );
-    fftR.forward( fftSamplesL );
+    fft.forward( fftSamples );
 
     // The format of the saved txt file.
     // The file contains many rows. Each row looks like this:
-    // T|L|R|L|R|L|R|... etc
+    // T|M|M|...
     // where T is the time in seconds
-    // Then we alternate left and right channel FFT values
-    // The first L and R values in each row are low frequencies (bass)
-    // and they go towards high frequency as we advance towards
-    // the end of the line.
     StringBuilder msg = new StringBuilder(nf(chunkStartIndex/sampleRate, 0, 3).replace(',', '.'));
     for (int i=0; i<fftSlices; ++i) {
-      msg.append(SEP + nf(fftL.getAvg(i), 0, 4).replace(',', '.'));
-      msg.append(SEP + nf(fftR.getAvg(i), 0, 4).replace(',', '.'));
+      msg.append(SEP + nf(fft.getAvg(i), 0, 4).replace(',', '.'));
     }
+    println(msg.toString());
     output.println(msg.toString());
   }
   track.close();

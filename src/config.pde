@@ -1,10 +1,13 @@
 public class OavpConfig {
-  public int FRAMERATE = 60;
+  public int FRAMERATE = 5;
+  public int MOVIE_FPS = 2;
+  public String AUDIO_ANALYSIS_SEPERATOR = "|";
 
-  public String AUDIO_FILE;
-  public int BUFFER_SIZE = 1024;
-  public int MIN_BANDWIDTH_PER_OCTAVE = 200;
-  public int BANDS_PER_OCTAVE = 30;
+  public String AUDIO_FILE = "test-audio.mp3";
+  public int BUFFER_SIZE = 128;
+  // public int BUFFER_SIZE = 1024;
+  public int MIN_BANDWIDTH_PER_OCTAVE = 22;
+  public int BANDS_PER_OCTAVE = 3;
 
   public String FONT_FILE = "RobotoMono-Regular-32.vlw";
   public int FONT_UNIT = 8;
@@ -21,7 +24,7 @@ public class OavpConfig {
   public float BUFFER_SMOOTHING = 0.85f;
 
   public boolean ENABLE_ORTHO = false;
-  public boolean ENABLE_VIDEO_RENDER = false;
+  public boolean ENABLE_VIDEO_RENDER = true;
 
   public String FRAME_TITLE = "oavp";
 

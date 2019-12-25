@@ -33,14 +33,25 @@ public class OavpAnalysis {
     beat = new BeatDetect();
     beat.setSensitivity(300);
     if (config.AUDIO_FILE != null) {
-      println("[ oavp ] Loading audio file: " + config.AUDIO_FILE);
-      player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
-      player.loop();
-      isLineIn = false;
-      fft = new FFT(player.bufferSize(), player.sampleRate());
-      fft.logAverages(config.MIN_BANDWIDTH_PER_OCTAVE, config.BANDS_PER_OCTAVE);
-      avgSize = fft.avgSize();
-      bufferSize = player.bufferSize();
+      if (config.ENABLE_VIDEO_RENDER) {
+        println("[ oavp ] Analyzing audio file: " + config.AUDIO_FILE);
+        try {
+          analyzeAudioFile(minim, config.AUDIO_FILE, config.AUDIO_ANALYSIS_SEPERATOR);
+        } catch(Exception e) {
+          println("!");
+          e.printStackTrace();
+          exit();
+        }
+      } else {
+        println("[ oavp ] Loading audio file: " + config.AUDIO_FILE);
+        player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
+        player.loop();
+        isLineIn = false;
+        fft = new FFT(player.bufferSize(), player.sampleRate());
+        fft.logAverages(config.MIN_BANDWIDTH_PER_OCTAVE, config.BANDS_PER_OCTAVE);
+        avgSize = fft.avgSize();
+        bufferSize = player.bufferSize();
+      }
     } else {
       input = minim.getLineIn();
       isLineIn = true;
@@ -225,7 +236,38 @@ public class OavpAnalysis {
       }
     }
 
+    // printAnalysis();
   }
+
+  // public void printAnalysis() {
+  //   StringBuilder msg = new StringBuilder("");
+  //   // TIME
+  //   msg.append(nf(0, 0, 3).replace(',', '.'));
+  //   // LEFT LEVEL
+  //   msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(leftLevel, 0, 4).replace(',', '.'));
+  //   // RIGHT LEVEL
+  //   msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(rightLevel, 0, 4).replace(',', '.'));
+  //   // BEAT ONSET
+  //   if (beat.isOnset()) {
+  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + 1);
+  //   } else {
+  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + 0);
+  //   }
+  //   // SPECTRUM
+  //   for (int i = 0; i < spectrum.length; ++i) {
+  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(spectrum[i], 0, 4).replace(',', '.'));
+  //   }
+  //   // LEFT BUFFER
+  //   for (int i = 0; i < leftBuffer.length; ++i) {
+  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(leftBuffer[i], 0, 4).replace(',', '.'));
+  //   }
+  //   // RIGHT BUFFER
+  //   for (int i = 0; i < rightBuffer.length; ++i) {
+  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(rightBuffer[i], 0, 4).replace(',', '.'));
+  //   }
+  //   println(msg.toString());
+  //   println("---");
+  // }
 
   /**
    * Get spectrum values
@@ -410,5 +452,114 @@ public class OavpAnalysis {
    */
   public boolean isBeatOnset() {
     return beat.isOnset();
+  }
+
+  public float getRootMeanSquare(float values[]) {
+    int n = values.length;
+    float squareSum = 0;
+
+    for (int i = 0; i < values.length; i++) {
+      squareSum += Math.pow(values[i], 2);
+    }
+
+    return (float) Math.sqrt(squareSum / n);
+  }
+
+  void analyzeAudioFile(Minim minim, String fileName, String seperator) {
+    PrintWriter output;
+
+    output = createWriter(dataPath(fileName + ".txt"));
+
+    // Load Sample
+    AudioSample track = minim.loadSample(fileName, 2048);
+
+    // Declare FFT Size (half of sample rate)
+    int bufferSize = 1024;
+    println("[ oavp ] Audio Analysis - bufferSize: " + bufferSize);
+
+    float sampleRate = track.sampleRate();
+    println("[ oavp ] Audio Analysis - sampleRate: " + sampleRate);
+
+    float[] buffer = new float[bufferSize];
+    float[] leftBuffer = new float[bufferSize];
+    float[] rightBuffer = new float[bufferSize];
+    float leftLevel = 0.0;
+    float rightLevel = 0.0;
+    println("[ oavp ] Audio Analysis - buffer length: " + buffer.length);
+
+    float[] leftSamples = track.getChannel(AudioSample.LEFT);
+    float[] rightSamples = track.getChannel(AudioSample.RIGHT);
+    println("[ oavp ] Audio Analysis - samples length: " + leftSamples.length);
+
+    FFT fft = new FFT(bufferSize, sampleRate);
+    fft.logAverages(22, 3);
+    println("[ oavp ] Audio Analysis - logAverages minBandwidth: 22, bandsPerOctave: 3");
+
+    beat = new BeatDetect();
+    beat.setSensitivity(10);
+    println("[ oavp ] Audio Analysis - beat detect sensitivity: 10");
+
+    int totalChunks = (leftSamples.length / bufferSize) + 1;
+    println("[ oavp ] Audio Analysis - total chunks: " + totalChunks);
+
+    int fftSlices = fft.avgSize();
+    println("[ oavp ] Audio Analysis - number of fftSlices: " + fftSlices);
+
+    for (int chunkIndex = 0; chunkIndex < totalChunks; ++chunkIndex) {
+      int chunkStartIndex = chunkIndex * bufferSize;
+      int chunkSize = min( leftSamples.length - chunkStartIndex, bufferSize );
+
+      // Copy the chunks into respective buffers
+      System.arraycopy( leftSamples, chunkStartIndex, leftBuffer, 0, chunkSize);
+      System.arraycopy( rightSamples, chunkStartIndex, rightBuffer, 0, chunkSize);
+
+      // LEFT BUFFER DEFAULT FOR FFT
+      buffer = leftBuffer;
+
+      // If we don't have any samples left, fill the remaining with 0
+      if ( chunkSize < bufferSize ) {
+        java.util.Arrays.fill( buffer, chunkSize, buffer.length - 1, 0.0 );
+      }
+
+      // Push buffer into fft.forward to get our fast fourier transform
+      fft.forward( buffer );
+      beat.detect( buffer );
+      leftLevel = getRootMeanSquare(leftBuffer);
+      rightLevel = getRootMeanSquare(rightBuffer);
+
+      // Append TIME
+      StringBuilder msg = new StringBuilder(nf(chunkStartIndex/sampleRate, 0, 3).replace(',', '.'));
+
+      // Append BEAT
+      if (beat.isOnset()) {
+        msg.append(seperator + "1");
+      } else {
+        msg.append(seperator + "0");
+      }
+
+      // Append Left Level & Right Level
+      msg.append(seperator + nf(leftLevel, 0, 4).replace(',', '.'));
+      msg.append(seperator + nf(rightLevel, 0, 4).replace(',', '.'));
+
+      // Append Left Buffer & Right Buffer
+      for (int i=0; i < bufferSize; ++i) {
+        msg.append(seperator + nf(leftBuffer[i], 0, 4).replace(',', '.'));
+      }
+      for (int i=0; i < bufferSize; ++i) {
+        msg.append(seperator + nf(rightBuffer[i], 0, 4).replace(',', '.'));
+      }
+
+      // Append Spectrum (non avged)
+      for (int i=0; i < fftSlices; ++i) {
+        msg.append(seperator + nf(fft.getAvg(i), 0, 4).replace(',', '.'));
+      }
+
+      output.println(msg.toString());
+    }
+    track.close();
+    output.flush();
+    output.close();
+    println("[ oavp ] Audio file analysis done.");
+    exit();
   }
 }
