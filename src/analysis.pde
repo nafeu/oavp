@@ -13,6 +13,7 @@ public class OavpAnalysis {
   private float bufferSmoothing;
   private float levelSmoothing;
   private String seperator;
+  private boolean isBeatOnset;
 
   private float[] spectrum;
   private float minSpectrumVal = 0.0f;
@@ -115,6 +116,7 @@ public class OavpAnalysis {
     } else {
       beat.detect(player.mix);
     }
+    isBeatOnset = beat.isOnset();
   }
 
   /**
@@ -428,7 +430,7 @@ public class OavpAnalysis {
    * Check if current slice is a beat onset
    */
   public boolean isBeatOnset() {
-    return beat.isOnset();
+    return isBeatOnset;
   }
 
   public float getRootMeanSquare(float values[]) {
@@ -562,6 +564,14 @@ public class OavpAnalysis {
     output.flush();
     output.close();
     println("[ oavp ] Audio file analysis done.");
-    exit();
+  }
+
+  public void readAnalysis(float[] analysisData) {
+    isBeatOnset = (analysisData[1] == 1);
+    leftLevel = analysisData[2];
+    rightLevel = analysisData[3];
+    System.arraycopy(analysisData, 4, leftBuffer, 0, bufferSize);
+    System.arraycopy(analysisData, 4 + bufferSize, rightBuffer, 0, bufferSize);
+    System.arraycopy(analysisData, 4 + bufferSize + bufferSize, spectrum, 0, avgSize);
   }
 }

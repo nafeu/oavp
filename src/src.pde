@@ -26,6 +26,7 @@ OavpText text;
 OavpPalette palette;
 OavpEntityManager entities;
 VideoExport videoExport;
+BufferedReader reader;
 boolean loaded = false;
 
 void setup() {
@@ -96,10 +97,11 @@ void setup() {
 
     // Activate Video Export
     if (oavp.ENABLE_VIDEO_RENDER) {
-      // videoExport = new VideoExport(this);
-      // videoExport.setFrameRate(oavp.MOVIE_FPS);
-      // videoExport.setAudioFileName(oavp.AUDIO_FILE);
-      // videoExport.startMovie();
+      reader = createReader(oavp.AUDIO_FILE + ".txt");
+      videoExport = new VideoExport(this);
+      videoExport.setFrameRate(oavp.MOVIE_FPS);
+      videoExport.setAudioFileName(oavp.AUDIO_FILE);
+      videoExport.startMovie();
     }
 
     setupSketch();
@@ -122,11 +124,39 @@ synchronized void draw() {
     text("[ oavp ]", width/2 - textWidth("[ oavp ]")/2, height/2 - 25);
   } else {
     try {
-      updateHelpers();
-      updateEntities();
-      drawSketch();
       if (oavp.ENABLE_VIDEO_RENDER) {
-        // videoExport.saveFrame();
+        String line;
+        try {
+          line = reader.readLine();
+        }
+        catch (IOException e) {
+          e.printStackTrace();
+          line = null;
+        }
+        if (line == null) {
+          // Done reading the file.
+          // Close the video file.
+          videoExport.endMovie();
+          exit();
+        } else {
+          String[] rawAnalysisData = split(line, oavp.AUDIO_ANALYSIS_SEPERATOR);
+          float[] analysisData = new float[rawAnalysisData.length];
+
+          for (int i = 0; i < rawAnalysisData.length; i++) {
+            analysisData[i] = float(rawAnalysisData[i]);
+          }
+
+          updateEntities(analysisData);
+          float soundTime = analysisData[0];
+          while (videoExport.getCurrentTime() < soundTime + (1 / oavp.MOVIE_FPS) * 0.5) {
+            drawSketch();
+            videoExport.saveFrame();
+          }
+        }
+      } else {
+        updateHelpers();
+        updateEntities();
+        drawSketch();
       }
     } catch (Exception e) {
       println("[ oavp ] Error during draw loop");
@@ -140,6 +170,18 @@ void updateEntities() {
   try {
     entities.update();
     analysis.forward();
+    updateSketch();
+  } catch (Exception e) {
+    println("[ oavp ] Error during update loop");
+    debugError(e);
+    exit();
+  }
+}
+
+void updateEntities(float[] analysisData) {
+  try {
+    entities.update();
+    analysis.readAnalysis(analysisData);
     updateSketch();
   } catch (Exception e) {
     println("[ oavp ] Error during update loop");

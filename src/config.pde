@@ -1,6 +1,6 @@
 public class OavpConfig {
-  public int FRAMERATE = 5;
-  public int MOVIE_FPS = 2;
+  public int FRAMERATE = 1000;
+  public int MOVIE_FPS = 60;
   public String AUDIO_ANALYSIS_SEPERATOR = "|";
 
   public String AUDIO_FILE = "test-audio.mp3";

@@ -89,21 +89,8 @@ void draw() {
     exit();
   } else {
     String[] p = split(line, SEP);
-    // The first column indicates
-    // the sound time in seconds.
     float soundTime = float(p[0]);
 
-    // Our movie will have 30 frames per second.
-    // Our FFT analysis probably produces
-    // 43 rows per second (44100 / fftSize) or
-    // 46.875 rows per second (48000 / fftSize).
-    // We have two different data rates: 30fps vs 43rps.
-    // How to deal with that? We render frames as
-    // long as the movie time is less than the latest
-    // data (sound) time.
-    // I added an offset of half frame duration,
-    // but I'm not sure if it's useful nor what
-    // would be the ideal value. Please experiment :)
     while (videoExport.getCurrentTime() < soundTime + frameDuration * 0.5) {
       background(0);
       noStroke();
