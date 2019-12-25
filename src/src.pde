@@ -35,7 +35,7 @@ void setup() {
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // Display Setup
-  // size(1000, 1000, P3D);
+  // size(810, 1440, P3D); // INSTAGRAM VIDEO
   fullScreen(P3D, 1);
 
   try {

@@ -16,19 +16,24 @@ public class OavpAnalysis {
   private boolean isBeatOnset;
 
   private float[] spectrum;
+  private float[] lastSpectrum;
   private float minSpectrumVal = 0.0f;
   private float maxSpectrumVal = 0.0f;
 
   private float[] leftBuffer;
+  private float[] lastLeftBuffer;
   private float[] rightBuffer;
+  private float[] lastRightBuffer;
   private float[] leftSamples;
   private float[] rightSamples;
 
   private float leftLevel;
+  private float lastLeftLevel = 0.0f;
   private float minLeftLevel = 0.0f;
   private float maxLeftLevel = 0.0f;
 
   private float rightLevel;
+  private float lastRightLevel;
   private float minRightLevel = 0.0f;
   private float maxRightLevel = 0.0f;
 
@@ -52,6 +57,12 @@ public class OavpAnalysis {
         fft = new FFT(bufferSize, sampleRate);
         fft.logAverages(config.MIN_BANDWIDTH_PER_OCTAVE, config.BANDS_PER_OCTAVE);
         avgSize = fft.avgSize();
+        lastLeftBuffer = new float[bufferSize];
+        lastRightBuffer = new float[bufferSize];
+        lastSpectrum = new float[avgSize];
+        java.util.Arrays.fill(lastLeftBuffer, 0.0);
+        java.util.Arrays.fill(lastRightBuffer, 0.0);
+        java.util.Arrays.fill(lastSpectrum, 0.0);
       } else {
         println("[ oavp ] Loading audio file: " + config.AUDIO_FILE);
         player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
@@ -487,7 +498,8 @@ public class OavpAnalysis {
       // Apply smoothing and averages
       float currLeftLevel;
       currLeftLevel = leftLevel;
-      leftLevel = (levelSmoothing) * leftLevel + ((1 - levelSmoothing) * currLeftLevel);
+      // leftLevel = (levelSmoothing) * leftLevel + ((1 - levelSmoothing) * currLeftLevel);
+      leftLevel = (levelSmoothing) * lastLeftLevel + ((1 - levelSmoothing) * currLeftLevel);
       if (currLeftLevel > maxLeftLevel) {
         maxLeftLevel = currLeftLevel;
       }
@@ -497,7 +509,8 @@ public class OavpAnalysis {
 
       float currRightLevel;
       currRightLevel = rightLevel;
-      rightLevel = (levelSmoothing) * rightLevel + ((1 - levelSmoothing) * currRightLevel);
+      // rightLevel = (levelSmoothing) * rightLevel + ((1 - levelSmoothing) * currRightLevel);
+      rightLevel = (levelSmoothing) * lastRightLevel + ((1 - levelSmoothing) * currRightLevel);
       if (currRightLevel > maxRightLevel) {
         maxRightLevel = currRightLevel;
       }
@@ -510,8 +523,10 @@ public class OavpAnalysis {
         float currRightBuffer;
         currLeftBuffer = leftBuffer[i];
         currRightBuffer = rightBuffer[i];
-        leftBuffer[i] = (bufferSmoothing) * leftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
-        rightBuffer[i] = (bufferSmoothing) * rightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
+        // leftBuffer[i] = (bufferSmoothing) * leftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
+        leftBuffer[i] = (bufferSmoothing) * lastLeftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
+        // rightBuffer[i] = (bufferSmoothing) * rightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
+        rightBuffer[i] = (bufferSmoothing) * lastRightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
       }
 
       for (int i = 0; i < avgSize; i++) {
@@ -522,7 +537,8 @@ public class OavpAnalysis {
         else {
           currSpectrumVal = fft.getAvg(i);
         }
-        spectrum[i] = (spectrumSmoothing) * spectrum[i] + ((1 - spectrumSmoothing) * currSpectrumVal);
+        // spectrum[i] = (spectrumSmoothing) * spectrum[i] + ((1 - spectrumSmoothing) * currSpectrumVal);
+        spectrum[i] = (spectrumSmoothing) * lastSpectrum[i] + ((1 - spectrumSmoothing) * currSpectrumVal);
         if (spectrum[i] > maxSpectrumVal) {
           maxSpectrumVal = spectrum[i];
         }
@@ -530,6 +546,13 @@ public class OavpAnalysis {
           minSpectrumVal = spectrum[i];
         }
       }
+
+      // Store last buffer values (for next smoothing)
+      lastLeftLevel = leftLevel;
+      lastRightLevel = rightLevel;
+      System.arraycopy( leftBuffer, 0, lastLeftBuffer, 0, bufferSize);
+      System.arraycopy( rightBuffer, 0, lastRightBuffer, 0, bufferSize);
+      System.arraycopy( spectrum, 0, lastSpectrum, 0, avgSize);
 
       // Append TIME
       StringBuilder msg = new StringBuilder(nf(chunkStartIndex/sampleRate, 0, 3).replace(',', '.'));
