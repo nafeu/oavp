@@ -154,7 +154,7 @@ void movieEvent(Movie m) {
 
 void analyzeAudio() {
   if (oavp.ENABLE_VIDEO_RENDER) {
-    analysis.analyzeAudioFile(minim, oavp.AUDIO_FILE, oavp.AUDIO_ANALYSIS_SEPERATOR);
+    analysis.analyzeAudioFile();
   }
   synchronized(this) {
     loaded = true;

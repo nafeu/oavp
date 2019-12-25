@@ -2,13 +2,17 @@ public class OavpAnalysis {
   private FFT fft;
   private AudioPlayer player;
   private AudioInput input;
+  private AudioSample track;
   private BeatDetect beat;
+  private PrintWriter output;
 
   private int avgSize;
   private int bufferSize;
+  private float sampleRate;
   private float spectrumSmoothing;
   private float bufferSmoothing;
   private float levelSmoothing;
+  private String seperator;
 
   private float[] spectrum;
   private float minSpectrumVal = 0.0f;
@@ -16,6 +20,8 @@ public class OavpAnalysis {
 
   private float[] leftBuffer;
   private float[] rightBuffer;
+  private float[] leftSamples;
+  private float[] rightSamples;
 
   private float leftLevel;
   private float minLeftLevel = 0.0f;
@@ -35,6 +41,16 @@ public class OavpAnalysis {
     if (config.AUDIO_FILE != null) {
       if (config.ENABLE_VIDEO_RENDER) {
         println("[ oavp ] Analyzing audio file: " + config.AUDIO_FILE);
+        output = createWriter(dataPath(config.AUDIO_FILE + ".txt"));
+        seperator = config.AUDIO_ANALYSIS_SEPERATOR;
+        bufferSize = config.BUFFER_SIZE;
+        track = minim.loadSample(config.AUDIO_FILE, bufferSize * 2);
+        sampleRate = track.sampleRate();
+        leftSamples = track.getChannel(AudioSample.LEFT);
+        rightSamples = track.getChannel(AudioSample.RIGHT);
+        fft = new FFT(bufferSize, sampleRate);
+        fft.logAverages(config.MIN_BANDWIDTH_PER_OCTAVE, config.BANDS_PER_OCTAVE);
+        avgSize = fft.avgSize();
       } else {
         println("[ oavp ] Loading audio file: " + config.AUDIO_FILE);
         player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
@@ -426,45 +442,23 @@ public class OavpAnalysis {
     return (float) Math.sqrt(squareSum / n);
   }
 
-  void analyzeAudioFile(Minim minim, String fileName, String seperator) {
-    PrintWriter output;
-
-    output = createWriter(dataPath(fileName + ".txt"));
-
-    // Load Sample
-    AudioSample track = minim.loadSample(fileName, 2048);
-
-    // Declare FFT Size (half of sample rate)
-    int bufferSize = 1024;
+  public void analyzeAudioFile() {
     println("[ oavp ] Audio Analysis - bufferSize: " + bufferSize);
-
-    float sampleRate = track.sampleRate();
     println("[ oavp ] Audio Analysis - sampleRate: " + sampleRate);
 
     float[] buffer = new float[bufferSize];
-    float[] leftBuffer = new float[bufferSize];
-    float[] rightBuffer = new float[bufferSize];
-    float leftLevel = 0.0;
-    float rightLevel = 0.0;
+    leftBuffer = new float[bufferSize];
+    rightBuffer = new float[bufferSize];
+
     println("[ oavp ] Audio Analysis - buffer length: " + buffer.length);
-
-    float[] leftSamples = track.getChannel(AudioSample.LEFT);
-    float[] rightSamples = track.getChannel(AudioSample.RIGHT);
     println("[ oavp ] Audio Analysis - samples length: " + leftSamples.length);
-
-    FFT fft = new FFT(bufferSize, sampleRate);
-    fft.logAverages(22, 3);
     println("[ oavp ] Audio Analysis - logAverages minBandwidth: 22, bandsPerOctave: 3");
-
-    beat = new BeatDetect();
-    beat.setSensitivity(10);
     println("[ oavp ] Audio Analysis - beat detect sensitivity: 10");
 
     int totalChunks = (leftSamples.length / bufferSize) + 1;
-    println("[ oavp ] Audio Analysis - total chunks: " + totalChunks);
 
-    int fftSlices = fft.avgSize();
-    println("[ oavp ] Audio Analysis - number of fftSlices: " + fftSlices);
+    println("[ oavp ] Audio Analysis - total chunks: " + totalChunks);
+    println("[ oavp ] Audio Analysis - avgSize (number of FFT slices) " + avgSize);
 
     for (int chunkIndex = 0; chunkIndex < totalChunks; ++chunkIndex) {
       int chunkStartIndex = chunkIndex * bufferSize;
@@ -487,6 +481,53 @@ public class OavpAnalysis {
       beat.detect( buffer );
       leftLevel = getRootMeanSquare(leftBuffer);
       rightLevel = getRootMeanSquare(rightBuffer);
+
+      // Apply smoothing and averages
+      float currLeftLevel;
+      currLeftLevel = leftLevel;
+      leftLevel = (levelSmoothing) * leftLevel + ((1 - levelSmoothing) * currLeftLevel);
+      if (currLeftLevel > maxLeftLevel) {
+        maxLeftLevel = currLeftLevel;
+      }
+      if (!firstMinDone || (currLeftLevel < minLeftLevel)) {
+        minLeftLevel = leftLevel;
+      }
+
+      float currRightLevel;
+      currRightLevel = rightLevel;
+      rightLevel = (levelSmoothing) * rightLevel + ((1 - levelSmoothing) * currRightLevel);
+      if (currRightLevel > maxRightLevel) {
+        maxRightLevel = currRightLevel;
+      }
+      if (!firstMinDone || (currRightLevel < minRightLevel)) {
+        minRightLevel = rightLevel;
+      }
+
+      for (int i = 0; i < bufferSize; i++) {
+        float currLeftBuffer;
+        float currRightBuffer;
+        currLeftBuffer = leftBuffer[i];
+        currRightBuffer = rightBuffer[i];
+        leftBuffer[i] = (bufferSmoothing) * leftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
+        rightBuffer[i] = (bufferSmoothing) * rightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
+      }
+
+      for (int i = 0; i < avgSize; i++) {
+        float currSpectrumVal;
+        if (useDB) {
+          currSpectrumVal = dB(fft.getAvg(i));
+        }
+        else {
+          currSpectrumVal = fft.getAvg(i);
+        }
+        spectrum[i] = (spectrumSmoothing) * spectrum[i] + ((1 - spectrumSmoothing) * currSpectrumVal);
+        if (spectrum[i] > maxSpectrumVal) {
+          maxSpectrumVal = spectrum[i];
+        }
+        if (!firstMinDone || (spectrum[i] < minSpectrumVal)) {
+          minSpectrumVal = spectrum[i];
+        }
+      }
 
       // Append TIME
       StringBuilder msg = new StringBuilder(nf(chunkStartIndex/sampleRate, 0, 3).replace(',', '.'));
@@ -511,8 +552,8 @@ public class OavpAnalysis {
       }
 
       // Append Spectrum (non avged)
-      for (int i=0; i < fftSlices; ++i) {
-        msg.append(seperator + nf(fft.getAvg(i), 0, 4).replace(',', '.'));
+      for (int i=0; i < avgSize; ++i) {
+        msg.append(seperator + nf(spectrum[i], 0, 4).replace(',', '.'));
       }
 
       output.println(msg.toString());
