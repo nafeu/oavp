@@ -44,6 +44,6 @@ Output #0, mp4, to '/Users/nafeu/Development/github/oavp/libraries/VideoExport/e
     Stream #0:1(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 600x600, q=2-31, 650 kb/s, 30 fps, 30 tbr, 15360 tbn, 15360 tbc (default)
     Metadata:
       handler_name    : VideoHandler
-frame=  181 fps=0.0 q=-1.0 Lsize=     581kB time=00:00:06.01 bitrate= 790.8kbits/s speed=52.5x    
+frame=  181 fps=0.0 q=-1.0 Lsize=     581kB time=00:00:06.01 bitrate= 790.8kbits/s speed=47.5x    
 video:479kB audio:94kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 1.340809%
-[aac @ 0x7fae57002a00] Qavg: 1154.116
+[aac @ 0x7fc6dd803800] Qavg: 1154.116

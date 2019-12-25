@@ -35,13 +35,6 @@ public class OavpAnalysis {
     if (config.AUDIO_FILE != null) {
       if (config.ENABLE_VIDEO_RENDER) {
         println("[ oavp ] Analyzing audio file: " + config.AUDIO_FILE);
-        try {
-          analyzeAudioFile(minim, config.AUDIO_FILE, config.AUDIO_ANALYSIS_SEPERATOR);
-        } catch(Exception e) {
-          println("!");
-          e.printStackTrace();
-          exit();
-        }
       } else {
         println("[ oavp ] Loading audio file: " + config.AUDIO_FILE);
         player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
@@ -235,39 +228,7 @@ public class OavpAnalysis {
         minSpectrumVal = spectrum[i];
       }
     }
-
-    // printAnalysis();
   }
-
-  // public void printAnalysis() {
-  //   StringBuilder msg = new StringBuilder("");
-  //   // TIME
-  //   msg.append(nf(0, 0, 3).replace(',', '.'));
-  //   // LEFT LEVEL
-  //   msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(leftLevel, 0, 4).replace(',', '.'));
-  //   // RIGHT LEVEL
-  //   msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(rightLevel, 0, 4).replace(',', '.'));
-  //   // BEAT ONSET
-  //   if (beat.isOnset()) {
-  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + 1);
-  //   } else {
-  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + 0);
-  //   }
-  //   // SPECTRUM
-  //   for (int i = 0; i < spectrum.length; ++i) {
-  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(spectrum[i], 0, 4).replace(',', '.'));
-  //   }
-  //   // LEFT BUFFER
-  //   for (int i = 0; i < leftBuffer.length; ++i) {
-  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(leftBuffer[i], 0, 4).replace(',', '.'));
-  //   }
-  //   // RIGHT BUFFER
-  //   for (int i = 0; i < rightBuffer.length; ++i) {
-  //     msg.append(config.AUDIO_ANALYSIS_SEPERATOR + nf(rightBuffer[i], 0, 4).replace(',', '.'));
-  //   }
-  //   println(msg.toString());
-  //   println("---");
-  // }
 
   /**
    * Get spectrum values

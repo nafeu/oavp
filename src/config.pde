@@ -4,8 +4,7 @@ public class OavpConfig {
   public String AUDIO_ANALYSIS_SEPERATOR = "|";
 
   public String AUDIO_FILE = "test-audio.mp3";
-  public int BUFFER_SIZE = 128;
-  // public int BUFFER_SIZE = 1024;
+  public int BUFFER_SIZE = 1024;
   public int MIN_BANDWIDTH_PER_OCTAVE = 22;
   public int BANDS_PER_OCTAVE = 3;
 

@@ -26,6 +26,7 @@ OavpText text;
 OavpPalette palette;
 OavpEntityManager entities;
 VideoExport videoExport;
+boolean loaded = false;
 
 void setup() {
   context = this;
@@ -60,6 +61,7 @@ void setup() {
 
     // Audio Analysis Tools Setup
     analysis = new OavpAnalysis(minim, oavp);
+    thread("analyzeAudio");
 
     // Main Visualizer Setup
     visualizers = new OavpVisualizer(analysis, entityPosition, entities);
@@ -112,18 +114,25 @@ void setup() {
   text.setPadding(20);
 }
 
-void draw() {
-  try {
-    updateHelpers();
-    updateEntities();
-    drawSketch();
-    if (oavp.ENABLE_VIDEO_RENDER) {
-      // videoExport.saveFrame();
+synchronized void draw() {
+  if (!loaded) {
+    background(0);
+    textSize(50);
+    fill(255);
+    text("[ oavp ]", width/2 - textWidth("[ oavp ]")/2, height/2 - 25);
+  } else {
+    try {
+      updateHelpers();
+      updateEntities();
+      drawSketch();
+      if (oavp.ENABLE_VIDEO_RENDER) {
+        // videoExport.saveFrame();
+      }
+    } catch (Exception e) {
+      println("[ oavp ] Error during draw loop");
+      debugError(e);
+      exit();
     }
-  } catch (Exception e) {
-    println("[ oavp ] Error during draw loop");
-    debugError(e);
-    exit();
   }
 }
 
@@ -141,4 +150,13 @@ void updateEntities() {
 
 void movieEvent(Movie m) {
   m.read();
+}
+
+void analyzeAudio() {
+  if (oavp.ENABLE_VIDEO_RENDER) {
+    analysis.analyzeAudioFile(minim, oavp.AUDIO_FILE, oavp.AUDIO_ANALYSIS_SEPERATOR);
+  }
+  synchronized(this) {
+    loaded = true;
+  }
 }
