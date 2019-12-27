@@ -35,8 +35,8 @@ void setup() {
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // Display Setup
-  // size(810, 1440, P3D); // INSTAGRAM VIDEO
-  fullScreen(P3D, 1);
+  size(810, 1440, P3D); // INSTAGRAM VIDEO
+  // fullScreen(P3D, 1);
 
   try {
     oavp = new OavpConfig();
@@ -140,13 +140,19 @@ synchronized void draw() {
           exit();
         } else {
           String[] rawAnalysisData = split(line, oavp.AUDIO_ANALYSIS_SEPERATOR);
+          String[] rawEventsData = split(rawAnalysisData[rawAnalysisData.length - 1], oavp.EVENTS_SEPERATOR);
           float[] analysisData = new float[rawAnalysisData.length];
+          int[] eventsData = new int[rawEventsData.length];
 
-          for (int i = 0; i < rawAnalysisData.length; i++) {
+          for (int i = 0; i < rawAnalysisData.length - 1; i++) {
             analysisData[i] = float(rawAnalysisData[i]);
           }
 
-          updateEntities(analysisData);
+          for (int i = 0; i < rawEventsData.length; i++) {
+            eventsData[i] = int(rawEventsData[i]);
+          }
+
+          updateEntities(oavp, analysisData, eventsData);
           float soundTime = analysisData[0];
           while (videoExport.getCurrentTime() < soundTime + (1 / oavp.MOVIE_FPS) * 0.5) {
             drawSketch();
@@ -178,10 +184,10 @@ void updateEntities() {
   }
 }
 
-void updateEntities(float[] analysisData) {
+void updateEntities(OavpConfig config, float[] analysisData, int[] eventsData) {
   try {
     entities.update();
-    analysis.readAnalysis(analysisData);
+    analysis.readAnalysis(config, analysisData, eventsData);
     updateSketch();
   } catch (Exception e) {
     println("[ oavp ] Error during update loop");
@@ -196,7 +202,7 @@ void movieEvent(Movie m) {
 
 void analyzeAudio() {
   if (oavp.ENABLE_VIDEO_RENDER) {
-    analysis.analyzeAudioFile();
+    analysis.analyzeAudioFile(oavp);
   }
   synchronized(this) {
     loaded = true;

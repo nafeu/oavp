@@ -1,7 +1,8 @@
 public class OavpConfig {
-  public int FRAMERATE = 60;
+  public int FRAMERATE = 1000;
   public int MOVIE_FPS = 30;
   public String AUDIO_ANALYSIS_SEPERATOR = "|";
+  public String EVENTS_SEPERATOR = ",";
 
   public String AUDIO_FILE = "oavp-test-track-1.mp3";
   public int BUFFER_SIZE = 1024;
@@ -27,7 +28,16 @@ public class OavpConfig {
 
   public String FRAME_TITLE = "oavp";
 
-  OavpConfig() {}
+  public DefaultEvents DEFAULT_EVENTS;
+
+  public class DefaultEvents {
+    int BEAT = 0;
+    DefaultEvents(){}
+  }
+
+  OavpConfig() {
+    DEFAULT_EVENTS = new DefaultEvents();
+  }
 
   public float width(float scale) {
     return w * scale;

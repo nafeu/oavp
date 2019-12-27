@@ -455,7 +455,7 @@ public class OavpAnalysis {
     return (float) Math.sqrt(squareSum / n);
   }
 
-  public void analyzeAudioFile() {
+  public void analyzeAudioFile(OavpConfig config) {
     println("[ oavp ] Audio Analysis - bufferSize: " + bufferSize);
     println("[ oavp ] Audio Analysis - sampleRate: " + sampleRate);
 
@@ -475,11 +475,11 @@ public class OavpAnalysis {
 
     for (int chunkIndex = 0; chunkIndex < totalChunks; ++chunkIndex) {
       int chunkStartIndex = chunkIndex * bufferSize;
-      int chunkSize = min( leftSamples.length - chunkStartIndex, bufferSize );
+      int chunkSize = min(leftSamples.length - chunkStartIndex, bufferSize);
 
       // Copy the chunks into respective buffers
-      System.arraycopy( leftSamples, chunkStartIndex, leftBuffer, 0, chunkSize);
-      System.arraycopy( rightSamples, chunkStartIndex, rightBuffer, 0, chunkSize);
+      System.arraycopy(leftSamples, chunkStartIndex, leftBuffer, 0, chunkSize);
+      System.arraycopy(rightSamples, chunkStartIndex, rightBuffer, 0, chunkSize);
 
       // LEFT BUFFER DEFAULT FOR FFT
       buffer = leftBuffer;
@@ -498,7 +498,6 @@ public class OavpAnalysis {
       // Apply smoothing and averages
       float currLeftLevel;
       currLeftLevel = leftLevel;
-      // leftLevel = (levelSmoothing) * leftLevel + ((1 - levelSmoothing) * currLeftLevel);
       leftLevel = (levelSmoothing) * lastLeftLevel + ((1 - levelSmoothing) * currLeftLevel);
       if (currLeftLevel > maxLeftLevel) {
         maxLeftLevel = currLeftLevel;
@@ -509,7 +508,6 @@ public class OavpAnalysis {
 
       float currRightLevel;
       currRightLevel = rightLevel;
-      // rightLevel = (levelSmoothing) * rightLevel + ((1 - levelSmoothing) * currRightLevel);
       rightLevel = (levelSmoothing) * lastRightLevel + ((1 - levelSmoothing) * currRightLevel);
       if (currRightLevel > maxRightLevel) {
         maxRightLevel = currRightLevel;
@@ -523,9 +521,7 @@ public class OavpAnalysis {
         float currRightBuffer;
         currLeftBuffer = leftBuffer[i];
         currRightBuffer = rightBuffer[i];
-        // leftBuffer[i] = (bufferSmoothing) * leftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
         leftBuffer[i] = (bufferSmoothing) * lastLeftBuffer[i] + ((1 - bufferSmoothing) * currLeftBuffer);
-        // rightBuffer[i] = (bufferSmoothing) * rightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
         rightBuffer[i] = (bufferSmoothing) * lastRightBuffer[i] + ((1 - bufferSmoothing) * currRightBuffer);
       }
 
@@ -537,7 +533,6 @@ public class OavpAnalysis {
         else {
           currSpectrumVal = fft.getAvg(i);
         }
-        // spectrum[i] = (spectrumSmoothing) * spectrum[i] + ((1 - spectrumSmoothing) * currSpectrumVal);
         spectrum[i] = (spectrumSmoothing) * lastSpectrum[i] + ((1 - spectrumSmoothing) * currSpectrumVal);
         if (spectrum[i] > maxSpectrumVal) {
           maxSpectrumVal = spectrum[i];
@@ -550,19 +545,12 @@ public class OavpAnalysis {
       // Store last buffer values (for next smoothing)
       lastLeftLevel = leftLevel;
       lastRightLevel = rightLevel;
-      System.arraycopy( leftBuffer, 0, lastLeftBuffer, 0, bufferSize);
-      System.arraycopy( rightBuffer, 0, lastRightBuffer, 0, bufferSize);
-      System.arraycopy( spectrum, 0, lastSpectrum, 0, avgSize);
+      System.arraycopy(leftBuffer, 0, lastLeftBuffer, 0, bufferSize);
+      System.arraycopy(rightBuffer, 0, lastRightBuffer, 0, bufferSize);
+      System.arraycopy(spectrum, 0, lastSpectrum, 0, avgSize);
 
       // Append TIME
       StringBuilder msg = new StringBuilder(nf(chunkStartIndex/sampleRate, 0, 3).replace(',', '.'));
-
-      // Append BEAT
-      if (beat.isOnset()) {
-        msg.append(seperator + "1");
-      } else {
-        msg.append(seperator + "0");
-      }
 
       // Append Left Level & Right Level
       msg.append(seperator + nf(leftLevel, 0, 4).replace(',', '.'));
@@ -581,6 +569,11 @@ public class OavpAnalysis {
         msg.append(seperator + nf(spectrum[i], 0, 4).replace(',', '.'));
       }
 
+      // Append Events
+      if (beat.isOnset()) {
+        msg.append(seperator + config.DEFAULT_EVENTS.BEAT + config.EVENTS_SEPERATOR);
+      }
+
       output.println(msg.toString());
     }
     track.close();
@@ -589,12 +582,21 @@ public class OavpAnalysis {
     println("[ oavp ] Audio file analysis done.");
   }
 
-  public void readAnalysis(float[] analysisData) {
-    isBeatOnset = (analysisData[1] == 1);
-    leftLevel = analysisData[2];
-    rightLevel = analysisData[3];
-    System.arraycopy(analysisData, 4, leftBuffer, 0, bufferSize);
-    System.arraycopy(analysisData, 4 + bufferSize, rightBuffer, 0, bufferSize);
-    System.arraycopy(analysisData, 4 + bufferSize + bufferSize, spectrum, 0, avgSize);
+  public void readAnalysis(OavpConfig config, float[] analysisData, int[] eventsData) {
+    int analysisIndex = 3;
+
+    leftLevel = analysisData[1];
+    rightLevel = analysisData[2];
+    isBeatOnset = false;
+
+    for (int i = 0; i < eventsData.length; i++) {
+      if (eventsData[i] == config.DEFAULT_EVENTS.BEAT) {
+        isBeatOnset = true;
+      }
+    }
+
+    System.arraycopy(analysisData, analysisIndex, leftBuffer, 0, bufferSize);
+    System.arraycopy(analysisData, analysisIndex + bufferSize, rightBuffer, 0, bufferSize);
+    System.arraycopy(analysisData, analysisIndex + bufferSize + bufferSize, spectrum, 0, avgSize);
   }
 }
