@@ -36,6 +36,7 @@ void setup() {
 
   // Display Setup
   size(810, 1440, P3D); // INSTAGRAM VIDEO
+  // size(1000, 1000, P3D); // DEFAULT
   // fullScreen(P3D, 1);
 
   try {

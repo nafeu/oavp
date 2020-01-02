@@ -14,6 +14,7 @@ public class OavpAnalysis {
   private float levelSmoothing;
   private String seperator;
   private boolean isBeatOnset;
+  private boolean isTempoBeatOnset;
 
   private float[] spectrum;
   private float[] lastSpectrum;
@@ -342,7 +343,7 @@ public class OavpAnalysis {
     if (isLineIn) {
       return input.bufferSize();
     }
-    return player.bufferSize();
+    return bufferSize;
   }
 
   /**
@@ -444,6 +445,10 @@ public class OavpAnalysis {
     return isBeatOnset;
   }
 
+  public boolean isTempoBeatOnset() {
+    return isTempoBeatOnset;
+  }
+
   public float getRootMeanSquare(float values[]) {
     int n = values.length;
     float squareSum = 0;
@@ -471,7 +476,22 @@ public class OavpAnalysis {
     int totalChunks = (leftSamples.length / bufferSize) + 1;
 
     println("[ oavp ] Audio Analysis - total chunks: " + totalChunks);
+    println("[ oavp ] Audio Analysis - track length (ms): " + track.length());
     println("[ oavp ] Audio Analysis - avgSize (number of FFT slices) " + avgSize);
+
+    float beatIntervalMs = 60000 / float(config.TARGET_BPM);
+
+    int audioLengthMs = track.length();
+    float timeRemainder = audioLengthMs % beatIntervalMs;
+    float timeQuotient = (audioLengthMs - timeRemainder) / beatIntervalMs;
+
+    List<Float> beatMarkers = new ArrayList();
+
+    for (int i = 0; i < int(timeQuotient); i++) {
+      beatMarkers.add(i * beatIntervalMs);
+    }
+
+    println("[ oavp ] Audio Analysis - Total Beat Markers: " + beatMarkers.size());
 
     for (int chunkIndex = 0; chunkIndex < totalChunks; ++chunkIndex) {
       int chunkStartIndex = chunkIndex * bufferSize;
@@ -550,7 +570,9 @@ public class OavpAnalysis {
       System.arraycopy(spectrum, 0, lastSpectrum, 0, avgSize);
 
       // Append TIME
-      StringBuilder msg = new StringBuilder(nf(chunkStartIndex/sampleRate, 0, 3).replace(',', '.'));
+      float timeValue = chunkStartIndex / sampleRate;
+
+      StringBuilder msg = new StringBuilder(nf(timeValue, 0, 3).replace(',', '.'));
 
       // Append Left Level & Right Level
       msg.append(seperator + nf(leftLevel, 0, 4).replace(',', '.'));
@@ -570,8 +592,21 @@ public class OavpAnalysis {
       }
 
       // Append Events
+      msg.append(seperator);
+
+      if (beatMarkers.size() > 0) {
+        float timeValueMs = timeValue * 1000;
+        float beatMarkerMs = beatMarkers.get(0);
+        float timeDifference = abs(timeValueMs - beatMarkerMs);
+
+        if (timeDifference <= 10 || timeValueMs > beatMarkerMs) {
+          beatMarkers.remove(0);
+          msg.append(config.DEFAULT_EVENTS.BEAT_MARKER + config.EVENTS_SEPERATOR);
+        }
+      }
+
       if (beat.isOnset()) {
-        msg.append(seperator + config.DEFAULT_EVENTS.BEAT + config.EVENTS_SEPERATOR);
+        msg.append(config.DEFAULT_EVENTS.BEAT + config.EVENTS_SEPERATOR);
       }
 
       output.println(msg.toString());
@@ -588,10 +623,14 @@ public class OavpAnalysis {
     leftLevel = analysisData[1];
     rightLevel = analysisData[2];
     isBeatOnset = false;
+    isTempoBeatOnset = false;
 
     for (int i = 0; i < eventsData.length; i++) {
       if (eventsData[i] == config.DEFAULT_EVENTS.BEAT) {
         isBeatOnset = true;
+      }
+      if (eventsData[i] == config.DEFAULT_EVENTS.BEAT_MARKER) {
+        isTempoBeatOnset = true;
       }
     }
 
