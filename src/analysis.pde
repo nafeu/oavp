@@ -14,7 +14,7 @@ public class OavpAnalysis {
   private float levelSmoothing;
   private String seperator;
   private boolean isBeatOnset;
-  private boolean isTempoBeatOnset;
+  private boolean isQuantizedOnset;
 
   private float[] spectrum;
   private float[] lastSpectrum;
@@ -445,8 +445,8 @@ public class OavpAnalysis {
     return isBeatOnset;
   }
 
-  public boolean isTempoBeatOnset() {
-    return isTempoBeatOnset;
+  public boolean isQuantizedOnset() {
+    return isQuantizedOnset;
   }
 
   public float getRootMeanSquare(float values[]) {
@@ -479,19 +479,19 @@ public class OavpAnalysis {
     println("[ oavp ] Audio Analysis - track length (ms): " + track.length());
     println("[ oavp ] Audio Analysis - avgSize (number of FFT slices) " + avgSize);
 
-    float beatIntervalMs = 60000 / float(config.TARGET_BPM);
+    float quantizationIntervalMs = (60000 / float(config.TARGET_BPM)) / config.QUANTIZATION;
 
     int audioLengthMs = track.length();
-    float timeRemainder = audioLengthMs % beatIntervalMs;
-    float timeQuotient = (audioLengthMs - timeRemainder) / beatIntervalMs;
+    float timeRemainder = audioLengthMs % quantizationIntervalMs;
+    float timeQuotient = (audioLengthMs - timeRemainder) / quantizationIntervalMs;
 
-    List<Float> beatMarkers = new ArrayList();
+    List<Float> quantizationMarkers = new ArrayList();
 
     for (int i = 0; i < int(timeQuotient); i++) {
-      beatMarkers.add(i * beatIntervalMs);
+      quantizationMarkers.add(i * quantizationIntervalMs);
     }
 
-    println("[ oavp ] Audio Analysis - Total Beat Markers: " + beatMarkers.size());
+    println("[ oavp ] Audio Analysis - Total Beat Markers: " + quantizationMarkers.size());
 
     for (int chunkIndex = 0; chunkIndex < totalChunks; ++chunkIndex) {
       int chunkStartIndex = chunkIndex * bufferSize;
@@ -575,33 +575,33 @@ public class OavpAnalysis {
       StringBuilder msg = new StringBuilder(nf(timeValue, 0, 3).replace(',', '.'));
 
       // Append Left Level & Right Level
-      msg.append(seperator + nf(leftLevel, 0, 4).replace(',', '.'));
-      msg.append(seperator + nf(rightLevel, 0, 4).replace(',', '.'));
+      msg.append(seperator + nf(leftLevel, 0, config.ANALYSIS_PRECISION).replace(',', '.'));
+      msg.append(seperator + nf(rightLevel, 0, config.ANALYSIS_PRECISION).replace(',', '.'));
 
       // Append Left Buffer & Right Buffer
       for (int i=0; i < bufferSize; ++i) {
-        msg.append(seperator + nf(leftBuffer[i], 0, 4).replace(',', '.'));
+        msg.append(seperator + nf(leftBuffer[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
       }
       for (int i=0; i < bufferSize; ++i) {
-        msg.append(seperator + nf(rightBuffer[i], 0, 4).replace(',', '.'));
+        msg.append(seperator + nf(rightBuffer[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
       }
 
       // Append Spectrum (non avged)
       for (int i=0; i < avgSize; ++i) {
-        msg.append(seperator + nf(spectrum[i], 0, 4).replace(',', '.'));
+        msg.append(seperator + nf(spectrum[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
       }
 
       // Append Events
       msg.append(seperator);
 
-      if (beatMarkers.size() > 0) {
+      if (quantizationMarkers.size() > 0) {
         float timeValueMs = timeValue * 1000;
-        float beatMarkerMs = beatMarkers.get(0);
+        float beatMarkerMs = quantizationMarkers.get(0);
         float timeDifference = abs(timeValueMs - beatMarkerMs);
 
         if (timeDifference <= 10 || timeValueMs > beatMarkerMs) {
-          beatMarkers.remove(0);
-          msg.append(config.DEFAULT_EVENTS.BEAT_MARKER + config.EVENTS_SEPERATOR);
+          quantizationMarkers.remove(0);
+          msg.append(config.DEFAULT_EVENTS.QUANTIZATION_MARKER + config.EVENTS_SEPERATOR);
         }
       }
 
@@ -623,14 +623,14 @@ public class OavpAnalysis {
     leftLevel = analysisData[1];
     rightLevel = analysisData[2];
     isBeatOnset = false;
-    isTempoBeatOnset = false;
+    isQuantizedOnset = false;
 
     for (int i = 0; i < eventsData.length; i++) {
       if (eventsData[i] == config.DEFAULT_EVENTS.BEAT) {
         isBeatOnset = true;
       }
-      if (eventsData[i] == config.DEFAULT_EVENTS.BEAT_MARKER) {
-        isTempoBeatOnset = true;
+      if (eventsData[i] == config.DEFAULT_EVENTS.QUANTIZATION_MARKER) {
+        isQuantizedOnset = true;
       }
     }
 

@@ -120,9 +120,9 @@ void setup() {
 synchronized void draw() {
   if (!loaded) {
     background(0);
-    textSize(50);
+    textSize(25);
     fill(255);
-    text("[ oavp ]", width/2 - textWidth("[ oavp ]")/2, height/2 - 25);
+    text("[ oavp - analyzing audio ]", 20, 20);
   } else {
     try {
       if (oavp.ENABLE_VIDEO_RENDER) {

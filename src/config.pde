@@ -1,12 +1,14 @@
 public class OavpConfig {
-  public int FRAMERATE = 60;
-  public int MOVIE_FPS = 30;
+  public int FRAMERATE = 1000;
+  public int MOVIE_FPS = 60;
   public String AUDIO_ANALYSIS_SEPERATOR = "|";
   public String EVENTS_SEPERATOR = ",";
-  public int TARGET_BPM = 100;
+  public int ANALYSIS_PRECISION = 4;
 
-  public String AUDIO_FILE = "test-audio.mp3";
+  public String AUDIO_FILE = "100bpm.mp3";
   // public String AUDIO_FILE;
+  public int TARGET_BPM = 100;
+  public int QUANTIZATION = 4; // Quarter Notes
   public int BUFFER_SIZE = 1024;
   public int MIN_BANDWIDTH_PER_OCTAVE = 22;
   public int BANDS_PER_OCTAVE = 3;
@@ -33,7 +35,7 @@ public class OavpConfig {
   public DefaultEvents DEFAULT_EVENTS;
 
   public class DefaultEvents {
-    int BEAT_MARKER = 1;
+    int QUANTIZATION_MARKER = 1;
     int BEAT = 2;
     DefaultEvents(){}
   }
