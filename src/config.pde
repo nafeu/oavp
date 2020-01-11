@@ -5,10 +5,13 @@ public class OavpConfig {
   public String EVENTS_SEPERATOR = ",";
   public int ANALYSIS_PRECISION = 4;
 
-  public String AUDIO_FILE = "100bpm.mp3";
+  public String AUDIO_FILE = "120.wav";
   // public String AUDIO_FILE;
-  public int TARGET_BPM = 100;
-  public int QUANTIZATION = 4; // Quarter Notes
+  public int TARGET_BPM = 120;
+  // public int QUANTIZATION = 1; // Quarter
+  // public int QUANTIZATION = 2; // Eight
+  public int QUANTIZATION = 4; // Sixteenth
+  // public int QUANTIZATION = 8; // Thirty-Secondth
   public int BUFFER_SIZE = 1024;
   public int MIN_BANDWIDTH_PER_OCTAVE = 22;
   public int BANDS_PER_OCTAVE = 3;
@@ -29,6 +32,7 @@ public class OavpConfig {
 
   public boolean ENABLE_ORTHO = false;
   public boolean ENABLE_VIDEO_RENDER = true;
+  public boolean ANALYZE_AUDIO = false;
 
   public String FRAME_TITLE = "oavp";
 

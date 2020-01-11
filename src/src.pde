@@ -98,7 +98,7 @@ void setup() {
 
     // Activate Video Export
     if (oavp.ENABLE_VIDEO_RENDER) {
-      reader = createReader(oavp.AUDIO_FILE + ".txt");
+      reader = createReader(oavp.AUDIO_FILE + ".deep-analysis.txt");
       videoExport = new VideoExport(this);
       videoExport.setFrameRate(oavp.MOVIE_FPS);
       videoExport.setAudioFileName(oavp.AUDIO_FILE);
@@ -202,7 +202,7 @@ void movieEvent(Movie m) {
 }
 
 void analyzeAudio() {
-  if (oavp.ENABLE_VIDEO_RENDER) {
+  if (oavp.ANALYZE_AUDIO) {
     analysis.analyzeAudioFile(oavp);
   }
   synchronized(this) {

@@ -4,7 +4,7 @@ public class OavpAnalysis {
   private AudioInput input;
   private AudioSample track;
   private BeatDetect beat;
-  private PrintWriter output;
+  private PrintWriter deepAnalysisWriter;
 
   private int avgSize;
   private int bufferSize;
@@ -46,9 +46,9 @@ public class OavpAnalysis {
     beat = new BeatDetect();
     beat.setSensitivity(300);
     if (config.AUDIO_FILE != null) {
-      if (config.ENABLE_VIDEO_RENDER) {
+      if (config.ANALYZE_AUDIO) {
         println("[ oavp ] Analyzing audio file: " + config.AUDIO_FILE);
-        output = createWriter(dataPath(config.AUDIO_FILE + ".txt"));
+        deepAnalysisWriter = createWriter(dataPath(config.AUDIO_FILE + ".deep-analysis.txt"));
         seperator = config.AUDIO_ANALYSIS_SEPERATOR;
         bufferSize = config.BUFFER_SIZE;
         track = minim.loadSample(config.AUDIO_FILE, bufferSize * 2);
@@ -64,6 +64,8 @@ public class OavpAnalysis {
         java.util.Arrays.fill(lastLeftBuffer, 0.0);
         java.util.Arrays.fill(lastRightBuffer, 0.0);
         java.util.Arrays.fill(lastSpectrum, 0.0);
+      } else if (config.ENABLE_VIDEO_RENDER) {
+        println("[ oavp ] Rendering movie...");
       } else {
         println("[ oavp ] Loading audio file: " + config.AUDIO_FILE);
         player = minim.loadFile(config.AUDIO_FILE, config.BUFFER_SIZE);
@@ -572,48 +574,48 @@ public class OavpAnalysis {
       // Append TIME
       float timeValue = chunkStartIndex / sampleRate;
 
-      StringBuilder msg = new StringBuilder(nf(timeValue, 0, 3).replace(',', '.'));
+      StringBuilder deepAnalysisMsg = new StringBuilder(nf(timeValue, 0, 3).replace(',', '.'));
 
       // Append Left Level & Right Level
-      msg.append(seperator + nf(leftLevel, 0, config.ANALYSIS_PRECISION).replace(',', '.'));
-      msg.append(seperator + nf(rightLevel, 0, config.ANALYSIS_PRECISION).replace(',', '.'));
+      deepAnalysisMsg.append(seperator + nf(leftLevel, 0, config.ANALYSIS_PRECISION).replace(',', '.'));
+      deepAnalysisMsg.append(seperator + nf(rightLevel, 0, config.ANALYSIS_PRECISION).replace(',', '.'));
 
       // Append Left Buffer & Right Buffer
       for (int i=0; i < bufferSize; ++i) {
-        msg.append(seperator + nf(leftBuffer[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
+        deepAnalysisMsg.append(seperator + nf(leftBuffer[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
       }
       for (int i=0; i < bufferSize; ++i) {
-        msg.append(seperator + nf(rightBuffer[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
+        deepAnalysisMsg.append(seperator + nf(rightBuffer[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
       }
 
       // Append Spectrum (non avged)
       for (int i=0; i < avgSize; ++i) {
-        msg.append(seperator + nf(spectrum[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
+        deepAnalysisMsg.append(seperator + nf(spectrum[i], 0, config.ANALYSIS_PRECISION).replace(',', '.'));
       }
 
       // Append Events
-      msg.append(seperator);
+      deepAnalysisMsg.append(seperator);
+
+      if (beat.isOnset()) {
+        deepAnalysisMsg.append(config.DEFAULT_EVENTS.BEAT + config.EVENTS_SEPERATOR);
+      }
 
       if (quantizationMarkers.size() > 0) {
         float timeValueMs = timeValue * 1000;
-        float beatMarkerMs = quantizationMarkers.get(0);
-        float timeDifference = abs(timeValueMs - beatMarkerMs);
+        float quantizationMarkerMs = quantizationMarkers.get(0);
+        float timeDifference = abs(timeValueMs - quantizationMarkerMs);
 
-        if (timeDifference <= 10 || timeValueMs > beatMarkerMs) {
+        if (timeDifference <= 10 || timeValueMs > quantizationMarkerMs) {
           quantizationMarkers.remove(0);
-          msg.append(config.DEFAULT_EVENTS.QUANTIZATION_MARKER + config.EVENTS_SEPERATOR);
+          deepAnalysisMsg.append(config.DEFAULT_EVENTS.QUANTIZATION_MARKER + config.EVENTS_SEPERATOR);
         }
       }
 
-      if (beat.isOnset()) {
-        msg.append(config.DEFAULT_EVENTS.BEAT + config.EVENTS_SEPERATOR);
-      }
-
-      output.println(msg.toString());
+      deepAnalysisWriter.println(deepAnalysisMsg.toString());
     }
     track.close();
-    output.flush();
-    output.close();
+    deepAnalysisWriter.flush();
+    deepAnalysisWriter.close();
     println("[ oavp ] Audio file analysis done.");
   }
 
