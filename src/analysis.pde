@@ -6,6 +6,10 @@ public class OavpAnalysis {
   private BeatDetect beat;
   private PrintWriter deepAnalysisWriter;
 
+  private HashMap<Float, List<String>> midiData;
+  List<Float> midiDataMsKeys;
+  Set<Integer> midiNotesUsed;
+
   private int avgSize;
   private int bufferSize;
   private float sampleRate;
@@ -495,6 +499,50 @@ public class OavpAnalysis {
 
     println("[ oavp ] Audio Analysis - Total Beat Markers: " + quantizationMarkers.size());
 
+    if (config.MIDI_FILE != null) {
+      println("[ oavp ] Audio Analysis - Parsing Midi File");
+      File midiFile = new File(dataPath(config.MIDI_FILE));
+      midiData = new HashMap<Float, List<String>>();
+      midiDataMsKeys = new ArrayList<Float>();
+      midiNotesUsed = new HashSet<Integer>();
+      try {
+        Sequence seq = MidiSystem.getSequence(midiFile);
+        Track[] midiTracks = seq.getTracks();
+        int ppq = seq.getResolution();
+        Track midiTrack = midiTracks[0];
+
+        for (int i = 0; i < midiTrack.size(); i++) {
+          MidiEvent midiEvent = midiTrack.get(i);
+          long tick = midiEvent.getTick();
+
+          int msPerTick = (60000 / (config.TARGET_BPM * ppq));
+          float ms = tick * msPerTick;
+
+          if (midiEvent.getMessage() instanceof ShortMessage) {
+            ShortMessage shortMessage = (ShortMessage) midiEvent.getMessage();
+            int command = shortMessage.getCommand();
+            if (command == ShortMessage.NOTE_OFF || command == ShortMessage.NOTE_ON) {
+              String midiEntry = shortMessage.getData1() + "-" + (command == ShortMessage.NOTE_ON ? 1 : 0) + "-" + shortMessage.getData2();
+              midiNotesUsed.add(shortMessage.getData1());
+              if (midiData.containsKey(ms)) {
+                midiData.get(ms).add(midiEntry);
+              } else {
+                List<String> midiEntries = new ArrayList<String>();
+                midiEntries.add(midiEntry);
+                midiData.put(ms, midiEntries);
+                midiDataMsKeys.add(ms);
+              }
+            }
+          }
+        }
+      } catch(Exception e) {
+        e.printStackTrace();
+        exit();
+      }
+
+      println("[ oavp ] Audio Analysis - MIDI Notes Used: " + midiNotesUsed);
+    }
+
     for (int chunkIndex = 0; chunkIndex < totalChunks; ++chunkIndex) {
       int chunkStartIndex = chunkIndex * bufferSize;
       int chunkSize = min(leftSamples.length - chunkStartIndex, bufferSize);
@@ -600,14 +648,31 @@ public class OavpAnalysis {
         deepAnalysisMsg.append(config.DEFAULT_EVENTS.BEAT + config.EVENTS_SEPERATOR);
       }
 
+      float timeValueMs = timeValue * 1000;
+
       if (quantizationMarkers.size() > 0) {
-        float timeValueMs = timeValue * 1000;
         float quantizationMarkerMs = quantizationMarkers.get(0);
         float timeDifference = abs(timeValueMs - quantizationMarkerMs);
 
         if (timeDifference <= 10 || timeValueMs > quantizationMarkerMs) {
           quantizationMarkers.remove(0);
           deepAnalysisMsg.append(config.DEFAULT_EVENTS.QUANTIZATION_MARKER + config.EVENTS_SEPERATOR);
+        }
+      }
+
+      if (config.MIDI_FILE != null) {
+        if (midiDataMsKeys.size() > 0) {
+          float midiDataMsKey = midiDataMsKeys.get(0);
+          float timeDifference = abs(timeValueMs - midiDataMsKey);
+
+          if (timeDifference <= 10 || timeValueMs > midiDataMsKey) {
+            midiDataMsKeys.remove(0);
+
+            List<String> midiDataEntry = (List) midiData.get(midiDataMsKey);
+            String encodedMidiEvent = String.join(config.EVENTS_SEPERATOR, midiDataEntry);
+
+            deepAnalysisMsg.append(encodedMidiEvent);
+          }
         }
       }
 
@@ -619,7 +684,7 @@ public class OavpAnalysis {
     println("[ oavp ] Audio file analysis done.");
   }
 
-  public void readAnalysis(OavpConfig config, float[] analysisData, int[] eventsData) {
+  public void readAnalysis(OavpConfig config, float[] analysisData, String[] eventsData) {
     int analysisIndex = 3;
 
     leftLevel = analysisData[1];
@@ -634,6 +699,8 @@ public class OavpAnalysis {
       if (eventsData[i] == config.DEFAULT_EVENTS.QUANTIZATION_MARKER) {
         isQuantizedOnset = true;
       }
+
+      // PARSE eventsData[i] : [NOTE]-[STATE]-[VELOCITY]
     }
 
     System.arraycopy(analysisData, analysisIndex, leftBuffer, 0, bufferSize);

@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Collections;
 import java.io.File;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 import processing.video.*;
 import com.hamoid.*;
+import javax.sound.midi.*;
 
 PApplet context;
 OavpConfig oavp;
@@ -141,16 +145,11 @@ synchronized void draw() {
           exit();
         } else {
           String[] rawAnalysisData = split(line, oavp.AUDIO_ANALYSIS_SEPERATOR);
-          String[] rawEventsData = split(rawAnalysisData[rawAnalysisData.length - 1], oavp.EVENTS_SEPERATOR);
+          String[] eventsData = split(rawAnalysisData[rawAnalysisData.length - 1], oavp.EVENTS_SEPERATOR);
           float[] analysisData = new float[rawAnalysisData.length];
-          int[] eventsData = new int[rawEventsData.length];
 
           for (int i = 0; i < rawAnalysisData.length - 1; i++) {
             analysisData[i] = float(rawAnalysisData[i]);
-          }
-
-          for (int i = 0; i < rawEventsData.length; i++) {
-            eventsData[i] = int(rawEventsData[i]);
           }
 
           updateEntities(oavp, analysisData, eventsData);
@@ -185,7 +184,7 @@ void updateEntities() {
   }
 }
 
-void updateEntities(OavpConfig config, float[] analysisData, int[] eventsData) {
+void updateEntities(OavpConfig config, float[] analysisData, String[] eventsData) {
   try {
     entities.update();
     analysis.readAnalysis(config, analysisData, eventsData);
