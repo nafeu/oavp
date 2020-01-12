@@ -685,26 +685,30 @@ public class OavpAnalysis {
   }
 
   public void readAnalysis(OavpConfig config, float[] analysisData, String[] eventsData) {
-    int analysisIndex = 3;
+    parseAnalysisData(analysisData, config);
+    parseDefaultEvents(eventsData, config);
+  }
 
-    leftLevel = analysisData[1];
-    rightLevel = analysisData[2];
+  private void parseAnalysisData(float[] analysisData, OavpConfig config) {
+    leftLevel = analysisData[config.ANALYSIS_LEFT_LEVEL_INDEX];
+    rightLevel = analysisData[config.ANALYSIS_RIGHT_LEVEL_INDEX];
+    System.arraycopy(analysisData, config.ANALYSIS_INDEX, leftBuffer, 0, bufferSize);
+    System.arraycopy(analysisData, config.ANALYSIS_INDEX + bufferSize, rightBuffer, 0, bufferSize);
+    System.arraycopy(analysisData, config.ANALYSIS_INDEX + bufferSize + bufferSize, spectrum, 0, avgSize);
+  }
+
+  private void parseDefaultEvents(String[] eventsData, OavpConfig config) {
     isBeatOnset = false;
     isQuantizedOnset = false;
 
     for (int i = 0; i < eventsData.length; i++) {
-      if (eventsData[i] == config.DEFAULT_EVENTS.BEAT) {
+      if (eventsData[i].equals(config.DEFAULT_EVENTS.BEAT)) {
         isBeatOnset = true;
       }
-      if (eventsData[i] == config.DEFAULT_EVENTS.QUANTIZATION_MARKER) {
+      if (eventsData[i].equals(config.DEFAULT_EVENTS.QUANTIZATION_MARKER)) {
         isQuantizedOnset = true;
       }
-
-      // PARSE eventsData[i] : [NOTE]-[STATE]-[VELOCITY]
     }
-
-    System.arraycopy(analysisData, analysisIndex, leftBuffer, 0, bufferSize);
-    System.arraycopy(analysisData, analysisIndex + bufferSize, rightBuffer, 0, bufferSize);
-    System.arraycopy(analysisData, analysisIndex + bufferSize + bufferSize, spectrum, 0, avgSize);
   }
+
 }

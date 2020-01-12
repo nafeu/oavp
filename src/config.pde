@@ -4,6 +4,9 @@ public class OavpConfig {
   public String AUDIO_ANALYSIS_SEPERATOR = "|";
   public String EVENTS_SEPERATOR = ",";
   public int ANALYSIS_PRECISION = 4;
+  public int ANALYSIS_INDEX = 3;
+  public int ANALYSIS_LEFT_LEVEL_INDEX = 1;
+  public int ANALYSIS_RIGHT_LEVEL_INDEX = 2;
 
   public String AUDIO_FILE = "120-updated.wav";
   public String MIDI_FILE = "120-updated.mid";
@@ -33,7 +36,7 @@ public class OavpConfig {
 
   public boolean ENABLE_ORTHO = false;
   public boolean ENABLE_VIDEO_RENDER = true;
-  public boolean ANALYZE_AUDIO = true;
+  public boolean ANALYZE_AUDIO = false;
 
   public String FRAME_TITLE = "oavp";
 
