@@ -16,6 +16,7 @@ import de.looksgood.ani.easing.*;
 import processing.video.*;
 import com.hamoid.*;
 import javax.sound.midi.*;
+import java.util.concurrent.TimeUnit;
 
 PApplet context;
 OavpConfig oavp;
@@ -39,9 +40,9 @@ void setup() {
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // Display Setup
-  size(810, 1440, P3D); // INSTAGRAM VIDEO
+  // size(810, 1440, P3D); // INSTAGRAM VIDEO
   // size(1000, 1000, P3D); // DEFAULT
-  // fullScreen(P3D, 1);
+  fullScreen(P3D, 1);
 
   try {
     oavp = new OavpConfig();
@@ -106,6 +107,7 @@ void setup() {
       videoExport = new VideoExport(this);
       videoExport.setFrameRate(oavp.MOVIE_FPS);
       videoExport.setAudioFileName(oavp.AUDIO_FILE);
+      videoExport.setDebugging(false);
       videoExport.startMovie();
     }
 
@@ -121,17 +123,24 @@ void setup() {
   text.setPadding(20);
 }
 
+boolean firstRender = true;
+
 synchronized void draw() {
   if (!loaded) {
     background(0);
     textSize(25);
     fill(255);
-    text("[ oavp - analyzing audio ]", 20, 20);
+    textAlign(CENTER, CENTER);
+    text("[ analyzing audio ]", oavp.width(0.5), oavp.height(0.5));
   } else {
     try {
       if (oavp.ENABLE_VIDEO_RENDER) {
         String line;
         try {
+          if (firstRender == true) {
+            TimeUnit.SECONDS.sleep(3);
+            firstRender = false;
+          }
           line = reader.readLine();
         }
         catch (IOException e) {
@@ -154,7 +163,8 @@ synchronized void draw() {
 
           updateEntities(oavp, analysisData, eventsData);
           float soundTime = analysisData[0];
-          while (videoExport.getCurrentTime() < soundTime + (1 / oavp.MOVIE_FPS) * 0.5) {
+          float frameDurationOffset = (1 / oavp.MOVIE_FPS) * oavp.FRAME_OFFSET_MULTIPLIER;
+          while (videoExport.getCurrentTime() < (soundTime + frameDurationOffset)) {
             drawSketch();
             videoExport.saveFrame();
           }

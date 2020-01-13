@@ -1,5 +1,6 @@
 public class OavpConfig {
   public int FRAMERATE = 1000;
+  // public int FRAMERATE = 60;
   public int MOVIE_FPS = 60;
   public String AUDIO_ANALYSIS_SEPERATOR = "|";
   public String EVENTS_SEPERATOR = ",";
@@ -7,9 +8,12 @@ public class OavpConfig {
   public int ANALYSIS_INDEX = 3;
   public int ANALYSIS_LEFT_LEVEL_INDEX = 1;
   public int ANALYSIS_RIGHT_LEVEL_INDEX = 2;
+  public int MAX_MIDI_NOTE_RANGE = 128;
 
-  public String AUDIO_FILE = "120-updated.wav";
-  public String MIDI_FILE = "120-updated.mid";
+  // public String AUDIO_FILE;
+  // public String MIDI_FILE;
+  public String AUDIO_FILE = "120.wav";
+  public String MIDI_FILE = "120.mid";
   public int TARGET_BPM = 120;
   public int QUANTIZATION = 4; // Sixteenth
   // public int QUANTIZATION = 1; // Quarter
@@ -35,16 +39,21 @@ public class OavpConfig {
   public float BUFFER_SMOOTHING = 0.85f;
 
   public boolean ENABLE_ORTHO = false;
+  // public boolean ENABLE_VIDEO_RENDER = false;
+  // public boolean ANALYZE_AUDIO = false;
   public boolean ENABLE_VIDEO_RENDER = true;
-  public boolean ANALYZE_AUDIO = false;
+  public boolean ANALYZE_AUDIO = true;
+
+  // public float FRAME_OFFSET_MULTIPLIER = 0.5;
+  public float FRAME_OFFSET_MULTIPLIER = 0;
 
   public String FRAME_TITLE = "oavp";
 
   public DefaultEvents DEFAULT_EVENTS;
 
   public class DefaultEvents {
-    String QUANTIZATION_MARKER = "0-1-100";
-    String BEAT = "1-1-100";
+    int QUANTIZATION_MARKER = 1 + MAX_MIDI_NOTE_RANGE;
+    int BEAT = 2 + MAX_MIDI_NOTE_RANGE;
     DefaultEvents(){}
   }
 

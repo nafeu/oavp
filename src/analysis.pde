@@ -10,6 +10,8 @@ public class OavpAnalysis {
   List<Float> midiDataMsKeys;
   Set<Integer> midiNotesUsed;
 
+  private HashMap<Integer, OavpEvent> oavpEvents;
+
   private int avgSize;
   private int bufferSize;
   private float sampleRate;
@@ -49,6 +51,7 @@ public class OavpAnalysis {
   OavpAnalysis (Minim minim, OavpConfig config) {
     beat = new BeatDetect();
     beat.setSensitivity(300);
+    oavpEvents = new HashMap<Integer, OavpEvent>();
     if (config.AUDIO_FILE != null) {
       if (config.ANALYZE_AUDIO) {
         println("[ oavp ] Analyzing audio file: " + config.AUDIO_FILE);
@@ -645,7 +648,7 @@ public class OavpAnalysis {
       deepAnalysisMsg.append(seperator);
 
       if (beat.isOnset()) {
-        deepAnalysisMsg.append(config.DEFAULT_EVENTS.BEAT + config.EVENTS_SEPERATOR);
+        deepAnalysisMsg.append(config.DEFAULT_EVENTS.BEAT + "-1-100" + config.EVENTS_SEPERATOR);
       }
 
       float timeValueMs = timeValue * 1000;
@@ -656,7 +659,7 @@ public class OavpAnalysis {
 
         if (timeDifference <= 10 || timeValueMs > quantizationMarkerMs) {
           quantizationMarkers.remove(0);
-          deepAnalysisMsg.append(config.DEFAULT_EVENTS.QUANTIZATION_MARKER + config.EVENTS_SEPERATOR);
+          deepAnalysisMsg.append(config.DEFAULT_EVENTS.QUANTIZATION_MARKER + "-1-100" + config.EVENTS_SEPERATOR);
         }
       }
 
@@ -686,7 +689,8 @@ public class OavpAnalysis {
 
   public void readAnalysis(OavpConfig config, float[] analysisData, String[] eventsData) {
     parseAnalysisData(analysisData, config);
-    parseDefaultEvents(eventsData, config);
+    parseEvents(eventsData);
+    parseDefaultEvents(config);
   }
 
   private void parseAnalysisData(float[] analysisData, OavpConfig config) {
@@ -697,18 +701,76 @@ public class OavpAnalysis {
     System.arraycopy(analysisData, config.ANALYSIS_INDEX + bufferSize + bufferSize, spectrum, 0, avgSize);
   }
 
-  private void parseDefaultEvents(String[] eventsData, OavpConfig config) {
-    isBeatOnset = false;
-    isQuantizedOnset = false;
-
+  private void parseEvents(String[] eventsData) {
+    oavpEvents.clear();
     for (int i = 0; i < eventsData.length; i++) {
-      if (eventsData[i].equals(config.DEFAULT_EVENTS.BEAT)) {
-        isBeatOnset = true;
-      }
-      if (eventsData[i].equals(config.DEFAULT_EVENTS.QUANTIZATION_MARKER)) {
-        isQuantizedOnset = true;
+      if (eventsData[i].length() > 0) {
+        OavpEvent event = new OavpEvent(eventsData[i]);
+        oavpEvents.put(event.getNote(), event);
       }
     }
   }
 
+  private void parseDefaultEvents(OavpConfig config) {
+    isBeatOnset = false;
+    isQuantizedOnset = false;
+
+    if (oavpEvents.containsKey(config.DEFAULT_EVENTS.BEAT)) {
+      isBeatOnset = true;
+    }
+    if (oavpEvents.containsKey(config.DEFAULT_EVENTS.QUANTIZATION_MARKER)) {
+      isQuantizedOnset = true;
+    }
+  }
+
+  public boolean isEventOn(int note) {
+    if (oavpEvents.containsKey(note) && oavpEvents.get(note).isOn()) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isEventOff(int note) {
+    if (oavpEvents.containsKey(note) && oavpEvents.get(note).isOff()) {
+      return true;
+    }
+    return false;
+  }
+
+  public OavpEvent getEvent(int note) {
+    return oavpEvents.get(note);
+  }
+}
+
+public class OavpEvent {
+  private int note;
+  private boolean state;
+  private int velocity;
+
+  OavpEvent(String eventData) {
+    String[] eventDataSplit = eventData.split("-");
+    this.note = int(eventDataSplit[0]);
+    this.state = int(eventDataSplit[1]) == 1;
+    this.velocity = int(eventDataSplit[2]);
+  }
+
+  public int getNote() {
+    return this.note;
+  }
+
+  public int getVelocity() {
+    return this.velocity;
+  }
+
+  public boolean getState() {
+    return this.state;
+  }
+
+  public boolean isOn() {
+    return this.state == true;
+  }
+
+  public boolean isOff() {
+    return this.state == false;
+  }
 }
