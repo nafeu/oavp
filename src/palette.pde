@@ -7,12 +7,9 @@ public class OavpPalette {
   private int rotatingColorIndex = 0;
   private color colorA = 0;
   private color colorB = 0;
-  private PFont mono;
 
   OavpPalette(OavpConfig config) {
     storage = new HashMap<String, color[]>();
-    mono = loadFont(config.FONT_FILE);
-    textFont(mono, config.FONT_UNIT * (Math.round(config.STAGE_WIDTH * config.FONT_SCALE)));
     flat = new FlatUIColors();
   }
 
