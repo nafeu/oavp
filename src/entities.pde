@@ -773,6 +773,10 @@ public class OavpToggle {
   public float getValue() {
     return value;
   }
+
+  public float getInvertedValue() {
+    return 1.0 - value;
+  }
 }
 
 public class OavpEntityManager {

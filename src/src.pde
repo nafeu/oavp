@@ -42,7 +42,10 @@ void setup() {
   // Display Setup
   // size(810, 1440, P3D); // INSTAGRAM VIDEO
   // size(750, 750, P3D); // DEFAULT
+
+  // %DISPLAY SETTINGS - START%
   fullScreen(P3D, 1);
+  // %DISPLAY SETTINGS - END%
 
   try {
     oavp = new OavpConfig();

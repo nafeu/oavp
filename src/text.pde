@@ -5,11 +5,13 @@ public class OavpText {
   private PFont regular;
   private PFont bold;
   private PFont thin;
+  private float opacity;
   private int size;
 
   OavpText(OavpConfig config, OavpPosition cursor) {
     this.cursor = cursor;
     this.padding = 50;
+    this.opacity = 1.0;
     textMode(SHAPE);
     try {
       this.regular = createFont(config.FONT_REGULAR, config.FONT_SIZE);
@@ -187,8 +189,13 @@ public class OavpText {
     return this;
   }
 
+  public OavpText opacity(float opacity) {
+    this.opacity = opacity;
+    return this;
+  }
+
   public OavpText colour(color inputColour) {
-    fill(inputColour);
+    fill(red(inputColour), green(inputColour), blue(inputColour), this.opacity * 255);
     return this;
   }
 
