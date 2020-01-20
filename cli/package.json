@@ -1,0 +1,30 @@
+{
+  "name": "@nafeu/oavp",
+  "version": "1.0.0",
+  "description": "CLI for open audio visualizers for processing",
+  "main": "src/cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "@nafeu/oavp": "bin/oavp",
+    "oavp": "bin/oavp"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "cli",
+    "processing",
+    "audio",
+    "visualizations"
+  ],
+  "author": "Nafeu Nasir",
+  "license": "MIT",
+  "dependencies": {
+    "arg": "^4.1.2",
+    "esm": "^3.2.25",
+    "execa": "^3.4.0",
+    "inquirer": "^7.0.0"
+  }
+}
