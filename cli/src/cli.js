@@ -1,61 +1,49 @@
 import arg from 'arg';
 import inquirer from 'inquirer';
 import execa from 'execa';
+import _ from 'lodash';
+import { handleCreateCommand } from './components/create';
 
 function parseArgumentsIntoOptions(rawArgs) {
     const args = arg(
         {
-            '--yes': Boolean,
-            '-y': '--yes',
+            // '--yes': Boolean,
+            // '-y': '--yes',
         },
         {
             argv: rawArgs.slice(2),
         }
     )
     return {
-        skipPrompts: args['--yes'] || false,
-        execution: args['--yes'] || false,
+        // skipPrompts: args['--yes'] || false,
+        // execution: args['--yes'] || false,
         command: args._[0],
     }
 }
 
-async function promptForMissingOptions(options) {
-    const defaultCommand = 'date';
-    if (options.skipPrompts) {
-        return {
-            ...options,
-            command: options.command || defaultCommand
-        };
+const VALID_COMMANDS = ['create', 'build'];
+const DEFAULT_COMMAND = 'create';
+
+async function promptForMissingCommand(options) {
+    const questions = [];
+
+    const isInvalidCommand = options.command && _.includes(VALID_COMMANDS, _.toLower(options.command));
+
+    if (isInvalidCommand) {
+      console.log(`[ oavp ] Command '${options.command}' not recognized.`)
     }
 
-    const questions = [];
     if (!options.command) {
         questions.push({
             type: 'list',
             name: 'command',
-            message: 'Please choose which command to run',
-            choices: ['date', 'ls', 'pwd'],
-            default: defaultCommand
-        })
+            message: 'Please select a command:',
+            choices: VALID_COMMANDS,
+            default: DEFAULT_COMMAND
+        });
     }
 
     const answers = await inquirer.prompt(questions);
-
-    if (!options.execution) {
-        const confirmation = await inquirer.prompt([
-            {
-                type: 'confirm',
-                name: 'execution',
-                message: `Execute command: '${answers.command || options.command}'?`,
-                default: false,
-            }
-        ])
-        return {
-            ...options,
-            command: options.command || answers.command,
-            execution: options.execution || confirmation.execution,
-        }
-    }
 
     return {
         ...options,
@@ -63,21 +51,19 @@ async function promptForMissingOptions(options) {
     }
 }
 
-async function handleOptions({ command, execution }) {
-    if (execution) {
-        const result = await execa(command, [], {});
-        if (result.failed) {
-            Promise.reject(`Failed to execute ${command}`)
-            return;
-        } else {
-            console.log(result.stdout);
-        }
-    }
+async function handleOptions({ command }) {
+  switch (command) {
+    case 'create':
+      await handleCreateCommand();
+      break;
+    default:
+      await handleCreateCommand();
+  }
 }
 
 export async function cli(args) {
     let options = parseArgumentsIntoOptions(args);
-    options = await promptForMissingOptions(options);
+    options = await promptForMissingCommand(options);
     try {
         await handleOptions(options);
     } catch(err) {
