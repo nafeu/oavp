@@ -7,8 +7,8 @@ import { handleCreateCommand } from './components/create';
 function parseArgumentsIntoOptions(rawArgs) {
     const args = arg(
         {
-            // '--yes': Boolean,
-            // '-y': '--yes',
+            '--template': String,
+            '-t': '--template',
         },
         {
             argv: rawArgs.slice(2),
@@ -16,7 +16,7 @@ function parseArgumentsIntoOptions(rawArgs) {
     )
     return {
         // skipPrompts: args['--yes'] || false,
-        // execution: args['--yes'] || false,
+        template: args['--template'],
         command: args._[0],
     }
 }
@@ -27,13 +27,13 @@ const DEFAULT_COMMAND = 'create';
 async function promptForMissingCommand(options) {
     const questions = [];
 
-    const isInvalidCommand = options.command && _.includes(VALID_COMMANDS, _.toLower(options.command));
+    const isInvalidCommand = options.command && !_.includes(VALID_COMMANDS, _.toLower(options.command));
 
     if (isInvalidCommand) {
       console.log(`[ oavp ] Command '${options.command}' not recognized.`)
     }
 
-    if (!options.command) {
+    if (!options.command || isInvalidCommand) {
         questions.push({
             type: 'list',
             name: 'command',
@@ -51,13 +51,13 @@ async function promptForMissingCommand(options) {
     }
 }
 
-async function handleOptions({ command }) {
-  switch (command) {
+async function handleOptions(options) {
+  switch (options.command) {
     case 'create':
-      await handleCreateCommand();
+      await handleCreateCommand(options);
       break;
     default:
-      await handleCreateCommand();
+      await handleCreateCommand(options);
   }
 }
 
