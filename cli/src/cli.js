@@ -1,6 +1,5 @@
 import arg from 'arg';
 import inquirer from 'inquirer';
-import execa from 'execa';
 import _ from 'lodash';
 import { handleCreateCommand } from './components/create';
 
@@ -11,11 +10,15 @@ function parseArgumentsIntoOptions(rawArgs) {
             '-t': '--template',
         },
         {
+            '--sketch': String,
+            '-s': '--sketch',
+        },
+        {
             argv: rawArgs.slice(2),
         }
     )
     return {
-        // skipPrompts: args['--yes'] || false,
+        sketch: args['--sketch'],
         template: args['--template'],
         command: args._[0],
     }

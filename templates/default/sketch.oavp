@@ -1,0 +1,69 @@
+void setupSketch() {
+  entities.addPulser("example");
+  entities.addEmissions("example");
+  entities.addInterval("example", 10, 1);
+  entities.addToggle("topic-title")
+    .duration(1)
+    .easing(Ani.EXPO_IN_OUT);
+}
+
+void updateSketch() {
+  entities.getPulser("example").pulseIf(analysis.isEventOn(37) || analysis.isBeatOnset());
+  emitters.useEmissions("example").emitIf(analysis.isEventOn(38) || analysis.isBeatOnset());
+  entities.getInterval("example").update(entities.getPulser("example").getValue());
+}
+
+void drawSketch() {
+  palette.reset(palette.flat.black, palette.flat.yellow, 2);
+
+  text
+    .create()
+    .opacity(entities.getToggle("topic-title").getInvertedValue())
+    .colour(palette.flat.white)
+    .bottom()
+    .left()
+    .moveUp(oavp.width(0.1))
+    .moveRight(oavp.width(0.05))
+    .moveDown(entities.getToggle("topic-title").getValue() * oavp.height(0.15))
+    .alignLeft()
+    .size(32)
+    .weightRegular()
+    .write(oavp.TOPIC_NAME)
+    .size(18)
+    .moveDown(oavp.width(0.04))
+    .weightBold()
+    .write(oavp.TOPIC_TITLE)
+    .done();
+
+  visualizers
+    .useInterval("example")
+    .create()
+    .center().middle()
+    .draw.intervalGhostCircle(0, oavp.width(0.5), 10)
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .rotate(frameCount, frameCount)
+    .draw.basicLevelCube(oavp.width(0.75))
+    .next()
+    .center().middle()
+    .rotate(frameCount(-0.25), frameCount(-0.25))
+    .draw.basicLevelCube(oavp.width(0.25))
+    .done();
+
+  visualizers
+    .useEmissions("example")
+    .create()
+    .center().middle()
+    .rotate(0, 0, frameCount(0.25))
+    .draw.emissionSplashSquare(oavp.width(0.4))
+    .done();
+}
+
+void keyPressed() {
+  if (key == 'q') {
+    entities.getToggle("topic-title").softToggle();
+  }
+}

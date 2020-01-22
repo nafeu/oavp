@@ -1,0 +1,31 @@
+void setupSketch() {
+  entities.addPulser("tempoBeat");
+    .duration(2);
+  entities.addPulser("detectedBeat");
+    .duration(2);
+}
+
+void updateSketch() {
+  entities.getPulser("tempoBeat").pulseIf(analysis.isTempoBeatOnset());
+  entities.getPulser("detectedBeat").pulseIf(analysis.isBeatOnset());
+}
+
+void drawSketch() {
+  palette.reset(palette.flat.black, palette.flat.white, 2);
+
+  visualizers
+    .create()
+    .center().middle()
+    .moveLeft(oavp.width(0.25))
+    .strokeColor(palette.flat.blue);
+    .draw.basicSquare(oavp.width(0.25) * entities.getPulser("tempoBeat").getValue())
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .moveRight(oavp.width(0.25))
+    .strokeColor(palette.flat.orange);
+    .draw.basicSquare(oavp.width(0.25) * entities.getPulser("detectedBeat").getValue())
+    .done();
+}

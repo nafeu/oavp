@@ -7,7 +7,7 @@ src/sketch.pde
 **/config.json
 devnotes.txt
 **/doc-export.md
-**/*.oavp
+sketches/
 **/data/*.txt
 *.mp4
 ffmpeg.txt

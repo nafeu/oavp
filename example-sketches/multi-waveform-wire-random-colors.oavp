@@ -1,0 +1,81 @@
+float SKETCH_DISTANCE = 0.02;
+
+void setupSketch() {
+  // palette.add("a", palette.getRandomColor());
+  // palette.add("b", palette.getRandomColor());
+  // palette.add("c", palette.getRandomColor());
+  // palette.add("d", palette.getRandomColor());
+  // palette.add("e", palette.getRandomColor());
+  // palette.add("bg", palette.getRandomColor());
+  palette.add("a", -5054501);
+  palette.add("b", -1074534);
+  palette.add("c", -7461718);
+  palette.add("d", -688361);
+  palette.add("e", -44462);
+  palette.add("bg", -15064194);
+  println("Palette:");
+  println(palette.get("a"));
+  println(palette.get("b"));
+  println(palette.get("c"));
+  println(palette.get("d"));
+  println(palette.get("e"));
+  println(palette.get("bg"));
+}
+
+void updateSketch() {
+
+}
+
+void drawSketch() {
+  palette.reset(palette.get("bg"), palette.flat.white, 2);
+
+  visualizers
+    .create()
+    .middle()
+    .moveRight(oavp.width(0.25))
+    .moveUp(oavp.height(0.25))
+    .rotate(0, normalMouseX * 180, 0)
+    .moveLeft(oavp.width(SKETCH_DISTANCE))
+    .dimensions(oavp.width(0.5), oavp.height(0.5))
+      .strokeColor(palette.get("a"))
+      .draw.basicWaveformWire()
+      .moveDown(oavp.width(SKETCH_DISTANCE))
+      .moveRight(oavp.width(SKETCH_DISTANCE))
+      .moveForward(oavp.width(SKETCH_DISTANCE))
+      .strokeColor(palette.get("b"))
+      .draw.basicWaveformWire()
+      .moveDown(oavp.width(SKETCH_DISTANCE))
+      .moveRight(oavp.width(SKETCH_DISTANCE))
+      .moveForward(oavp.width(SKETCH_DISTANCE))
+      .strokeColor(palette.get("c"))
+      .draw.basicWaveformWire()
+      .moveDown(oavp.width(SKETCH_DISTANCE))
+      .moveRight(oavp.width(SKETCH_DISTANCE))
+      .moveForward(oavp.width(SKETCH_DISTANCE))
+      .strokeColor(palette.get("d"))
+      .draw.basicWaveformWire()
+      .moveDown(oavp.width(SKETCH_DISTANCE))
+      .moveRight(oavp.width(SKETCH_DISTANCE))
+      .moveForward(oavp.width(SKETCH_DISTANCE))
+      .strokeColor(palette.get("e"))
+      .draw.basicWaveformWire()
+    .done();
+}
+
+void keyPressed() {
+  if (key == 'q') {
+    palette.add("a", palette.getRandomColor());
+    palette.add("b", palette.getRandomColor());
+    palette.add("c", palette.getRandomColor());
+    palette.add("d", palette.getRandomColor());
+    palette.add("e", palette.getRandomColor());
+    palette.add("bg", palette.getRandomColor());
+    println("Palette:");
+    println(palette.get("a"));
+    println(palette.get("b"));
+    println(palette.get("c"));
+    println(palette.get("d"));
+    println(palette.get("e"));
+    println(palette.get("bg"));
+  }
+}

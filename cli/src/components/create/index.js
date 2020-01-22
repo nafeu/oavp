@@ -1,12 +1,48 @@
-import { readTemplate, getTemplates } from '../../utils/helpers';
 import inquirer from 'inquirer';
 import _ from 'lodash';
 import { capitalCase } from 'change-case';
+
+import {
+  readTemplateConfig,
+  readTemplateSketch,
+  getTemplates,
+  validateSketchName,
+  createSketch,
+  openWithEditor,
+} from '../../utils/helpers';
 
 const DEFAULT_TEMPLATE = 'default';
 const TEMPLATE_PATTERN = /%([A-Z]\w+(\|[\S])|())\w+%/g;
 
 export async function handleCreateCommand(options) {
+  const name = await getSketchName(options);
+  const { config, template } = await getTemplateConfig(options);
+  const sketch = await readTemplateSketch(template);
+  const path = createSketch({ name, config, sketch });
+  await openWithEditor(path);
+}
+
+export async function getSketchName(options) {
+  const questions = [];
+
+  if (options.sketch && !validateSketchName(options.sketch)) {
+    console.log(`[ oavp ] The sketch name '${options.sketch}' is invalid or already exists.`)
+  }
+
+  if (!options.sketch || !validateSketchName(options.sketch)) {
+    const answers = await inquirer.prompt({
+      type: 'input',
+      name: 'name',
+      message: 'Please enter a name for your sketch:',
+      validate: validateSketchName
+    });
+    return answers.name;
+  }
+
+  return options.name;
+}
+
+export async function getTemplateConfig(options) {
   const questions = [];
 
   const availableTemplates = await getTemplates();
@@ -28,7 +64,8 @@ export async function handleCreateCommand(options) {
   }
 
   const answers = await inquirer.prompt(questions);
-  const [templateData, templateDefaults] = (await readTemplate(options.template || answers.template)).split('---');
+  const finalTemplate = options.template || answers.template;
+  const [templateData, templateDefaults] = (await readTemplateConfig(finalTemplate)).split('---');
 
   const templateDefaultsMapping = {}
 
@@ -64,7 +101,6 @@ export async function handleCreateCommand(options) {
     );
   });
 
-  const parsedTemplateData = JSON.parse(processedTemplateData);
-
-  console.log(parsedTemplateData);
+  return { config: processedTemplateData, template: options.template || answers.template };
 }
+
