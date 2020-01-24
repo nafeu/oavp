@@ -297,6 +297,11 @@ class OavpVisualizer {
     return this;
   }
 
+  public OavpVisualizer fillColor(String customColor) {
+    fill(unhex("FF" + customColor.substring(1)));
+    return this;
+  }
+
   /**
    * Set fill color
    * @param customColor the color
@@ -313,6 +318,11 @@ class OavpVisualizer {
    */
   public OavpVisualizer strokeColor(color customColor) {
     stroke(customColor);
+    return this;
+  }
+
+  public OavpVisualizer strokeColor(String customColor) {
+    stroke(unhex("FF" + customColor.substring(1)));
     return this;
   }
 

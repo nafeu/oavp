@@ -199,6 +199,12 @@ public class OavpText {
     return this;
   }
 
+  public OavpText colour(String inputColour) {
+    color unhexedColor = unhex("FF" + inputColour.substring(1));
+    fill(red(unhexedColor), green(unhexedColor), blue(unhexedColor), this.opacity * 255);
+    return this;
+  }
+
   public OavpText write(String text, color inputColor) {
     noStroke();
     fill(inputColor);

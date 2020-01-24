@@ -30,11 +30,11 @@ public class OavpConfig {
   public int FONT_SIZE = 64;
   public float FONT_SCALE = 0.0033;
 
-  public float STAGE_WIDTH = 750;
-  public float STAGE_HEIGHT = 750;
-  public float w = 750;
-  public float h = 750;
-  public float GRID_SCALE = 750;
+  public int STAGE_WIDTH = 750;
+  public int STAGE_HEIGHT = 750;
+  public int w = 750;
+  public int h = 750;
+  public int GRID_SCALE = 750;
 
   public float SPECTRUM_SMOOTHING = 0.80f;
   public float LEVEL_SMOOTHING = 0.95f;
@@ -52,6 +52,12 @@ public class OavpConfig {
   public String FRAME_TITLE = "oavp";
   public String TOPIC_NAME = "Phrakture";
   public String TOPIC_TITLE = "Reinvented By Silence";
+  public String COLOR_A = "#B2DFDB";
+  public String COLOR_B = "#EF9A9A";
+  public String COLOR_C = "#8E24AA";
+  public String COLOR_D = "#F57F17";
+  public String COLOR_E = "#FF5252";
+  public String COLOR_BG = "#1A237E";
 
   public DefaultEvents DEFAULT_EVENTS;
 

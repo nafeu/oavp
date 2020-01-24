@@ -2,6 +2,7 @@ import arg from 'arg';
 import inquirer from 'inquirer';
 import _ from 'lodash';
 import { handleCreateCommand } from './components/create';
+import { handleBuildCommand } from './components/build';
 
 function parseArgumentsIntoOptions(rawArgs) {
     const args = arg(
@@ -58,6 +59,9 @@ async function handleOptions(options) {
   switch (options.command) {
     case 'create':
       await handleCreateCommand(options);
+      break;
+    case 'build':
+      await handleBuildCommand(options);
       break;
     default:
       await handleCreateCommand(options);

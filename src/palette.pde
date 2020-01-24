@@ -27,9 +27,22 @@ public class OavpPalette {
     strokeWeight(strokeWeight);
   }
 
+  public void reset(String background, String primary, float strokeWeight) {
+    background(unhex("FF" + background.substring(1)));
+    noFill();
+    stroke(unhex("FF" + primary.substring(1)));
+    strokeWeight(strokeWeight);
+  }
+
   public void reset(color background, color primary) {
     background(background);
     fill(primary);
+    noStroke();
+  }
+
+  public void reset(String background, String primary) {
+    background(unhex("FF" + background.substring(1)));
+    fill(unhex("FF" + primary.substring(1)));
     noStroke();
   }
 

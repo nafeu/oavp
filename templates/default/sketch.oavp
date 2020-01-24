@@ -14,12 +14,12 @@ void updateSketch() {
 }
 
 void drawSketch() {
-  palette.reset(palette.flat.black, palette.flat.yellow, 2);
+  palette.reset(oavp.COLOR_BG, oavp.COLOR_A, 2);
 
   text
     .create()
     .opacity(entities.getToggle("topic-title").getInvertedValue())
-    .colour(palette.flat.white)
+    .colour(oavp.COLOR_A)
     .bottom()
     .left()
     .moveUp(oavp.width(0.1))
@@ -39,6 +39,7 @@ void drawSketch() {
     .useInterval("example")
     .create()
     .center().middle()
+    .strokeColor(oavp.COLOR_B)
     .draw.intervalGhostCircle(0, oavp.width(0.5), 10)
     .done();
 
@@ -46,10 +47,12 @@ void drawSketch() {
     .create()
     .center().middle()
     .rotate(frameCount, frameCount)
+    .strokeColor(oavp.COLOR_C)
     .draw.basicLevelCube(oavp.width(0.75))
     .next()
     .center().middle()
     .rotate(frameCount(-0.25), frameCount(-0.25))
+    .strokeColor(oavp.COLOR_D)
     .draw.basicLevelCube(oavp.width(0.25))
     .done();
 
@@ -58,6 +61,7 @@ void drawSketch() {
     .create()
     .center().middle()
     .rotate(0, 0, frameCount(0.25))
+    .strokeColor(oavp.COLOR_E)
     .draw.emissionSplashSquare(oavp.width(0.4))
     .done();
 }
