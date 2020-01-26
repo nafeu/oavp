@@ -39,13 +39,9 @@ void setup() {
 
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
-  // Display Setup
-  // size(810, 1440, P3D); // INSTAGRAM VIDEO
-  // size(750, 750, P3D); // DEFAULT
-
-  // %DISPLAY SETTINGS - START%
+  // DISPLAY_SETTINGS_START
   fullScreen(P3D, 1);
-  // %DISPLAY SETTINGS - END%
+  // DISPLAY_SETTINGS_END
 
   try {
     oavp = new OavpConfig();

@@ -52,7 +52,7 @@ public class OavpAnalysis {
     beat = new BeatDetect();
     beat.setSensitivity(300);
     oavpEvents = new HashMap<Integer, OavpEvent>();
-    if (config.AUDIO_FILE != null) {
+    if (config.AUDIO_FILE != null && config.AUDIO_FILE != "") {
       if (config.ANALYZE_AUDIO) {
         println("[ oavp ] Analyzing audio file: " + config.AUDIO_FILE);
         deepAnalysisWriter = createWriter(dataPath(config.AUDIO_FILE + ".deep-analysis.txt"));
@@ -502,7 +502,7 @@ public class OavpAnalysis {
 
     println("[ oavp ] Audio Analysis - Total Beat Markers: " + quantizationMarkers.size());
 
-    if (config.MIDI_FILE != null) {
+    if (config.MIDI_FILE != null && config.MIDI_FILE != "") {
       println("[ oavp ] Audio Analysis - Parsing Midi File");
       File midiFile = new File(dataPath(config.MIDI_FILE));
       midiData = new HashMap<Float, List<String>>();

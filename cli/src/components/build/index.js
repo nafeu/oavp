@@ -1,29 +1,30 @@
 import inquirer from 'inquirer';
 import inquirerAutocompletePrompt from 'inquirer-autocomplete-prompt';
+import execa from 'execa';
 
 import {
-  readTemplateConfig,
-  readTemplateSketch,
-  readBaseConfigTemplateStart,
-  readBaseConfigTemplateEnd,
   readConfig,
   readSketch,
   checkSketchExists,
-  openWithEditor,
-  getSketches,
   validateSketchNameForBuild,
   searchSketches,
-  parseJsConfigToJava,
+  writeToOavpConfigFile,
+  writeToOavpSrcFile,
+  getUpdatedJavaSrc,
+  getUpdatedJavaConfig,
 } from '../../utils/helpers';
+
+import { SRC_PATH } from '../../config';
 
 inquirer.registerPrompt('autocomplete', inquirerAutocompletePrompt);
 
 export async function handleBuildCommand(options) {
   const { config, sketch } = await getSketchByName(options);
-  const baseConfigStart = await readBaseConfigTemplateStart();
-  const baseConfigEnd = await readBaseConfigTemplateEnd();
-  const finalConfig = `${baseConfigStart}\n${parseJsConfigToJava(config)}\n${baseConfigEnd}`;
-  console.log(finalConfig);
+  const updatedJavaConfig = await getUpdatedJavaConfig(config);
+  const updatedJavaSrc = await getUpdatedJavaSrc(config);
+  writeToOavpConfigFile(updatedJavaConfig);
+  writeToOavpSrcFile(updatedJavaSrc);
+  execa('processing-java', [`--sketch=${SRC_PATH}`, '--force', '--run']).stdout.pipe(process.stdout);
 }
 
 export async function getSketchByName(options) {

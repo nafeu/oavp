@@ -1,8 +1,19 @@
 import { promises as fs, existsSync, mkdirSync, writeFileSync } from 'fs';
-import { TEMPLATES_PATH, SKETCHES_PATH } from '../config';
+import {
+  TEMPLATES_PATH,
+  SKETCHES_PATH,
+  SRC_PATH,
+} from '../config';
 import execa from 'execa';
 import fuzzy from 'fuzzy';
 import _ from 'lodash';
+
+const DISPLAY_SETTINGS_PATTERN = /(DISPLAY_SETTINGS_START[\s\S]+DISPLAY_SETTINGS_END)/g;
+const DISPLAY_SETTINGS_MAPPING = {
+  'fullscreen': 'fullScreen(P3D, 1);',
+  'default': 'size(750, 750, P3D);',
+  'instagram': 'size(810, 1440, P3D);'
+}
 
 export async function readTemplateConfig(template) {
   try {
@@ -16,6 +27,15 @@ export async function readTemplateConfig(template) {
 export async function readTemplateSketch(template) {
   try {
     return(await fs.readFile(`${TEMPLATES_PATH}/${template}/sketch.oavp`, 'utf8'));
+  } catch (err) {
+    console.log(err.message);
+    process.exit(1);
+  }
+}
+
+export async function readOavpSrc(template) {
+  try {
+    return(await fs.readFile(`${SRC_PATH}/src.pde`, 'utf8'));
   } catch (err) {
     console.log(err.message);
     process.exit(1);
@@ -60,7 +80,7 @@ export async function readBaseConfigTemplateEnd(sketch) {
 
 export async function getTemplates() {
   try {
-    return(await fs.readdir(`${TEMPLATES_PATH}/`));
+    return(_.filter(await fs.readdir(`${TEMPLATES_PATH}/`), template => !_.includes(template, '.txt')));
   } catch (err) {
     console.log(err.message);
     process.exit(1);
@@ -137,13 +157,44 @@ export function parseJsConfigToJava(config) {
 }
 
 export function getJavaDeclaration(name, value) {
-  if (String(value) === value) {
+  if (typeof value === 'boolean') {
+    return `public boolean ${name} = ${value};`;
+  } else if (String(value) === value) {
     return `public String ${name} = "${value}";`;
   } else if (isFloat(value) || _.includes(String(value), '.')) {
     return `public float ${name} = ${value};`;
   } else {
     return `public int ${name} = ${value};`;
   }
+}
+
+export function writeToOavpConfigFile(content) {
+  writeFileSync(`${SRC_PATH}/config.pde`, content, {
+    encoding: 'utf8',
+    flag: 'w'
+  });
+}
+
+export function writeToOavpSrcFile(content) {
+  writeFileSync(`${SRC_PATH}/src.pde`, content, {
+    encoding: 'utf8',
+    flag: 'w'
+  });
+}
+
+export async function getUpdatedJavaSrc(config) {
+  const src = await readOavpSrc();
+  return src.replace(DISPLAY_SETTINGS_PATTERN, getJavaDisplaySettings(config));
+}
+
+export async function getUpdatedJavaConfig(config) {
+  const baseConfigStart = await readBaseConfigTemplateStart();
+  const baseConfigEnd = await readBaseConfigTemplateEnd();
+  return `${baseConfigStart}\n${parseJsConfigToJava(config)}\n${baseConfigEnd}`;
+}
+
+export function getJavaDisplaySettings({ DISPLAY_SETTINGS }) {
+  return `DISPLAY_SETTINGS_START\n  ${DISPLAY_SETTINGS_MAPPING[DISPLAY_SETTINGS] ? DISPLAY_SETTINGS_MAPPING[DISPLAY_SETTINGS] : 'fullScreen(P3D, 1);'}\n  // DISPLAY_SETTINGS_END`;
 }
 
 function isInt(n){
