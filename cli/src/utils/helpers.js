@@ -1,3 +1,4 @@
+import inquirer from 'inquirer';
 import { promises as fs, existsSync, mkdirSync, writeFileSync } from 'fs';
 import {
   TEMPLATES_PATH,
@@ -195,6 +196,16 @@ export async function getUpdatedJavaConfig(config) {
 
 export function getJavaDisplaySettings({ DISPLAY_SETTINGS }) {
   return `DISPLAY_SETTINGS_START\n  ${DISPLAY_SETTINGS_MAPPING[DISPLAY_SETTINGS] ? DISPLAY_SETTINGS_MAPPING[DISPLAY_SETTINGS] : 'fullScreen(P3D, 1);'}\n  // DISPLAY_SETTINGS_END`;
+}
+
+export async function confirm(question, defaultValue) {
+  const { confirmation } = await inquirer.prompt({
+    type: 'confirm',
+    name: 'confirmation',
+    message: question,
+    default: defaultValue,
+  });
+  return confirmation;
 }
 
 function isInt(n){

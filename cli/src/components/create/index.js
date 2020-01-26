@@ -9,6 +9,7 @@ import {
   validateSketchName,
   createSketch,
   openWithEditor,
+  confirm,
 } from '../../utils/helpers';
 
 const DEFAULT_TEMPLATE = 'default';
@@ -19,7 +20,9 @@ export async function handleCreateCommand(options) {
   const { config, template } = await getTemplateConfig(options);
   const sketch = await readTemplateSketch(template);
   const path = createSketch({ name, config, sketch });
-  await openWithEditor(path);
+  if (await confirm(`Open this sketch in an editor?`, false)) {
+    await openWithEditor(path);
+  }
 }
 
 export async function getSketchName(options) {
