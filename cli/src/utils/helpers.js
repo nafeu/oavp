@@ -187,6 +187,13 @@ export function writeToOavpSrcFile(content) {
   });
 }
 
+export function writeToOavpSketchFile(content) {
+  writeFileSync(`${SRC_PATH}/sketch.pde`, content, {
+    encoding: 'utf8',
+    flag: 'w'
+  });
+}
+
 export async function getUpdatedJavaSrc(config) {
   const src = await readOavpSrc();
   return src.replace(DISPLAY_SETTINGS_PATTERN, getJavaDisplaySettings(config));

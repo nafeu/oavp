@@ -70,7 +70,8 @@ export async function getTemplateConfig(options) {
   const finalTemplate = options.template || answers.template;
   const [templateData, templateDefaults] = (await readTemplateConfig(finalTemplate)).split('---');
 
-  const templateDefaultsMapping = {}
+  const templateDefaultsMapping = {};
+  let templateAnswers = {};
 
   if (templateDefaults) {
     _.each(_.filter(templateDefaults.split('\n'), item => item.length > 0), item => {
@@ -82,18 +83,29 @@ export async function getTemplateConfig(options) {
 
   const templateVariables = _.uniq(_.map(templateData.match(TEMPLATE_PATTERN), item => _.trim(item, '%')));
 
-  const templateQuestions = [];
-
-  _.forEach(templateVariables, item => {
-    templateQuestions.push({
-      type: 'input',
-      name: item,
-      message: `Enter ${capitalCase(item)}:`,
-      default: templateDefaultsMapping[item] ? templateDefaultsMapping[item] : capitalCase(item),
-    });
+  const { useDefaults } = await inquirer.prompt({
+    type: 'confirm',
+    name: 'useDefaults',
+    message: 'Use default preset values?',
+    default: true
   });
 
-  const templateAnswers = await inquirer.prompt(templateQuestions);
+  if (useDefaults) {
+    templateAnswers = templateDefaultsMapping;
+  } else {
+    const templateQuestions = [];
+
+    _.forEach(templateVariables, item => {
+      templateQuestions.push({
+        type: 'input',
+        name: item,
+        message: `Enter ${capitalCase(item)}:`,
+        default: templateDefaultsMapping[item] ? templateDefaultsMapping[item] : capitalCase(item),
+      });
+    });
+
+    templateAnswers = await inquirer.prompt(templateQuestions);
+  }
 
   let processedTemplateData = templateData;
 

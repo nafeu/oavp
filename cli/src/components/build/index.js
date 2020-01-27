@@ -10,6 +10,7 @@ import {
   searchSketches,
   writeToOavpConfigFile,
   writeToOavpSrcFile,
+  writeToOavpSketchFile,
   getUpdatedJavaSrc,
   getUpdatedJavaConfig,
 } from '../../utils/helpers';
@@ -23,7 +24,9 @@ export async function handleBuildCommand(options) {
   const updatedJavaConfig = await getUpdatedJavaConfig(config);
   const updatedJavaSrc = await getUpdatedJavaSrc(config);
   writeToOavpConfigFile(updatedJavaConfig);
+  writeToOavpSketchFile(sketch);
   writeToOavpSrcFile(updatedJavaSrc);
+  console.log(`[ oavp ] Building sketch...`);
   execa('processing-java', [`--sketch=${SRC_PATH}`, '--force', '--run']).stdout.pipe(process.stdout);
 }
 

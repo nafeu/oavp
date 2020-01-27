@@ -103,7 +103,7 @@ void setup() {
     // Activate Video Export
     if (oavp.ENABLE_VIDEO_RENDER) {
       reader = createReader(oavp.AUDIO_FILE + ".deep-analysis.txt");
-      videoExport = new VideoExport(this);
+      videoExport = new VideoExport(this, "export.mp4");
       videoExport.setFrameRate(oavp.MOVIE_FPS);
       videoExport.setAudioFileName(oavp.AUDIO_FILE);
       videoExport.setDebugging(false);
