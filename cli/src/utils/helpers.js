@@ -121,7 +121,7 @@ export function checkSketchExists(name) {
   if (existsSync(`${SKETCHES_PATH}/${name}`)) {
     return true;
   }
-  return `A sketch with the name '${name}' does not exist.`;
+  return false;
 }
 
 export function createSketch({ name, config, sketch }) {
@@ -139,6 +139,10 @@ export async function openWithEditor(path) {
     console.log(err.message);
     process.exit(1);
   }
+}
+
+export function getPathToSketch(name) {
+  return `${SKETCHES_PATH}/${name}`;
 }
 
 export function searchSketches(answers, input) {

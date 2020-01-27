@@ -3,21 +3,20 @@ import inquirer from 'inquirer';
 import _ from 'lodash';
 import { handleCreateCommand } from './components/create';
 import { handleBuildCommand } from './components/build';
+import { handleOpenCommand } from './components/open';
 
 function parseArgumentsIntoOptions(rawArgs) {
     const args = arg(
         {
             '--template': String,
             '-t': '--template',
-        },
-        {
             '--sketch': String,
             '-s': '--sketch',
         },
         {
             argv: rawArgs.slice(2),
         }
-    )
+    );
     return {
         sketch: args['--sketch'],
         template: args['--template'],
@@ -25,7 +24,7 @@ function parseArgumentsIntoOptions(rawArgs) {
     }
 }
 
-const VALID_COMMANDS = ['create', 'build'];
+const VALID_COMMANDS = ['create', 'build', 'open'];
 const DEFAULT_COMMAND = 'create';
 
 async function promptForMissingCommand(options) {
@@ -62,6 +61,9 @@ async function handleOptions(options) {
       break;
     case 'build':
       await handleBuildCommand(options);
+      break;
+    case 'open':
+      await handleOpenCommand(options);
       break;
     default:
       await handleCreateCommand(options);
