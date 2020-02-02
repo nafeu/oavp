@@ -1,0 +1,35 @@
+void setupSketch() {
+  entities.addToggle("topic-title").duration(1).easing(%EASING%);
+} /*--SETUP--*/
+
+void updateSketch() {
+} /*--UPDATE--*/
+
+void drawSketch() {
+  text
+    .create()
+    .opacity(entities.getToggle("topic-title").getInvertedValue())
+    .colour(oavp.COLOR_A)
+    .bottom()
+    .left()
+    .moveUp(oavp.width(0.1))
+    .moveRight(oavp.width(0.05))
+    .moveDown(entities.getToggle("topic-title").getValue() * oavp.height(0.15))
+    .alignLeft()
+    .size(32)
+    .weightRegular()
+    .write(oavp.TOPIC_NAME)
+    .size(18)
+    .moveDown(oavp.width(0.04))
+    .weightBold()
+    .write(oavp.TOPIC_TITLE)
+    .done();
+} /*--DRAW--*/
+
+void keyPressed() {
+  if (key == 'q') {
+    entities.getToggle("topic-title").softToggle();
+  }
+} /*--KEY--*/
+---
+EASING: Ani.EXPO_IN_OUT

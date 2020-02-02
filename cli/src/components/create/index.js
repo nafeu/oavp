@@ -10,10 +10,14 @@ import {
   createSketch,
   openWithEditor,
   confirm,
+  getDefaultsMapping
 } from '../../utils/helpers';
 
+import {
+  TEMPLATE_PATTERN
+} from '../../utils/constants';
+
 const DEFAULT_TEMPLATE = 'default';
-const TEMPLATE_PATTERN = /%([A-Z]\w+(\|[\S])|())\w+%/g;
 
 export async function handleCreateCommand(options) {
   const name = await getSketchName(options);
@@ -70,15 +74,11 @@ export async function getTemplateConfig(options) {
   const finalTemplate = options.template || answers.template;
   const [templateData, templateDefaults] = (await readTemplateConfig(finalTemplate)).split('---');
 
-  const templateDefaultsMapping = {};
+  let templateDefaultsMapping = {};
   let templateAnswers = {};
 
   if (templateDefaults) {
-    _.each(_.filter(templateDefaults.split('\n'), item => item.length > 0), item => {
-      const delimiter = ': ';
-      const name = item.split(delimiter)[0];
-      templateDefaultsMapping[name] = item.substr(name.length + delimiter.length, item.length);
-    })
+    templateDefaultsMapping = getDefaultsMapping(templateDefaults);
   }
 
   const templateVariables = _.uniq(_.map(templateData.match(TEMPLATE_PATTERN), item => _.trim(item, '%')));

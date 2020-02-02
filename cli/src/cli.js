@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { handleCreateCommand } from './components/create';
 import { handleBuildCommand } from './components/build';
 import { handleOpenCommand } from './components/open';
+import { handlePresetCommand } from './components/preset';
 
 function parseArgumentsIntoOptions(rawArgs) {
     const args = arg(
@@ -12,6 +13,10 @@ function parseArgumentsIntoOptions(rawArgs) {
             '-t': '--template',
             '--sketch': String,
             '-s': '--sketch',
+            '--preset': String,
+            '-p': '--preset',
+            '--use-defaults': Boolean,
+            '-d': '--use-defaults',
         },
         {
             argv: rawArgs.slice(2),
@@ -20,11 +25,13 @@ function parseArgumentsIntoOptions(rawArgs) {
     return {
         sketch: args['--sketch'],
         template: args['--template'],
+        preset: args['--preset'],
         command: args._[0],
+        useDefaults: args['--use-defaults'] || false,
     }
 }
 
-const VALID_COMMANDS = ['create', 'build', 'open'];
+const VALID_COMMANDS = ['create', 'build', 'open', 'preset'];
 const DEFAULT_COMMAND = 'create';
 
 async function promptForMissingCommand(options) {
@@ -64,6 +71,9 @@ async function handleOptions(options) {
       break;
     case 'open':
       await handleOpenCommand(options);
+      break;
+    case 'preset':
+      await handlePresetCommand(options);
       break;
     default:
       await handleCreateCommand(options);

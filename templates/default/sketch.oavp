@@ -5,13 +5,13 @@ void setupSketch() {
   entities.addToggle("topic-title")
     .duration(1)
     .easing(Ani.EXPO_IN_OUT);
-}
+} /*--SETUP--*/
 
 void updateSketch() {
   entities.getPulser("example").pulseIf(analysis.isEventOn(37) || analysis.isBeatOnset());
   emitters.useEmissions("example").emitIf(analysis.isEventOn(38) || analysis.isBeatOnset());
   entities.getInterval("example").update(entities.getPulser("example").getValue());
-}
+} /*--UPDATE--*/
 
 void drawSketch() {
   palette.reset(oavp.COLOR_BG, oavp.COLOR_A, 2);
@@ -64,10 +64,10 @@ void drawSketch() {
     .strokeColor(oavp.COLOR_E)
     .draw.emissionSplashSquare(oavp.width(0.4))
     .done();
-}
+} /*--DRAW--*/
 
-void keyPressed() {
+void keyPressed() { // <
   if (key == 'q') {
     entities.getToggle("topic-title").softToggle();
   }
-}
+} /*--KEY--*/
