@@ -32,6 +32,8 @@ OavpPalette palette;
 OavpEntityManager entities;
 VideoExport videoExport;
 BufferedReader reader;
+OavpInput input;
+OavpEditor editor;
 boolean loaded = false;
 
 void setup() {
@@ -49,6 +51,9 @@ void setup() {
     // Frame Setup
     frameRate(oavp.FRAMERATE);
     surface.setTitle(oavp.FRAME_TITLE);
+
+    // Inputs
+    input = new OavpInput();
 
     // Library initialization
     minim = new Minim(context);
@@ -118,7 +123,10 @@ void setup() {
   }
 
   // Typography Setup
-  text = new OavpText(oavp,entityPosition);
+  text = new OavpText(oavp, entityPosition);
+
+  // Editor
+  editor = new OavpEditor(input, entities, text);
 }
 
 boolean firstRender = true;
@@ -168,9 +176,11 @@ synchronized void draw() {
           }
         }
       } else {
+        editor.handleKeyInputs();
         updateHelpers();
         updateEntities();
         drawSketch();
+        editor.drawIfEditMode();
       }
     } catch (Exception e) {
       println("[ oavp ] Error during draw loop");
@@ -215,4 +225,8 @@ void analyzeAudio() {
   synchronized(this) {
     loaded = true;
   }
+}
+
+void keyPressed() {
+  input.handleKeyPressed(keyCode);
 }
