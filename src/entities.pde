@@ -779,6 +779,129 @@ public class OavpToggle {
   }
 }
 
+public class OavpVariable {
+  public int x = 0;
+  public int xr = 0;
+  public int y = 0;
+  public int yr = 0;
+  public int z = 0;
+  public int zr = 0;
+  public float size = 100;
+  public float gridScale = 5;
+
+  OavpVariable() {}
+
+  public OavpVariable size(float input) {
+    this.size = input;
+    return this;
+  }
+
+  public OavpVariable x(int input) {
+    this.x = input;
+    return this;
+  }
+
+  public OavpVariable xr(int input) {
+    this.xr = input;
+    return this;
+  }
+
+  public OavpVariable increaseX() {
+    this.x += this.gridScale;
+    return this;
+  }
+
+  public OavpVariable decreaseX() {
+    this.x -= this.gridScale;
+    return this;
+  }
+
+  public OavpVariable increaseXR() {
+    this.xr += this.gridScale;
+    return this;
+  }
+
+  public OavpVariable decreaseXR() {
+    this.xr -= this.gridScale;
+    return this;
+  }
+
+  public OavpVariable y(int input) {
+    this.y = input;
+    return this;
+  }
+
+  public OavpVariable yr(int input) {
+    this.yr = input;
+    return this;
+  }
+
+  public OavpVariable increaseY() {
+    this.y += this.gridScale;
+    return this;
+  }
+
+  public OavpVariable decreaseY() {
+    this.y -= this.gridScale;
+    return this;
+  }
+
+  public OavpVariable increaseYR() {
+    this.yr += this.gridScale;
+    return this;
+  }
+
+  public OavpVariable decreaseYR() {
+    this.yr -= this.gridScale;
+    return this;
+  }
+
+  public OavpVariable z(int input) {
+    this.z = input;
+    return this;
+  }
+
+  public OavpVariable zr(int input) {
+    this.zr = input;
+    return this;
+  }
+
+  public OavpVariable increaseZ() {
+    this.z += this.gridScale;
+    return this;
+  }
+
+  public OavpVariable decreaseZ() {
+    this.z -= this.gridScale;
+    return this;
+  }
+
+  public OavpVariable increaseZR() {
+    this.zr += this.gridScale;
+    return this;
+  }
+
+  public OavpVariable decreaseZR() {
+    this.zr -= this.gridScale;
+    return this;
+  }
+
+  public OavpVariable increaseSize() {
+    this.size += this.gridScale;
+    return this;
+  }
+
+  public OavpVariable decreaseSize() {
+    this.size -= this.gridScale;
+    return this;
+  }
+
+  public OavpVariable gridScale(int input) {
+    this.gridScale = input;
+    return this;
+  }
+}
+
 public class OavpEntityManager {
   private PApplet context;
   private Minim minim;
@@ -797,6 +920,10 @@ public class OavpEntityManager {
   private HashMap<String, OavpTerrain> terrains;
   private HashMap<String, OavpCamera> cameras;
   private HashMap<String, OavpToggle> toggles;
+  private HashMap<String, OavpVariable> variables;
+  private List<String> activeVariables;
+  private int selectedVariableIndex = 0;
+  public String selectedVariable = "";
 
   OavpEntityManager(PApplet context, Minim minim) {
     this.context = context;
@@ -816,6 +943,9 @@ public class OavpEntityManager {
     terrains = new HashMap<String, OavpTerrain>();
     cameras = new HashMap<String, OavpCamera>();
     toggles = new HashMap<String, OavpToggle>();
+    variables = new HashMap<String, OavpVariable>();
+    activeVariables = new ArrayList();
+    selectedVariableIndex = 0;
   }
 
   public float mouseX(float start, float end) {
@@ -1101,6 +1231,16 @@ public class OavpEntityManager {
 
   public OavpToggle getToggle(String name) {
     return toggles.get(name);
+  }
+
+  public OavpVariable addVariable(String name) {
+    variables.put(name, new OavpVariable());
+    activeVariables.add(name);
+    return variables.get(name);
+  }
+
+  public OavpVariable getVariable(String name) {
+    return variables.get(name);
   }
 
   public void update() {
