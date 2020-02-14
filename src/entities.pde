@@ -788,8 +788,13 @@ public class OavpVariable {
   public int zr = 0;
   public float size = 100;
   public float gridScale = 5;
+  public String name = "";
 
   OavpVariable() {}
+
+  OavpVariable(String name) {
+    this.name = name;
+  }
 
   public OavpVariable size(float input) {
     this.size = input;
@@ -921,7 +926,7 @@ public class OavpEntityManager {
   private HashMap<String, OavpCamera> cameras;
   private HashMap<String, OavpToggle> toggles;
   private HashMap<String, OavpVariable> variables;
-  private List<String> activeVariables;
+  private List<OavpVariable> activeVariables;
   private int selectedVariableIndex = 0;
   public String selectedVariable = "";
 
@@ -1234,13 +1239,26 @@ public class OavpEntityManager {
   }
 
   public OavpVariable addVariable(String name) {
-    variables.put(name, new OavpVariable());
-    activeVariables.add(name);
-    return variables.get(name);
+    OavpVariable variable = new OavpVariable(name);
+    variables.put(name, variable);
+    activeVariables.add(variable);
+    return variable;
   }
 
   public OavpVariable getVariable(String name) {
     return variables.get(name);
+  }
+
+  public OavpVariable getActiveVariable() {
+    return activeVariables.get(this.selectedVariableIndex);
+  }
+
+  public void cycleActiveVariable() {
+    if (this.selectedVariableIndex == this.activeVariables.size() - 1) {
+      this.selectedVariableIndex = 0;
+    } else {
+      this.selectedVariableIndex += 1;
+    }
   }
 
   public void update() {
