@@ -17,8 +17,14 @@ public class OavpEditor {
     if (input.isPressed(KEY_F)) {
       entities.cycleActiveVariable();
     }
-    if (input.isPressed(KEY_J)) {
-      entities.getActiveVariable().increaseZR();
+    if (input.isMousePressed()) {
+      entities.getActiveVariable().previewY(input.getYGridTicks());
+      entities.getActiveVariable().previewX(input.getXGridTicks());
+    }
+    if (input.isMouseReleased()) {
+      entities.getActiveVariable().commitY(input.getYGridTicks());
+      entities.getActiveVariable().commitX(input.getXGridTicks());
+      input.resetTicks();
     }
   }
 
@@ -34,6 +40,8 @@ public class OavpEditor {
     StringBuilder msg = new StringBuilder("EDIT MODE");
     msg.append("\nX: " + normalMouseX);
     msg.append("\nY: " + normalMouseY);
+    msg.append("\nXT: " + input.getXGridTicks());
+    msg.append("\nYT: " + input.getYGridTicks());
     msg.append("\nVAR: " + entities.getActiveVariable().name);
 
     text.create()

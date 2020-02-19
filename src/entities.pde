@@ -781,13 +781,20 @@ public class OavpToggle {
 
 public class OavpVariable {
   public int x = 0;
+  public int xOrig = 0;
   public int xr = 0;
+  public int xrOrig = 0;
   public int y = 0;
+  public int yOrig = 0;
   public int yr = 0;
+  public int yrOrig = 0;
   public int z = 0;
+  public int zOrig = 0;
   public int zr = 0;
+  public int zrOrig = 0;
   public float size = 100;
-  public float gridScale = 5;
+  public float sizeOrig = 100;
+  public int gridScale = 25;
   public String name = "";
 
   OavpVariable() {}
@@ -806,28 +813,28 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable previewX(int multiplier) {
+    this.x = this.xOrig + (multiplier * gridScale);
+    return this;
+  }
+
+  public OavpVariable commitX(int multiplier) {
+    this.xOrig = this.x;
+    return this;
+  }
+
   public OavpVariable xr(int input) {
     this.xr = input;
     return this;
   }
 
-  public OavpVariable increaseX() {
-    this.x += this.gridScale;
+  public OavpVariable previewXR(int multiplier) {
+    this.xr = this.xrOrig + (multiplier * gridScale);
     return this;
   }
 
-  public OavpVariable decreaseX() {
-    this.x -= this.gridScale;
-    return this;
-  }
-
-  public OavpVariable increaseXR() {
-    this.xr += this.gridScale;
-    return this;
-  }
-
-  public OavpVariable decreaseXR() {
-    this.xr -= this.gridScale;
+  public OavpVariable commitXR(int multiplier) {
+    this.xrOrig = this.xr;
     return this;
   }
 
@@ -836,28 +843,28 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable previewY(int multiplier) {
+    this.y = this.yOrig + (multiplier * gridScale);
+    return this;
+  }
+
+  public OavpVariable commitY(int multiplier) {
+    this.yOrig = this.y;
+    return this;
+  }
+
   public OavpVariable yr(int input) {
     this.yr = input;
     return this;
   }
 
-  public OavpVariable increaseY() {
-    this.y += this.gridScale;
+  public OavpVariable previewYR(int multiplier) {
+    this.y = this.yOrig + (multiplier * gridScale);
     return this;
   }
 
-  public OavpVariable decreaseY() {
-    this.y -= this.gridScale;
-    return this;
-  }
-
-  public OavpVariable increaseYR() {
-    this.yr += this.gridScale;
-    return this;
-  }
-
-  public OavpVariable decreaseYR() {
-    this.yr -= this.gridScale;
+  public OavpVariable commitYR(int multiplier) {
+    this.yOrig = this.y;
     return this;
   }
 
@@ -866,38 +873,28 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable previewZ(int multiplier) {
+    this.z = this.zOrig + (multiplier * gridScale);
+    return this;
+  }
+
+  public OavpVariable commitZ(int multiplier) {
+    this.zOrig = this.z;
+    return this;
+  }
+
   public OavpVariable zr(int input) {
     this.zr = input;
     return this;
   }
 
-  public OavpVariable increaseZ() {
-    this.z += this.gridScale;
+  public OavpVariable previewZr(int multiplier) {
+    this.zr = this.zrOrig + (multiplier * gridScale);
     return this;
   }
 
-  public OavpVariable decreaseZ() {
-    this.z -= this.gridScale;
-    return this;
-  }
-
-  public OavpVariable increaseZR() {
-    this.zr += this.gridScale;
-    return this;
-  }
-
-  public OavpVariable decreaseZR() {
-    this.zr -= this.gridScale;
-    return this;
-  }
-
-  public OavpVariable increaseSize() {
-    this.size += this.gridScale;
-    return this;
-  }
-
-  public OavpVariable decreaseSize() {
-    this.size -= this.gridScale;
+  public OavpVariable commitZr(int multiplier) {
+    this.zrOrig = this.zr;
     return this;
   }
 

@@ -42,7 +42,8 @@ void setup() {
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // DISPLAY_SETTINGS_START
-  fullScreen(P3D, 1);
+  // fullScreen(P3D, 1);
+  size(750, 750, P3D);
   // DISPLAY_SETTINGS_END
 
   try {
@@ -192,6 +193,7 @@ synchronized void draw() {
 
 void updateEntities() {
   try {
+    input.update();
     entities.update();
     analysis.forward();
     updateSketch();
@@ -229,4 +231,12 @@ void analyzeAudio() {
 
 void keyPressed() {
   input.handleKeyPressed(keyCode);
+}
+
+void mousePressed() {
+  input.handleMousePressed();
+}
+
+void mouseReleased() {
+  input.handleMouseReleased();
 }
