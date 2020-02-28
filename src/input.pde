@@ -1,6 +1,7 @@
 public class OavpInput {
   private int pressedKey;
   private boolean isHoldingShift = false;
+  private boolean isHoldingControl = false;
   private boolean isMousePressed = false;
 
   private float xStart = 0;
@@ -19,6 +20,8 @@ public class OavpInput {
   void handleKeyPressed(int code) {
     if (code == SHIFT) {
       this.isHoldingShift = true;
+    } else if (code == CONTROL) {
+      this.isHoldingControl = true;
     } else {
       this.pressedKey = code;
     }
@@ -74,12 +77,52 @@ public class OavpInput {
     return false;
   }
 
+  boolean isShiftReleased() {
+    if (this.isHoldingShift) {
+      if (!keyPressed) {
+        this.isHoldingShift = false;
+        return true;
+      } else if (keyPressed && keyCode != SHIFT) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  boolean isControlReleased() {
+    if (this.isHoldingControl) {
+      if (!keyPressed) {
+        this.isHoldingControl = false;
+        return true;
+      } else if (keyPressed && keyCode != CONTROL) {
+        return false;
+      }
+    }
+    return false;
+  }
+
   boolean isMousePressed() {
     return mousePressed;
+  }
+
+  boolean isShiftPressed() {
+    return (keyPressed && keyCode == SHIFT);
+  }
+
+  boolean isControlPressed() {
+    return (keyPressed && keyCode == CONTROL);
   }
 
   public void resetTicks() {
     this.xGridTicks = 0;
     this.yGridTicks = 0;
+  }
+
+  public void resetYTicks() {
+    this.yGridTicks = 0;
+  }
+
+  public void resetXTicks() {
+    this.xGridTicks = 0;
   }
 }

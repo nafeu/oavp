@@ -3,6 +3,7 @@ public class OavpEditor {
   private OavpInput input;
   private OavpEntityManager entities;
   private OavpText text;
+  private int activeTool = TOOL_MOVE;
 
   OavpEditor(OavpInput input, OavpEntityManager entities, OavpText text) {
     this.input = input;
@@ -14,22 +15,160 @@ public class OavpEditor {
     if (input.isPressed(KEY_E)) {
       toggleEditMode();
     }
-    if (input.isPressed(KEY_F)) {
-      entities.cycleActiveVariable();
+
+    if (this.isEditMode) {
+      if (this.activeTool == TOOL_MOVE) {
+        handleToolMoveInputs();
+      } else if (this.activeTool == TOOL_RESIZE) {
+        handleToolResizeInputs();
+      } else if (this.activeTool == TOOL_ROTATE) {
+        handleToolRotateInputs();
+      }
+
+      if (input.isPressed(KEY_R)) {
+        entities.cycleActiveVariable();
+      }
+
+      if (input.isPressed(KEY_T)) {
+        cycleActiveTool();
+      }
     }
+
+  }
+
+  private void handleToolMoveInputs() {
+    int delta = 2;
+
+    if (input.isHoldingShift) {
+      delta = 5;
+    }
+
+    if (input.isHoldingControl) {
+      delta = 1;
+    }
+
+    if (input.isPressed(UP)) {
+      entities.getActiveVariable().previewY(delta * -1).commitY();
+    }
+
+    if (input.isPressed(DOWN)) {
+      entities.getActiveVariable().previewY(delta).commitY();
+    }
+
+    if (input.isPressed(RIGHT)) {
+      entities.getActiveVariable().previewX(delta).commitX();
+    }
+
+    if (input.isPressed(LEFT)) {
+      entities.getActiveVariable().previewX(delta * -1).commitX();
+    }
+
     if (input.isMousePressed()) {
-      entities.getActiveVariable().previewY(input.getYGridTicks());
-      entities.getActiveVariable().previewX(input.getXGridTicks());
+      entities.getActiveVariable().previewY(input.getYGridTicks() * delta);
+      entities.getActiveVariable().previewX(input.getXGridTicks() * delta);
     }
+
     if (input.isMouseReleased()) {
-      entities.getActiveVariable().commitY(input.getYGridTicks());
-      entities.getActiveVariable().commitX(input.getXGridTicks());
+      entities.getActiveVariable().commitY();
+      entities.getActiveVariable().commitX();
       input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
+  private void handleToolResizeInputs() {
+    int delta = 2;
+
+    if (input.isHoldingShift) {
+      delta = 5;
+    }
+
+    if (input.isHoldingControl) {
+      delta = 1;
+    }
+
+    if (input.isPressed(UP)) {
+      entities.getActiveVariable().previewSize(delta * -1).commitSize();
+    }
+
+    if (input.isPressed(DOWN)) {
+      entities.getActiveVariable().previewSize(delta).commitSize();
+    }
+
+    if (input.isMousePressed()) {
+      entities.getActiveVariable().previewSize(input.getYGridTicks() * delta);
+    }
+
+    if (input.isMouseReleased()) {
+      entities.getActiveVariable().commitSize();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
+  private void handleToolRotateInputs() {
+    int delta = 2;
+
+    if (input.isHoldingShift) {
+      delta = 5;
+    }
+
+    if (input.isHoldingControl) {
+      delta = 1;
+    }
+
+    if (input.isPressed(RIGHT)) {
+      entities.getActiveVariable().previewZR(delta).commitZR();
+    }
+
+    if (input.isPressed(LEFT)) {
+      entities.getActiveVariable().previewZR(delta * -1).commitZR();
+    }
+
+    if (input.isMousePressed()) {
+      entities.getActiveVariable().previewZR(input.getYGridTicks() * delta);
+    }
+
+    if (input.isMouseReleased()) {
+      entities.getActiveVariable().commitZR();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
     }
   }
 
   private void toggleEditMode() {
     this.isEditMode = !this.isEditMode;
+  }
+
+  private void cycleActiveTool() {
+    if (this.activeTool == TOOL_MOVE) {
+      this.activeTool = TOOL_RESIZE;
+    } else if (this.activeTool == TOOL_RESIZE) {
+      this.activeTool = TOOL_ROTATE;
+    } else {
+      this.activeTool = TOOL_MOVE;
+    }
   }
 
   public boolean isEditMode() {
@@ -38,11 +177,8 @@ public class OavpEditor {
 
   public void draw() {
     StringBuilder msg = new StringBuilder("EDIT MODE");
-    msg.append("\nX: " + normalMouseX);
-    msg.append("\nY: " + normalMouseY);
-    msg.append("\nXT: " + input.getXGridTicks());
-    msg.append("\nYT: " + input.getYGridTicks());
-    msg.append("\nVAR: " + entities.getActiveVariable().name);
+    msg.append("\n[ " + entities.getActiveVariable().name + " ]");
+    msg.append("\n[ Tool: " + getActiveToolName() + " ]");
 
     text.create()
       .colour(palette.flat.white)
@@ -53,6 +189,19 @@ public class OavpEditor {
       .done();
   }
 
+  private String getActiveToolName() {
+    if (this.activeTool == TOOL_MOVE) {
+      return "move";
+    }
+    if (this.activeTool == TOOL_RESIZE) {
+      return "resize";
+    }
+    if (this.activeTool == TOOL_ROTATE) {
+      return "rotate";
+    }
+    return "";
+  }
+
   public void drawIfEditMode() {
     if (this.isEditMode) {
       this.draw();
@@ -60,6 +209,11 @@ public class OavpEditor {
   }
 }
 
+int TOOL_MOVE = 0;
+int TOOL_RESIZE = 1;
+int TOOL_ROTATE = 2;
+
+// KEYS
 int KEY_A = 65;
 int KEY_B = 66;
 int KEY_C = 67;
@@ -86,23 +240,3 @@ int KEY_W = 87;
 int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

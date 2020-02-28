@@ -794,7 +794,7 @@ public class OavpVariable {
   public int zrOrig = 0;
   public float size = 100;
   public float sizeOrig = 100;
-  public int gridScale = 25;
+  public int gridScale = 5;
   public String name = "";
 
   OavpVariable() {}
@@ -805,6 +805,17 @@ public class OavpVariable {
 
   public OavpVariable size(float input) {
     this.size = input;
+    this.sizeOrig = input;
+    return this;
+  }
+
+  public OavpVariable previewSize(int multiplier) {
+    this.size = this.sizeOrig + ((multiplier * -1) * gridScale);
+    return this;
+  }
+
+  public OavpVariable commitSize() {
+    this.sizeOrig = this.size;
     return this;
   }
 
@@ -818,7 +829,7 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable commitX(int multiplier) {
+  public OavpVariable commitX() {
     this.xOrig = this.x;
     return this;
   }
@@ -833,7 +844,7 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable commitXR(int multiplier) {
+  public OavpVariable commitXR() {
     this.xrOrig = this.xr;
     return this;
   }
@@ -848,7 +859,7 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable commitY(int multiplier) {
+  public OavpVariable commitY() {
     this.yOrig = this.y;
     return this;
   }
@@ -863,7 +874,7 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable commitYR(int multiplier) {
+  public OavpVariable commitYR() {
     this.yOrig = this.y;
     return this;
   }
@@ -878,7 +889,7 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable commitZ(int multiplier) {
+  public OavpVariable commitZ() {
     this.zOrig = this.z;
     return this;
   }
@@ -888,12 +899,12 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable previewZr(int multiplier) {
+  public OavpVariable previewZR(int multiplier) {
     this.zr = this.zrOrig + (multiplier * gridScale);
     return this;
   }
 
-  public OavpVariable commitZr(int multiplier) {
+  public OavpVariable commitZR() {
     this.zrOrig = this.zr;
     return this;
   }
