@@ -21,6 +21,8 @@ public class OavpEditor {
         handleToolMoveInputs();
       } else if (this.activeTool == TOOL_RESIZE) {
         handleToolResizeInputs();
+      } else if (this.activeTool == TOOL_TRANSFORM) {
+        handleToolTransformInputs();
       } else if (this.activeTool == TOOL_ROTATE) {
         handleToolRotateInputs();
       }
@@ -120,6 +122,53 @@ public class OavpEditor {
     }
   }
 
+  private void handleToolTransformInputs() {
+    int delta = 2;
+
+    if (input.isHoldingShift) {
+      delta = 5;
+    }
+
+    if (input.isHoldingControl) {
+      delta = 1;
+    }
+
+    if (input.isPressed(RIGHT)) {
+      entities.getActiveVariable().previewW(delta * -1).commitW();
+    }
+
+    if (input.isPressed(LEFT)) {
+      entities.getActiveVariable().previewW(delta).commitW();
+    }
+
+    if (input.isPressed(UP)) {
+      entities.getActiveVariable().previewH(delta * -1).commitH();
+    }
+
+    if (input.isPressed(DOWN)) {
+      entities.getActiveVariable().previewH(delta).commitH();
+    }
+
+    if (input.isMousePressed()) {
+      entities.getActiveVariable().previewW(input.getXGridTicks() * delta);
+      entities.getActiveVariable().previewH(input.getYGridTicks() * delta);
+    }
+
+    if (input.isMouseReleased()) {
+      entities.getActiveVariable().commitW();
+      entities.getActiveVariable().commitH();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
   private void handleToolRotateInputs() {
     int delta = 2;
 
@@ -165,6 +214,8 @@ public class OavpEditor {
     if (this.activeTool == TOOL_MOVE) {
       this.activeTool = TOOL_RESIZE;
     } else if (this.activeTool == TOOL_RESIZE) {
+      this.activeTool = TOOL_TRANSFORM;
+    } else if (this.activeTool == TOOL_TRANSFORM) {
       this.activeTool = TOOL_ROTATE;
     } else {
       this.activeTool = TOOL_MOVE;
@@ -196,6 +247,9 @@ public class OavpEditor {
     if (this.activeTool == TOOL_RESIZE) {
       return "resize";
     }
+    if (this.activeTool == TOOL_TRANSFORM) {
+      return "transform";
+    }
     if (this.activeTool == TOOL_ROTATE) {
       return "rotate";
     }
@@ -211,7 +265,8 @@ public class OavpEditor {
 
 int TOOL_MOVE = 0;
 int TOOL_RESIZE = 1;
-int TOOL_ROTATE = 2;
+int TOOL_TRANSFORM = 2;
+int TOOL_ROTATE = 3;
 
 // KEYS
 int KEY_A = 65;

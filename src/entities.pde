@@ -792,6 +792,12 @@ public class OavpVariable {
   public int zOrig = 0;
   public int zr = 0;
   public int zrOrig = 0;
+  public float w = 100;
+  public float wOrig = 100;
+  public float h = 100;
+  public float hOrig = 100;
+  public float l = 100;
+  public float lOrig = 100;
   public float size = 100;
   public float sizeOrig = 100;
   public int gridScale = 5;
@@ -816,6 +822,54 @@ public class OavpVariable {
 
   public OavpVariable commitSize() {
     this.sizeOrig = this.size;
+    return this;
+  }
+
+  public OavpVariable w(float input) {
+    this.w = input;
+    this.wOrig = input;
+    return this;
+  }
+
+  public OavpVariable previewW(int multiplier) {
+    this.w = this.wOrig + ((multiplier * -1) * gridScale);
+    return this;
+  }
+
+  public OavpVariable commitW() {
+    this.wOrig = this.w;
+    return this;
+  }
+
+  public OavpVariable h(float input) {
+    this.h = input;
+    this.hOrig = input;
+    return this;
+  }
+
+  public OavpVariable previewH(int multiplier) {
+    this.h = this.hOrig + ((multiplier * -1) * gridScale);
+    return this;
+  }
+
+  public OavpVariable commitH() {
+    this.hOrig = this.h;
+    return this;
+  }
+
+  public OavpVariable l(float input) {
+    this.l = input;
+    this.lOrig = input;
+    return this;
+  }
+
+  public OavpVariable previewL(int multiplier) {
+    this.l = this.lOrig + ((multiplier * -1) * gridScale);
+    return this;
+  }
+
+  public OavpVariable commitL() {
+    this.lOrig = this.l;
     return this;
   }
 

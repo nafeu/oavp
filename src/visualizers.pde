@@ -494,6 +494,20 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicRectangle(float w, float h) {
+      rectMode(CENTER);
+      rect(0, 0, w, h);
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicRectangle(float w, float h, float r) {
+      rectMode(CENTER);
+      rect(0, 0, w, h, r);
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a basic diamond
      * @param size the length and width of the diamond
