@@ -30,6 +30,7 @@ OavpShape shapes;
 OavpText text;
 OavpPalette palette;
 OavpEntityManager entities;
+OavpObjectManager objects;
 VideoExport videoExport;
 BufferedReader reader;
 OavpInput input;
@@ -63,6 +64,9 @@ void setup() {
     // Entity Setup
     entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
     entities = new OavpEntityManager(context, minim);
+
+    // Objects Setup
+    objects = new OavpObjectManager();
 
     // Default Camera Setup
     defaultCamera = new OavpCamera();
@@ -181,6 +185,7 @@ synchronized void draw() {
         updateHelpers();
         updateEntities();
         drawSketch();
+        objects.draw();
         editor.drawIfEditMode();
       }
     } catch (Exception e) {
@@ -195,6 +200,7 @@ void updateEntities() {
   try {
     input.update();
     entities.update();
+    objects.update();
     analysis.forward();
     updateSketch();
   } catch (Exception e) {
@@ -207,6 +213,7 @@ void updateEntities() {
 void updateEntities(OavpConfig config, float[] analysisData, String[] eventsData) {
   try {
     entities.update();
+    objects.update();
     analysis.readAnalysis(config, analysisData, eventsData);
     updateSketch();
   } catch (Exception e) {

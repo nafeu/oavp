@@ -207,7 +207,9 @@ public class OavpEditor {
   }
 
   private void toggleEditMode() {
-    this.isEditMode = !this.isEditMode;
+    if (entities.activeVariables.size() > 0) {
+      this.isEditMode = !this.isEditMode;
+    }
   }
 
   private void cycleActiveTool() {

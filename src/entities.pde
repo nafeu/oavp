@@ -801,6 +801,8 @@ public class OavpVariable {
   public float size = 100;
   public float sizeOrig = 100;
   public int gridScale = 5;
+  public color strokeColor;
+  public color fillColor;
   public String name = "";
 
   OavpVariable() {}
@@ -965,6 +967,16 @@ public class OavpVariable {
 
   public OavpVariable gridScale(int input) {
     this.gridScale = input;
+    return this;
+  }
+
+  public OavpVariable strokeColor(color input) {
+    this.strokeColor = input;
+    return this;
+  }
+
+  public OavpVariable fillColor(color input) {
+    this.fillColor = input;
     return this;
   }
 }
