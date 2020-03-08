@@ -46,11 +46,19 @@ public class OavpObjectManager {
     return activeObjects.get(this.selectedObjectIndex).getVariable();
   }
 
-  public void cycleActiveVariable() {
+  public void nextActiveVariable() {
     if (this.selectedObjectIndex == this.activeObjects.size() - 1) {
       this.selectedObjectIndex = 0;
     } else {
       this.selectedObjectIndex += 1;
+    }
+  }
+
+  public void prevActiveVariable() {
+    if (this.selectedObjectIndex == 0) {
+      this.selectedObjectIndex = this.activeObjects.size() - 1;
+    } else {
+      this.selectedObjectIndex -= 1;
     }
   }
 }
@@ -91,8 +99,8 @@ public class OavpObjBasicRectangle extends OavpObject {
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr)
       .draw.basicRectangle(
-        variable.w + analysis.getLevel() * variable.w,
-        variable.h + analysis.getLevel() * variable.h,
+        variable.w,
+        variable.h,
         variable.size)
       .done();
   }
@@ -110,7 +118,7 @@ public class OavpObjBasicSquare extends OavpObject {
       .center().middle()
       .strokeColor(variable.strokeColor)
       .move(variable.x, variable.y, variable.z)
-      .rotate(variable.xr, variable.yr, variable.zr + frameCount(variable.size / 500))
+      .rotate(variable.xr, variable.yr, variable.zr)
       .draw.basicSquare(variable.size)
       .done();
   }

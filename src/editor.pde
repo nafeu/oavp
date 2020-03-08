@@ -27,12 +27,28 @@ public class OavpEditor {
         handleToolRotateInputs();
       }
 
-      if (input.isPressed(KEY_R)) {
-        objects.cycleActiveVariable();
+      if (input.isPressed(KEY_L)) {
+        objects.nextActiveVariable();
+      }
+
+      if (input.isPressed(KEY_J)) {
+        objects.prevActiveVariable();
       }
 
       if (input.isPressed(KEY_T)) {
-        cycleActiveTool();
+        this.activeTool = TOOL_TRANSFORM;
+      }
+
+      if (input.isPressed(KEY_R)) {
+        this.activeTool = TOOL_RESIZE;
+      }
+
+      if (input.isPressed(KEY_M)) {
+        this.activeTool = TOOL_MOVE;
+      }
+
+      if (input.isPressed(KEY_Y)) {
+        this.activeTool = TOOL_ROTATE;
       }
     }
 
@@ -229,16 +245,27 @@ public class OavpEditor {
   }
 
   public void draw() {
-    StringBuilder msg = new StringBuilder("editing:");
-    msg.append(" " + objects.getActiveVariable().name);
-    msg.append(" | tool: " + getActiveToolName());
+    StringBuilder topBar = new StringBuilder("editing:");
+    topBar.append(" " + objects.getActiveVariable().name);
+    topBar.append(" | tool: " + getActiveToolName());
 
     text.create()
       .colour(palette.flat.white)
-      .size(14)
+      .size(12)
       .moveDown(oavp.height(0.05))
       .moveRight(oavp.width(0.05))
-      .write(msg.toString())
+      .write(topBar.toString())
+      .done();
+
+    StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | r: resize | m: move | y: rotate\n");
+    bottomBar.append("j: prev obj | l: next obj");
+
+    text.create()
+      .colour(palette.flat.white)
+      .size(10)
+      .moveDown(oavp.height(0.95))
+      .moveRight(oavp.width(0.05))
+      .write(bottomBar.toString())
       .done();
   }
 
