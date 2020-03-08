@@ -1,11 +1,15 @@
 public class OavpObjectManager {
   private HashMap<String, OavpObject> objectsStorage;
+  private List<OavpObject> activeObjects;
+  private int selectedObjectIndex = 0;
 
   OavpObjectManager() {
     objectsStorage = new HashMap<String, OavpObject>();
+    activeObjects = new ArrayList();
+    selectedObjectIndex = 0;
   }
 
-  public OavpObject add(String name, String className) {
+  public OavpVariable add(String name, String className) {
     OavpObject object;
 
     switch (className) {
@@ -19,9 +23,11 @@ public class OavpObjectManager {
         object = new OavpObject();
     }
 
+    object.setName(name);
     object.setup();
     objectsStorage.put(name, object);
-    return object;
+    activeObjects.add(object);
+    return object.getVariable();
   }
 
   public void update() {
@@ -35,6 +41,18 @@ public class OavpObjectManager {
       entry.getValue().draw();
     }
   }
+
+  public OavpVariable getActiveVariable() {
+    return activeObjects.get(this.selectedObjectIndex).getVariable();
+  }
+
+  public void cycleActiveVariable() {
+    if (this.selectedObjectIndex == this.activeObjects.size() - 1) {
+      this.selectedObjectIndex = 0;
+    } else {
+      this.selectedObjectIndex += 1;
+    }
+  }
 }
 
 public class OavpObject {
@@ -46,6 +64,10 @@ public class OavpObject {
 
   public OavpVariable getVariable() {
     return this.variable;
+  }
+
+  public void setName(String name) {
+    this.variable.name = name;
   }
 
   public void setup() {}
@@ -89,7 +111,7 @@ public class OavpObjBasicSquare extends OavpObject {
       .strokeColor(variable.strokeColor)
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr + frameCount(variable.size / 500))
-      .draw.basicSquare(variable.size + analysis.getLevel() * variable.size)
+      .draw.basicSquare(variable.size)
       .done();
   }
 }

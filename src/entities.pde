@@ -804,11 +804,75 @@ public class OavpVariable {
   public color strokeColor;
   public color fillColor;
   public String name = "";
+  public HashMap<String, Float> customFloatAttrs;
+  public HashMap<String, Integer> customIntAttrs;
+  public HashMap<String, String> customStringAttrs;
 
-  OavpVariable() {}
+  OavpVariable() {
+    this.customFloatAttrs = new HashMap<String, Float>();
+    this.customIntAttrs = new HashMap<String, Integer>();
+    this.customStringAttrs = new HashMap<String, String>();
+  }
 
   OavpVariable(String name) {
     this.name = name;
+    this.customFloatAttrs = new HashMap<String, Float>();
+    this.customIntAttrs = new HashMap<String, Integer>();
+    this.customStringAttrs = new HashMap<String, String>();
+  }
+
+  public OavpVariable set(String prop, int input) {
+    switch (prop) {
+      case "x":
+        this.x(input);
+        break;
+      case "xr":
+        this.xr(input);
+        break;
+      case "y":
+        this.y(input);
+        break;
+      case "yr":
+        this.yr(input);
+        break;
+      case "z":
+        this.z(input);
+        break;
+      case "zr":
+        this.zr(input);
+        break;
+      case "strokeColor":
+        this.strokeColor(input);
+        break;
+      case "fillColor":
+        this.fillColor(input);
+        break;
+      default:
+        this.customIntAttrs.put(prop, input);
+    }
+    return this;
+  }
+
+  public OavpVariable set(String prop, float input) {
+    switch (prop) {
+      case "w":
+        this.w(input);
+        break;
+      case "h":
+        this.h(input);
+        break;
+      case "l":
+        this.l(input);
+        break;
+      default:
+        this.customFloatAttrs.put(prop, input);
+    }
+    return this;
+  }
+
+  public OavpVariable set(String prop, String input) {
+    this.customStringAttrs.put(prop, input);
+    return this;
   }
 
   public OavpVariable size(float input) {

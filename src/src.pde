@@ -131,7 +131,7 @@ void setup() {
   text = new OavpText(oavp, entityPosition);
 
   // Editor
-  editor = new OavpEditor(input, entities, text);
+  editor = new OavpEditor(input, objects, text);
 }
 
 boolean firstRender = true;
