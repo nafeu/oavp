@@ -55,14 +55,14 @@ public class OavpEditor {
   }
 
   private void handleToolMoveInputs() {
-    int delta = 2;
+    int delta = DELTA_MOVEMENT;
 
     if (input.isHoldingShift) {
-      delta = 5;
+      delta = DELTA_MOVEMENT_SHIFT;
     }
 
     if (input.isHoldingControl) {
-      delta = 1;
+      delta = DELTA_MOVEMENT_CTRL;
     }
 
     if (input.isPressed(UP)) {
@@ -102,14 +102,14 @@ public class OavpEditor {
   }
 
   private void handleToolResizeInputs() {
-    int delta = 2;
+    int delta = DELTA_RESIZE;
 
     if (input.isHoldingShift) {
-      delta = 5;
+      delta = DELTA_RESIZE_SHIFT;
     }
 
     if (input.isHoldingControl) {
-      delta = 1;
+      delta = DELTA_RESIZE_CTRL;
     }
 
     if (input.isPressed(UP)) {
@@ -139,14 +139,14 @@ public class OavpEditor {
   }
 
   private void handleToolTransformInputs() {
-    int delta = 2;
+    int delta = DELTA_TRANSFORM;
 
     if (input.isHoldingShift) {
-      delta = 5;
+      delta = DELTA_TRANSFORM_SHIFT;
     }
 
     if (input.isHoldingControl) {
-      delta = 1;
+      delta = DELTA_TRANSFORM_CTRL;
     }
 
     if (input.isPressed(RIGHT)) {
@@ -186,14 +186,14 @@ public class OavpEditor {
   }
 
   private void handleToolRotateInputs() {
-    int delta = 2;
+    int delta = DELTA_ROTATE;
 
     if (input.isHoldingShift) {
-      delta = 5;
+      delta = DELTA_ROTATE_SHIFT;
     }
 
     if (input.isHoldingControl) {
-      delta = 1;
+      delta = DELTA_ROTATE_CTRL;
     }
 
     if (input.isPressed(RIGHT)) {
@@ -262,14 +262,7 @@ public class OavpEditor {
     StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | r: resize | m: move | y: rotate\n");
     bottomBar.append("j: prev obj | l: next obj | d: duplicate");
 
-    visualizers
-      .create()
-      .center().middle()
-      .strokeColor(palette.flat.blue)
-      .move(activeVariable.x, activeVariable.y, activeVariable.z)
-      .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
-      .draw.basicSquare(activeVariable.size)
-      .done();
+    drawToolMeta(activeVariable, this.activeTool);
 
     text.create()
       .colour(palette.flat.white)
@@ -300,6 +293,73 @@ public class OavpEditor {
     if (this.isEditMode) {
       this.draw();
     }
+  }
+}
+
+public void drawToolGuide(OavpVariable activeVariable, color toolColor) {
+  visualizers
+    .create()
+    .center().middle()
+    .strokeColor(toolColor)
+    .move(activeVariable.x, activeVariable.y, activeVariable.z)
+    .draw.basicSquare(activeVariable.size)
+    .draw.basicCircle(10)
+    .done();
+}
+
+public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
+  switch (activeTool) {
+    case 0: // MOVE
+      drawToolGuide(activeVariable, palette.flat.blue);
+      text.create()
+        .center().middle()
+        .colour(palette.flat.blue)
+        .size(10)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .moveDown(20)
+        .write("x: " + activeVariable.x)
+        .moveDown(10)
+        .write("y: " + activeVariable.y)
+        .done();
+      break;
+
+    case 1: // RESIZE
+      drawToolGuide(activeVariable, palette.flat.orange);
+      text.create()
+        .center().middle()
+        .colour(palette.flat.orange)
+        .size(10)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .moveDown(20)
+        .write("size: " + activeVariable.size)
+        .done();
+      break;
+
+    case 2: // TRANSFORM
+      drawToolGuide(activeVariable, palette.flat.yellow);
+      text.create()
+        .center().middle()
+        .colour(palette.flat.yellow)
+        .size(10)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .moveDown(20)
+        .write("w: " + activeVariable.w)
+        .moveDown(10)
+        .write("h: " + activeVariable.h)
+        .done();
+      break;
+
+    case 3: // ROTATE
+      drawToolGuide(activeVariable, palette.flat.green);
+      text.create()
+        .center().middle()
+        .colour(palette.flat.green)
+        .size(10)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .moveDown(20)
+        .write("zr: " + activeVariable.zr)
+        .done();
+      break;
   }
 }
 
@@ -335,3 +395,19 @@ int KEY_W = 87;
 int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
+
+int DELTA_MOVEMENT = 10;
+int DELTA_MOVEMENT_SHIFT = 5;
+int DELTA_MOVEMENT_CTRL = 1;
+
+int DELTA_RESIZE = 10;
+int DELTA_RESIZE_SHIFT = 5;
+int DELTA_RESIZE_CTRL = 1;
+
+int DELTA_TRANSFORM = 10;
+int DELTA_TRANSFORM_SHIFT = 5;
+int DELTA_TRANSFORM_CTRL = 1;
+
+int DELTA_ROTATE = 3;
+int DELTA_ROTATE_SHIFT = 2;
+int DELTA_ROTATE_CTRL = 1;
