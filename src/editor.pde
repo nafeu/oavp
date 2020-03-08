@@ -245,8 +245,10 @@ public class OavpEditor {
   }
 
   public void draw() {
+    OavpVariable activeVariable = objects.getActiveVariable();
+
     StringBuilder topBar = new StringBuilder("editing:");
-    topBar.append(" " + objects.getActiveVariable().name);
+    topBar.append(" " + activeVariable.name);
     topBar.append(" | tool: " + getActiveToolName());
 
     text.create()
@@ -258,7 +260,16 @@ public class OavpEditor {
       .done();
 
     StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | r: resize | m: move | y: rotate\n");
-    bottomBar.append("j: prev obj | l: next obj");
+    bottomBar.append("j: prev obj | l: next obj | d: duplicate");
+
+    visualizers
+      .create()
+      .center().middle()
+      .strokeColor(palette.flat.blue)
+      .move(activeVariable.x, activeVariable.y, activeVariable.z)
+      .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+      .draw.basicSquare(activeVariable.size)
+      .done();
 
     text.create()
       .colour(palette.flat.white)

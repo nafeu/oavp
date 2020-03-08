@@ -19,6 +19,9 @@ public class OavpObjectManager {
       case "BasicSquare":
         object = new OavpObjBasicSquare();
         break;
+      case "BasicCircle":
+        object = new OavpObjBasicCircle();
+        break;
       default:
         object = new OavpObject();
     }
@@ -120,6 +123,24 @@ public class OavpObjBasicSquare extends OavpObject {
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr)
       .draw.basicSquare(variable.size)
+      .done();
+  }
+}
+
+public class OavpObjBasicCircle extends OavpObject {
+  public void setup() {
+    variable
+      .size(100);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .strokeColor(variable.strokeColor)
+      .move(variable.x, variable.y, variable.z)
+      .rotate(variable.xr, variable.yr, variable.zr)
+      .draw.basicCircle(variable.size)
       .done();
   }
 }
