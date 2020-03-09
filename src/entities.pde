@@ -993,12 +993,12 @@ public class OavpVariable {
   }
 
   public OavpVariable previewYR(int multiplier) {
-    this.y = this.yOrig + (multiplier * gridScale);
+    this.yr = this.yrOrig + (multiplier * gridScale);
     return this;
   }
 
   public OavpVariable commitYR() {
-    this.yOrig = this.y;
+    this.yrOrig = this.yr;
     return this;
   }
 

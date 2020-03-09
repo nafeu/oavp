@@ -26,6 +26,10 @@ public class OavpEditor {
         handleToolTransformInputs();
       } else if (this.activeTool == TOOL_ROTATE) {
         handleToolRotateInputs();
+      } else if (this.activeTool == TOOL_ARRANGE) {
+        handleToolArrangeInputs();
+      } else if (this.activeTool == TOOL_TURN) {
+        handleToolTurnInputs();
       }
 
       if (input.isPressed(KEY_L)) {
@@ -50,6 +54,14 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_R)) {
         this.activeTool = TOOL_ROTATE;
+      }
+
+      if (input.isPressed(KEY_N)) {
+        this.activeTool = TOOL_ARRANGE;
+      }
+
+      if (input.isPressed(KEY_Y)) {
+        this.activeTool = TOOL_TURN;
       }
 
       if (input.isPressed(KEY_D)) {
@@ -239,6 +251,90 @@ public class OavpEditor {
     }
   }
 
+  private void handleToolArrangeInputs() {
+    int delta = DELTA_ARRANGE;
+
+    if (input.isHoldingShift) {
+      delta = DELTA_ARRANGE_SHIFT;
+    }
+
+    if (input.isHoldingControl) {
+      delta = DELTA_ARRANGE_CTRL;
+    }
+
+    if (input.isPressed(UP)) {
+      objects.getActiveVariable().previewZ(delta * -1).commitZ();
+    }
+
+    if (input.isPressed(DOWN)) {
+      objects.getActiveVariable().previewZ(delta).commitZ();
+    }
+
+    if (input.isMousePressed()) {
+      objects.getActiveVariable().previewZ(input.getYGridTicks() * delta);
+    }
+
+    if (input.isMouseReleased()) {
+      objects.getActiveVariable().commitZ();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
+  private void handleToolTurnInputs() {
+    int delta = DELTA_TURN;
+
+    if (input.isHoldingShift) {
+      delta = DELTA_TURN_SHIFT;
+    }
+
+    if (input.isHoldingControl) {
+      delta = DELTA_TURN_CTRL;
+    }
+
+    if (input.isPressed(UP)) {
+      objects.getActiveVariable().previewXR(delta).commitXR();
+    }
+
+    if (input.isPressed(DOWN)) {
+      objects.getActiveVariable().previewXR(delta * -1).commitXR();
+    }
+
+    if (input.isPressed(RIGHT)) {
+      objects.getActiveVariable().previewYR(delta).commitYR();
+    }
+
+    if (input.isPressed(LEFT)) {
+      objects.getActiveVariable().previewYR(delta * -1).commitYR();
+    }
+
+    if (input.isMousePressed()) {
+      objects.getActiveVariable().previewXR(input.getYGridTicks() * delta * -1);
+      objects.getActiveVariable().previewYR(input.getXGridTicks() * delta);
+    }
+
+    if (input.isMouseReleased()) {
+      objects.getActiveVariable().commitYR();
+      objects.getActiveVariable().commitXR();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
   private void toggleEditMode() {
     if (objects.activeObjects.size() > 0) {
       this.isEditMode = !this.isEditMode;
@@ -247,18 +343,6 @@ public class OavpEditor {
 
   private void toggleHelpMode() {
     this.isHelpMode = !this.isHelpMode;
-  }
-
-  private void cycleActiveTool() {
-    if (this.activeTool == TOOL_MOVE) {
-      this.activeTool = TOOL_RESIZE;
-    } else if (this.activeTool == TOOL_RESIZE) {
-      this.activeTool = TOOL_TRANSFORM;
-    } else if (this.activeTool == TOOL_TRANSFORM) {
-      this.activeTool = TOOL_ROTATE;
-    } else {
-      this.activeTool = TOOL_MOVE;
-    }
   }
 
   public boolean isEditMode() {
@@ -271,27 +355,12 @@ public class OavpEditor {
     drawToolMeta(activeVariable, this.activeTool);
 
     if (this.isHelpMode) {
-      StringBuilder topBar = new StringBuilder("editing:");
-      topBar.append(" " + activeVariable.name);
-      topBar.append(" | tool: " + getActiveToolName());
-
       text.create()
         .colour(palette.flat.white)
         .size(12)
-        .moveDown(oavp.height(0.05))
-        .moveRight(oavp.width(0.05))
-        .write(topBar.toString())
-        .done();
-
-      StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | s: resize | m: move | r: rotate\n");
-      bottomBar.append("j: prev obj | l: next obj | d: duplicate");
-
-      text.create()
-        .colour(palette.flat.white)
-        .size(10)
         .moveDown(oavp.height(0.95))
-        .moveRight(oavp.width(0.05))
-        .write(bottomBar.toString())
+        .moveRight(oavp.width(0.02))
+        .write("e: edit | t: transform | s: resize | m: move | r: rotate\nj: prev | l: next | d: dupl")
         .done();
     }
 
@@ -301,6 +370,9 @@ public class OavpEditor {
     if (this.activeTool == TOOL_MOVE) {
       return "move";
     }
+    if (this.activeTool == TOOL_ARRANGE) {
+      return "arrange";
+    }
     if (this.activeTool == TOOL_RESIZE) {
       return "resize";
     }
@@ -308,6 +380,9 @@ public class OavpEditor {
       return "transform";
     }
     if (this.activeTool == TOOL_ROTATE) {
+      return "rotate";
+    }
+    if (this.activeTool == TOOL_TURN) {
       return "rotate";
     }
     return "";
@@ -411,6 +486,50 @@ public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
         .write("zr: " + activeVariable.zr)
         .done();
       break;
+
+    case 4: // ARRANGE
+      visualizers
+        .create()
+        .center().middle()
+        .strokeColor(palette.flat.teal)
+        .strokeWeightStyle(2)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .draw.basicSquare(100)
+        .draw.basicCircle(10)
+        .done();
+
+      text.create()
+        .center().middle()
+        .colour(palette.flat.teal)
+        .size(10)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .moveDown(20)
+        .write("z: " + activeVariable.z)
+        .done();
+      break;
+
+    case 5: // TURN
+      visualizers
+        .create()
+        .center().middle()
+        .strokeColor(palette.flat.darkTeal)
+        .strokeWeightStyle(2)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .rotate(0, 0, 45)
+        .draw.basicRectangle(15, 15, 50)
+        .done();
+
+      text.create()
+        .center().middle()
+        .colour(palette.flat.darkTeal)
+        .size(10)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .moveDown(20)
+        .write("xr: " + activeVariable.xr)
+        .moveDown(10)
+        .write("yr: " + activeVariable.yr)
+        .done();
+      break;
   }
 }
 
@@ -418,6 +537,8 @@ int TOOL_MOVE = 0;
 int TOOL_RESIZE = 1;
 int TOOL_TRANSFORM = 2;
 int TOOL_ROTATE = 3;
+int TOOL_ARRANGE = 4;
+int TOOL_TURN = 5;
 
 // KEYS
 int KEY_A = 65;
@@ -462,3 +583,11 @@ int DELTA_TRANSFORM_CTRL = 1;
 int DELTA_ROTATE = 3;
 int DELTA_ROTATE_SHIFT = 2;
 int DELTA_ROTATE_CTRL = 1;
+
+int DELTA_ARRANGE = 10;
+int DELTA_ARRANGE_SHIFT = 5;
+int DELTA_ARRANGE_CTRL = 1;
+
+int DELTA_TURN = 3;
+int DELTA_TURN_SHIFT = 2;
+int DELTA_TURN_CTRL = 1;
