@@ -1521,6 +1521,34 @@ public class OavpObjectManager {
       OavpVariable variable = entry.getValue().getVariable();
 
       objectData.append("\n  objects.add(\"" + objectKey + "\", \"" + objectClassName + "\")");
+
+      if (variable.x != 0) { objectData.append(".set(\"x\"," + variable.x + ")"); }
+      if (variable.xr != 0) { objectData.append(".set(\"xr\"," + variable.xr + ")"); }
+      if (variable.y != 0) { objectData.append(".set(\"y\"," + variable.y + ")"); }
+      if (variable.yr != 0) { objectData.append(".set(\"yr\"," + variable.yr + ")"); }
+      if (variable.z != 0) { objectData.append(".set(\"z\"," + variable.z + ")"); }
+      if (variable.zr != 0) { objectData.append(".set(\"zr\"," + variable.zr + ")"); }
+      if (variable.w != 100) { objectData.append(".set(\"w\"," + variable.w + ")"); }
+      if (variable.h != 100) { objectData.append(".set(\"h\"," + variable.h + ")"); }
+      if (variable.l != 100) { objectData.append(".set(\"l\"," + variable.l + ")"); }
+      if (variable.size != 100) { objectData.append(".set(\"size\"," + variable.size + ")"); }
+
+      objectData.append(".set(\"strokeColor\"," + variable.strokeColor + ")");
+      objectData.append(".set(\"fillColor\"," + variable.fillColor + ")");
+
+      for (HashMap.Entry<String, Float> customAttrEntry : variable.customFloatAttrs.entrySet()) {
+        objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
+      }
+
+      for (HashMap.Entry<String, Integer> customAttrEntry : variable.customIntAttrs.entrySet()) {
+        objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
+      }
+
+      for (HashMap.Entry<String, String> customAttrEntry : variable.customStringAttrs.entrySet()) {
+        objectData.append(".set(\"" + customAttrEntry.getKey() + "\", \"" + customAttrEntry.getValue() + "\")");
+      }
+
+      objectData.append(";\n");
     }
     StringSelection stringSelection = new StringSelection(objectData.toString());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
