@@ -33,6 +33,15 @@ public class OavpObjectManager {
     return object.getVariable();
   }
 
+  public OavpVariable duplicate() {
+    println("Duplicating " + this.getActiveVariable().name);
+    OavpObject clone = this.getActiveObject().clone();
+
+    objectsStorage.put(this.getActiveVariable().name + "-copy", clone);
+    activeObjects.add(clone);
+    return clone.getVariable();
+  }
+
   public void update() {
     for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
       entry.getValue().update();
@@ -47,6 +56,10 @@ public class OavpObjectManager {
 
   public OavpVariable getActiveVariable() {
     return activeObjects.get(this.selectedObjectIndex).getVariable();
+  }
+
+  public OavpObject getActiveObject() {
+    return activeObjects.get(this.selectedObjectIndex);
   }
 
   public void nextActiveVariable() {
@@ -79,6 +92,55 @@ public class OavpObject {
 
   public void setName(String name) {
     this.variable.name = name;
+  }
+
+  public OavpObject clone() {
+    OavpObject clone;
+
+    String rawClassName = this.getClass().getName();
+    String className = rawClassName.split("OavpObj")[1];
+
+    switch (className) {
+      case "BasicRectangle":
+        clone = new OavpObjBasicRectangle();
+        break;
+      case "BasicSquare":
+        clone = new OavpObjBasicSquare();
+        break;
+      case "BasicCircle":
+        clone = new OavpObjBasicCircle();
+        break;
+      default:
+        clone = new OavpObject();
+    }
+
+    clone.getVariable()
+      .set("x", this.variable.x)
+      .set("xr", this.variable.xr)
+      .set("y", this.variable.y)
+      .set("yr", this.variable.yr)
+      .set("z", this.variable.z)
+      .set("zr", this.variable.zr)
+      .set("strokeColor", this.variable.strokeColor)
+      .set("fillColor", this.variable.fillColor)
+      .set("w", this.variable.w)
+      .set("h", this.variable.h)
+      .set("l", this.variable.l)
+      .set("size", this.variable.size);
+
+    for (HashMap.Entry<String, Float> entry : this.variable.customFloatAttrs.entrySet()) {
+      clone.getVariable().set(entry.getKey(), entry.getValue());
+    }
+
+    for (HashMap.Entry<String, Integer> entry : this.variable.customIntAttrs.entrySet()) {
+      clone.getVariable().set(entry.getKey(), entry.getValue());
+    }
+
+    for (HashMap.Entry<String, String> entry : this.variable.customStringAttrs.entrySet()) {
+      clone.getVariable().set(entry.getKey(), entry.getValue());
+    }
+
+    return clone;
   }
 
   public void setup() {}

@@ -864,6 +864,9 @@ public class OavpVariable {
       case "l":
         this.l(input);
         break;
+      case "size":
+        this.size(input);
+        break;
       default:
         this.customFloatAttrs.put(prop, input);
     }

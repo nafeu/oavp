@@ -39,7 +39,7 @@ public class OavpEditor {
         this.activeTool = TOOL_TRANSFORM;
       }
 
-      if (input.isPressed(KEY_R)) {
+      if (input.isPressed(KEY_S)) {
         this.activeTool = TOOL_RESIZE;
       }
 
@@ -47,8 +47,12 @@ public class OavpEditor {
         this.activeTool = TOOL_MOVE;
       }
 
-      if (input.isPressed(KEY_Y)) {
+      if (input.isPressed(KEY_R)) {
         this.activeTool = TOOL_ROTATE;
+      }
+
+      if (input.isPressed(KEY_D)) {
+        objects.duplicate();
       }
     }
 
@@ -259,7 +263,7 @@ public class OavpEditor {
       .write(topBar.toString())
       .done();
 
-    StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | r: resize | m: move | y: rotate\n");
+    StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | s: resize | m: move | r: rotate\n");
     bottomBar.append("j: prev obj | l: next obj | d: duplicate");
 
     drawToolMeta(activeVariable, this.activeTool);
