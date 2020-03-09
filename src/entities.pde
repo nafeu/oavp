@@ -1461,6 +1461,15 @@ public class OavpObjectManager {
     return clone.getVariable();
   }
 
+  public void remove() {
+    if (this.activeObjects.size() > 1) {
+      String activeObjectName = this.getActiveVariable().name;
+      activeObjects.remove(this.getActiveObject());
+      objectsStorage.remove(activeObjectName);
+      lastActiveVariable();
+    }
+  }
+
   public void update() {
     for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
       entry.getValue().update();
@@ -1499,6 +1508,24 @@ public class OavpObjectManager {
     } else {
       this.selectedObjectIndex -= 1;
     }
+  }
+
+  public void printObjectData() {
+    Date date = new Date();
+    println("--- [ object data : " + date + " ] ---");
+    StringBuilder objectData = new StringBuilder();
+    for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
+      OavpObject object = entry.getValue();
+      String objectKey = entry.getKey();
+      String objectClassName = extractOavpClassName(object.getClass().getName());
+      OavpVariable variable = entry.getValue().getVariable();
+
+      objectData.append("\n  objects.add(\"" + objectKey + "\", \"" + objectClassName + "\")");
+    }
+    StringSelection stringSelection = new StringSelection(objectData.toString());
+    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    clipboard.setContents(stringSelection, null);
+    println(objectData.toString());
   }
 }
 
@@ -1565,4 +1592,11 @@ public class OavpObject {
   public void setup() {}
   public void draw() {}
   public void update() {}
+}
+
+public String extractOavpClassName(String rawName) {
+  if (rawName == "src$OavpObject") {
+    return "OavpObject";
+  }
+  return rawName.split("OavpObj")[1];
 }

@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Arrays;
+import java.util.Date;
 import java.io.File;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
@@ -18,6 +19,9 @@ import processing.video.*;
 import com.hamoid.*;
 import javax.sound.midi.*;
 import java.util.concurrent.TimeUnit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 
 PApplet context;
 OavpConfig oavp;

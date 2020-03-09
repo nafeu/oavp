@@ -59,6 +59,14 @@ public class OavpEditor {
       if (input.isPressed(KEY_H)) {
         toggleHelpMode();
       }
+
+      if (input.isPressed(KEY_X)) {
+        objects.printObjectData();
+      }
+
+      if (input.isPressed(KEY_W)) {
+        objects.remove();
+      }
     }
 
   }
