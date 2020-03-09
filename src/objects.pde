@@ -33,12 +33,36 @@ public class OavpObjectManager {
     return object.getVariable();
   }
 
-  public OavpVariable duplicate() {
-    println("Duplicating " + this.getActiveVariable().name);
-    OavpObject clone = this.getActiveObject().clone();
+  public String getCloneName(String originalName) {
+    String output;
+    Set<String> nameSplit = new HashSet<String>(Arrays.asList(originalName.split("-")));
+    Set<String> existingNames = objectsStorage.keySet();
 
-    objectsStorage.put(this.getActiveVariable().name + "-copy", clone);
+    if (nameSplit.contains("copy")) {
+      String lastItem = originalName.split("-")[originalName.split("-").length - 1];
+      if (isNumber(lastItem)) {
+        output = originalName.substring(0, originalName.length() - lastItem.length()) + str(int(lastItem) + 1);
+      } else {
+        output = originalName + "-1";
+      }
+    } else {
+      output = originalName + "-copy";
+    }
+
+    if (existingNames.contains(output)) {
+      return getCloneName(output);
+    } else {
+      return output;
+    }
+  }
+
+  public OavpVariable duplicate() {
+    String cloneName = getCloneName(this.getActiveVariable().name);
+    OavpObject clone = this.getActiveObject().clone(cloneName);
+
+    objectsStorage.put(cloneName, clone);
     activeObjects.add(clone);
+    lastActiveVariable();
     return clone.getVariable();
   }
 
@@ -70,6 +94,10 @@ public class OavpObjectManager {
     }
   }
 
+  public void lastActiveVariable() {
+    this.selectedObjectIndex = this.activeObjects.size() - 1;
+  }
+
   public void prevActiveVariable() {
     if (this.selectedObjectIndex == 0) {
       this.selectedObjectIndex = this.activeObjects.size() - 1;
@@ -94,7 +122,7 @@ public class OavpObject {
     this.variable.name = name;
   }
 
-  public OavpObject clone() {
+  public OavpObject clone(String name) {
     OavpObject clone;
 
     String rawClassName = this.getClass().getName();
@@ -114,30 +142,42 @@ public class OavpObject {
         clone = new OavpObject();
     }
 
-    clone.getVariable()
-      .set("x", this.variable.x)
-      .set("xr", this.variable.xr)
-      .set("y", this.variable.y)
-      .set("yr", this.variable.yr)
-      .set("z", this.variable.z)
-      .set("zr", this.variable.zr)
-      .set("strokeColor", this.variable.strokeColor)
-      .set("fillColor", this.variable.fillColor)
-      .set("w", this.variable.w)
-      .set("h", this.variable.h)
-      .set("l", this.variable.l)
-      .set("size", this.variable.size);
+    OavpVariable cloneVariable = clone.getVariable();
+
+    cloneVariable.name = name;
+    cloneVariable.x = this.variable.x;
+    cloneVariable.xOrig = this.variable.xOrig;
+    cloneVariable.xr = this.variable.xr;
+    cloneVariable.xrOrig = this.variable.xrOrig;
+    cloneVariable.y = this.variable.y;
+    cloneVariable.yOrig = this.variable.yOrig;
+    cloneVariable.yr = this.variable.yr;
+    cloneVariable.yrOrig = this.variable.yrOrig;
+    cloneVariable.z = this.variable.z;
+    cloneVariable.zOrig = this.variable.zOrig;
+    cloneVariable.zr = this.variable.zr;
+    cloneVariable.zrOrig = this.variable.zrOrig;
+    cloneVariable.w = this.variable.w;
+    cloneVariable.wOrig = this.variable.wOrig;
+    cloneVariable.h = this.variable.h;
+    cloneVariable.hOrig = this.variable.hOrig;
+    cloneVariable.l = this.variable.l;
+    cloneVariable.lOrig = this.variable.lOrig;
+    cloneVariable.size = this.variable.size;
+    cloneVariable.sizeOrig = this.variable.sizeOrig;
+    cloneVariable.strokeColor = this.variable.strokeColor;
+    cloneVariable.fillColor = this.variable.fillColor;
 
     for (HashMap.Entry<String, Float> entry : this.variable.customFloatAttrs.entrySet()) {
-      clone.getVariable().set(entry.getKey(), entry.getValue());
+      cloneVariable.set(entry.getKey(), entry.getValue());
     }
 
     for (HashMap.Entry<String, Integer> entry : this.variable.customIntAttrs.entrySet()) {
-      clone.getVariable().set(entry.getKey(), entry.getValue());
+      cloneVariable.set(entry.getKey(), entry.getValue());
     }
 
     for (HashMap.Entry<String, String> entry : this.variable.customStringAttrs.entrySet()) {
-      clone.getVariable().set(entry.getKey(), entry.getValue());
+      cloneVariable.set(entry.getKey(), entry.getValue());
     }
 
     return clone;

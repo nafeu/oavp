@@ -50,6 +50,23 @@ color opacity(color c, float alpha) {
   return out;
 }
 
+public boolean isNumber(String str){
+  int i=0, len=str.length();
+  boolean a=false,b=false,c=false, d=false;
+  if(i<len && (str.charAt(i)=='+' || str.charAt(i)=='-')) i++;
+  while( i<len && isDigit(str.charAt(i)) ){ i++; a=true; }
+  if(i<len && (str.charAt(i)=='.')) i++;
+  while( i<len && isDigit(str.charAt(i)) ){ i++; b=true; }
+  if(i<len && (str.charAt(i)=='e' || str.charAt(i)=='E') && (a || b)){ i++; c=true; }
+  if(i<len && (str.charAt(i)=='+' || str.charAt(i)=='-') && c) i++;
+  while( i<len && isDigit(str.charAt(i)) ){ i++; d=true;}
+  return i==len && (a||b) && (!c || (c && d));
+}
+
+boolean isDigit(char c){
+  return c>='0' && c<='9';
+}
+
 // @question Do we want this to always run after an exception? If so then we
 // can remove exit() call since that's handled by the entry function.
 // @answer calling exit() prevents the Java Applet from hanging in the background
