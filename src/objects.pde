@@ -62,7 +62,7 @@ public class OavpObjBasicRectangleSpectrum extends OavpObject {
       .draw.basicRectangle(variable.w, variable.h)
       .moveLeft(variable.w * 0.9 / 2)
       .moveUp(variable.h * 0.9 / 2)
-      .draw.basicSpectrumBars()
+      .draw.basicSpectrumLines()
       .done();
   }
 }

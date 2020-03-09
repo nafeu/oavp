@@ -593,6 +593,26 @@ class OavpVisualizer {
     }
 
     /**
+     * Draw a spectrum visualizer with bars
+     * @use draw
+     */
+    public OavpVisualizer basicSpectrumLines() {
+      int avgSize = analysis.getAvgSize();
+      for (int i = 0; i < avgSize; i++) {
+        float rawPulser = analysis.getSpectrumVal(i);
+        float displayPulser = analysis.scaleSpectrumVal(rawPulser);
+        float xPos = (i * (currWidth / avgSize)) + ((currWidth / avgSize) / 2);
+        line(
+          xPos,
+          currHeight,
+          xPos,
+          currHeight - (currHeight * displayPulser)
+        );
+      }
+      return OavpVisualizer.this;
+    }
+
+    /**
      * Draw a spectrum visualizer as a wire
      * @use draw
      */
