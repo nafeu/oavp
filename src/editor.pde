@@ -1,5 +1,6 @@
 public class OavpEditor {
   private boolean isEditMode = false;
+  private boolean isHelpMode = false;
   private OavpInput input;
   private OavpObjectManager objects;
   private OavpText text;
@@ -53,6 +54,10 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_D)) {
         objects.duplicate();
+      }
+
+      if (input.isPressed(KEY_H)) {
+        toggleHelpMode();
       }
     }
 
@@ -232,6 +237,10 @@ public class OavpEditor {
     }
   }
 
+  private void toggleHelpMode() {
+    this.isHelpMode = !this.isHelpMode;
+  }
+
   private void cycleActiveTool() {
     if (this.activeTool == TOOL_MOVE) {
       this.activeTool = TOOL_RESIZE;
@@ -251,30 +260,33 @@ public class OavpEditor {
   public void draw() {
     OavpVariable activeVariable = objects.getActiveVariable();
 
-    StringBuilder topBar = new StringBuilder("editing:");
-    topBar.append(" " + activeVariable.name);
-    topBar.append(" | tool: " + getActiveToolName());
-
-    text.create()
-      .colour(palette.flat.white)
-      .size(12)
-      .moveDown(oavp.height(0.05))
-      .moveRight(oavp.width(0.05))
-      .write(topBar.toString())
-      .done();
-
-    StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | s: resize | m: move | r: rotate\n");
-    bottomBar.append("j: prev obj | l: next obj | d: duplicate");
-
     drawToolMeta(activeVariable, this.activeTool);
 
-    text.create()
-      .colour(palette.flat.white)
-      .size(10)
-      .moveDown(oavp.height(0.95))
-      .moveRight(oavp.width(0.05))
-      .write(bottomBar.toString())
-      .done();
+    if (this.isHelpMode) {
+      StringBuilder topBar = new StringBuilder("editing:");
+      topBar.append(" " + activeVariable.name);
+      topBar.append(" | tool: " + getActiveToolName());
+
+      text.create()
+        .colour(palette.flat.white)
+        .size(12)
+        .moveDown(oavp.height(0.05))
+        .moveRight(oavp.width(0.05))
+        .write(topBar.toString())
+        .done();
+
+      StringBuilder bottomBar = new StringBuilder("e: close edit mode | t: transform | s: resize | m: move | r: rotate\n");
+      bottomBar.append("j: prev obj | l: next obj | d: duplicate");
+
+      text.create()
+        .colour(palette.flat.white)
+        .size(10)
+        .moveDown(oavp.height(0.95))
+        .moveRight(oavp.width(0.05))
+        .write(bottomBar.toString())
+        .done();
+    }
+
   }
 
   private String getActiveToolName() {
@@ -300,21 +312,19 @@ public class OavpEditor {
   }
 }
 
-public void drawToolGuide(OavpVariable activeVariable, color toolColor) {
-  visualizers
-    .create()
-    .center().middle()
-    .strokeColor(toolColor)
-    .move(activeVariable.x, activeVariable.y, activeVariable.z)
-    .draw.basicSquare(activeVariable.size)
-    .draw.basicCircle(10)
-    .done();
-}
-
 public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
   switch (activeTool) {
     case 0: // MOVE
-      drawToolGuide(activeVariable, palette.flat.blue);
+      visualizers
+        .create()
+        .center().middle()
+        .strokeColor(palette.flat.blue)
+        .strokeWeightStyle(2)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .draw.basicSquare(100)
+        .draw.basicCircle(10)
+        .done();
+
       text.create()
         .center().middle()
         .colour(palette.flat.blue)
@@ -328,7 +338,17 @@ public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
       break;
 
     case 1: // RESIZE
-      drawToolGuide(activeVariable, palette.flat.orange);
+      visualizers
+        .create()
+        .center().middle()
+        .strokeColor(palette.flat.orange)
+        .strokeWeightStyle(2)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .draw.basicRectangle(activeVariable.size, activeVariable.size, 50)
+        .draw.basicSquare(25)
+        .draw.basicCircle(5)
+        .done();
+
       text.create()
         .center().middle()
         .colour(palette.flat.orange)
@@ -340,7 +360,17 @@ public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
       break;
 
     case 2: // TRANSFORM
-      drawToolGuide(activeVariable, palette.flat.yellow);
+      visualizers
+        .create()
+        .center().middle()
+        .strokeColor(palette.flat.yellow)
+        .strokeWeightStyle(2)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+        .draw.basicRectangle(activeVariable.w, activeVariable.h)
+        .draw.basicCircle(10)
+        .done();
+
       text.create()
         .center().middle()
         .colour(palette.flat.yellow)
@@ -354,7 +384,16 @@ public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
       break;
 
     case 3: // ROTATE
-      drawToolGuide(activeVariable, palette.flat.green);
+      visualizers
+        .create()
+        .center().middle()
+        .strokeColor(palette.flat.green)
+        .strokeWeightStyle(2)
+        .move(activeVariable.x, activeVariable.y, activeVariable.z)
+        .rotate(0, 0, 45)
+        .draw.basicSquare(15)
+        .done();
+
       text.create()
         .center().middle()
         .colour(palette.flat.green)
