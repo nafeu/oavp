@@ -5,11 +5,15 @@ public class OavpEditor {
   private OavpObjectManager objects;
   private OavpText text;
   private int activeTool = TOOL_MOVE;
+  private int colorPaletteIndex = 0;
+  private int colorIndex = 0;
+  private color[] activePalette;
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
     this.objects = objects;
     this.text = text;
+    this.activePalette = palette.getPalette(colorPaletteIndex);
   }
 
   public void handleKeyInputs() {
@@ -30,6 +34,8 @@ public class OavpEditor {
         handleToolArrangeInputs();
       } else if (this.activeTool == TOOL_TURN) {
         handleToolTurnInputs();
+      } else if (this.activeTool == TOOL_COLOR) {
+        handleToolColorInputs();
       }
 
       if (input.isPressed(KEY_L)) {
@@ -62,6 +68,10 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_Y)) {
         this.activeTool = TOOL_TURN;
+      }
+
+      if (input.isPressed(KEY_C)) {
+        this.activeTool = TOOL_COLOR;
       }
 
       if (input.isPressed(KEY_D)) {
@@ -335,6 +345,71 @@ public class OavpEditor {
     }
   }
 
+  private void handleToolColorInputs() {
+    if (input.isHoldingShift) {
+
+    }
+
+    if (input.isHoldingControl) {
+
+    }
+
+    if (input.isPressed(UP)) {
+      if (this.colorIndex == 0) {
+        this.colorIndex = this.activePalette.length - 1;
+      } else {
+        this.colorIndex = (this.colorIndex - 1) % this.activePalette.length;
+      }
+    }
+
+    if (input.isPressed(DOWN)) {
+      this.colorIndex = (this.colorIndex + 1) % this.activePalette.length;
+    }
+
+    if (input.isPressed(RIGHT)) {
+      this.colorPaletteIndex = (this.colorPaletteIndex + 1) % palette.table.length;
+      this.activePalette = palette.getPalette(colorPaletteIndex);
+      this.colorIndex = this.colorIndex % this.activePalette.length;
+    }
+
+    if (input.isPressed(LEFT)) {
+      if (this.colorPaletteIndex == 0) {
+        this.colorPaletteIndex = palette.table.length - 1;
+      } else {
+        this.colorPaletteIndex = (this.colorPaletteIndex - 1) % palette.table.length;
+        this.activePalette = palette.getPalette(colorPaletteIndex);
+        this.colorIndex = this.colorIndex % this.activePalette.length;
+      }
+    }
+
+    if (input.isPressed(ENTER)) {
+      if (input.isHoldingShift) {
+        objects.getActiveVariable().fillColor(this.activePalette[this.colorIndex]);
+      } else {
+        objects.getActiveVariable().strokeColor(this.activePalette[this.colorIndex]);
+      }
+    }
+
+    if (input.isMousePressed()) {
+      // input.getYGridTicks();
+      // input.getXGridTicks();
+    }
+
+    if (input.isMouseReleased()) {
+      // objects.getActiveVariable().commitYR();
+      // objects.getActiveVariable().commitXR();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
   private void toggleEditMode() {
     if (objects.activeObjects.size() > 0) {
       this.isEditMode = !this.isEditMode;
@@ -383,7 +458,10 @@ public class OavpEditor {
       return "rotate";
     }
     if (this.activeTool == TOOL_TURN) {
-      return "rotate";
+      return "turn";
+    }
+    if (this.activeTool == TOOL_COLOR) {
+      return "color";
     }
     return "";
   }
@@ -393,145 +471,184 @@ public class OavpEditor {
       this.draw();
     }
   }
-}
 
-public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
-  switch (activeTool) {
-    case 0: // MOVE
-      visualizers
-        .create()
-        .center().middle()
-        .strokeColor(palette.flat.blue)
-        .strokeWeightStyle(2)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .draw.basicSquare(100)
-        .draw.basicCircle(10)
-        .done();
+  public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
+    visualizers
+      .noFillStyle();
 
-      text.create()
-        .center().middle()
-        .colour(palette.flat.blue)
-        .size(10)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .moveDown(20)
-        .write("x: " + activeVariable.x)
-        .moveDown(10)
-        .write("y: " + activeVariable.y)
-        .done();
-      break;
+    switch (activeTool) {
+      case 0: // MOVE
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.blue)
+          .strokeWeightStyle(2)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.basicSquare(100)
+          .draw.basicCircle(10)
+          .done();
 
-    case 1: // RESIZE
-      visualizers
-        .create()
-        .center().middle()
-        .strokeColor(palette.flat.orange)
-        .strokeWeightStyle(2)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .draw.basicRectangle(activeVariable.size, activeVariable.size, 50)
-        .draw.basicSquare(25)
-        .draw.basicCircle(5)
-        .done();
+        text.create()
+          .center().middle()
+          .colour(palette.flat.blue)
+          .size(10)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .moveDown(20)
+          .write("x: " + activeVariable.x)
+          .moveDown(10)
+          .write("y: " + activeVariable.y)
+          .done();
+        break;
 
-      text.create()
-        .center().middle()
-        .colour(palette.flat.orange)
-        .size(10)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .moveDown(20)
-        .write("size: " + activeVariable.size)
-        .done();
-      break;
+      case 1: // RESIZE
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.orange)
+          .strokeWeightStyle(2)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.basicRectangle(activeVariable.size, activeVariable.size, 50)
+          .draw.basicSquare(25)
+          .draw.basicCircle(5)
+          .done();
 
-    case 2: // TRANSFORM
-      visualizers
-        .create()
-        .center().middle()
-        .strokeColor(palette.flat.yellow)
-        .strokeWeightStyle(2)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
-        .draw.basicRectangle(activeVariable.w, activeVariable.h)
-        .draw.basicCircle(10)
-        .done();
+        text.create()
+          .center().middle()
+          .colour(palette.flat.orange)
+          .size(10)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .moveDown(20)
+          .write("size: " + activeVariable.size)
+          .done();
+        break;
 
-      text.create()
-        .center().middle()
-        .colour(palette.flat.yellow)
-        .size(10)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .moveDown(20)
-        .write("w: " + activeVariable.w)
-        .moveDown(10)
-        .write("h: " + activeVariable.h)
-        .done();
-      break;
+      case 2: // TRANSFORM
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.yellow)
+          .strokeWeightStyle(2)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+          .draw.basicRectangle(activeVariable.w, activeVariable.h)
+          .draw.basicCircle(10)
+          .done();
 
-    case 3: // ROTATE
-      visualizers
-        .create()
-        .center().middle()
-        .strokeColor(palette.flat.green)
-        .strokeWeightStyle(2)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .rotate(0, 0, 45)
-        .draw.basicSquare(15)
-        .done();
+        text.create()
+          .center().middle()
+          .colour(palette.flat.yellow)
+          .size(10)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .moveDown(20)
+          .write("w: " + activeVariable.w)
+          .moveDown(10)
+          .write("h: " + activeVariable.h)
+          .done();
+        break;
 
-      text.create()
-        .center().middle()
-        .colour(palette.flat.green)
-        .size(10)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .moveDown(20)
-        .write("zr: " + activeVariable.zr)
-        .done();
-      break;
+      case 3: // ROTATE
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.green)
+          .strokeWeightStyle(2)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .rotate(0, 0, 45)
+          .draw.basicSquare(15)
+          .done();
 
-    case 4: // ARRANGE
-      visualizers
-        .create()
-        .center().middle()
-        .strokeColor(palette.flat.teal)
-        .strokeWeightStyle(2)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .draw.basicSquare(100)
-        .draw.basicCircle(10)
-        .done();
+        text.create()
+          .center().middle()
+          .colour(palette.flat.green)
+          .size(10)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .moveDown(20)
+          .write("zr: " + activeVariable.zr)
+          .done();
+        break;
 
-      text.create()
-        .center().middle()
-        .colour(palette.flat.teal)
-        .size(10)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .moveDown(20)
-        .write("z: " + activeVariable.z)
-        .done();
-      break;
+      case 4: // ARRANGE
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.teal)
+          .strokeWeightStyle(2)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.basicSquare(100)
+          .draw.basicCircle(10)
+          .done();
 
-    case 5: // TURN
-      visualizers
-        .create()
-        .center().middle()
-        .strokeColor(palette.flat.darkTeal)
-        .strokeWeightStyle(2)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .rotate(0, 0, 45)
-        .draw.basicRectangle(15, 15, 50)
-        .done();
+        text.create()
+          .center().middle()
+          .colour(palette.flat.teal)
+          .size(10)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .moveDown(20)
+          .write("z: " + activeVariable.z)
+          .done();
+        break;
 
-      text.create()
-        .center().middle()
-        .colour(palette.flat.darkTeal)
-        .size(10)
-        .move(activeVariable.x, activeVariable.y, activeVariable.z)
-        .moveDown(20)
-        .write("xr: " + activeVariable.xr)
-        .moveDown(10)
-        .write("yr: " + activeVariable.yr)
-        .done();
-      break;
+      case 5: // TURN
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.darkTeal)
+          .strokeWeightStyle(2)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .rotate(0, 0, 45)
+          .draw.basicRectangle(15, 15, 50)
+          .done();
+
+        text.create()
+          .center().middle()
+          .colour(palette.flat.darkTeal)
+          .size(10)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .moveDown(20)
+          .write("xr: " + activeVariable.xr)
+          .moveDown(10)
+          .write("yr: " + activeVariable.yr)
+          .done();
+        break;
+
+      case 6: // COLOR
+        visualizers
+          .create()
+          .center().middle()
+          .strokeWeightStyle(2)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z);
+
+        if (input.isHoldingShift) {
+          visualizers
+            .strokeColor(palette.flat.black)
+            .fillColor(this.activePalette[colorIndex]);
+        } else {
+          visualizers
+            .strokeColor(this.activePalette[colorIndex])
+            .fillColor(palette.flat.black);
+        }
+
+        visualizers
+          .draw.basicRectangle(20, 10)
+          .strokeColor(palette.flat.black)
+          .moveRight(20)
+          .moveUp(10 * colorIndex);
+
+        for (int i = 0; i < this.activePalette.length; i++) {
+          visualizers
+            .fillColor(this.activePalette[i])
+            .draw.basicRectangle(20, 10)
+            .moveDown(10);
+        }
+
+        visualizers
+          .done();
+
+        break;
+    }
   }
 }
+
 
 int TOOL_MOVE = 0;
 int TOOL_RESIZE = 1;
@@ -539,8 +656,10 @@ int TOOL_TRANSFORM = 2;
 int TOOL_ROTATE = 3;
 int TOOL_ARRANGE = 4;
 int TOOL_TURN = 5;
+int TOOL_COLOR = 6;
 
 // KEYS
+int KEY_ENTER = 10;
 int KEY_A = 65;
 int KEY_B = 66;
 int KEY_C = 67;

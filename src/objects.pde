@@ -57,11 +57,13 @@ public class OavpObjBasicRectangleSpectrum extends OavpObject {
       .dimensions(variable.w * 0.9, variable.h * 0.9)
       .center().middle()
       .strokeColor(variable.strokeColor)
+      .fillColor(variable.fillColor)
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr)
       .draw.basicRectangle(variable.w, variable.h)
       .moveLeft(variable.w * 0.9 / 2)
       .moveUp(variable.h * 0.9 / 2)
+      .moveForward(2)
       .draw.basicSpectrumLines()
       .done();
   }

@@ -78,14 +78,14 @@ public class OavpPalette {
   }
 
   public int getRandomColor(int accent) {
-    int randomIndex = new Random().nextInt(material[accent % material.length].length);
-    return material[accent % material.length][randomIndex];
+    int randomIndex = new Random().nextInt(table[accent % table.length].length);
+    return table[accent % table.length][randomIndex];
   }
 
   public int getRandomColor() {
-    int randomAccent = new Random().nextInt(material.length);
-    int randomIndex = new Random().nextInt(material[randomAccent].length);
-    return material[randomAccent][randomIndex];
+    int randomAccent = new Random().nextInt(table.length);
+    int randomIndex = new Random().nextInt(table[randomAccent].length);
+    return table[randomAccent][randomIndex];
   }
 
   public color getRotatingColor() {
@@ -106,15 +106,19 @@ public class OavpPalette {
   }
 
   public void setRotatingColorByPosition(OavpPosition position, int accent, float duration, Easing easing) {
-    int colorAccent = accent % material.length;
-    int colorIndex = abs(position.x + position.y) % material[colorAccent].length;
-    setRotatingColor(material[colorAccent][colorIndex], duration, easing);
+    int colorAccent = accent % table.length;
+    int colorIndex = abs(position.x + position.y) % table[colorAccent].length;
+    setRotatingColor(table[colorAccent][colorIndex], duration, easing);
   }
 
-  public color getMaterialColor(int accent, int index) {
-    int colorAccent = accent % material.length;
-    int colorIndex = index % material[colorAccent].length;
-    return material[colorAccent][colorIndex];
+  public color getColor(int paletteIndex, int selectedIndex) {
+    int colorPalette = paletteIndex % table.length;
+    int colorIndex = selectedIndex % table[colorPalette].length;
+    return table[colorPalette][colorIndex];
+  }
+
+  public color[] getPalette(int paletteIndex) {
+    return table[paletteIndex % table.length];
   }
 
   public class FlatUIColors {
@@ -143,7 +147,17 @@ public class OavpPalette {
     FlatUIColors() {}
   }
 
-  public int[][] material = {
+  public int[][] table = {
+    // FLAT-LIGHT
+    {
+      #1abc9c, #2ecc71, #3498db, #9b59b6, #e74c3c, #e67e22,
+      #f1c40f, #95a5a6, #ecf0f1, #34495e,
+    },
+    // FLAT-DARK
+    {
+      #16a085, #27ae60, #2980b9, #8e44ad, #c0392b, #d35400,
+      #f39c12, #7f8c8d, #bdc3c7, #2c3e50,
+    },
     // 50
     {
       #ffebee, #fce4ec, #f3e5f5, #ede7f6, #e8eaf6, #e3f2fd,
