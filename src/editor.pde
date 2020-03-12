@@ -383,7 +383,10 @@ public class OavpEditor {
     }
 
     if (input.isPressed(ENTER)) {
-      if (input.isHoldingShift) {
+      if (input.isHoldingControl) {
+        objects.getActiveVariable().fillColor(0);
+        objects.getActiveVariable().strokeColor(0);
+      } else if (input.isHoldingShift) {
         objects.getActiveVariable().fillColor(this.activePalette[this.colorIndex]);
       } else {
         objects.getActiveVariable().strokeColor(this.activePalette[this.colorIndex]);
@@ -473,9 +476,6 @@ public class OavpEditor {
   }
 
   public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
-    visualizers
-      .noFillStyle();
-
     switch (activeTool) {
       case 0: // MOVE
         visualizers

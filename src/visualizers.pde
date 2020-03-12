@@ -293,7 +293,11 @@ class OavpVisualizer {
    * @param customColor the color
    */
   public OavpVisualizer fillColor(color customColor) {
-    fill(customColor);
+    if (customColor != 0) {
+      fill(customColor);
+    } else {
+      noFill();
+    }
     return this;
   }
 
@@ -317,7 +321,11 @@ class OavpVisualizer {
    * @param customColor the color
    */
   public OavpVisualizer strokeColor(color customColor) {
-    stroke(customColor);
+    if (customColor != 0) {
+      stroke(customColor);
+    } else {
+      noStroke();
+    }
     return this;
   }
 

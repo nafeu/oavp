@@ -53,6 +53,7 @@ public class OavpObjBasicRectangleSpectrum extends OavpObject {
 
   public void draw() {
     visualizers
+      .startStyle()
       .create()
       .dimensions(variable.w * 0.9, variable.h * 0.9)
       .center().middle()
