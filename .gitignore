@@ -12,3 +12,4 @@ sketches/
 *.mp4
 ffmpeg.txt
 ffmpeg-audio.txt
+**/data/*.svg

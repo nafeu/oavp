@@ -807,11 +807,13 @@ public class OavpVariable {
   public HashMap<String, Float> customFloatAttrs;
   public HashMap<String, Integer> customIntAttrs;
   public HashMap<String, String> customStringAttrs;
+  public Set<String> options;
 
   OavpVariable() {
     this.customFloatAttrs = new HashMap<String, Float>();
     this.customIntAttrs = new HashMap<String, Integer>();
     this.customStringAttrs = new HashMap<String, String>();
+    this.options = new HashSet<String>();
   }
 
   OavpVariable(String name) {
@@ -819,6 +821,7 @@ public class OavpVariable {
     this.customFloatAttrs = new HashMap<String, Float>();
     this.customIntAttrs = new HashMap<String, Integer>();
     this.customStringAttrs = new HashMap<String, String>();
+    this.options = new HashSet<String>();
   }
 
   public OavpVariable set(String prop, int input) {
@@ -875,6 +878,11 @@ public class OavpVariable {
 
   public OavpVariable set(String prop, String input) {
     this.customStringAttrs.put(prop, input);
+    return this;
+  }
+
+  public OavpVariable set(String option) {
+    this.options.add(option);
     return this;
   }
 
@@ -1455,6 +1463,8 @@ public class OavpObjectManager {
     String cloneName = getCloneName(this.getActiveVariable().name);
     OavpObject clone = this.getActiveObject().clone(cloneName);
 
+    clone.setName(cloneName);
+    clone.setup();
     objectsStorage.put(cloneName, clone);
     activeObjects.add(clone);
     lastActiveVariable();
@@ -1548,7 +1558,11 @@ public class OavpObjectManager {
         objectData.append(".set(\"" + customAttrEntry.getKey() + "\", \"" + customAttrEntry.getValue() + "\")");
       }
 
-      objectData.append(";\n");
+      for (String option : variable.options) {
+        objectData.append(".set(\"" + option + "\")");
+      }
+
+      objectData.append(";");
     }
     StringSelection stringSelection = new StringSelection(objectData.toString());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -1572,13 +1586,13 @@ public class OavpObject {
     this.variable.name = name;
   }
 
-  public OavpObject clone(String name) {
+  public OavpObject clone(String cloneName) {
     String rawClassName = this.getClass().getName();
     String className = rawClassName.split("OavpObj")[1];
     OavpObject clone = createObject(className);
     OavpVariable cloneVariable = clone.getVariable();
 
-    cloneVariable.name = name;
+    cloneVariable.name = cloneName;
     cloneVariable.x = this.variable.x;
     cloneVariable.xOrig = this.variable.xOrig;
     cloneVariable.xr = this.variable.xr;
