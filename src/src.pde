@@ -189,8 +189,10 @@ synchronized void draw() {
         editor.handleKeyInputs();
         updateHelpers();
         updateEntities();
-        drawSketch();
-        objects.draw();
+        if (!editor.isCreateMode) {
+          drawSketch();
+          objects.draw();
+        }
         editor.drawIfEditMode();
       }
     } catch (Exception e) {

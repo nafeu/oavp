@@ -1,6 +1,7 @@
 public class OavpEditor {
   private boolean isEditMode = false;
   private boolean isHelpMode = false;
+  private boolean isCreateMode = false;
   private OavpInput input;
   private OavpObjectManager objects;
   private OavpText text;
@@ -8,6 +9,7 @@ public class OavpEditor {
   private int colorPaletteIndex = 0;
   private int colorIndex = 0;
   private color[] activePalette;
+  private int createModeSelectionIndex = 0;
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
@@ -22,7 +24,9 @@ public class OavpEditor {
     }
 
     if (this.isEditMode) {
-      if (this.activeTool == TOOL_MOVE) {
+      if (this.isCreateMode) {
+        handleCreateModeInputs();
+      } else if (this.activeTool == TOOL_MOVE) {
         handleToolMoveInputs();
       } else if (this.activeTool == TOOL_RESIZE) {
         handleToolResizeInputs();
@@ -85,7 +89,7 @@ public class OavpEditor {
       }
 
       if (input.isPressed(KEY_H)) {
-        toggleHelpMode();
+        toggleCreateMode();
       }
 
       if (input.isPressed(KEY_X)) {
@@ -456,14 +460,60 @@ public class OavpEditor {
     }
   }
 
+  private void handleCreateModeInputs() {
+    if (input.isHoldingShift) {
+
+    }
+
+    if (input.isHoldingControl) {
+
+    }
+
+    if (input.isPressed(UP)) {
+
+    }
+
+    if (input.isPressed(DOWN)) {
+
+    }
+
+    if (input.isPressed(RIGHT)) {
+
+    }
+
+    if (input.isPressed(LEFT)) {
+
+    }
+
+    if (input.isPressed(ENTER)) {
+      println(this.createModeSelectionIndex);
+    }
+
+    if (input.isMousePressed()) {
+
+    }
+
+    if (input.isMouseReleased()) {
+      println(this.createModeSelectionIndex);
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
   private void toggleEditMode() {
     if (objects.activeObjects.size() > 0) {
       this.isEditMode = !this.isEditMode;
     }
   }
 
-  private void toggleHelpMode() {
-    this.isHelpMode = !this.isHelpMode;
+  private void toggleCreateMode() {
+    this.isCreateMode = !this.isCreateMode;
   }
 
   public boolean isEditMode() {
@@ -471,20 +521,12 @@ public class OavpEditor {
   }
 
   public void draw() {
-    OavpVariable activeVariable = objects.getActiveVariable();
-
-    drawToolMeta(activeVariable, this.activeTool);
-
-    if (this.isHelpMode) {
-      text.create()
-        .colour(palette.flat.white)
-        .size(12)
-        .moveDown(oavp.height(0.95))
-        .moveRight(oavp.width(0.02))
-        .write("e: edit | t: transform | s: resize | m: move | r: rotate\nj: prev | l: next | d: dupl")
-        .done();
+    if (this.isCreateMode) {
+      drawCreateMenu();
+    } else {
+      OavpVariable activeVariable = objects.getActiveVariable();
+      drawToolMeta(activeVariable, this.activeTool);
     }
-
   }
 
   private String getActiveToolName() {
@@ -719,6 +761,37 @@ public class OavpEditor {
           .done();
 
         break;
+    }
+  }
+
+  public void drawCreateMenu() {
+    int columnCount = 3;
+    int rowCount = 8;
+    float colWidth = oavp.width(0.8) / columnCount;
+    float rowHeight = oavp.height(0.8) / rowCount;
+    float xPadding = oavp.width(0.1);
+    float yPadding = oavp.height(0.1);
+
+    for (int i = 0; i < columnCount; i++) {
+      for (int j = 0; j < rowCount; j++) {
+        float x0 = (i * colWidth) + xPadding;
+        float x1 = (i * colWidth) + colWidth + xPadding;
+        float y0 = (j * rowHeight) + yPadding;
+        float y1 = (j * rowHeight) + rowHeight + yPadding;
+
+        if (
+          (mouseX >= x0 && mouseX < x1) &&
+          (mouseY >= y0 && mouseY < y1)
+        ) {
+          this.createModeSelectionIndex = i + (j * columnCount);
+          fill(palette.flat.red);
+        } else {
+          fill(palette.flat.white);
+        }
+
+        rectMode(CORNER);
+        rect(x0, y0, colWidth, rowHeight);
+      }
     }
   }
 }
