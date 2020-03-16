@@ -558,6 +558,26 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicZRectangle(float w, float h, float distance) {
+      rectMode(CENTER);
+      pushMatrix();
+      translate(0, 0, distance);
+      rect(0, 0, w, h);
+      popMatrix();
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicZRectangle(float w, float h, float distance, float r) {
+      rectMode(CENTER);
+      pushMatrix();
+      translate(0, 0, distance);
+      rect(0, 0, w, h, r);
+      popMatrix();
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a mesh generated with an interval of incoming spectrum values
      * @param scale the scale of the mesh
@@ -569,8 +589,8 @@ class OavpVisualizer {
       int rows = interval.getIntervalSize();
       int cols = analysis.getAvgSize();
 
-      float rowScale = currWidth / rows;
-      float colScale = currHeight / cols;
+      float rowScale = currHeight / rows;
+      float colScale = currWidth / cols;
 
       for (int i = 0; i < rows - 1; i++) {
         beginShape(TRIANGLE_STRIP);

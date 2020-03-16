@@ -803,6 +803,8 @@ public class OavpVariable {
   public int gridScale = 5;
   public color strokeColor;
   public color fillColor;
+  public float strokeWeight = 2;
+  public float strokeWeightOrig = 2;
   public String name = "";
   public HashMap<String, Float> customFloatAttrs;
   public HashMap<String, Integer> customIntAttrs;
@@ -846,6 +848,9 @@ public class OavpVariable {
         break;
       case "strokeColor":
         this.strokeColor(input);
+        break;
+      case "strokeWeight":
+        this.strokeWeight(input);
         break;
       case "fillColor":
         this.fillColor(input);
@@ -892,6 +897,7 @@ public class OavpVariable {
     return this;
   }
 
+
   public OavpVariable previewSize(int multiplier) {
     this.size = this.sizeOrig + ((multiplier * -1) * gridScale);
     return this;
@@ -899,6 +905,22 @@ public class OavpVariable {
 
   public OavpVariable commitSize() {
     this.sizeOrig = this.size;
+    return this;
+  }
+
+  public OavpVariable strokeWeight(float input) {
+    this.strokeWeight = input;
+    this.strokeWeightOrig = input;
+    return this;
+  }
+
+  public OavpVariable previewStrokeWeight(float multiplier) {
+    this.strokeWeight = this.strokeWeightOrig + (multiplier * -1);
+    return this;
+  }
+
+  public OavpVariable commitStrokeWeight() {
+    this.strokeWeightOrig = this.strokeWeight;
     return this;
   }
 
@@ -1463,8 +1485,6 @@ public class OavpObjectManager {
     String cloneName = getCloneName(this.getActiveVariable().name);
     OavpObject clone = this.getActiveObject().clone(cloneName);
 
-    clone.setName(cloneName);
-    clone.setup();
     objectsStorage.put(cloneName, clone);
     activeObjects.add(clone);
     lastActiveVariable();
@@ -1544,6 +1564,7 @@ public class OavpObjectManager {
       if (variable.size != 100) { objectData.append(".set(\"size\"," + variable.size + ")"); }
 
       objectData.append(".set(\"strokeColor\"," + variable.strokeColor + ")");
+      objectData.append(".set(\"strokeWeight\"," + variable.strokeWeight + ")");
       objectData.append(".set(\"fillColor\"," + variable.fillColor + ")");
 
       for (HashMap.Entry<String, Float> customAttrEntry : variable.customFloatAttrs.entrySet()) {
@@ -1592,6 +1613,9 @@ public class OavpObject {
     OavpObject clone = createObject(className);
     OavpVariable cloneVariable = clone.getVariable();
 
+    clone.setName(cloneName);
+    clone.setup();
+
     cloneVariable.name = cloneName;
     cloneVariable.x = this.variable.x;
     cloneVariable.xOrig = this.variable.xOrig;
@@ -1614,19 +1638,26 @@ public class OavpObject {
     cloneVariable.size = this.variable.size;
     cloneVariable.sizeOrig = this.variable.sizeOrig;
     cloneVariable.strokeColor = this.variable.strokeColor;
+    cloneVariable.strokeWeight = this.variable.strokeWeight;
+    cloneVariable.strokeWeightOrig = this.variable.strokeWeightOrig;
     cloneVariable.fillColor = this.variable.fillColor;
 
     for (HashMap.Entry<String, Float> entry : this.variable.customFloatAttrs.entrySet()) {
-      cloneVariable.set(entry.getKey(), entry.getValue());
+      cloneVariable.set(entry.getKey(), (float) entry.getValue());
     }
 
     for (HashMap.Entry<String, Integer> entry : this.variable.customIntAttrs.entrySet()) {
-      cloneVariable.set(entry.getKey(), entry.getValue());
+      cloneVariable.set(entry.getKey(), (int) entry.getValue());
     }
 
     for (HashMap.Entry<String, String> entry : this.variable.customStringAttrs.entrySet()) {
-      cloneVariable.set(entry.getKey(), entry.getValue());
+      cloneVariable.set(entry.getKey(), (String) entry.getValue());
     }
+
+    for (String option : this.variable.options) {
+      cloneVariable.set(option);
+    }
+
 
     return clone;
   }

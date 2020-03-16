@@ -23,6 +23,9 @@ public OavpObject createObject(String className) {
     case "SpectrumMesh":
       object = new OavpObjSpectrumMesh();
       break;
+    case "ZRectangles":
+      object = new OavpObjZRectangles();
+      break;
     default:
       object = new OavpObject();
   }
@@ -212,8 +215,7 @@ public class OavpObjGhostSplash extends OavpObject {
 
 public class OavpObjSpectrumMesh extends OavpObject {
   public void setup() {
-    variable
-      .size(100);
+    variable.size(100);
     entities.addInterval(variable.name, 30, analysis.getAvgSize());
   }
 
@@ -230,13 +232,57 @@ public class OavpObjSpectrumMesh extends OavpObject {
       .fillColor(variable.fillColor)
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr)
-      .moveUp(oavp.width(0.125))
-      .rotate(45, 0, 45)
       .dimensions(variable.w, variable.h)
+      .moveLeft(variable.w / 2)
+      .moveUp(variable.h / 2)
       .draw.intervalSpectrumMesh(variable.size, 2)
-      // .draw.basicZSquare(oavp.width(0.4), oscillate(-100, 100, 0.005))
-      // .draw.basicZSquare(oavp.width(0.45), oscillate(-100, 100, 0.010))
-      // .draw.basicZSquare(oavp.width(0.5), oscillate(-100, 100, 0.015))
       .done();
+  }
+}
+
+public class OavpObjZRectangles extends OavpObject {
+  public void setup() {
+    variable
+      .size(100)
+      .set("count", 3)
+      .set("gap", 0.10)
+      .set("radius", 50);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .strokeColor(variable.strokeColor)
+      .fillColor(variable.fillColor)
+      .strokeWeightStyle(variable.strokeWeight)
+      .move(variable.x, variable.y, variable.z)
+      .rotate(variable.xr, variable.yr, variable.zr)
+      .dimensions(variable.w, variable.h);
+
+    int count = variable.customIntAttrs.get("count");
+    float gap = variable.customFloatAttrs.get("gap");
+
+    for (int i = 0; i < count; i++) {
+      if (variable.options.contains("radial")) {
+        int radius = variable.customIntAttrs.get("radius");
+        visualizers
+          .draw.basicZRectangle(
+            variable.w * (1.00 - (gap * i)),
+            variable.h * (1.00 - (gap * i)),
+            oscillate(-variable.size, variable.size, 0.015 - (0.001 * i)),
+            radius
+          );
+      } else {
+        visualizers
+          .draw.basicZRectangle(
+            variable.w * (1.00 - (gap * i)),
+            variable.h * (1.00 - (gap * i)),
+            oscillate(-variable.size, variable.size, 0.015 - (0.001 * i))
+          );
+      }
+    }
+
+    visualizers.done();
   }
 }

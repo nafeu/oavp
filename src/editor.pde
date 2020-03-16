@@ -36,6 +36,8 @@ public class OavpEditor {
         handleToolTurnInputs();
       } else if (this.activeTool == TOOL_COLOR) {
         handleToolColorInputs();
+      } else if (this.activeTool == TOOL_WEIGHT) {
+        handleToolWeightInputs();
       }
 
       if (input.isPressed(KEY_L)) {
@@ -72,6 +74,10 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_C)) {
         this.activeTool = TOOL_COLOR;
+      }
+
+      if (input.isPressed(KEY_B)) {
+        this.activeTool = TOOL_WEIGHT;
       }
 
       if (input.isPressed(KEY_D)) {
@@ -413,6 +419,43 @@ public class OavpEditor {
     }
   }
 
+  private void handleToolWeightInputs() {
+    float delta = DELTA_WEIGHT;
+
+    if (input.isHoldingShift) {
+      delta = DELTA_WEIGHT_SHIFT;
+    }
+
+    if (input.isHoldingControl) {
+      delta = DELTA_WEIGHT_CTRL;
+    }
+
+    if (input.isPressed(UP)) {
+      objects.getActiveVariable().previewStrokeWeight(delta * -1).commitStrokeWeight();
+    }
+
+    if (input.isPressed(DOWN)) {
+      objects.getActiveVariable().previewStrokeWeight(delta).commitStrokeWeight();
+    }
+
+    if (input.isMousePressed()) {
+      objects.getActiveVariable().previewStrokeWeight(input.getYGridTicks() * delta);
+    }
+
+    if (input.isMouseReleased()) {
+      objects.getActiveVariable().commitStrokeWeight();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
   private void toggleEditMode() {
     if (objects.activeObjects.size() > 0) {
       this.isEditMode = !this.isEditMode;
@@ -465,6 +508,9 @@ public class OavpEditor {
     }
     if (this.activeTool == TOOL_COLOR) {
       return "color";
+    }
+    if (this.activeTool == TOOL_WEIGHT) {
+      return "weight";
     }
     return "";
   }
@@ -651,6 +697,28 @@ public class OavpEditor {
           .done();
 
         break;
+
+      case 7: // WEIGHT
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.darkPrimary)
+          .noFillStyle()
+          .strokeWeightStyle(activeVariable.strokeWeight)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.basicRectangle(50, 10)
+          .done();
+
+        text.create()
+          .center().middle()
+          .colour(palette.flat.darkPrimary)
+          .size(10)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .moveDown(20)
+          .write("weight: " + activeVariable.strokeWeight)
+          .done();
+
+        break;
     }
   }
 }
@@ -663,6 +731,7 @@ int TOOL_ROTATE = 3;
 int TOOL_ARRANGE = 4;
 int TOOL_TURN = 5;
 int TOOL_COLOR = 6;
+int TOOL_WEIGHT = 7;
 
 // KEYS
 int KEY_ENTER = 10;
@@ -716,3 +785,7 @@ int DELTA_ARRANGE_CTRL = 1;
 int DELTA_TURN = 3;
 int DELTA_TURN_SHIFT = 2;
 int DELTA_TURN_CTRL = 1;
+
+float DELTA_WEIGHT = 2.0;
+float DELTA_WEIGHT_SHIFT = 1.0;
+float DELTA_WEIGHT_CTRL = 0.25;
