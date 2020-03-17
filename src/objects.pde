@@ -1,7 +1,9 @@
 String[] OBJECT_LIST = {
-  "BasicRectangle",
-  "BasicRectangleSpectrum",
-  "BasicCircle",
+  "StaticRectangle",
+  "LiveRectangle",
+  "StaticRectangleSpectrum",
+  "StaticCircle",
+  "LiveCircle",
   "GhostSplash",
   "SpectrumMesh",
   "ZRectangles"
@@ -11,14 +13,20 @@ public OavpObject createObject(String className) {
   OavpObject object;
 
   switch (className) {
-    case "BasicRectangle":
-      object = new OavpObjBasicRectangle();
+    case "StaticRectangle":
+      object = new OavpObjStaticRectangle();
       break;
-    case "BasicRectangleSpectrum":
-      object = new OavpObjBasicRectangleSpectrum();
+    case "LiveRectangle":
+      object = new OavpObjLiveRectangle();
       break;
-    case "BasicCircle":
-      object = new OavpObjBasicCircle();
+    case "StaticRectangleSpectrum":
+      object = new OavpObjStaticRectangleSpectrum();
+      break;
+    case "StaticCircle":
+      object = new OavpObjStaticCircle();
+      break;
+    case "LiveCircle":
+      object = new OavpObjLiveCircle();
       break;
     case "Svg":
       object = new OavpObjSvg();
@@ -39,7 +47,7 @@ public OavpObject createObject(String className) {
   return object;
 }
 
-public class OavpObjBasicRectangle extends OavpObject {
+public class OavpObjStaticRectangle extends OavpObject {
   public void setup() {
     variable
       .w(200)
@@ -53,6 +61,7 @@ public class OavpObjBasicRectangle extends OavpObject {
       .create()
       .center().middle()
       .strokeColor(variable.strokeColor)
+      .fillColor(variable.fillColor)
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr)
       .draw.basicRectangle(
@@ -63,7 +72,34 @@ public class OavpObjBasicRectangle extends OavpObject {
   }
 }
 
-public class OavpObjBasicRectangleSpectrum extends OavpObject {
+public class OavpObjLiveRectangle extends OavpObject {
+  public void setup() {
+    variable
+      .w(200)
+      .set("w-mod", 200)
+      .h(50)
+      .set("h-mod", 200)
+      .strokeColor(palette.flat.white)
+      .size(0);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .strokeColor(variable.strokeColor)
+      .fillColor(variable.fillColor)
+      .move(variable.x, variable.y, variable.z)
+      .rotate(variable.xr, variable.yr, variable.zr)
+      .draw.basicRectangle(
+        variable.w + (variable.customIntAttrs.get("w-mod") * analysis.getLevel()),
+        variable.h + (variable.customIntAttrs.get("h-mod") * analysis.getLevel()),
+        variable.size)
+      .done();
+  }
+}
+
+public class OavpObjStaticRectangleSpectrum extends OavpObject {
   public void setup() {
     variable
       .w(100)
@@ -101,7 +137,7 @@ public class OavpObjBasicRectangleSpectrum extends OavpObject {
   }
 }
 
-public class OavpObjBasicCircle extends OavpObject {
+public class OavpObjStaticCircle extends OavpObject {
   public void setup() {
     variable
       .size(100)
@@ -116,6 +152,27 @@ public class OavpObjBasicCircle extends OavpObject {
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr)
       .draw.basicCircle(variable.size)
+      .done();
+  }
+}
+
+public class OavpObjLiveCircle extends OavpObject {
+  public void setup() {
+    variable
+      .size(100)
+      .set("size-mod", 100)
+      .strokeColor(palette.flat.white);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .strokeColor(variable.strokeColor)
+      .fillColor(variable.fillColor)
+      .move(variable.x, variable.y, variable.z)
+      .rotate(variable.xr, variable.yr, variable.zr)
+      .draw.basicCircle(variable.size + (variable.customIntAttrs.get("size-mod") * analysis.getLevel()))
       .done();
   }
 }

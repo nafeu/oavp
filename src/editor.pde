@@ -398,13 +398,19 @@ public class OavpEditor {
     }
 
     if (input.isPressed(ENTER)) {
-      if (input.isHoldingControl) {
-        objects.getActiveVariable().fillColor(0);
-        objects.getActiveVariable().strokeColor(0);
-      } else if (input.isHoldingShift) {
+      if (input.isHoldingShift) {
         objects.getActiveVariable().fillColor(this.activePalette[this.colorIndex]);
       } else {
         objects.getActiveVariable().strokeColor(this.activePalette[this.colorIndex]);
+      }
+    }
+
+    if (input.isPressed(KEY_C)) {
+      if (input.isHoldingShift) {
+        objects.getActiveVariable().fillColor(0);
+      }
+      if (input.isHoldingControl) {
+        objects.getActiveVariable().strokeColor(0);
       }
     }
 
