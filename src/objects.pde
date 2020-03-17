@@ -1,3 +1,12 @@
+String[] OBJECT_LIST = {
+  "BasicRectangle",
+  "BasicRectangleSpectrum",
+  "BasicCircle",
+  "GhostSplash",
+  "SpectrumMesh",
+  "ZRectangles"
+};
+
 public OavpObject createObject(String className) {
   OavpObject object;
 
@@ -7,9 +16,6 @@ public OavpObject createObject(String className) {
       break;
     case "BasicRectangleSpectrum":
       object = new OavpObjBasicRectangleSpectrum();
-      break;
-    case "BasicSquare":
-      object = new OavpObjBasicSquare();
       break;
     case "BasicCircle":
       object = new OavpObjBasicCircle();
@@ -38,6 +44,7 @@ public class OavpObjBasicRectangle extends OavpObject {
     variable
       .w(200)
       .h(50)
+      .strokeColor(palette.flat.white)
       .size(0);
   }
 
@@ -60,7 +67,8 @@ public class OavpObjBasicRectangleSpectrum extends OavpObject {
   public void setup() {
     variable
       .w(100)
-      .h(100);
+      .h(100)
+      .strokeColor(palette.flat.white);
   }
 
   public void draw() {
@@ -93,28 +101,11 @@ public class OavpObjBasicRectangleSpectrum extends OavpObject {
   }
 }
 
-public class OavpObjBasicSquare extends OavpObject {
-  public void setup() {
-    variable
-      .size(100);
-  }
-
-  public void draw() {
-    visualizers
-      .create()
-      .center().middle()
-      .strokeColor(variable.strokeColor)
-      .move(variable.x, variable.y, variable.z)
-      .rotate(variable.xr, variable.yr, variable.zr)
-      .draw.basicSquare(variable.size)
-      .done();
-  }
-}
-
 public class OavpObjBasicCircle extends OavpObject {
   public void setup() {
     variable
-      .size(100);
+      .size(100)
+      .strokeColor(palette.flat.white);
   }
 
   public void draw() {
@@ -153,7 +144,8 @@ public class OavpObjGhostSplash extends OavpObject {
   public void setup() {
     variable
       .size(100)
-      .set("varName", variable.name);
+      .set("varName", variable.name)
+      .strokeColor(palette.flat.white);
     entities.addPulser(variable.customStringAttrs.get("varName"));
     entities.addEmissions(variable.customStringAttrs.get("varName"));
     entities.addInterval(variable.customStringAttrs.get("varName"), 10, 1);
@@ -215,7 +207,9 @@ public class OavpObjGhostSplash extends OavpObject {
 
 public class OavpObjSpectrumMesh extends OavpObject {
   public void setup() {
-    variable.size(100);
+    variable
+      .size(100)
+      .strokeColor(palette.flat.white);
     entities.addInterval(variable.name, 30, analysis.getAvgSize());
   }
 
@@ -246,7 +240,8 @@ public class OavpObjZRectangles extends OavpObject {
       .size(100)
       .set("count", 3)
       .set("gap", 0.10)
-      .set("radius", 50);
+      .set("radius", 50)
+      .strokeColor(palette.flat.white);
   }
 
   public void draw() {

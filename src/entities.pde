@@ -1455,7 +1455,12 @@ public class OavpObjectManager {
     object.setup();
     objectsStorage.put(name, object);
     activeObjects.add(object);
+    lastActiveVariable();
     return object.getVariable();
+  }
+
+  public int getCount() {
+    return objectsStorage.size();
   }
 
   public String getCloneName(String originalName) {

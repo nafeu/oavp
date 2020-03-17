@@ -10,12 +10,17 @@ public class OavpEditor {
   private int colorIndex = 0;
   private color[] activePalette;
   private int createModeSelectionIndex = 0;
+  private List<String> selectableObjects;
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
     this.objects = objects;
     this.text = text;
     this.activePalette = palette.getPalette(colorPaletteIndex);
+    this.selectableObjects = new ArrayList<String>();
+    for (String objectType : OBJECT_LIST) {
+      selectableObjects.add(objectType);
+    }
   }
 
   public void handleKeyInputs() {
@@ -470,23 +475,31 @@ public class OavpEditor {
     }
 
     if (input.isPressed(UP)) {
-
+      if (this.createModeSelectionIndex - CREATE_MODE_COLUMN_COUNT >= 0) {
+        this.createModeSelectionIndex -= CREATE_MODE_COLUMN_COUNT;
+      }
     }
 
     if (input.isPressed(DOWN)) {
-
+      if (this.createModeSelectionIndex + CREATE_MODE_COLUMN_COUNT < this.selectableObjects.size()) {
+        this.createModeSelectionIndex += CREATE_MODE_COLUMN_COUNT;
+      }
     }
 
     if (input.isPressed(RIGHT)) {
-
+      if (this.createModeSelectionIndex + 1 < this.selectableObjects.size()) {
+        this.createModeSelectionIndex += 1;
+      }
     }
 
     if (input.isPressed(LEFT)) {
-
+      if (this.createModeSelectionIndex - 1 >= 0) {
+        this.createModeSelectionIndex -= 1;
+      }
     }
 
     if (input.isPressed(ENTER)) {
-      println(this.createModeSelectionIndex);
+      handleCreateModeSelection(this.createModeSelectionIndex);
     }
 
     if (input.isMousePressed()) {
@@ -494,7 +507,7 @@ public class OavpEditor {
     }
 
     if (input.isMouseReleased()) {
-      println(this.createModeSelectionIndex);
+      handleCreateModeSelection(this.createModeSelectionIndex);
     }
 
     if (input.isShiftReleased()) {
@@ -506,14 +519,24 @@ public class OavpEditor {
     }
   }
 
+  private void handleCreateModeSelection(int index) {
+    if (index < this.selectableObjects.size()) {
+      this.isCreateMode = false;
+      String className = this.selectableObjects.get(index);
+      objects.add(className + "-" + UUID.randomUUID().toString(), className);
+    }
+  }
+
   private void toggleEditMode() {
-    if (objects.activeObjects.size() > 0) {
+    if (objects.activeObjects.size() > 0 && !this.isCreateMode) {
       this.isEditMode = !this.isEditMode;
     }
   }
 
   private void toggleCreateMode() {
-    this.isCreateMode = !this.isCreateMode;
+    if (this.isEditMode) {
+      this.isCreateMode = !this.isCreateMode;
+    }
   }
 
   public boolean isEditMode() {
@@ -767,15 +790,13 @@ public class OavpEditor {
   public void drawCreateMenu() {
     palette.reset(palette.flat.black, palette.flat.white, 2);
 
-    int columnCount = 3;
-    int rowCount = 8;
-    float colWidth = oavp.width(0.8) / columnCount;
-    float rowHeight = oavp.height(0.8) / rowCount;
+    float colWidth = oavp.width(0.8) / CREATE_MODE_COLUMN_COUNT;
+    float rowHeight = oavp.height(0.8) / CREATE_MODE_ROW_COUNT;
     float xPadding = oavp.width(0.1);
     float yPadding = oavp.height(0.1);
 
-    for (int i = 0; i < columnCount; i++) {
-      for (int j = 0; j < rowCount; j++) {
+    for (int i = 0; i < CREATE_MODE_COLUMN_COUNT; i++) {
+      for (int j = 0; j < CREATE_MODE_ROW_COUNT; j++) {
         float x0 = (i * colWidth) + xPadding;
         float x1 = (i * colWidth) + colWidth + xPadding;
         float y0 = (j * rowHeight) + yPadding;
@@ -783,24 +804,38 @@ public class OavpEditor {
 
         boolean isWithinSelectionArea = (
           (mouseX >= x0 && mouseX < x1) &&
-          (mouseY >= y0 && mouseY < y1)
+          (mouseY >= y0 && mouseY < y1) || this.createModeSelectionIndex == i + (j * CREATE_MODE_COLUMN_COUNT)
         );
 
         if (isWithinSelectionArea) {
-          this.createModeSelectionIndex = i + (j * columnCount);
+          this.createModeSelectionIndex = i + (j * CREATE_MODE_COLUMN_COUNT);
         }
 
-        text
-          .create()
-          .move(x0, y0)
-          .moveRight(colWidth / 2)
-          .moveDown(rowHeight / 2)
-          .fillColor(palette.flat.white)
-          .size(14)
-          .alignCompleteCenter()
-          .write("asdf")
-          .done();
+        int textIndex = i + (j * CREATE_MODE_COLUMN_COUNT);
 
+        if (textIndex < this.selectableObjects.size()) {
+          text
+            .create()
+            .move(x0, y0)
+            .moveRight(colWidth / 2)
+            .moveDown(rowHeight / 2)
+            .fillColor(palette.flat.white)
+            .size(14)
+            .alignCompleteCenter()
+            .write(this.selectableObjects.get(textIndex))
+            .done();
+            if (isWithinSelectionArea) {
+              visualizers
+                .create()
+                .move(x0, y0)
+                .moveRight(colWidth / 2)
+                .moveDown(rowHeight / 2)
+                .fillColor(palette.flat.white)
+                .moveDown(25)
+                .draw.basicRectangle(10, 10, 25)
+                .done();
+            }
+        }
       }
     }
   }
@@ -872,3 +907,6 @@ int DELTA_TURN_CTRL = 1;
 float DELTA_WEIGHT = 2.0;
 float DELTA_WEIGHT_SHIFT = 1.0;
 float DELTA_WEIGHT_CTRL = 0.25;
+
+int CREATE_MODE_COLUMN_COUNT = 3;
+int CREATE_MODE_ROW_COUNT = 8;
