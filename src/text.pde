@@ -40,7 +40,6 @@ public class OavpText {
   public OavpText done() {
     popStyle();
     popMatrix();
-    textFont(this.regular);
     return this;
   }
 
@@ -189,17 +188,22 @@ public class OavpText {
     return this;
   }
 
+  public OavpText alignCompleteCenter() {
+    textAlign(CENTER, CENTER);
+    return this;
+  }
+
   public OavpText opacity(float opacity) {
     this.opacity = opacity;
     return this;
   }
 
-  public OavpText colour(color inputColour) {
+  public OavpText fillColor(color inputColour) {
     fill(red(inputColour), green(inputColour), blue(inputColour), this.opacity * 255);
     return this;
   }
 
-  public OavpText colour(String inputColour) {
+  public OavpText fillColor(String inputColour) {
     color unhexedColor = unhex("FF" + inputColour.substring(1));
     fill(red(unhexedColor), green(unhexedColor), blue(unhexedColor), this.opacity * 255);
     return this;
@@ -216,6 +220,12 @@ public class OavpText {
     noStroke();
     fill(inputColor);
     text(String.valueOf(value), cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.scale - padding * 2, cursor.scale - padding * 2);
+    return this;
+  }
+
+  public OavpText writeBox(String text, float w, float h) {
+    noStroke();
+    text(text, 0, 0, w, h);
     return this;
   }
 

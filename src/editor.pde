@@ -579,7 +579,7 @@ public class OavpEditor {
 
         text.create()
           .center().middle()
-          .colour(palette.flat.blue)
+          .fillColor(palette.flat.blue)
           .size(10)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .moveDown(20)
@@ -604,7 +604,7 @@ public class OavpEditor {
 
         text.create()
           .center().middle()
-          .colour(palette.flat.orange)
+          .fillColor(palette.flat.orange)
           .size(10)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .moveDown(20)
@@ -627,7 +627,7 @@ public class OavpEditor {
 
         text.create()
           .center().middle()
-          .colour(palette.flat.yellow)
+          .fillColor(palette.flat.yellow)
           .size(10)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .moveDown(20)
@@ -651,7 +651,7 @@ public class OavpEditor {
 
         text.create()
           .center().middle()
-          .colour(palette.flat.green)
+          .fillColor(palette.flat.green)
           .size(10)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .moveDown(20)
@@ -673,7 +673,7 @@ public class OavpEditor {
 
         text.create()
           .center().middle()
-          .colour(palette.flat.teal)
+          .fillColor(palette.flat.teal)
           .size(10)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .moveDown(20)
@@ -695,7 +695,7 @@ public class OavpEditor {
 
         text.create()
           .center().middle()
-          .colour(palette.flat.darkTeal)
+          .fillColor(palette.flat.darkTeal)
           .size(10)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .moveDown(20)
@@ -753,7 +753,7 @@ public class OavpEditor {
 
         text.create()
           .center().middle()
-          .colour(palette.flat.darkPrimary)
+          .fillColor(palette.flat.darkPrimary)
           .size(10)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .moveDown(20)
@@ -765,6 +765,8 @@ public class OavpEditor {
   }
 
   public void drawCreateMenu() {
+    palette.reset(palette.flat.black, palette.flat.white, 2);
+
     int columnCount = 3;
     int rowCount = 8;
     float colWidth = oavp.width(0.8) / columnCount;
@@ -779,18 +781,26 @@ public class OavpEditor {
         float y0 = (j * rowHeight) + yPadding;
         float y1 = (j * rowHeight) + rowHeight + yPadding;
 
-        if (
+        boolean isWithinSelectionArea = (
           (mouseX >= x0 && mouseX < x1) &&
           (mouseY >= y0 && mouseY < y1)
-        ) {
+        );
+
+        if (isWithinSelectionArea) {
           this.createModeSelectionIndex = i + (j * columnCount);
-          fill(palette.flat.red);
-        } else {
-          fill(palette.flat.white);
         }
 
-        rectMode(CORNER);
-        rect(x0, y0, colWidth, rowHeight);
+        text
+          .create()
+          .move(x0, y0)
+          .moveRight(colWidth / 2)
+          .moveDown(rowHeight / 2)
+          .fillColor(palette.flat.white)
+          .size(14)
+          .alignCompleteCenter()
+          .write("asdf")
+          .done();
+
       }
     }
   }
