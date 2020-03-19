@@ -781,29 +781,55 @@ public class OavpToggle {
 
 public class OavpVariable {
   public int x = 0;
+  public float xMod = 0;
+  public String xModType = "";
   public int xOrig = 0;
   public int xr = 0;
+  public float xrMod = 0;
+  public String xrModType = "";
   public int xrOrig = 0;
   public int y = 0;
+  public float yMod = 0;
+  public String yModType = "";
   public int yOrig = 0;
   public int yr = 0;
+  public float yrMod = 0;
+  public String yrModType = "";
   public int yrOrig = 0;
   public int z = 0;
+  public float zMod = 0;
+  public String zModType = "";
   public int zOrig = 0;
   public int zr = 0;
+  public float zrMod = 0;
+  public String zrModType = "";
   public int zrOrig = 0;
   public float w = 100;
+  public float wMod = 0;
+  public String wModType = "";
   public float wOrig = 100;
   public float h = 100;
+  public float hMod = 0;
+  public String hModType = "";
   public float hOrig = 100;
   public float l = 100;
+  public float lMod = 0;
+  public String lModType = "";
   public float lOrig = 100;
   public float size = 100;
+  public float sizeMod = 0;
+  public String sizeModType = "";
   public float sizeOrig = 100;
   public int gridScale = 5;
   public color strokeColor;
+  public float strokeColorMod = 0;
+  public String strokeColorModType = "";
   public color fillColor;
+  public float fillColorMod = 0;
+  public String fillColorModType = "";
   public float strokeWeight = 2;
+  public float strokeWeightMod = 0;
+  public String strokeWeightModType = "";
   public float strokeWeightOrig = 2;
   public String name = "";
   public HashMap<String, Float> customFloatAttrs;
@@ -863,17 +889,56 @@ public class OavpVariable {
 
   public OavpVariable set(String prop, float input) {
     switch (prop) {
+      case "xMod":
+        this.xMod(input);
+        break;
+      case "xrMod":
+        this.xrMod(input);
+        break;
+      case "yMod":
+        this.yMod(input);
+        break;
+      case "yrMod":
+        this.yrMod(input);
+        break;
+      case "zMod":
+        this.zMod(input);
+        break;
+      case "zrMod":
+        this.zrMod(input);
+        break;
+      case "strokeColorMod":
+        this.strokeColorMod(input);
+        break;
+      case "strokeWeightMod":
+        this.strokeWeightMod(input);
+        break;
+      case "fillColorMod":
+        this.fillColorMod(input);
+        break;
       case "w":
         this.w(input);
+        break;
+      case "wMod":
+        this.wMod(input);
         break;
       case "h":
         this.h(input);
         break;
+      case "hMod":
+        this.hMod(input);
+        break;
       case "l":
         this.l(input);
         break;
+      case "lMod":
+        this.lMod(input);
+        break;
       case "size":
         this.size(input);
+        break;
+      case "sizeMod":
+        this.sizeMod(input);
         break;
       default:
         this.customFloatAttrs.put(prop, input);
@@ -882,7 +947,49 @@ public class OavpVariable {
   }
 
   public OavpVariable set(String prop, String input) {
-    this.customStringAttrs.put(prop, input);
+    switch(prop) {
+      case "xModType":
+        this.xModType(input);
+        break;
+      case "xrModType":
+        this.xrModType(input);
+        break;
+      case "yModType":
+        this.yModType(input);
+        break;
+      case "yrModType":
+        this.yrModType(input);
+        break;
+      case "zModType":
+        this.zModType(input);
+        break;
+      case "zrModType":
+        this.zrModType(input);
+        break;
+      case "wModType":
+        this.wModType(input);
+        break;
+      case "hModType":
+        this.hModType(input);
+        break;
+      case "lModType":
+        this.lModType(input);
+        break;
+      case "sizeModType":
+        this.sizeModType(input);
+        break;
+      case "strokeColorModType":
+        this.strokeColorModType(input);
+        break;
+      case "strokeWeightModType":
+        this.xModType(input);
+        break;
+      case "fillColorModType":
+        this.fillColorModType(input);
+        break;
+      default:
+        this.customStringAttrs.put(prop, input);
+    }
     return this;
   }
 
@@ -897,6 +1004,15 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable sizeMod(float input) {
+    this.sizeMod = input;
+    return this;
+  }
+
+  public OavpVariable sizeModType(String input) {
+    this.sizeModType = input;
+    return this;
+  }
 
   public OavpVariable previewSize(int multiplier) {
     this.size = this.sizeOrig + ((multiplier * -1) * gridScale);
@@ -911,6 +1027,16 @@ public class OavpVariable {
   public OavpVariable strokeWeight(float input) {
     this.strokeWeight = input;
     this.strokeWeightOrig = input;
+    return this;
+  }
+
+  public OavpVariable strokeWeightMod(float input) {
+    this.strokeWeightMod = input;
+    return this;
+  }
+
+  public OavpVariable strokeWeightModType(String input) {
+    this.strokeWeightModType = input;
     return this;
   }
 
@@ -930,6 +1056,16 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable wMod(float input) {
+    this.wMod = input;
+    return this;
+  }
+
+  public OavpVariable wModType(String input) {
+    this.wModType = input;
+    return this;
+  }
+
   public OavpVariable previewW(int multiplier) {
     this.w = this.wOrig + ((multiplier * -1) * gridScale);
     return this;
@@ -943,6 +1079,16 @@ public class OavpVariable {
   public OavpVariable h(float input) {
     this.h = input;
     this.hOrig = input;
+    return this;
+  }
+
+  public OavpVariable hMod(float input) {
+    this.hMod = input;
+    return this;
+  }
+
+  public OavpVariable hModType(String input) {
+    this.hModType = input;
     return this;
   }
 
@@ -962,6 +1108,16 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable lMod(float input) {
+    this.lMod = input;
+    return this;
+  }
+
+  public OavpVariable lModType(String input) {
+    this.lModType = input;
+    return this;
+  }
+
   public OavpVariable previewL(int multiplier) {
     this.l = this.lOrig + ((multiplier * -1) * gridScale);
     return this;
@@ -974,6 +1130,16 @@ public class OavpVariable {
 
   public OavpVariable x(int input) {
     this.x = input;
+    return this;
+  }
+
+  public OavpVariable xMod(float input) {
+    this.xMod = input;
+    return this;
+  }
+
+  public OavpVariable xModType(String input) {
+    this.xModType = input;
     return this;
   }
 
@@ -992,6 +1158,16 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable xrMod(float input) {
+    this.xrMod = input;
+    return this;
+  }
+
+  public OavpVariable xrModType(String input) {
+    this.xrModType = input;
+    return this;
+  }
+
   public OavpVariable previewXR(int multiplier) {
     this.xr = this.xrOrig + (multiplier * gridScale);
     return this;
@@ -1004,6 +1180,16 @@ public class OavpVariable {
 
   public OavpVariable y(int input) {
     this.y = input;
+    return this;
+  }
+
+  public OavpVariable yMod(float input) {
+    this.yMod = input;
+    return this;
+  }
+
+  public OavpVariable yModType(String input) {
+    this.yModType = input;
     return this;
   }
 
@@ -1022,6 +1208,16 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable yrMod(float input) {
+    this.yrMod = input;
+    return this;
+  }
+
+  public OavpVariable yrModType(String input) {
+    this.yrModType = input;
+    return this;
+  }
+
   public OavpVariable previewYR(int multiplier) {
     this.yr = this.yrOrig + (multiplier * gridScale);
     return this;
@@ -1037,6 +1233,16 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable zMod(float input) {
+    this.zMod = input;
+    return this;
+  }
+
+  public OavpVariable zModType(String input) {
+    this.zModType = input;
+    return this;
+  }
+
   public OavpVariable previewZ(int multiplier) {
     this.z = this.zOrig + (multiplier * gridScale);
     return this;
@@ -1049,6 +1255,16 @@ public class OavpVariable {
 
   public OavpVariable zr(int input) {
     this.zr = input;
+    return this;
+  }
+
+  public OavpVariable zrMod(float input) {
+    this.zrMod = input;
+    return this;
+  }
+
+  public OavpVariable zrModType(String input) {
+    this.zrModType = input;
     return this;
   }
 
@@ -1072,8 +1288,28 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable strokeColorMod(float input) {
+    this.strokeColorMod = input;
+    return this;
+  }
+
+  public OavpVariable strokeColorModType(String input) {
+    this.strokeColorModType = input;
+    return this;
+  }
+
   public OavpVariable fillColor(color input) {
     this.fillColor = input;
+    return this;
+  }
+
+  public OavpVariable fillColorMod(float input) {
+    this.fillColorMod = input;
+    return this;
+  }
+
+  public OavpVariable fillColorModType(String input) {
+    this.fillColorModType = input;
     return this;
   }
 }
@@ -1459,6 +1695,17 @@ public class OavpObjectManager {
     return object.getVariable();
   }
 
+  public OavpVariable add(String className) {
+    String name = className + "-" + UUID.randomUUID().toString();
+    OavpObject object = createObject(className);
+    object.setName(name);
+    object.setup();
+    objectsStorage.put(name, object);
+    activeObjects.add(object);
+    lastActiveVariable();
+    return object.getVariable();
+  }
+
   public int getCount() {
     return objectsStorage.size();
   }
@@ -1558,19 +1805,44 @@ public class OavpObjectManager {
       objectData.append("\n  objects.add(\"" + objectKey + "\", \"" + objectClassName + "\")");
 
       if (variable.x != 0) { objectData.append(".set(\"x\"," + variable.x + ")"); }
+      if (variable.xMod != 0) { objectData.append(".set(\"xMod\"," + variable.xMod + ")"); }
+      if (variable.xModType != "") { objectData.append(".set(\"xModType\",\"" + variable.xModType + "\")"); }
       if (variable.xr != 0) { objectData.append(".set(\"xr\"," + variable.xr + ")"); }
+      if (variable.xrMod != 0) { objectData.append(".set(\"xrMod\"," + variable.xrMod + ")"); }
+      if (variable.xrModType != "") { objectData.append(".set(\"xrModType\",\"" + variable.xrModType + "\")"); }
       if (variable.y != 0) { objectData.append(".set(\"y\"," + variable.y + ")"); }
+      if (variable.yMod != 0) { objectData.append(".set(\"yMod\"," + variable.yMod + ")"); }
+      if (variable.yModType != "") { objectData.append(".set(\"yModType\",\"" + variable.yModType + "\")"); }
       if (variable.yr != 0) { objectData.append(".set(\"yr\"," + variable.yr + ")"); }
+      if (variable.yrMod != 0) { objectData.append(".set(\"yrMod\"," + variable.yrMod + ")"); }
+      if (variable.yrModType != "") { objectData.append(".set(\"yrModType\",\"" + variable.yrModType + "\")"); }
       if (variable.z != 0) { objectData.append(".set(\"z\"," + variable.z + ")"); }
+      if (variable.zMod != 0) { objectData.append(".set(\"zMod\"," + variable.zMod + ")"); }
+      if (variable.zModType != "") { objectData.append(".set(\"zModType\",\"" + variable.zModType + "\")"); }
       if (variable.zr != 0) { objectData.append(".set(\"zr\"," + variable.zr + ")"); }
+      if (variable.zrMod != 0) { objectData.append(".set(\"zrMod\"," + variable.zrMod + ")"); }
+      if (variable.zrModType != "") { objectData.append(".set(\"zrModType\",\"" + variable.zrModType + "\")"); }
       if (variable.w != 100) { objectData.append(".set(\"w\"," + variable.w + ")"); }
+      if (variable.wMod != 0) { objectData.append(".set(\"wMod\"," + variable.wMod + ")"); }
+      if (variable.wModType != "") { objectData.append(".set(\"wModType\",\"" + variable.wModType + "\")"); }
       if (variable.h != 100) { objectData.append(".set(\"h\"," + variable.h + ")"); }
+      if (variable.hMod != 0) { objectData.append(".set(\"hMod\"," + variable.hMod + ")"); }
+      if (variable.hModType != "") { objectData.append(".set(\"hModType\",\"" + variable.hModType + "\")"); }
       if (variable.l != 100) { objectData.append(".set(\"l\"," + variable.l + ")"); }
+      if (variable.lMod != 0) { objectData.append(".set(\"lMod\"," + variable.lMod + ")"); }
+      if (variable.lModType != "") { objectData.append(".set(\"lModType\",\"" + variable.lModType + "\")"); }
       if (variable.size != 100) { objectData.append(".set(\"size\"," + variable.size + ")"); }
-
+      if (variable.sizeMod != 0) { objectData.append(".set(\"sizeMod\"," + variable.sizeMod + ")"); }
+      if (variable.sizeModType != "") { objectData.append(".set(\"sizeModType\",\"" + variable.sizeModType + "\")"); }
       objectData.append(".set(\"strokeColor\"," + variable.strokeColor + ")");
+      if (variable.strokeColorMod != 0) { objectData.append(".set(\"strokeColorMod\"," + variable.strokeColorMod + ")"); }
+      if (variable.strokeColorModType != "") { objectData.append(".set(\"strokeColorModType\",\"" + variable.strokeColorModType + "\")"); }
       objectData.append(".set(\"strokeWeight\"," + variable.strokeWeight + ")");
+      if (variable.strokeWeightMod != 0) { objectData.append(".set(\"strokeWeightMod\"," + variable.strokeWeightMod + ")"); }
+      if (variable.strokeWeightModType != "") { objectData.append(".set(\"strokeWeightModType\",\"" + variable.strokeWeightModType + "\")"); }
       objectData.append(".set(\"fillColor\"," + variable.fillColor + ")");
+      if (variable.fillColorMod != 0) { objectData.append(".set(\"fillColorMod\"," + variable.fillColorMod + ")"); }
+      if (variable.fillColorModType != "") { objectData.append(".set(\"fillColorModType\",\"" + variable.fillColorModType + "\")"); }
 
       for (HashMap.Entry<String, Float> customAttrEntry : variable.customFloatAttrs.entrySet()) {
         objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
@@ -1623,29 +1895,55 @@ public class OavpObject {
 
     cloneVariable.name = cloneName;
     cloneVariable.x = this.variable.x;
+    cloneVariable.xMod = this.variable.xMod;
+    cloneVariable.xModType = this.variable.xModType;
     cloneVariable.xOrig = this.variable.xOrig;
     cloneVariable.xr = this.variable.xr;
+    cloneVariable.xrMod = this.variable.xrMod;
+    cloneVariable.xrModType = this.variable.xrModType;
     cloneVariable.xrOrig = this.variable.xrOrig;
     cloneVariable.y = this.variable.y;
+    cloneVariable.yMod = this.variable.yMod;
+    cloneVariable.yModType = this.variable.yModType;
     cloneVariable.yOrig = this.variable.yOrig;
     cloneVariable.yr = this.variable.yr;
+    cloneVariable.yrMod = this.variable.yrMod;
+    cloneVariable.yrModType = this.variable.yrModType;
     cloneVariable.yrOrig = this.variable.yrOrig;
     cloneVariable.z = this.variable.z;
+    cloneVariable.zMod = this.variable.zMod;
+    cloneVariable.zModType = this.variable.zModType;
     cloneVariable.zOrig = this.variable.zOrig;
     cloneVariable.zr = this.variable.zr;
+    cloneVariable.zrMod = this.variable.zrMod;
+    cloneVariable.zrModType = this.variable.zrModType;
     cloneVariable.zrOrig = this.variable.zrOrig;
     cloneVariable.w = this.variable.w;
+    cloneVariable.wMod = this.variable.wMod;
+    cloneVariable.wModType = this.variable.wModType;
     cloneVariable.wOrig = this.variable.wOrig;
     cloneVariable.h = this.variable.h;
+    cloneVariable.hMod = this.variable.hMod;
+    cloneVariable.hModType = this.variable.hModType;
     cloneVariable.hOrig = this.variable.hOrig;
     cloneVariable.l = this.variable.l;
+    cloneVariable.lMod = this.variable.lMod;
+    cloneVariable.lModType = this.variable.lModType;
     cloneVariable.lOrig = this.variable.lOrig;
     cloneVariable.size = this.variable.size;
+    cloneVariable.sizeMod = this.variable.sizeMod;
+    cloneVariable.sizeModType = this.variable.sizeModType;
     cloneVariable.sizeOrig = this.variable.sizeOrig;
     cloneVariable.strokeColor = this.variable.strokeColor;
+    cloneVariable.strokeColorMod = this.variable.strokeColorMod;
+    cloneVariable.strokeColorModType = this.variable.strokeColorModType;
     cloneVariable.strokeWeight = this.variable.strokeWeight;
+    cloneVariable.strokeWeightMod = this.variable.strokeWeightMod;
+    cloneVariable.strokeWeightModType = this.variable.strokeWeightModType;
     cloneVariable.strokeWeightOrig = this.variable.strokeWeightOrig;
     cloneVariable.fillColor = this.variable.fillColor;
+    cloneVariable.fillColorMod = this.variable.fillColorMod;
+    cloneVariable.fillColorModType = this.variable.fillColorModType;
 
     for (HashMap.Entry<String, Float> entry : this.variable.customFloatAttrs.entrySet()) {
       cloneVariable.set(entry.getKey(), (float) entry.getValue());
@@ -1677,4 +1975,25 @@ public String extractOavpClassName(String rawName) {
     return "OavpObject";
   }
   return rawName.split("OavpObj")[1];
+}
+
+public float getMod(String type) {
+  float out;
+  switch(type) {
+    case "level":
+      out = analysis.getLevel();
+      break;
+    case "osc-fast":
+      out = oscillate(-1, 1, 0.1);
+      break;
+    case "osc-normal":
+      out = oscillate(-1, 1, 0.05);
+      break;
+    case "osc-slow":
+      out = oscillate(-1, 1, 0.01);
+      break;
+    default:
+      out = 0;
+  }
+  return out;
 }

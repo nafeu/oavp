@@ -127,6 +127,10 @@ void setup() {
     }
 
     setupSketch();
+
+    if (objects.getCount() == 0) {
+      objects.add("blank", "blank");
+    }
   } catch (Exception e) {
     System.err.println("[ oavp ] Error during setup");
     debugError(e);
