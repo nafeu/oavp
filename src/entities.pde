@@ -1312,6 +1312,28 @@ public class OavpVariable {
     this.fillColorModType = input;
     return this;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+
+    Class<?> thisClass = null;
+    try {
+        thisClass = Class.forName(this.getClass().getName());
+
+        Field[] aClassFields = thisClass.getDeclaredFields();
+        sb.append(this.getClass().getSimpleName() + " [ ");
+        for(Field f : aClassFields){
+            String fName = f.getName();
+            sb.append("(" + f.getType() + ") " + fName + " = " + f.get(this) + ", ");
+        }
+        sb.append("]");
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return sb.toString();
+  }
 }
 
 public class OavpEntityManager {
@@ -1977,6 +1999,30 @@ public String extractOavpClassName(String rawName) {
   return rawName.split("OavpObj")[1];
 }
 
+String[] MODIFIER_TYPES = {
+  "none",
+  "level",
+  "osc-fast",
+  "osc-normal",
+  "osc-slow"
+};
+
+String[] MODIFIER_FIELDS = {
+  "xMod",
+  "xrMod",
+  "yMod",
+  "yrMod",
+  "zMod",
+  "zrMod",
+  "wMod",
+  "hMod",
+  "lMod",
+  "sizeMod",
+  "strokeColorMod",
+  "strokeWeightMod",
+  "fillColorMod"
+};
+
 public float getMod(String type) {
   float out;
   switch(type) {
@@ -1984,13 +2030,13 @@ public float getMod(String type) {
       out = analysis.getLevel();
       break;
     case "osc-fast":
-      out = oscillate(-1, 1, 0.1);
-      break;
-    case "osc-normal":
       out = oscillate(-1, 1, 0.05);
       break;
-    case "osc-slow":
+    case "osc-normal":
       out = oscillate(-1, 1, 0.01);
+      break;
+    case "osc-slow":
+      out = oscillate(-1, 1, 0.005);
       break;
     default:
       out = 0;

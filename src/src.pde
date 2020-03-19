@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
+import java.lang.reflect.Field;
 import java.io.File;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;

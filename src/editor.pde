@@ -2,6 +2,7 @@ public class OavpEditor {
   private boolean isEditMode = false;
   private boolean isHelpMode = false;
   private boolean isCreateMode = false;
+  private boolean isSelectModifierTypeMode = false;
   private OavpInput input;
   private OavpObjectManager objects;
   private OavpText text;
@@ -11,6 +12,10 @@ public class OavpEditor {
   private color[] activePalette;
   private int createModeSelectionIndex = 0;
   private List<String> selectableObjects;
+  private List<String> availableModifierFields;
+  private List<String> availableModifierTypes;
+  private int selectedModifierFieldIndex = 0;
+  private int selectedModifierTypeIndex = 0;
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
@@ -18,8 +23,16 @@ public class OavpEditor {
     this.text = text;
     this.activePalette = palette.getPalette(colorPaletteIndex);
     this.selectableObjects = new ArrayList<String>();
+    this.availableModifierFields = new ArrayList<String>();
+    this.availableModifierTypes = new ArrayList<String>();
     for (String objectType : OBJECT_LIST) {
       selectableObjects.add(objectType);
+    }
+    for (String modifierField : MODIFIER_FIELDS) {
+      availableModifierFields.add(modifierField);
+    }
+    for (String modifierType : MODIFIER_TYPES) {
+      availableModifierTypes.add(modifierType);
     }
   }
 
@@ -47,6 +60,8 @@ public class OavpEditor {
         handleToolColorInputs();
       } else if (this.activeTool == TOOL_WEIGHT) {
         handleToolWeightInputs();
+      } else if (this.activeTool == TOOL_MODIFIER) {
+        handleToolModifierInputs();
       }
 
       if (input.isPressed(KEY_L)) {
@@ -103,6 +118,13 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_W)) {
         objects.remove();
+      }
+
+      if (input.isPressed(KEY_Z)) {
+        if (this.activeTool == TOOL_MODIFIER) {
+          this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
+        }
+        this.activeTool = TOOL_MODIFIER;
       }
     }
 
@@ -525,11 +547,86 @@ public class OavpEditor {
     }
   }
 
+  private void handleToolModifierInputs() {
+    float delta = DELTA_MODIFIER;
+
+    if (input.isHoldingShift) {
+      delta = DELTA_MODIFIER_SHIFT;
+    }
+
+    if (input.isHoldingControl) {
+      delta = DELTA_MODIFIER_CTRL;
+    }
+
+    if (input.isPressed(UP)) {
+      if (this.isSelectModifierTypeMode) {
+        if (this.selectedModifierTypeIndex - SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT >= 0) {
+          this.selectedModifierTypeIndex -= SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT;
+        }
+      } else {
+        this.setModifierValue(this.getModifierValue() + delta);
+      }
+    }
+
+    if (input.isPressed(DOWN)) {
+      if (this.isSelectModifierTypeMode) {
+        if (this.selectedModifierTypeIndex + SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT < this.availableModifierTypes.size()) {
+          this.selectedModifierTypeIndex += SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT;
+        }
+      } else {
+        this.setModifierValue(this.getModifierValue() - delta);
+      }
+    }
+
+    if (input.isPressed(RIGHT)) {
+      if (this.isSelectModifierTypeMode) {
+        if (this.selectedModifierTypeIndex + 1 < this.selectableObjects.size()) {
+          this.selectedModifierTypeIndex += 1;
+        }
+      } else {
+        if (this.selectedModifierFieldIndex < availableModifierFields.size() - 1) {
+          this.selectedModifierFieldIndex += 1;
+        }
+      }
+    }
+
+    if (input.isPressed(LEFT)) {
+      if (this.isSelectModifierTypeMode) {
+        if (this.selectedModifierTypeIndex - 1 >= 0) {
+          this.selectedModifierTypeIndex -= 1;
+        }
+      } else {
+        if (this.selectedModifierFieldIndex > 0) {
+          this.selectedModifierFieldIndex -= 1;
+        }
+      }
+    }
+
+    if (input.isPressed(ENTER)) {
+      if (this.isSelectModifierTypeMode) {
+        handleModifierTypeSelection(this.selectedModifierTypeIndex);
+      }
+    }
+
+    if (input.isMouseReleased()) {
+      if (this.isSelectModifierTypeMode) {
+        handleModifierTypeSelection(this.selectedModifierTypeIndex);
+      }
+    }
+  }
+
   private void handleCreateModeSelection(int index) {
     if (index < this.selectableObjects.size()) {
       this.isCreateMode = false;
       String className = this.selectableObjects.get(index);
       objects.add(className + "-" + UUID.randomUUID().toString(), className);
+    }
+  }
+
+  private void handleModifierTypeSelection(int index) {
+    if (index < this.availableModifierFields.size()) {
+      this.isSelectModifierTypeMode = false;
+      setModifierType(this.availableModifierTypes.get(selectedModifierTypeIndex));
     }
   }
 
@@ -582,6 +679,9 @@ public class OavpEditor {
     }
     if (this.activeTool == TOOL_WEIGHT) {
       return "weight";
+    }
+    if (this.activeTool == TOOL_MODIFIER) {
+      return "modifier";
     }
     return "";
   }
@@ -790,7 +890,141 @@ public class OavpEditor {
           .done();
 
         break;
+
+      case 8: // MODIFIER
+        if (this.isSelectModifierTypeMode) {
+          palette.reset(palette.flat.black, palette.flat.white, 2);
+
+          float colWidth = oavp.width(0.8) / SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT;
+          float rowHeight = oavp.height(0.8) / SELECT_MODIFIER_TYPE_MODE_ROW_COUNT;
+          float xPadding = oavp.width(0.1);
+          float yPadding = oavp.height(0.1);
+
+          for (int i = 0; i < SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT; i++) {
+            for (int j = 0; j < SELECT_MODIFIER_TYPE_MODE_ROW_COUNT; j++) {
+              float x0 = (i * colWidth) + xPadding;
+              float x1 = (i * colWidth) + colWidth + xPadding;
+              float y0 = (j * rowHeight) + yPadding;
+              float y1 = (j * rowHeight) + rowHeight + yPadding;
+
+              boolean isWithinSelectionArea = (
+                (mouseX >= x0 && mouseX < x1) &&
+                (mouseY >= y0 && mouseY < y1) || this.selectedModifierTypeIndex == i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT)
+              );
+
+              if (isWithinSelectionArea) {
+                this.selectedModifierTypeIndex = i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT);
+              }
+
+              int textIndex = i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT);
+
+              if (textIndex < this.availableModifierTypes.size()) {
+                text
+                  .create()
+                  .move(x0, y0)
+                  .moveRight(colWidth / 2)
+                  .moveDown(rowHeight / 2)
+                  .fillColor(palette.flat.white)
+                  .size(14)
+                  .alignCompleteCenter()
+                  .write(this.availableModifierTypes.get(textIndex))
+                  .done();
+                  if (isWithinSelectionArea) {
+                    visualizers
+                      .create()
+                      .move(x0, y0)
+                      .moveRight(colWidth / 2)
+                      .moveDown(rowHeight / 2)
+                      .fillColor(palette.flat.white)
+                      .moveDown(25)
+                      .draw.basicRectangle(10, 10, 25)
+                      .done();
+                  }
+              }
+            }
+          }
+        } else {
+          visualizers
+            .create()
+            .center().middle()
+            .strokeColor(palette.flat.purple)
+            .noFillStyle()
+            .strokeWeightStyle(2)
+            .move(activeVariable.x, activeVariable.y, activeVariable.z)
+            .draw.basicRectangle(200, 100)
+            .draw.basicCircle(5)
+            .done();
+
+          text.create()
+            .center().middle()
+            .fillColor(palette.flat.purple)
+            .size(10)
+            .move(activeVariable.x, activeVariable.y, activeVariable.z)
+            .moveDown(20)
+            .write(this.getActiveModifierField() + ": " + this.getModifierValue())
+            .moveDown(10)
+            .write("type: " + this.getModifierType())
+            .done();
+        }
+
+        break;
     }
+  }
+
+  private String getActiveModifierField() {
+    return this.availableModifierFields.get(this.selectedModifierFieldIndex);
+  }
+
+  private String getActiveModifierType() {
+    return this.availableModifierTypes.get(this.selectedModifierTypeIndex);
+  }
+
+  private float getModifierValue() {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableModifierFields.get(this.selectedModifierFieldIndex);
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      return (float) field.get(activeVariable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
+  }
+
+  private float setModifierValue(float value) {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableModifierFields.get(this.selectedModifierFieldIndex);
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      field.set(activeVariable, value);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
+  }
+
+  private String getModifierType() {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableModifierFields.get(this.selectedModifierFieldIndex) + "Type";
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      return (String) field.get(activeVariable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return "none";
+  }
+
+  private float setModifierType(String type) {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableModifierFields.get(this.selectedModifierFieldIndex) + "Type";
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      field.set(activeVariable, type);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
   }
 
   public void drawCreateMenu() {
@@ -856,6 +1090,7 @@ int TOOL_ARRANGE = 4;
 int TOOL_TURN = 5;
 int TOOL_COLOR = 6;
 int TOOL_WEIGHT = 7;
+int TOOL_MODIFIER = 8;
 
 // KEYS
 int KEY_ENTER = 10;
@@ -914,5 +1149,12 @@ float DELTA_WEIGHT = 2.0;
 float DELTA_WEIGHT_SHIFT = 1.0;
 float DELTA_WEIGHT_CTRL = 0.25;
 
+float DELTA_MODIFIER = 50.0;
+float DELTA_MODIFIER_SHIFT = 25.0;
+float DELTA_MODIFIER_CTRL = 5.0;
+
 int CREATE_MODE_COLUMN_COUNT = 3;
 int CREATE_MODE_ROW_COUNT = 8;
+
+int SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT = 3;
+int SELECT_MODIFIER_TYPE_MODE_ROW_COUNT = 8;
