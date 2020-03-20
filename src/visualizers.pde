@@ -509,6 +509,13 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicRectangle(float w, float h, float r, int mode) {
+      rectMode(mode);
+      rect(0, 0, w, h, r);
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer basicRectangle(float w, float h, float r) {
       rectMode(CENTER);
       rect(0, 0, w, h, r);

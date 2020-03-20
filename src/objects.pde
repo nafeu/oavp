@@ -58,6 +58,7 @@ public class OavpObjRectangle extends OavpObject {
       .center().middle()
       .strokeColor(variable.strokeColor)
       .fillColor(variable.fillColor)
+      .strokeWeightStyle(variable.strokeWeight)
       .move(
         variable.x + (variable.xMod * getMod(variable.xModType)),
         variable.y + (variable.yMod * getMod(variable.yModType)),

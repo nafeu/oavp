@@ -26,6 +26,12 @@ void updateHelpers() {
   normalMouseY = map(mouseY, 0, height, 0, 1);
 }
 
+float arrayAverage(float... arr) {
+  float sum = 0;
+  for (float f: arr) sum += f;
+  return sum/arr.length;
+}
+
 float floorPosDiff(float pos) {
   float out = pos - floor(pos);
   return out;

@@ -693,6 +693,19 @@ public class OavpEditor {
   }
 
   public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
+    float toolMetaXPadding = oavp.width(0.05);
+    float toolMetaYPadding = oavp.height(0.05);
+    float toolMetaBoxW = 200;
+    float toolMetaBoxH = 100;
+
+    visualizers
+      .create()
+      .move(toolMetaXPadding, toolMetaYPadding)
+      .noStrokeStyle()
+      .fillColor(palette.flat.black)
+      .draw.basicRectangle(toolMetaBoxW, toolMetaBoxH, 0, CORNER)
+      .done();
+
     switch (activeTool) {
       case 0: // MOVE
         visualizers
@@ -702,19 +715,16 @@ public class OavpEditor {
           .noFillStyle()
           .strokeWeightStyle(2)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .draw.basicSquare(100)
+          .draw.basicRectangle(95, 95)
           .draw.basicCircle(10)
           .done();
 
         text.create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .fillColor(palette.flat.blue)
-          .size(10)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .moveDown(20)
-          .write("x: " + activeVariable.x)
-          .moveDown(10)
-          .write("y: " + activeVariable.y)
+          .size(20)
+          .moveDown(toolMetaBoxH * 0.2)
+          .write("x: " + activeVariable.x + "\ny: " + activeVariable.y)
           .done();
         break;
 
@@ -732,11 +742,10 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .fillColor(palette.flat.orange)
-          .size(10)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .moveDown(20)
+          .size(20)
+          .moveDown(toolMetaBoxH * 0.2)
           .write("size: " + activeVariable.size)
           .done();
         break;
@@ -750,19 +759,16 @@ public class OavpEditor {
           .strokeWeightStyle(2)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
-          .draw.basicRectangle(activeVariable.w, activeVariable.h)
+          .draw.basicRectangle(activeVariable.w - 5, activeVariable.h - 5)
           .draw.basicCircle(10)
           .done();
 
         text.create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .fillColor(palette.flat.yellow)
-          .size(10)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .moveDown(20)
-          .write("w: " + activeVariable.w)
-          .moveDown(10)
-          .write("h: " + activeVariable.h)
+          .size(20)
+          .moveDown(toolMetaBoxH * 0.2)
+          .write("w: " + activeVariable.w + "\nh: " + activeVariable.h)
           .done();
         break;
 
@@ -779,11 +785,10 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .fillColor(palette.flat.green)
-          .size(10)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .moveDown(20)
+          .size(20)
+          .moveDown(toolMetaBoxH * 0.2)
           .write("zr: " + activeVariable.zr)
           .done();
         break;
@@ -801,11 +806,10 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .fillColor(palette.flat.teal)
-          .size(10)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .moveDown(20)
+          .size(20)
+          .moveDown(toolMetaBoxH * 0.2)
           .write("z: " + activeVariable.z)
           .done();
         break;
@@ -823,23 +827,20 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .fillColor(palette.flat.darkTeal)
-          .size(10)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .moveDown(20)
-          .write("xr: " + activeVariable.xr)
-          .moveDown(10)
-          .write("yr: " + activeVariable.yr)
+          .size(20)
+          .moveDown(toolMetaBoxH * 0.2)
+          .write("xr: " + activeVariable.xr + "\nyr: " + activeVariable.yr)
           .done();
         break;
 
       case 6: // COLOR
         visualizers
           .create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .strokeWeightStyle(2)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z);
+          .moveDown(toolMetaBoxH * 0.2);
 
         if (input.isHoldingShift) {
           visualizers
@@ -881,11 +882,10 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .center().middle()
+          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
           .fillColor(palette.flat.darkPrimary)
-          .size(10)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .moveDown(20)
+          .size(20)
+          .moveDown(toolMetaBoxH * 0.2)
           .write("weight: " + activeVariable.strokeWeight)
           .done();
 
@@ -951,19 +951,16 @@ public class OavpEditor {
             .noFillStyle()
             .strokeWeightStyle(2)
             .move(activeVariable.x, activeVariable.y, activeVariable.z)
-            .draw.basicRectangle(200, 100)
+            .draw.basicRectangle(95, 95)
             .draw.basicCircle(5)
             .done();
 
           text.create()
-            .center().middle()
+            .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
             .fillColor(palette.flat.purple)
-            .size(10)
-            .move(activeVariable.x, activeVariable.y, activeVariable.z)
-            .moveDown(20)
-            .write(this.getActiveModifierField() + ": " + this.getModifierValue())
-            .moveDown(10)
-            .write("type: " + this.getModifierType())
+            .size(20)
+            .moveDown(toolMetaBoxH * 0.2)
+            .write(this.getActiveModifierField() + ": " + this.getModifierValue() + "\ntype: " + this.getModifierType())
             .done();
         }
 

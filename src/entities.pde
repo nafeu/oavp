@@ -1700,6 +1700,7 @@ public class OavpObjectManager {
   private HashMap<String, OavpObject> objectsStorage;
   private List<OavpObject> activeObjects;
   private int selectedObjectIndex = 0;
+  private int selectionCounter = 0;
 
   OavpObjectManager() {
     objectsStorage = new HashMap<String, OavpObject>();
@@ -1800,10 +1801,12 @@ public class OavpObjectManager {
     } else {
       this.selectedObjectIndex += 1;
     }
+    println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
   }
 
   public void lastActiveVariable() {
     this.selectedObjectIndex = this.activeObjects.size() - 1;
+    println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
   }
 
   public void prevActiveVariable() {
@@ -1812,6 +1815,7 @@ public class OavpObjectManager {
     } else {
       this.selectedObjectIndex -= 1;
     }
+    println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
   }
 
   public void printObjectData() {
@@ -1844,16 +1848,16 @@ public class OavpObjectManager {
       if (variable.zr != 0) { objectData.append(".set(\"zr\"," + variable.zr + ")"); }
       if (variable.zrMod != 0) { objectData.append(".set(\"zrMod\"," + variable.zrMod + ")"); }
       if (variable.zrModType != "") { objectData.append(".set(\"zrModType\",\"" + variable.zrModType + "\")"); }
-      if (variable.w != 100) { objectData.append(".set(\"w\"," + variable.w + ")"); }
+      objectData.append(".set(\"w\"," + variable.w + ")");
       if (variable.wMod != 0) { objectData.append(".set(\"wMod\"," + variable.wMod + ")"); }
       if (variable.wModType != "") { objectData.append(".set(\"wModType\",\"" + variable.wModType + "\")"); }
-      if (variable.h != 100) { objectData.append(".set(\"h\"," + variable.h + ")"); }
+      objectData.append(".set(\"h\"," + variable.h + ")");
       if (variable.hMod != 0) { objectData.append(".set(\"hMod\"," + variable.hMod + ")"); }
       if (variable.hModType != "") { objectData.append(".set(\"hModType\",\"" + variable.hModType + "\")"); }
-      if (variable.l != 100) { objectData.append(".set(\"l\"," + variable.l + ")"); }
+      objectData.append(".set(\"l\"," + variable.l + ")");
       if (variable.lMod != 0) { objectData.append(".set(\"lMod\"," + variable.lMod + ")"); }
       if (variable.lModType != "") { objectData.append(".set(\"lModType\",\"" + variable.lModType + "\")"); }
-      if (variable.size != 100) { objectData.append(".set(\"size\"," + variable.size + ")"); }
+      objectData.append(".set(\"size\"," + variable.size + ")");
       if (variable.sizeMod != 0) { objectData.append(".set(\"sizeMod\"," + variable.sizeMod + ")"); }
       if (variable.sizeModType != "") { objectData.append(".set(\"sizeModType\",\"" + variable.sizeModType + "\")"); }
       objectData.append(".set(\"strokeColor\"," + variable.strokeColor + ")");
@@ -1999,14 +2003,6 @@ public String extractOavpClassName(String rawName) {
   return rawName.split("OavpObj")[1];
 }
 
-String[] MODIFIER_TYPES = {
-  "none",
-  "level",
-  "osc-fast",
-  "osc-normal",
-  "osc-slow"
-};
-
 String[] MODIFIER_FIELDS = {
   "xMod",
   "xrMod",
@@ -2023,6 +2019,18 @@ String[] MODIFIER_FIELDS = {
   "fillColorMod"
 };
 
+String[] MODIFIER_TYPES = {
+  "none",
+  "level",
+  "osc-fast",
+  "osc-normal",
+  "osc-slow",
+  "lows",
+  "mid-lows",
+  "mid-highs",
+  "highs"
+};
+
 public float getMod(String type) {
   float out;
   switch(type) {
@@ -2037,6 +2045,18 @@ public float getMod(String type) {
       break;
     case "osc-slow":
       out = oscillate(-1, 1, 0.005);
+      break;
+    case "lows":
+      out = map(analysis.getSpectrumChunkAvg(0), -20, 20, 0, 1);
+      break;
+    case "mid-lows":
+      out = map(analysis.getSpectrumChunkAvg(1), -20, 20, 0, 1);
+      break;
+    case "mid-highs":
+      out = map(analysis.getSpectrumChunkAvg(2), -25, 15, 0, 1);
+      break;
+    case "highs":
+      out = map(analysis.getSpectrumChunkAvg(3), -30, 10, 0, 1);
       break;
     default:
       out = 0;

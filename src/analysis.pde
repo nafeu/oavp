@@ -24,8 +24,11 @@ public class OavpAnalysis {
 
   private float[] spectrum;
   private float[] lastSpectrum;
+  private float[] spectrumChunkAvgs;
   private float minSpectrumVal = 0.0f;
   private float maxSpectrumVal = 0.0f;
+
+  private int spectrumChunkCount = 5;
 
   private float[] leftBuffer;
   private float[] lastLeftBuffer;
@@ -92,6 +95,7 @@ public class OavpAnalysis {
       bufferSize = input.bufferSize();
     }
     spectrum = new float[avgSize];
+    spectrumChunkAvgs = new float[spectrumChunkCount];
     leftBuffer = new float[bufferSize];
     rightBuffer = new float[bufferSize];
 
@@ -267,6 +271,13 @@ public class OavpAnalysis {
         minSpectrumVal = spectrum[i];
       }
     }
+
+    int spectrumChunkSize = floor(spectrum.length / 4);
+    int spectrumChunkIndex = 0;
+    for (int i = 0; i < spectrum.length; i += spectrumChunkSize) {
+      spectrumChunkAvgs[spectrumChunkIndex] = arrayAverage(Arrays.copyOfRange(spectrum, i, Math.min(spectrum.length, i + spectrumChunkSize)));
+      spectrumChunkIndex += 1;
+    }
   }
 
   /**
@@ -275,6 +286,10 @@ public class OavpAnalysis {
    */
   public float[] getSpectrum() {
     return spectrum;
+  }
+
+  public float getSpectrumChunkAvg(int index) {
+    return spectrumChunkAvgs[index];
   }
 
   /**
