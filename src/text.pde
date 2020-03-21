@@ -12,7 +12,7 @@ public class OavpText {
     this.cursor = cursor;
     this.padding = 50;
     this.opacity = 1.0;
-    textMode(SHAPE);
+    textMode(MODEL);
     try {
       this.regular = createFont(config.FONT_REGULAR, config.FONT_SIZE);
       this.bold = createFont(config.FONT_BOLD, config.FONT_SIZE);

@@ -2028,7 +2028,15 @@ String[] MODIFIER_TYPES = {
   "lows",
   "mid-lows",
   "mid-highs",
-  "highs"
+  "highs",
+  "beat-pulser",
+  "beat-toggle-hard",
+  "beat-toggle-soft",
+  "beat-counter",
+  "quantized-pulser",
+  "quantized-toggle-hard",
+  "quantized-toggle-soft",
+  "quantized-counter"
 };
 
 public float getMod(String type) {
@@ -2057,6 +2065,30 @@ public float getMod(String type) {
       break;
     case "highs":
       out = map(analysis.getSpectrumChunkAvg(3), -30, 10, 0, 1);
+      break;
+    case "beat-pulser":
+      out = entities.getPulser("beat-pulser").getValue();
+      break;
+    case "beat-toggle-hard":
+      out = entities.getToggle("beat-toggle-hard").getValue();
+      break;
+    case "beat-toggle-soft":
+      out = entities.getToggle("beat-toggle-soft").getValue();
+      break;
+    case "beat-counter":
+      out = entities.getCounter("beat-counter").getValue();
+      break;
+    case "quantized-pulser":
+      out = entities.getPulser("quantized-pulser").getValue();
+      break;
+    case "quantized-toggle-hard":
+      out = entities.getToggle("quantized-toggle-hard").getValue();
+      break;
+    case "quantized-toggle-soft":
+      out = entities.getToggle("quantized-toggle-soft").getValue();
+      break;
+    case "quantized-counter":
+      out = entities.getCounter("quantized-counter").getValue();
       break;
     default:
       out = 0;

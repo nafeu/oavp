@@ -899,6 +899,8 @@ public class OavpEditor {
           float rowHeight = oavp.height(0.8) / SELECT_MODIFIER_TYPE_MODE_ROW_COUNT;
           float xPadding = oavp.width(0.1);
           float yPadding = oavp.height(0.1);
+          float xScreenDisplacement = (width - oavp.width(1)) / 2;
+          float yScreenDisplacement = (height - oavp.height(1)) / 2;
 
           for (int i = 0; i < SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT; i++) {
             for (int j = 0; j < SELECT_MODIFIER_TYPE_MODE_ROW_COUNT; j++) {
@@ -908,8 +910,8 @@ public class OavpEditor {
               float y1 = (j * rowHeight) + rowHeight + yPadding;
 
               boolean isWithinSelectionArea = (
-                (mouseX >= x0 && mouseX < x1) &&
-                (mouseY >= y0 && mouseY < y1) || this.selectedModifierTypeIndex == i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT)
+                (mouseX >= (x0 + xScreenDisplacement) && mouseX < (x1 + xScreenDisplacement)) &&
+                (mouseY >= (y0 + yScreenDisplacement) && mouseY < (y1 + yScreenDisplacement)) || this.selectedModifierTypeIndex == i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT)
               );
 
               if (isWithinSelectionArea) {
@@ -1031,6 +1033,8 @@ public class OavpEditor {
     float rowHeight = oavp.height(0.8) / CREATE_MODE_ROW_COUNT;
     float xPadding = oavp.width(0.1);
     float yPadding = oavp.height(0.1);
+    float xScreenDisplacement = (width - oavp.width(1)) / 2;
+    float yScreenDisplacement = (height - oavp.height(1)) / 2;
 
     for (int i = 0; i < CREATE_MODE_COLUMN_COUNT; i++) {
       for (int j = 0; j < CREATE_MODE_ROW_COUNT; j++) {
@@ -1040,8 +1044,8 @@ public class OavpEditor {
         float y1 = (j * rowHeight) + rowHeight + yPadding;
 
         boolean isWithinSelectionArea = (
-          (mouseX >= x0 && mouseX < x1) &&
-          (mouseY >= y0 && mouseY < y1) || this.createModeSelectionIndex == i + (j * CREATE_MODE_COLUMN_COUNT)
+          (mouseX >= (x0 + xScreenDisplacement) && mouseX < (x1 + xScreenDisplacement)) &&
+          (mouseY >= (y0 + yScreenDisplacement) && mouseY < (y1 + yScreenDisplacement)) || this.createModeSelectionIndex == i + (j * CREATE_MODE_COLUMN_COUNT)
         );
 
         if (isWithinSelectionArea) {

@@ -50,8 +50,8 @@ void setup() {
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // DISPLAY_SETTINGS_START
-  // fullScreen(P3D, 1);
-  size(750, 750, P3D);
+  fullScreen(P3D, 2);
+  // size(750, 750, P3D);
   // DISPLAY_SETTINGS_END
 
   try {
@@ -127,11 +127,9 @@ void setup() {
       videoExport.startMovie();
     }
 
+    setupSketchDefaults();
     setupSketch();
 
-    if (objects.getCount() == 0) {
-      objects.add("blank", "blank");
-    }
   } catch (Exception e) {
     System.err.println("[ oavp ] Error during setup");
     debugError(e);
@@ -188,6 +186,7 @@ synchronized void draw() {
           float frameDurationOffset = (1 / oavp.MOVIE_FPS) * oavp.FRAME_OFFSET_MULTIPLIER;
           while (videoExport.getCurrentTime() < (soundTime + frameDurationOffset)) {
             drawSketch();
+            objects.draw();
             videoExport.saveFrame();
           }
         }
@@ -215,6 +214,7 @@ void updateEntities() {
     entities.update();
     objects.update();
     analysis.forward();
+    updateSketchDefaults();
     updateSketch();
   } catch (Exception e) {
     println("[ oavp ] Error during update loop");
@@ -259,4 +259,32 @@ void mousePressed() {
 
 void mouseReleased() {
   input.handleMouseReleased();
+}
+
+void setupSketchDefaults() {
+  if (objects.getCount() == 0) {
+    objects.add("blank", "blank");
+  }
+
+  entities.addPulser("beat-pulser").duration(0.3);
+  entities.addToggle("beat-toggle-hard").duration(0.3);
+  entities.addToggle("beat-toggle-soft").duration(0.3);
+  entities.addCounter("beat-counter").duration(0.3);
+  entities.addPulser("quantized-pulser").duration(0.3);
+  entities.addToggle("quantized-toggle-hard").duration(0.3);
+  entities.addToggle("quantized-toggle-soft").duration(0.3);
+  entities.addCounter("quantized-counter").duration(0.3);
+}
+
+void updateSketchDefaults() {
+  boolean isBeatOnset = analysis.isBeatOnset();
+  boolean isQuantizedOnset = analysis.isQuantizedOnset();
+  entities.getPulser("beat-pulser").pulseIf(isBeatOnset);
+  entities.getToggle("beat-toggle-hard").toggleIf(isBeatOnset);
+  entities.getToggle("beat-toggle-soft").softToggleIf(isBeatOnset);
+  entities.getCounter("beat-counter").incrementIf(isBeatOnset);
+  entities.getPulser("quantized-pulser").pulseIf(isQuantizedOnset);
+  entities.getToggle("quantized-toggle-hard").toggleIf(isQuantizedOnset);
+  entities.getToggle("quantized-toggle-soft").softToggleIf(isQuantizedOnset);
+  entities.getCounter("quantized-counter").incrementIf(isQuantizedOnset);
 }
