@@ -715,7 +715,8 @@ public class OavpEditor {
           .noFillStyle()
           .strokeWeightStyle(2)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .draw.basicRectangle(95, 95)
+          .draw.positionalLines(width)
+          .draw.basicSquare(100)
           .draw.basicCircle(10)
           .done();
 
@@ -724,7 +725,7 @@ public class OavpEditor {
           .fillColor(palette.flat.blue)
           .size(20)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("x: " + activeVariable.x + "\ny: " + activeVariable.y)
+          .write("move\nx: " + activeVariable.x + "\ny: " + activeVariable.y)
           .done();
         break;
 
@@ -746,7 +747,7 @@ public class OavpEditor {
           .fillColor(palette.flat.orange)
           .size(20)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("size: " + activeVariable.size)
+          .write("resize\nsize: " + activeVariable.size)
           .done();
         break;
 
@@ -768,7 +769,7 @@ public class OavpEditor {
           .fillColor(palette.flat.yellow)
           .size(20)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("w: " + activeVariable.w + "\nh: " + activeVariable.h)
+          .write("transform\nw: " + activeVariable.w + "\nh: " + activeVariable.h)
           .done();
         break;
 
@@ -780,6 +781,8 @@ public class OavpEditor {
           .noFillStyle()
           .strokeWeightStyle(2)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+          .draw.positionalLines(width)
           .rotate(0, 0, 45)
           .draw.basicSquare(15)
           .done();
@@ -789,7 +792,7 @@ public class OavpEditor {
           .fillColor(palette.flat.green)
           .size(20)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("zr: " + activeVariable.zr)
+          .write("rotate\nzr: " + activeVariable.zr)
           .done();
         break;
 
@@ -801,6 +804,7 @@ public class OavpEditor {
           .noFillStyle()
           .strokeWeightStyle(2)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.positionalLines(width)
           .draw.basicSquare(100)
           .draw.basicCircle(10)
           .done();
@@ -810,7 +814,7 @@ public class OavpEditor {
           .fillColor(palette.flat.teal)
           .size(20)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("z: " + activeVariable.z)
+          .write("arrange\nz: " + activeVariable.z)
           .done();
         break;
 
@@ -822,7 +826,8 @@ public class OavpEditor {
           .noFillStyle()
           .strokeWeightStyle(2)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .rotate(0, 0, 45)
+          .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+          .draw.positionalLines(width)
           .draw.basicRectangle(15, 15, 50)
           .done();
 
@@ -831,7 +836,7 @@ public class OavpEditor {
           .fillColor(palette.flat.darkTeal)
           .size(20)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("xr: " + activeVariable.xr + "\nyr: " + activeVariable.yr)
+          .write("turn\nxr: " + activeVariable.xr + "\nyr: " + activeVariable.yr)
           .done();
         break;
 
@@ -886,7 +891,7 @@ public class OavpEditor {
           .fillColor(palette.flat.darkPrimary)
           .size(20)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("weight: " + activeVariable.strokeWeight)
+          .write("weight\nweight: " + activeVariable.strokeWeight)
           .done();
 
         break;
@@ -962,7 +967,7 @@ public class OavpEditor {
             .fillColor(palette.flat.purple)
             .size(20)
             .moveDown(toolMetaBoxH * 0.2)
-            .write(this.getActiveModifierField() + ": " + this.getModifierValue() + "\ntype: " + this.getModifierType())
+            .write("modifier\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + "\ntype: " + this.getModifierType())
             .done();
         }
 

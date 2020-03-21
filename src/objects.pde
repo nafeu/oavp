@@ -185,7 +185,7 @@ public class OavpObjGhostSplash extends OavpObject {
       .strokeColor(palette.flat.white);
     entities.addPulser(variable.customStringAttrs.get("varName"));
     entities.addEmissions(variable.customStringAttrs.get("varName"));
-    entities.addInterval(variable.customStringAttrs.get("varName"), 10, 1);
+    // entities.addInterval(variable.customStringAttrs.get("varName"), 10, 1);
   }
 
   public void update() {
@@ -193,21 +193,21 @@ public class OavpObjGhostSplash extends OavpObject {
       .pulseIf(analysis.isBeatOnset());
     emitters.useEmissions(variable.customStringAttrs.get("varName"))
       .emitIf(analysis.isBeatOnset());
-    entities.getInterval(variable.customStringAttrs.get("varName"))
-      .update(entities.getPulser(variable.customStringAttrs.get("varName")).getValue());
+    // entities.getInterval(variable.customStringAttrs.get("varName"))
+    //   .update(entities.getPulser(variable.customStringAttrs.get("varName")).getValue());
   }
 
   public void draw() {
-    visualizers
-      .useInterval(variable.customStringAttrs.get("varName"))
-      .create()
-      .center().middle()
-      .strokeColor(variable.strokeColor)
-      .fillColor(variable.fillColor)
-      .move(variable.x, variable.y, variable.z)
-      .rotate(variable.xr, variable.yr, variable.zr)
-      .draw.intervalGhostCircle(0, variable.size * 2, 10)
-      .done();
+    // visualizers
+    //   .useInterval(variable.customStringAttrs.get("varName"))
+    //   .create()
+    //   .center().middle()
+    //   .strokeColor(variable.strokeColor)
+    //   .fillColor(variable.fillColor)
+    //   .move(variable.x, variable.y, variable.z)
+    //   .rotate(variable.xr, variable.yr, variable.zr)
+    //   .draw.intervalGhostCircle(0, variable.size * 2, 10)
+    //   .done();
 
     visualizers
       .create()

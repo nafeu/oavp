@@ -523,6 +523,23 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicLine(float x0, float y0, float x1, float y1) {
+      line(x0, y0, x1, y1);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicLine(float x0, float y0, float z0, float x1, float y1, float z1) {
+      line(x0, y0, z0, x1, y1, z1);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer positionalLines(float distance) {
+      line(0 - distance, 0, 0, 0 + distance, 0, 0);
+      line(0, 0 - distance, 0, 0, 0 + distance, 0);
+      line(0, 0, 0 - distance, 0, 0, 0 + distance);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a basic diamond
      * @param size the length and width of the diamond

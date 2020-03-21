@@ -26,6 +26,14 @@ void updateHelpers() {
   normalMouseY = map(mouseY, 0, height, 0, 1);
 }
 
+float getNormalX(float x) {
+  return map(x, 0, width, 0, 1);
+}
+
+float getNormalY(float x) {
+  return map(x, 0, height, 0, 1);
+}
+
 float arrayAverage(float... arr) {
   float sum = 0;
   for (float f: arr) sum += f;
