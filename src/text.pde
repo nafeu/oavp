@@ -61,6 +61,7 @@ public class OavpText {
   public OavpText size(int size) {
     this.size = size;
     textSize(size);
+    textLeading(20);
     return this;
   }
 

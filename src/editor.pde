@@ -391,7 +391,7 @@ public class OavpEditor {
 
     }
 
-    if (input.isPressed(UP)) {
+    if (input.isPressed(LEFT)) {
       if (this.colorIndex == 0) {
         this.colorIndex = this.activePalette.length - 1;
       } else {
@@ -399,17 +399,17 @@ public class OavpEditor {
       }
     }
 
-    if (input.isPressed(DOWN)) {
+    if (input.isPressed(RIGHT)) {
       this.colorIndex = (this.colorIndex + 1) % this.activePalette.length;
     }
 
-    if (input.isPressed(RIGHT)) {
+    if (input.isPressed(DOWN)) {
       this.colorPaletteIndex = (this.colorPaletteIndex + 1) % palette.table.length;
       this.activePalette = palette.getPalette(colorPaletteIndex);
       this.colorIndex = this.colorIndex % this.activePalette.length;
     }
 
-    if (input.isPressed(LEFT)) {
+    if (input.isPressed(UP)) {
       if (this.colorPaletteIndex == 0) {
         this.colorPaletteIndex = palette.table.length - 1;
       } else {
@@ -693,14 +693,15 @@ public class OavpEditor {
   }
 
   public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
-    float toolMetaXPadding = oavp.width(0.05);
-    float toolMetaYPadding = oavp.height(0.05);
-    float toolMetaBoxW = 200;
-    float toolMetaBoxH = 100;
+    float toolMetaXPadding = width * 0.025;
+    float toolMetaYPadding = height * 0.0075;
+    float toolMetaBoxW = width * 1.5;
+    float toolMetaBoxH = height * 0.05;
+    float toolMetaTextPosition = width * 0.17;
 
     visualizers
       .create()
-      .move(toolMetaXPadding, toolMetaYPadding)
+      .moveLeft(width - oavp.width(1))
       .noStrokeStyle()
       .fillColor(palette.flat.black)
       .draw.basicRectangle(toolMetaBoxW, toolMetaBoxH, 0, CORNER)
@@ -713,7 +714,7 @@ public class OavpEditor {
           .center().middle()
           .strokeColor(palette.flat.blue)
           .noFillStyle()
-          .strokeWeightStyle(2)
+          .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .draw.positionalLines(width)
           .draw.basicSquare(100)
@@ -721,11 +722,12 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .fillColor(palette.flat.blue)
-          .size(20)
+          .size(14)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("move\nx: " + activeVariable.x + "\ny: " + activeVariable.y)
+          .write("move " + activeVariable.name + "\nx: " + activeVariable.x + ", y: " + activeVariable.y)
           .done();
         break;
 
@@ -735,7 +737,7 @@ public class OavpEditor {
           .center().middle()
           .strokeColor(palette.flat.orange)
           .noFillStyle()
-          .strokeWeightStyle(2)
+          .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .draw.basicRectangle(activeVariable.size, activeVariable.size, 50)
           .draw.basicSquare(25)
@@ -743,11 +745,12 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .fillColor(palette.flat.orange)
-          .size(20)
+          .size(14)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("resize\nsize: " + activeVariable.size)
+          .write("resize " + activeVariable.name + "\nsize: " + activeVariable.size)
           .done();
         break;
 
@@ -757,7 +760,7 @@ public class OavpEditor {
           .center().middle()
           .strokeColor(palette.flat.yellow)
           .noFillStyle()
-          .strokeWeightStyle(2)
+          .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
           .draw.basicRectangle(activeVariable.w - 5, activeVariable.h - 5)
@@ -765,11 +768,12 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .fillColor(palette.flat.yellow)
-          .size(20)
+          .size(14)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("transform\nw: " + activeVariable.w + "\nh: " + activeVariable.h)
+          .write("transform " + activeVariable.name + "\nw: " + activeVariable.w + ", h: " + activeVariable.h)
           .done();
         break;
 
@@ -779,7 +783,7 @@ public class OavpEditor {
           .center().middle()
           .strokeColor(palette.flat.green)
           .noFillStyle()
-          .strokeWeightStyle(2)
+          .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
           .draw.positionalLines(width)
@@ -788,11 +792,12 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .fillColor(palette.flat.green)
-          .size(20)
+          .size(14)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("rotate\nzr: " + activeVariable.zr)
+          .write("rotate " + activeVariable.name + "\nzr: " + activeVariable.zr)
           .done();
         break;
 
@@ -802,7 +807,7 @@ public class OavpEditor {
           .center().middle()
           .strokeColor(palette.flat.teal)
           .noFillStyle()
-          .strokeWeightStyle(2)
+          .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .draw.positionalLines(width)
           .draw.basicSquare(100)
@@ -810,11 +815,12 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .fillColor(palette.flat.teal)
-          .size(20)
+          .size(14)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("arrange\nz: " + activeVariable.z)
+          .write("arrange " + activeVariable.name + "\nz: " + activeVariable.z)
           .done();
         break;
 
@@ -824,7 +830,7 @@ public class OavpEditor {
           .center().middle()
           .strokeColor(palette.flat.darkTeal)
           .noFillStyle()
-          .strokeWeightStyle(2)
+          .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
           .draw.positionalLines(width)
@@ -832,20 +838,42 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .fillColor(palette.flat.darkTeal)
-          .size(20)
+          .size(14)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("turn\nxr: " + activeVariable.xr + "\nyr: " + activeVariable.yr)
+          .write("turn " + activeVariable.name + "\nxr: " + activeVariable.xr + ", yr: " + activeVariable.yr)
           .done();
         break;
 
       case 6: // COLOR
         visualizers
           .create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .center().middle()
+          .strokeColor(palette.flat.grey)
+          .noFillStyle()
+          .strokeWeightStyle(0.5)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+          .draw.positionalLines(width)
+          .done();
+
+        text.create()
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
+          .fillColor(palette.flat.grey)
+          .size(14)
+          .moveDown(toolMetaBoxH * 0.2)
+          .write("color " + activeVariable.name)
+          .done();
+
+        visualizers
+          .create()
+          .moveLeft(toolMetaTextPosition - 15)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .strokeWeightStyle(2)
-          .moveDown(toolMetaBoxH * 0.2);
+          .moveDown(toolMetaBoxH * 0.4);
 
         if (input.isHoldingShift) {
           visualizers
@@ -860,14 +888,14 @@ public class OavpEditor {
         visualizers
           .draw.basicRectangle(20, 10)
           .strokeColor(palette.flat.black)
-          .moveRight(20)
-          .moveUp(10 * colorIndex);
+          .moveDown(10)
+          .moveLeft(20 * colorIndex);
 
         for (int i = 0; i < this.activePalette.length; i++) {
           visualizers
             .fillColor(this.activePalette[i])
             .draw.basicRectangle(20, 10)
-            .moveDown(10);
+            .moveRight(20);
         }
 
         visualizers
@@ -887,11 +915,12 @@ public class OavpEditor {
           .done();
 
         text.create()
-          .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
           .fillColor(palette.flat.darkPrimary)
-          .size(20)
+          .size(14)
           .moveDown(toolMetaBoxH * 0.2)
-          .write("weight\nweight: " + activeVariable.strokeWeight)
+          .write("weigh " + activeVariable.name + "\nweight: " + activeVariable.strokeWeight)
           .done();
 
         break;
@@ -963,11 +992,12 @@ public class OavpEditor {
             .done();
 
           text.create()
-            .move(toolMetaXPadding + (toolMetaBoxW * 0.1), toolMetaYPadding + (toolMetaBoxH * 0.2))
+            .moveLeft(toolMetaTextPosition)
+            .move(toolMetaXPadding, toolMetaYPadding)
             .fillColor(palette.flat.purple)
-            .size(20)
+            .size(14)
             .moveDown(toolMetaBoxH * 0.2)
-            .write("modifier\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + "\ntype: " + this.getModifierType())
+            .write("modify " + activeVariable.name + "\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + ", type: " + this.getModifierType())
             .done();
         }
 
@@ -1012,7 +1042,7 @@ public class OavpEditor {
     try {
       String fieldName = this.availableModifierFields.get(this.selectedModifierFieldIndex) + "Type";
       Field field = activeVariable.getClass().getDeclaredField(fieldName);
-      return (String) field.get(activeVariable);
+      return (String) field.get(activeVariable) == "" ? "none" : (String) field.get(activeVariable);
     } catch (Exception e) {
       e.printStackTrace();
     }
