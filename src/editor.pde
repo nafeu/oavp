@@ -727,6 +727,7 @@ public class OavpEditor {
           .fillColor(palette.flat.blue)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("move " + activeVariable.name + "\nx: " + activeVariable.x + ", y: " + activeVariable.y)
           .done();
         break;
@@ -750,6 +751,7 @@ public class OavpEditor {
           .fillColor(palette.flat.orange)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("resize " + activeVariable.name + "\nsize: " + activeVariable.size)
           .done();
         break;
@@ -773,6 +775,7 @@ public class OavpEditor {
           .fillColor(palette.flat.yellow)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("transform " + activeVariable.name + "\nw: " + activeVariable.w + ", h: " + activeVariable.h)
           .done();
         break;
@@ -797,6 +800,7 @@ public class OavpEditor {
           .fillColor(palette.flat.green)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("rotate " + activeVariable.name + "\nzr: " + activeVariable.zr)
           .done();
         break;
@@ -820,6 +824,7 @@ public class OavpEditor {
           .fillColor(palette.flat.teal)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("arrange " + activeVariable.name + "\nz: " + activeVariable.z)
           .done();
         break;
@@ -843,6 +848,7 @@ public class OavpEditor {
           .fillColor(palette.flat.darkTeal)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("turn " + activeVariable.name + "\nxr: " + activeVariable.xr + ", yr: " + activeVariable.yr)
           .done();
         break;
@@ -865,6 +871,7 @@ public class OavpEditor {
           .fillColor(palette.flat.grey)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("color " + activeVariable.name)
           .done();
 
@@ -920,6 +927,7 @@ public class OavpEditor {
           .fillColor(palette.flat.darkPrimary)
           .size(14)
           .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
           .write("weigh " + activeVariable.name + "\nweight: " + activeVariable.strokeWeight)
           .done();
 
@@ -997,6 +1005,7 @@ public class OavpEditor {
             .fillColor(palette.flat.purple)
             .size(14)
             .moveDown(toolMetaBoxH * 0.2)
+            .alignLeft()
             .write("modify " + activeVariable.name + "\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + ", type: " + this.getModifierType())
             .done();
         }

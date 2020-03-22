@@ -54,93 +54,17 @@ void setup() {
   // size(750, 750, P3D);
   // DISPLAY_SETTINGS_END
 
+  // Frame Setup
+  frameRate(60);
+  surface.setTitle("oavp");
+
   try {
-    oavp = new OavpConfig();
-
-    // Frame Setup
-    frameRate(oavp.FRAMERATE);
-    surface.setTitle(oavp.FRAME_TITLE);
-
-    // Inputs
-    input = new OavpInput();
-
-    // Library initialization
-    minim = new Minim(context);
-    Ani.init(context);
-
-    // Entity Setup
-    entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
-    entities = new OavpEntityManager(context, minim);
-
-    // Objects Setup
-    objects = new OavpObjectManager();
-
-    // Default Camera Setup
-    defaultCamera = new OavpCamera();
-    defaultCamera.view();
-
-    // Style Setup
-    palette = new OavpPalette(oavp);
-
-    // Audio Analysis Tools Setup
-    analysis = new OavpAnalysis(minim, oavp);
-    thread("analyzeAudio");
-
-    // Main Visualizer Setup
-    visualizers = new OavpVisualizer(analysis, entityPosition, entities);
-    emitters = new OavpEmitter(analysis, entities);
-    shapes = new OavpShape();
-
-    // Autoload Files
-    File[] files = new File(dataPath("")).listFiles();
-
-    for (int i = 0; i < files.length; i++) {
-      String extension = getFileExtension(files[i]);
-      String name = files[i].getName();
-
-      switch(extension) {
-        case "svg":
-          println("[ oavp ] Loading svg: " + name);
-          entities.addSvg(name);
-          break;
-        case "jpg":
-        case "png":
-          println("[ oavp ] Loading image: " + name);
-          entities.addImg(name);
-          break;
-        case "mov":
-          println("[ oavp ] Loading movie: " + name);
-          entities.addMovie(name);
-          break;
-        default:
-          break;
-      }
-    }
-
-    // Activate Video Export
-    if (oavp.ENABLE_VIDEO_RENDER) {
-      reader = createReader(oavp.AUDIO_FILE + ".deep-analysis.txt");
-      videoExport = new VideoExport(this, "export.mp4");
-      videoExport.setFrameRate(oavp.MOVIE_FPS);
-      videoExport.setAudioFileName(oavp.AUDIO_FILE);
-      videoExport.setDebugging(false);
-      videoExport.startMovie();
-    }
-
-    setupSketchDefaults();
-    setupSketch();
-
+    thread("loadApplication");
   } catch (Exception e) {
     System.err.println("[ oavp ] Error during setup");
     debugError(e);
     exit();
   }
-
-  // Typography Setup
-  text = new OavpText(oavp, entityPosition);
-
-  // Editor
-  editor = new OavpEditor(input, objects, text);
 }
 
 boolean firstRender = true;
@@ -151,7 +75,7 @@ synchronized void draw() {
     textSize(25);
     fill(255);
     textAlign(CENTER, CENTER);
-    text("[ analyzing audio ]", oavp.width(0.5), oavp.height(0.5));
+    text("[ loading ]", oavp.width(0.5), oavp.height(0.5));
   } else {
     try {
       if (oavp.ENABLE_VIDEO_RENDER) {
@@ -185,6 +109,7 @@ synchronized void draw() {
           float soundTime = analysisData[0];
           float frameDurationOffset = (1 / oavp.MOVIE_FPS) * oavp.FRAME_OFFSET_MULTIPLIER;
           while (videoExport.getCurrentTime() < (soundTime + frameDurationOffset)) {
+            drawSketchDefaults();
             drawSketch();
             objects.draw();
             videoExport.saveFrame();
@@ -195,6 +120,7 @@ synchronized void draw() {
         updateHelpers();
         updateEntities();
         if (!editor.isCreateMode) {
+          drawSketchDefaults();
           drawSketch();
           objects.draw();
         }
@@ -240,10 +166,87 @@ void movieEvent(Movie m) {
   m.read();
 }
 
-void analyzeAudio() {
+void loadApplication() {
+  oavp = new OavpConfig();
+
+  // Inputs
+  input = new OavpInput();
+
+  // Library initialization
+  minim = new Minim(context);
+  Ani.init(context);
+
+  // Entity Setup
+  entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
+  entities = new OavpEntityManager(context, minim);
+
+  // Objects Setup
+  objects = new OavpObjectManager();
+
+  // Default Camera Setup
+  defaultCamera = new OavpCamera();
+  defaultCamera.view();
+
+  // Style Setup
+  palette = new OavpPalette(oavp);
+
+  // Audio Analysis Tools Setup
+  analysis = new OavpAnalysis(minim, oavp);
+
   if (oavp.ANALYZE_AUDIO) {
     analysis.analyzeAudioFile(oavp);
   }
+
+  // Main Visualizer Setup
+  visualizers = new OavpVisualizer(analysis, entityPosition, entities);
+  emitters = new OavpEmitter(analysis, entities);
+  shapes = new OavpShape();
+
+  // Autoload Files
+  File[] files = new File(dataPath("")).listFiles();
+
+  for (int i = 0; i < files.length; i++) {
+    String extension = getFileExtension(files[i]);
+    String name = files[i].getName();
+
+    switch(extension) {
+      case "svg":
+        println("[ oavp ] Loading svg: " + name);
+        entities.addSvg(name);
+        break;
+      case "jpg":
+      case "png":
+        println("[ oavp ] Loading image: " + name);
+        entities.addImg(name);
+        break;
+      case "mov":
+        println("[ oavp ] Loading movie: " + name);
+        entities.addMovie(name);
+        break;
+      default:
+        break;
+    }
+  }
+
+  // Activate Video Export
+  if (oavp.ENABLE_VIDEO_RENDER) {
+    reader = createReader(oavp.AUDIO_FILE + ".deep-analysis.txt");
+    videoExport = new VideoExport(this, "export.mp4");
+    videoExport.setFrameRate(oavp.MOVIE_FPS);
+    videoExport.setAudioFileName(oavp.AUDIO_FILE);
+    videoExport.setDebugging(false);
+    videoExport.startMovie();
+  }
+
+  setupSketchDefaults();
+  setupSketch();
+
+  // Typography Setup
+  text = new OavpText(oavp, entityPosition);
+
+  // Editor
+  editor = new OavpEditor(input, objects, text);
+
   synchronized(this) {
     loaded = true;
   }
@@ -262,9 +265,10 @@ void mouseReleased() {
 }
 
 void setupSketchDefaults() {
-  if (objects.getCount() == 0) {
-    objects.add("blank", "blank");
-  }
+  objects.add("background", "blank")
+    .fillColor(palette.flat.black)
+    .strokeColor(palette.flat.white)
+    .strokeWeight(2);
 
   entities.addPulser("beat-pulser").duration(0.3);
   entities.addToggle("beat-toggle-hard").duration(0.3);
@@ -287,4 +291,13 @@ void updateSketchDefaults() {
   entities.getToggle("quantized-toggle-hard").toggleIf(isQuantizedOnset);
   entities.getToggle("quantized-toggle-soft").softToggleIf(isQuantizedOnset);
   entities.getCounter("quantized-counter").incrementIf(isQuantizedOnset);
+}
+
+void drawSketchDefaults() {
+  OavpVariable backgroundVariable = objects.get("background").variable;
+  palette.reset(
+    backgroundVariable.fillColor,
+    backgroundVariable.strokeColor,
+    backgroundVariable.strokeWeight
+  );
 }

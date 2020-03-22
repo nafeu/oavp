@@ -1729,6 +1729,10 @@ public class OavpObjectManager {
     return object.getVariable();
   }
 
+  public OavpObject get(String name) {
+    return objectsStorage.get(name);
+  }
+
   public int getCount() {
     return objectsStorage.size();
   }
