@@ -62,6 +62,8 @@ public class OavpEditor {
         handleToolWeightInputs();
       } else if (this.activeTool == TOOL_MODIFIER) {
         handleToolModifierInputs();
+      } else if (this.activeTool == TOOL_VARIATION) {
+        handleToolVariationInputs();
       }
 
       if (input.isPressed(KEY_L)) {
@@ -102,6 +104,10 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_B)) {
         this.activeTool = TOOL_WEIGHT;
+      }
+
+      if (input.isPressed(KEY_V)) {
+        this.activeTool = TOOL_VARIATION;
       }
 
       if (input.isPressed(KEY_D)) {
@@ -615,6 +621,38 @@ public class OavpEditor {
     }
   }
 
+  private void handleToolVariationInputs() {
+    OavpVariable activeVariable = objects.getActiveVariable();
+
+    if (input.isPressed(UP)) {
+      if (activeVariable.variation > 0) {
+        activeVariable.variation -= 1;
+      }
+    }
+
+    if (input.isPressed(DOWN)) {
+      if (activeVariable.variation < activeVariable.variations.size() - 1) {
+        activeVariable.variation += 1;
+      }
+    }
+
+    if (input.isPressed(RIGHT)) {
+
+    }
+
+    if (input.isPressed(LEFT)) {
+
+    }
+
+    if (input.isPressed(ENTER)) {
+
+    }
+
+    if (input.isMouseReleased()) {
+
+    }
+  }
+
   private void handleCreateModeSelection(int index) {
     if (index < this.selectableObjects.size()) {
       this.isCreateMode = false;
@@ -653,37 +691,6 @@ public class OavpEditor {
       OavpVariable activeVariable = objects.getActiveVariable();
       drawToolMeta(activeVariable, this.activeTool);
     }
-  }
-
-  private String getActiveToolName() {
-    if (this.activeTool == TOOL_MOVE) {
-      return "move";
-    }
-    if (this.activeTool == TOOL_ARRANGE) {
-      return "arrange";
-    }
-    if (this.activeTool == TOOL_RESIZE) {
-      return "resize";
-    }
-    if (this.activeTool == TOOL_TRANSFORM) {
-      return "transform";
-    }
-    if (this.activeTool == TOOL_ROTATE) {
-      return "rotate";
-    }
-    if (this.activeTool == TOOL_TURN) {
-      return "turn";
-    }
-    if (this.activeTool == TOOL_COLOR) {
-      return "color";
-    }
-    if (this.activeTool == TOOL_WEIGHT) {
-      return "weight";
-    }
-    if (this.activeTool == TOOL_MODIFIER) {
-      return "modifier";
-    }
-    return "";
   }
 
   public void drawIfEditMode() {
@@ -1009,7 +1016,27 @@ public class OavpEditor {
             .write("modify " + activeVariable.name + "\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + ", type: " + this.getModifierType())
             .done();
         }
+        break;
+      case 9: // VARIATION
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.darkRed)
+          .noFillStyle()
+          .strokeWeightStyle(0.5)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.positionalLines(width)
+          .done();
 
+        text.create()
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
+          .fillColor(palette.flat.darkRed)
+          .size(14)
+          .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
+          .write("variation of " + activeVariable.name + "\ntype: " + activeVariable.getVariation())
+          .done();
         break;
     }
   }
@@ -1126,7 +1153,6 @@ public class OavpEditor {
   }
 }
 
-
 int TOOL_MOVE = 0;
 int TOOL_RESIZE = 1;
 int TOOL_TRANSFORM = 2;
@@ -1136,6 +1162,7 @@ int TOOL_TURN = 5;
 int TOOL_COLOR = 6;
 int TOOL_WEIGHT = 7;
 int TOOL_MODIFIER = 8;
+int TOOL_VARIATION = 9;
 
 // KEYS
 int KEY_ENTER = 10;

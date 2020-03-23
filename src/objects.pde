@@ -80,6 +80,7 @@ public class OavpObjRectangle extends OavpObject {
 public class OavpObjRectangleSpectrum extends OavpObject {
   public void setup() {
     variable
+      .variations("outline")
       .w(100)
       .h(100)
       .strokeColor(palette.flat.white);
@@ -95,7 +96,7 @@ public class OavpObjRectangleSpectrum extends OavpObject {
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr);
 
-    if (variable.options.contains("outline")) {
+    if (variable.ofVariation("outline")) {
       visualizers
         .dimensions(variable.w * 0.9, variable.h * 0.9)
         .draw.basicRectangle(variable.w, variable.h)
@@ -261,19 +262,31 @@ public class OavpObjSpectrumMesh extends OavpObject {
       .center().middle()
       .strokeColor(variable.strokeColor)
       .fillColor(variable.fillColor)
+      .strokeWeightStyle(variable.strokeWeight)
       .move(variable.x, variable.y, variable.z)
       .rotate(variable.xr, variable.yr, variable.zr)
       .dimensions(variable.w, variable.h)
       .moveLeft(variable.w / 2)
-      .moveUp(variable.h / 2)
-      .draw.intervalSpectrumMesh(variable.size, 2)
-      .done();
+      .moveUp(variable.h / 2);
+
+    if (variable.ofVariation("dotted")) {
+      visualizers.draw.intervalSpectrumPoints(variable.size, 2);
+    } else if (variable.ofVariation("z-lines")) {
+      visualizers.draw.intervalSpectrumZLines(variable.size, 2);
+    } else if (variable.ofVariation("x-lines")) {
+      visualizers.draw.intervalSpectrumXLines(variable.size, 2);
+    } else {
+      visualizers.draw.intervalSpectrumMesh(variable.size, 2);
+    }
+
+    visualizers.done();
   }
 }
 
 public class OavpObjZRectangles extends OavpObject {
   public void setup() {
     variable
+      .variations("radial")
       .size(100)
       .set("count", 3)
       .set("gap", 0.10)
@@ -296,7 +309,7 @@ public class OavpObjZRectangles extends OavpObject {
     float gap = variable.customFloatAttrs.get("gap");
 
     for (int i = 0; i < count; i++) {
-      if (variable.options.contains("radial")) {
+      if (variable.ofVariation("radial")) {
         int radius = variable.customIntAttrs.get("radius");
         visualizers
           .draw.basicZRectangle(

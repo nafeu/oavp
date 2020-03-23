@@ -835,13 +835,15 @@ public class OavpVariable {
   public HashMap<String, Float> customFloatAttrs;
   public HashMap<String, Integer> customIntAttrs;
   public HashMap<String, String> customStringAttrs;
-  public Set<String> options;
+  public List<String> variations;
+  public int variation = 0;
 
   OavpVariable() {
     this.customFloatAttrs = new HashMap<String, Float>();
     this.customIntAttrs = new HashMap<String, Integer>();
     this.customStringAttrs = new HashMap<String, String>();
-    this.options = new HashSet<String>();
+    this.variations = new ArrayList();
+    this.variations("default");
   }
 
   OavpVariable(String name) {
@@ -849,7 +851,8 @@ public class OavpVariable {
     this.customFloatAttrs = new HashMap<String, Float>();
     this.customIntAttrs = new HashMap<String, Integer>();
     this.customStringAttrs = new HashMap<String, String>();
-    this.options = new HashSet<String>();
+    this.variations = new ArrayList();
+    this.variations("default");
   }
 
   public OavpVariable set(String prop, int input) {
@@ -987,14 +990,28 @@ public class OavpVariable {
       case "fillColorModType":
         this.fillColorModType(input);
         break;
+      case "variation":
+        this.variation(input);
+        break;
       default:
         this.customStringAttrs.put(prop, input);
     }
     return this;
   }
 
-  public OavpVariable set(String option) {
-    this.options.add(option);
+  public OavpVariable variation(String option) {
+    if (variations.contains(option)) {
+      this.variation = variations.indexOf(option);
+    } else {
+      this.variation = 0;
+    }
+    return this;
+  }
+
+  public OavpVariable variations(String ...options) {
+    for (String option: options) {
+      this.variations.add(option);
+    }
     return this;
   }
 
@@ -1311,6 +1328,14 @@ public class OavpVariable {
   public OavpVariable fillColorModType(String input) {
     this.fillColorModType = input;
     return this;
+  }
+
+  public String getVariation() {
+    return this.variations.get(this.variation);
+  }
+
+  public boolean ofVariation(String input) {
+    return (input == this.variations.get(this.variation));
   }
 
   @Override
@@ -1873,6 +1898,7 @@ public class OavpObjectManager {
       objectData.append(".set(\"fillColor\"," + variable.fillColor + ")");
       if (variable.fillColorMod != 0) { objectData.append(".set(\"fillColorMod\"," + variable.fillColorMod + ")"); }
       if (variable.fillColorModType != "") { objectData.append(".set(\"fillColorModType\",\"" + variable.fillColorModType + "\")"); }
+      if (variable.variation != 0) { objectData.append(".set(\"variation\",\"" + variable.getVariation() + "\")"); }
 
       for (HashMap.Entry<String, Float> customAttrEntry : variable.customFloatAttrs.entrySet()) {
         objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
@@ -1884,10 +1910,6 @@ public class OavpObjectManager {
 
       for (HashMap.Entry<String, String> customAttrEntry : variable.customStringAttrs.entrySet()) {
         objectData.append(".set(\"" + customAttrEntry.getKey() + "\", \"" + customAttrEntry.getValue() + "\")");
-      }
-
-      for (String option : variable.options) {
-        objectData.append(".set(\"" + option + "\")");
       }
 
       objectData.append(";");
@@ -1974,6 +1996,7 @@ public class OavpObject {
     cloneVariable.fillColor = this.variable.fillColor;
     cloneVariable.fillColorMod = this.variable.fillColorMod;
     cloneVariable.fillColorModType = this.variable.fillColorModType;
+    cloneVariable.variation = this.variable.variation;
 
     for (HashMap.Entry<String, Float> entry : this.variable.customFloatAttrs.entrySet()) {
       cloneVariable.set(entry.getKey(), (float) entry.getValue());
@@ -1986,11 +2009,6 @@ public class OavpObject {
     for (HashMap.Entry<String, String> entry : this.variable.customStringAttrs.entrySet()) {
       cloneVariable.set(entry.getKey(), (String) entry.getValue());
     }
-
-    for (String option : this.variable.options) {
-      cloneVariable.set(option);
-    }
-
 
     return clone;
   }

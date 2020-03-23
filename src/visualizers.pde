@@ -630,6 +630,78 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer intervalSpectrumPoints(float scale, int specSample) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
+      int rows = interval.getIntervalSize();
+      int cols = analysis.getAvgSize();
+
+      float rowScale = currHeight / rows;
+      float colScale = currWidth / cols;
+
+      for (int i = 0; i < rows - 1; i++) {
+        for (int j = 0; j < cols; j += specSample) {
+          float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
+          float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
+          point(j * colScale, i * rowScale, specValA * scale);
+          point(j * colScale, (i + 1) * rowScale, specValB * scale);
+        }
+      }
+
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer intervalSpectrumZLines(float scale, int specSample) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
+      int rows = interval.getIntervalSize();
+      int cols = analysis.getAvgSize();
+
+      float rowScale = currHeight / rows;
+      float colScale = currWidth / cols;
+
+      for (int i = 0; i < rows - 1; i++) {
+        for (int j = 0; j < cols; j += specSample) {
+          float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
+          float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
+          line(
+            j * colScale, i * rowScale, 0,
+            j * colScale, i * rowScale, specValA * scale
+          );
+          line(
+            j * colScale, (i + 1) * rowScale, 0,
+            j * colScale, (i + 1) * rowScale, specValB * scale
+          );
+        }
+      }
+
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer intervalSpectrumXLines(float scale, int specSample) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
+      int rows = interval.getIntervalSize();
+      int cols = analysis.getAvgSize();
+
+      float rowScale = currHeight / rows;
+      float colScale = currWidth / cols;
+
+      for (int i = 0; i < rows - 1; i++) {
+        beginShape(LINES);
+        for (int j = 0; j < cols; j += specSample) {
+          float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
+          float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
+          vertex(
+            j * colScale, i * rowScale, specValA * scale
+          );
+          vertex(
+            j * colScale, (i + 1) * rowScale, specValB * scale
+          );
+        }
+        endShape();
+      }
+
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a spectrum visualizer with bars
      * @use draw
