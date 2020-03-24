@@ -64,6 +64,8 @@ public class OavpEditor {
         handleToolModifierInputs();
       } else if (this.activeTool == TOOL_VARIATION) {
         handleToolVariationInputs();
+      } else if (this.activeTool == TOOL_LENGTH) {
+        handleToolLengthInputs();
       }
 
       if (input.isPressed(KEY_L)) {
@@ -108,6 +110,10 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_V)) {
         this.activeTool = TOOL_VARIATION;
+      }
+
+      if (input.isPressed(KEY_G)) {
+        this.activeTool = TOOL_LENGTH;
       }
 
       if (input.isPressed(KEY_D)) {
@@ -653,6 +659,43 @@ public class OavpEditor {
     }
   }
 
+  private void handleToolLengthInputs() {
+    int delta = DELTA_LENGTH;
+
+    if (input.isHoldingShift) {
+      delta = DELTA_LENGTH_SHIFT;
+    }
+
+    if (input.isHoldingControl) {
+      delta = DELTA_LENGTH_CTRL;
+    }
+
+    if (input.isPressed(UP)) {
+      objects.getActiveVariable().previewL(delta * -1).commitL();
+    }
+
+    if (input.isPressed(DOWN)) {
+      objects.getActiveVariable().previewL(delta).commitL();
+    }
+
+    if (input.isMousePressed()) {
+      objects.getActiveVariable().previewL(input.getYGridTicks() * delta);
+    }
+
+    if (input.isMouseReleased()) {
+      objects.getActiveVariable().commitL();
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {
+
+    }
+
+    if (input.isControlReleased()) {
+
+    }
+  }
+
   private void handleCreateModeSelection(int index) {
     if (index < this.selectableObjects.size()) {
       this.isCreateMode = false;
@@ -772,6 +815,7 @@ public class OavpEditor {
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+          .draw.positionalLines(width)
           .draw.basicRectangle(activeVariable.w - 5, activeVariable.h - 5)
           .draw.basicCircle(10)
           .done();
@@ -1017,6 +1061,7 @@ public class OavpEditor {
             .done();
         }
         break;
+
       case 9: // VARIATION
         visualizers
           .create()
@@ -1036,6 +1081,31 @@ public class OavpEditor {
           .moveDown(toolMetaBoxH * 0.2)
           .alignLeft()
           .write("variation of " + activeVariable.name + "\ntype: " + activeVariable.getVariation())
+          .done();
+        break;
+
+      case 10: // LENGTH
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.darkYellow)
+          .noFillStyle()
+          .strokeWeightStyle(0.5)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
+          .draw.positionalLines(width)
+          .draw.basicBox(activeVariable.w - 5, activeVariable.h - 5, activeVariable.l - 5)
+          .draw.basicCircle(10)
+          .done();
+
+        text.create()
+          .moveLeft(toolMetaTextPosition)
+          .move(toolMetaXPadding, toolMetaYPadding)
+          .fillColor(palette.flat.darkYellow)
+          .size(14)
+          .moveDown(toolMetaBoxH * 0.2)
+          .alignLeft()
+          .write("lengthen " + activeVariable.name + "\nl: " + activeVariable.l)
           .done();
         break;
     }
@@ -1163,6 +1233,7 @@ int TOOL_COLOR = 6;
 int TOOL_WEIGHT = 7;
 int TOOL_MODIFIER = 8;
 int TOOL_VARIATION = 9;
+int TOOL_LENGTH = 10;
 
 // KEYS
 int KEY_ENTER = 10;
@@ -1224,6 +1295,10 @@ float DELTA_WEIGHT_CTRL = 0.25;
 float DELTA_MODIFIER = 50.0;
 float DELTA_MODIFIER_SHIFT = 25.0;
 float DELTA_MODIFIER_CTRL = 5.0;
+
+int DELTA_LENGTH = 10;
+int DELTA_LENGTH_SHIFT = 5;
+int DELTA_LENGTH_CTRL = 1;
 
 int CREATE_MODE_COLUMN_COUNT = 3;
 int CREATE_MODE_ROW_COUNT = 8;
