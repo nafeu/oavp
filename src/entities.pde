@@ -1796,8 +1796,9 @@ public class OavpObjectManager {
   }
 
   public void remove() {
-    if (this.activeObjects.size() > 1) {
-      String activeObjectName = this.getActiveVariable().name;
+    String activeObjectName = this.getActiveVariable().name;
+
+    if (activeObjectName != "background") {
       activeObjects.remove(this.getActiveObject());
       objectsStorage.remove(activeObjectName);
       lastActiveVariable();

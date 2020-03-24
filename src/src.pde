@@ -184,6 +184,9 @@ void loadApplication() {
   objects = new OavpObjectManager();
 
   // Default Camera Setup
+  if (oavp.ENABLE_ORTHO) {
+    ortho();
+  }
   defaultCamera = new OavpCamera();
   defaultCamera.view();
 

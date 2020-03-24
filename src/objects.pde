@@ -246,6 +246,11 @@ public class OavpObjGhostSplash extends OavpObject {
 public class OavpObjSpectrumMesh extends OavpObject {
   public void setup() {
     variable
+      .variations(
+        "dotted",
+        "z-lines",
+        "x-lines"
+      )
       .size(100)
       .strokeColor(palette.flat.white);
     entities.addInterval(variable.name, 30, analysis.getAvgSize());
