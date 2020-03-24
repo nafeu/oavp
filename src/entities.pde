@@ -2101,6 +2101,7 @@ String[] MODIFIER_FIELDS = {
 
 String[] MODIFIER_TYPES = {
   "none",
+  "framecount",
   "level",
   "osc-fast",
   "osc-normal",
@@ -2116,12 +2117,15 @@ String[] MODIFIER_TYPES = {
   "quantized-pulser",
   "quantized-toggle-hard",
   "quantized-toggle-soft",
-  "quantized-counter"
+  "quantized-counter",
 };
 
 public float getMod(String type) {
   float out;
   switch(type) {
+    case "framecount":
+      out = frameCount(0.01);
+      break;
     case "level":
       out = analysis.getLevel();
       break;
