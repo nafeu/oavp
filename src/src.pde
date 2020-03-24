@@ -241,8 +241,9 @@ void loadApplication() {
     videoExport.startMovie();
   }
 
-  setupSketchDefaults();
+  setupPreSketchDefaults();
   setupSketch();
+  setupPostSketchDefaults();
 
   // Typography Setup
   text = new OavpText(oavp, entityPosition);
@@ -267,12 +268,7 @@ void mouseReleased() {
   input.handleMouseReleased();
 }
 
-void setupSketchDefaults() {
-  objects.add("background", "blank")
-    .fillColor(palette.flat.black)
-    .strokeColor(palette.flat.white)
-    .strokeWeight(2);
-
+void setupPreSketchDefaults() {
   entities.addPulser("beat-pulser").duration(0.3);
   entities.addToggle("beat-toggle-hard").duration(0.3);
   entities.addToggle("beat-toggle-soft").duration(0.3);
@@ -281,6 +277,15 @@ void setupSketchDefaults() {
   entities.addToggle("quantized-toggle-hard").duration(0.3);
   entities.addToggle("quantized-toggle-soft").duration(0.3);
   entities.addCounter("quantized-counter").duration(0.3);
+}
+
+void setupPostSketchDefaults() {
+  if (!objects.has("background")) {
+    objects.add("background", "blank")
+      .fillColor(palette.flat.black)
+      .strokeColor(palette.flat.white)
+      .strokeWeight(2);
+  }
 }
 
 void updateSketchDefaults() {

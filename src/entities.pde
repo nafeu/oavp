@@ -1754,6 +1754,10 @@ public class OavpObjectManager {
     return object.getVariable();
   }
 
+  public boolean has(String name) {
+    return objectsStorage.containsKey(name);
+  }
+
   public OavpObject get(String name) {
     return objectsStorage.get(name);
   }
