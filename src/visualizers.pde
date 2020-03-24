@@ -469,6 +469,17 @@ class OavpVisualizer {
     return this;
   }
 
+  public OavpVisualizer use(OavpVariable variable) {
+    this
+      .strokeColor(variable.strokeColor())
+      .fillColor(variable.fillColor())
+      .strokeWeightStyle(variable.strokeWeight())
+      .move(variable.x(), variable.y(), variable.z())
+      .rotate(variable.xr(), variable.yr(), variable.zr())
+      .dimensions(variable.w(), variable.h());
+    return this;
+  }
+
   class Draw {
 
     private OavpAnalysis analysis;
@@ -903,6 +914,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicBox(float w, float h, float l) {
+      box(w, h, l);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a pulsing flatbox
      * @param scale the scale of the visualizer
@@ -1019,6 +1035,36 @@ class OavpVisualizer {
         rect(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
       }
       rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer intervalBullseyeCircle(float radius, int trailSize) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
+      ellipseMode(RADIUS);
+      pushStyle();
+      for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
+        strokeWeight(i);
+        ellipse(0, 0, interval.getIntervalData(i)[0] * radius, interval.getIntervalData(i)[0] * radius);
+      }
+      popStyle();
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer intervalBullseyeRectangle(float w, float h, int trailSize) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
+      rectMode(CENTER);
+      for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
+        rect(0, 0, interval.getIntervalData(i)[0] * w, interval.getIntervalData(i)[0] * h);
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer intervalBullseyeBox(float w, float h, float l, int trailSize) {
+      OavpInterval interval = OavpVisualizer.this.currInterval;
+      for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
+        box(interval.getIntervalData(i)[0] * w, interval.getIntervalData(i)[0] * h, interval.getIntervalData(i)[0] * l);
+      }
       return OavpVisualizer.this;
     }
 
@@ -1249,6 +1295,26 @@ class OavpVisualizer {
         rect(0, 0, emission.value * scale, emission.value * scale);
       }
       rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer emissionSplashRectangle(float w, float h) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      rectMode(CENTER);
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
+        rect(0, 0, emission.value * w, emission.value * h);
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer emissionSplashBox(float w, float h, float l) {
+      List emissions = OavpVisualizer.this.currEmissions;
+      for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
+        OavpEmission emission = iter.next();
+        box(emission.value * w, emission.value * h, emission.value * l);
+      }
       return OavpVisualizer.this;
     }
 

@@ -1338,6 +1338,59 @@ public class OavpVariable {
     return (input == this.variations.get(this.variation));
   }
 
+  public float x() {
+    return this.x + (this.xMod * getMod(this.xModType));
+  }
+
+  public float xr() {
+    return this.xr + (this.xrMod * getMod(this.xrModType));
+  }
+
+  public float y() {
+    return this.y + (this.yMod * getMod(this.yModType));
+  }
+
+  public float yr() {
+    return this.yr + (this.yrMod * getMod(this.yrModType));
+  }
+
+  public float z() {
+    return this.z + (this.zMod * getMod(this.zModType));
+  }
+
+  public float zr() {
+    return this.zr + (this.zrMod * getMod(this.zrModType));
+  }
+
+  public float w() {
+    return this.w + (this.wMod * getMod(this.wModType));
+  }
+
+  public float h() {
+    return this.h + (this.hMod * getMod(this.hModType));
+  }
+
+  public float l() {
+    return this.l + (this.lMod * getMod(this.lModType));
+  }
+
+  public float size() {
+    return this.size + (this.sizeMod * getMod(this.sizeModType));
+  }
+
+  public color strokeColor() {
+    return this.strokeColor; // + (this.strokeColorMod * getMod(this.strokeColorModType));
+  }
+
+  public color fillColor() {
+    return this.fillColor; // + (this.fillColorMod * getMod(this.fillColorModType));
+  }
+
+  public float strokeWeight() {
+    return this.strokeWeight + (this.strokeWeightMod * getMod(this.strokeWeightModType));
+  }
+
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
