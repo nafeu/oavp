@@ -2,6 +2,7 @@ String[] OBJECT_LIST = {
   "Rectangle",
   "Spectrum",
   "Circle",
+  "Triangle",
   "Box",
   "Bullseye",
   "Splash",
@@ -21,6 +22,9 @@ public OavpObject createObject(String className) {
       break;
     case "Circle":
       object = new OavpObjCircle();
+      break;
+    case "Triangle":
+      object = new OavpObjTriangle();
       break;
     case "Box":
       object = new OavpObjBox();
@@ -59,6 +63,23 @@ public class OavpObjRectangle extends OavpObject {
       .center().middle()
       .use(variable)
       .draw.basicRectangle(variable.w(), variable.h(), variable.size())
+      .done();
+  }
+}
+
+public class OavpObjTriangle extends OavpObject {
+  public void setup() {
+    variable
+      .size(100)
+      .strokeColor(palette.flat.white);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable)
+      .draw.basicTriangle(variable.size())
       .done();
   }
 }

@@ -1379,11 +1379,11 @@ public class OavpVariable {
   }
 
   public color strokeColor() {
-    return this.strokeColor; // + (this.strokeColorMod * getMod(this.strokeColorModType));
+    return this.strokeColorMod == 0 ? this.strokeColor : opacity(this.strokeColor, (map(this.strokeColorMod, 0, 200, 0, 20) * getMod(this.strokeColorModType)));
   }
 
   public color fillColor() {
-    return this.fillColor; // + (this.fillColorMod * getMod(this.fillColorModType));
+    return this.fillColorMod == 0 ? this.fillColor : opacity(this.fillColor, (map(this.fillColorMod, 0, 200, 0, 20) * getMod(this.fillColorModType)));
   }
 
   public float strokeWeight() {

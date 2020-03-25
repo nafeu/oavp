@@ -534,6 +534,15 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicTriangle(float size) {
+      triangle(
+        0, -size,
+        0 + cos(radians(30)) * size, 0 + sin(radians(30)) * size,
+        0 - cos(radians(30)) * size, 0 + sin(radians(30)) * size
+      );
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer basicLine(float x0, float y0, float x1, float y1) {
       line(x0, y0, x1, y1);
       return OavpVisualizer.this;
