@@ -70,6 +70,11 @@ public class OavpObjRectangle extends OavpObject {
 public class OavpObjTriangle extends OavpObject {
   public void setup() {
     variable
+      .variations(
+        "equilateral",
+        "left-right",
+        "right-right"
+      )
       .size(100)
       .strokeColor(palette.flat.white);
   }
@@ -78,9 +83,19 @@ public class OavpObjTriangle extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable)
-      .draw.basicTriangle(variable.size())
-      .done();
+      .use(variable);
+
+    if (variable.ofVariation("equilateral")) {
+      visualizers.draw.basicEquilateralTriangle(variable.size());
+    } else if (variable.ofVariation("left-right")) {
+      visualizers.draw.basicLeftRightTriangle(variable.w(), variable.h());
+    } else if (variable.ofVariation("right-right")) {
+      visualizers.draw.basicRightRightTriangle(variable.w(), variable.h());
+    } else {
+      visualizers.draw.basicTriangle(variable.w(), variable.h());
+    }
+
+    visualizers.done();
   }
 }
 

@@ -534,11 +534,38 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicTriangle(float size) {
+    public OavpVisualizer basicEquilateralTriangle(float size) {
       triangle(
         0, -size,
         0 + cos(radians(30)) * size, 0 + sin(radians(30)) * size,
         0 - cos(radians(30)) * size, 0 + sin(radians(30)) * size
+      );
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicTriangle(float w, float h) {
+      triangle(
+        0, -h/2,
+        w/2, h/2,
+        -w/2, h/2
+      );
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicLeftRightTriangle(float w, float h) {
+      triangle(
+        -w/2, -h/2,
+        w/2, h/2,
+        -w/2, h/2
+      );
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicRightRightTriangle(float w, float h) {
+      triangle(
+        w/2, -h/2,
+        w/2, h/2,
+        -w/2, h/2
       );
       return OavpVisualizer.this;
     }
