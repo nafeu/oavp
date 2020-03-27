@@ -1,4 +1,5 @@
 String[] OBJECT_LIST = {
+  "Line",
   "Rectangle",
   "Spectrum",
   "Circle",
@@ -14,6 +15,9 @@ public OavpObject createObject(String className) {
   OavpObject object;
 
   switch (className) {
+    case "Line":
+      object = new OavpObjLine();
+      break;
     case "Rectangle":
       object = new OavpObjRectangle();
       break;
@@ -93,6 +97,37 @@ public class OavpObjTriangle extends OavpObject {
       visualizers.draw.basicRightRightTriangle(variable.w(), variable.h());
     } else {
       visualizers.draw.basicTriangle(variable.w(), variable.h());
+    }
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjLine extends OavpObject {
+  public void setup() {
+    variable
+      .variations(
+        "vertical",
+        "diagonal"
+      )
+      .w(100)
+      .h(100)
+      .l(0)
+      .strokeColor(palette.flat.white);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable);
+
+    if (variable.ofVariation("vertical")) {
+      visualizers.draw.basicVerticalLine(variable.w(), variable.h(), variable.l());
+    } else if (variable.ofVariation("diagonal")) {
+      visualizers.draw.basicDiagonalLine(variable.w(), variable.h(), variable.l());
+    } else {
+      visualizers.draw.basicHorizontalLine(variable.w(), variable.h(), variable.l());
     }
 
     visualizers.done();

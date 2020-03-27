@@ -570,15 +570,25 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicLine(float x0, float y0, float x1, float y1) {
-      line(x0, y0, x1, y1);
+    public OavpVisualizer basicVerticalLine(float w, float h, float l) {
+      line(0, -h/2, 0, 0, h/2, l);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicLine(float x0, float y0, float z0, float x1, float y1, float z1) {
-      line(x0, y0, z0, x1, y1, z1);
+    public OavpVisualizer basicHorizontalLine(float w, float h, float l) {
+      line(-w/2, 0, 0, w/2, 0, l);
       return OavpVisualizer.this;
     }
+
+    public OavpVisualizer basicDiagonalLine(float w, float h, float l) {
+      line(-w/2, -h/2, 0, w/2, h/2, l);
+      return OavpVisualizer.this;
+    }
+
+    // public OavpVisualizer basicLine(float w, float h, float l) {
+    //   line(x0, y0, z0, x1, y1, z1);
+    //   return OavpVisualizer.this;
+    // }
 
     public OavpVisualizer positionalLines(float distance) {
       line(0 - distance, 0, 0, 0 + distance, 0, 0);
