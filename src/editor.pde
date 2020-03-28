@@ -25,6 +25,7 @@ public class OavpEditor {
     this.selectableObjects = new ArrayList<String>();
     this.availableModifierFields = new ArrayList<String>();
     this.availableModifierTypes = new ArrayList<String>();
+
     for (String objectType : OBJECT_LIST) {
       selectableObjects.add(objectType);
     }
@@ -39,6 +40,10 @@ public class OavpEditor {
   public void handleKeyInputs() {
     if (input.isPressed(KEY_E)) {
       toggleEditMode();
+    }
+
+    if (input.isPressed(KEY_O)) {
+      println(cp5.get(Textfield.class,"controlP5TestInput").isFocus());
     }
 
     if (this.isEditMode) {
@@ -714,6 +719,11 @@ public class OavpEditor {
   private void toggleEditMode() {
     if (objects.activeObjects.size() > 0 && !this.isCreateMode) {
       this.isEditMode = !this.isEditMode;
+      // if (this.isEditMode) {
+      //   cp5.show();
+      // } else {
+      //   cp5.hide();
+      // }
     }
   }
 
@@ -751,7 +761,6 @@ public class OavpEditor {
 
     visualizers
       .create()
-      .moveLeft(width - oavp.width(1))
       .noStrokeStyle()
       .fillColor(palette.flat.black)
       .draw.basicRectangle(toolMetaBoxW, toolMetaBoxH, 0, CORNER)
@@ -780,6 +789,7 @@ public class OavpEditor {
           .alignLeft()
           .write("move " + activeVariable.name + "\nx: " + activeVariable.x + ", y: " + activeVariable.y)
           .done();
+
         break;
 
       case 1: // RESIZE
@@ -1221,6 +1231,14 @@ public class OavpEditor {
       }
     }
   }
+}
+
+public void setupEditorGui() {
+  cp5.hide();
+  cp5.addTextfield("controlP5TestInput")
+     .setPosition(20,100)
+     .setSize(200,40)
+     .setColor(color(255,0,0));
 }
 
 int TOOL_MOVE = 0;

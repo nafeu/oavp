@@ -76,7 +76,6 @@ public class OavpText {
   }
 
   public OavpText write(String text) {
-    // text(text, cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.scale - padding * 2, cursor.scale - padding * 2);
     text(text, 0, 0);
     return this;
   }
@@ -137,7 +136,7 @@ public class OavpText {
   }
 
   public OavpText right() {
-    translate(cursor.getScaledX() + cursor.scale, 0);
+    translate(cursor.getScaledX() + cursor.xScale, 0);
     return this;
   }
 
@@ -147,7 +146,7 @@ public class OavpText {
   }
 
   public OavpText bottom() {
-    translate(0, cursor.getScaledY() + cursor.scale);
+    translate(0, cursor.getScaledY() + cursor.yScale);
     return this;
   }
 
@@ -213,14 +212,14 @@ public class OavpText {
   public OavpText write(String text, color inputColor) {
     noStroke();
     fill(inputColor);
-    text(text, cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.scale - padding * 2, cursor.scale - padding * 2);
+    text(text, cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.xScale - padding * 2, cursor.yScale - padding * 2);
     return this;
   }
 
   public OavpText write(float value, color inputColor) {
     noStroke();
     fill(inputColor);
-    text(String.valueOf(value), cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.scale - padding * 2, cursor.scale - padding * 2);
+    text(String.valueOf(value), cursor.getScaledX() + padding, cursor.getScaledY() + padding, cursor.xScale - padding * 2, cursor.yScale - padding * 2);
     return this;
   }
 

@@ -45,7 +45,7 @@ class OavpVisualizer {
    * Set horizontal drawing origin to right of screen
    */
   public OavpVisualizer right() {
-    translate(cursor.getScaledX() + cursor.scale, 0);
+    translate(cursor.getScaledX() + cursor.xScale, 0);
     return this;
   }
 
@@ -61,7 +61,7 @@ class OavpVisualizer {
    * Set vertical drawing origin to bottom of screen
    */
   public OavpVisualizer bottom() {
-    translate(0, cursor.getScaledY() + cursor.scale);
+    translate(0, cursor.getScaledY() + cursor.yScale);
     return this;
   }
 
@@ -197,6 +197,7 @@ class OavpVisualizer {
    */
   public OavpVisualizer create() {
     pushMatrix();
+    translate(0, 0);
     return this;
   }
 

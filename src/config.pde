@@ -26,7 +26,6 @@ public int STAGE_WIDTH = 750;
 public int STAGE_HEIGHT = 750;
 public int w = 750;
 public int h = 750;
-public int GRID_SCALE = 750;
 public float SPECTRUM_SMOOTHING = 0.8;
 public float LEVEL_SMOOTHING = 0.95;
 public float BUFFER_SMOOTHING = 0.85;

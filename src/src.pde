@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import controlP5.*;
 
 PApplet context;
 OavpConfig oavp;
@@ -43,6 +44,7 @@ BufferedReader reader;
 OavpInput input;
 OavpEditor editor;
 boolean loaded = false;
+ControlP5 cp5;
 
 void setup() {
   context = this;
@@ -58,6 +60,9 @@ void setup() {
   frameRate(60);
   surface.setTitle("oavp");
 
+  cp5 = new ControlP5(this);
+  setupEditorGui();
+
   try {
     thread("loadApplication");
   } catch (Exception e) {
@@ -65,6 +70,10 @@ void setup() {
     debugError(e);
     exit();
   }
+}
+
+public void controlP5TestInput(String theText) {
+  println(theText);
 }
 
 boolean firstRender = true;
@@ -177,7 +186,7 @@ void loadApplication() {
   Ani.init(context);
 
   // Entity Setup
-  entityPosition = new OavpPosition(0, 0, oavp.GRID_SCALE);
+  entityPosition = new OavpPosition(0, 0);
   entities = new OavpEntityManager(context, minim);
 
   // Objects Setup
@@ -187,8 +196,6 @@ void loadApplication() {
   if (oavp.ENABLE_ORTHO) {
     ortho();
   }
-  defaultCamera = new OavpCamera();
-  defaultCamera.view();
 
   // Style Setup
   palette = new OavpPalette(oavp);
@@ -308,4 +315,11 @@ void drawSketchDefaults() {
     backgroundVariable.strokeColor,
     backgroundVariable.strokeWeight
   );
+}
+
+public void controlEvent(ControlEvent theEvent) {
+  println("got a control event from controller with id "+theEvent.getId());
+  // switch(theEvent.getId()) {
+
+  // }
 }

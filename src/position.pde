@@ -3,10 +3,11 @@ public class OavpPosition {
   public int y;
   private int startingX;
   private int startingY;
-  public float scale;
+  public float xScale;
+  public float yScale;
   public int[] xRange = new int[2];
   public int[] yRange = new int[2];
-  OavpPosition(int initialX, int initialY, float initialScale) {
+  OavpPosition(int initialX, int initialY) {
     x = initialX;
     startingX = initialX;
     y = initialY;
@@ -15,19 +16,20 @@ public class OavpPosition {
     xRange[1] = x;
     yRange[0] = y;
     yRange[1] = y;
-    scale = initialScale;
+    xScale = width;
+    yScale = height;
   }
   public float getScaledX() {
-    return x * scale;
+    return x * width;
   }
   public float getCenteredX() {
-    return x * scale + (scale / 2);
+    return x * width + (width / 2);
   }
   public float getScaledY() {
-    return y * scale;
+    return y * height;
   }
   public float getCenteredY() {
-    return y * scale + (scale / 2);
+    return y * height + (height / 2);
   }
   public int getLowerBoundX() {
     return xRange[0];
