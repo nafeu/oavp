@@ -129,6 +129,7 @@ public class OavpEditor {
 
         if (input.isPressed(KEY_B)) {
           this.activeTool = TOOL_WEIGHT;
+          originalValues.put("strokeWeight", objects.getActiveVariable().strokeWeight);
         }
 
         if (input.isPressed(KEY_V)) {
@@ -389,33 +390,33 @@ public class OavpEditor {
     }
   }
 
+  float DELTA_WEIGHT_PRECISE_KEYS = 0.25;
+  float DELTA_WEIGHT_SNAP_KEYS = 0.50;
+  float DELTA_WEIGHT_PRECISE_MOUSE = 0.25;
+  float DELTA_WEIGHT_SNAP_MOUSE = 0.50;
+
   private void handleToolWeightInputs() {
-    float delta = DELTA_WEIGHT;
+    float deltaKeys = DELTA_WEIGHT_PRECISE_KEYS;
+    float deltaMouse = DELTA_WEIGHT_PRECISE_MOUSE;
 
-    if (input.isHoldingShift) {
-      delta = DELTA_WEIGHT_SHIFT;
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_WEIGHT_SNAP_KEYS;
+      deltaMouse = DELTA_WEIGHT_SNAP_MOUSE;
     }
 
-    if (input.isHoldingControl) {
-      delta = DELTA_WEIGHT_CTRL;
-    }
-
-    if (input.isPressed(UP)) {
-      objects.getActiveVariable().previewStrokeWeight(delta * -1).commitStrokeWeight();
-    }
-
-    if (input.isPressed(DOWN)) {
-      objects.getActiveVariable().previewStrokeWeight(delta).commitStrokeWeight();
-    }
+    if (input.isPressed(UP)) { previewEdit("strokeWeight", deltaKeys); commitEdit("strokeWeight"); }
+    if (input.isPressed(DOWN)) { previewEdit("strokeWeight", deltaKeys * -1); commitEdit("strokeWeight"); }
 
     if (input.isMousePressed()) {
-      objects.getActiveVariable().previewStrokeWeight(input.getYGridTicks() * delta);
+      previewEdit("strokeWeight", snap(input.getYGridTicks(), deltaMouse));
     }
 
     if (input.isMouseReleased()) {
-      objects.getActiveVariable().commitStrokeWeight();
+      commitEdit("strokeWeight");
       input.resetTicks();
     }
+
+    if (input.isShiftReleased()) {}
   }
 
   private void handleCreateModeInputs() {
@@ -562,11 +563,14 @@ public class OavpEditor {
   private void toggleEditMode() {
     if (objects.activeObjects.size() > 0 && !this.isCreateMode) {
       this.isEditMode = !this.isEditMode;
-      // if (this.isEditMode) {
+      if (this.isEditMode) {
+        originalValues.put("x", objects.getActiveVariable().x);
+        originalValues.put("y", objects.getActiveVariable().y);
+        originalValues.put("z", objects.getActiveVariable().z);
       //   cp5.show();
-      // } else {
+      } else {
       //   cp5.hide();
-      // }
+      }
     }
   }
 
@@ -1004,10 +1008,6 @@ int KEY_W = 87;
 int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
-
-float DELTA_WEIGHT = 2.0;
-float DELTA_WEIGHT_SHIFT = 1.0;
-float DELTA_WEIGHT_CTRL = 0.25;
 
 float DELTA_MODIFIER = 50.0;
 float DELTA_MODIFIER_SHIFT = 25.0;
