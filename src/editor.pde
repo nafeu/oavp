@@ -72,8 +72,6 @@ public class OavpEditor {
         handleToolTransformInputs();
       } else if (this.activeTool == TOOL_ROTATE) {
         handleToolRotateInputs();
-      } else if (this.activeTool == TOOL_ARRANGE) {
-        handleToolArrangeInputs();
       } else if (this.activeTool == TOOL_TURN) {
         handleToolTurnInputs();
       } else if (this.activeTool == TOOL_COLOR) {
@@ -84,8 +82,6 @@ public class OavpEditor {
         handleToolModifierInputs();
       } else if (this.activeTool == TOOL_VARIATION) {
         handleToolVariationInputs();
-      } else if (this.activeTool == TOOL_LENGTH) {
-        handleToolLengthInputs();
       }
     }
 
@@ -107,22 +103,23 @@ public class OavpEditor {
           this.activeTool = TOOL_MOVE;
           originalValues.put("x", objects.getActiveVariable().x);
           originalValues.put("y", objects.getActiveVariable().y);
-        }
-
-        if (input.isPressed(KEY_T)) {
-          this.activeTool = TOOL_TRANSFORM;
+          originalValues.put("z", objects.getActiveVariable().z);
         }
 
         if (input.isPressed(KEY_S)) {
           this.activeTool = TOOL_RESIZE;
+          originalValues.put("size", objects.getActiveVariable().size);
+        }
+
+        if (input.isPressed(KEY_T)) {
+          this.activeTool = TOOL_TRANSFORM;
+          originalValues.put("w", objects.getActiveVariable().w);
+          originalValues.put("h", objects.getActiveVariable().h);
+          originalValues.put("l", objects.getActiveVariable().l);
         }
 
         if (input.isPressed(KEY_R)) {
           this.activeTool = TOOL_ROTATE;
-        }
-
-        if (input.isPressed(KEY_N)) {
-          this.activeTool = TOOL_ARRANGE;
         }
 
         if (input.isPressed(KEY_Y)) {
@@ -139,10 +136,6 @@ public class OavpEditor {
 
         if (input.isPressed(KEY_V)) {
           this.activeTool = TOOL_VARIATION;
-        }
-
-        if (input.isPressed(KEY_G)) {
-          this.activeTool = TOOL_LENGTH;
         }
 
         if (input.isPressed(KEY_Z)) {
@@ -183,12 +176,12 @@ public class OavpEditor {
     try {
       OavpVariable activeVariable = objects.getActiveVariable();
       Field field = activeVariable.getClass().getDeclaredField(fieldName);
-      if (value instanceof Integer) {
-        field.set(activeVariable, ((Integer) originalValues.get(fieldName)) + (Integer) value);
-      } else if (value instanceof String) {
+      if (originalValues.get(fieldName).getClass() == Float.class) {
+        field.set(activeVariable, (float) value + (float) originalValues.get(fieldName));
+      } else if (originalValues.get(fieldName).getClass() == String.class) {
         field.set(activeVariable, (String) value);
-      } else if (value instanceof Float) {
-        field.set(activeVariable, ((float) originalValues.get(fieldName)) + (float) value);
+      } else if (originalValues.get(fieldName).getClass() == Integer.class) {
+        field.set(activeVariable, (int) value + (int) originalValues.get(fieldName));
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -219,104 +212,93 @@ public class OavpEditor {
       deltaMouse = DELTA_MOVEMENT_SNAP_MOUSE;
     }
 
-    if (input.isPressed(UP)) {
-      previewEdit("y", deltaKeys * -1);
-      commitEdit("y");
+    if (input.isHoldingShift) {
+      if (input.isPressed(UP)) { previewEdit("z", deltaKeys * -1); commitEdit("z"); }
+      if (input.isPressed(DOWN)) { previewEdit("z", deltaKeys); commitEdit("z"); }
+      if (input.isMousePressed()) {
+        previewEdit("z", snap(input.getYGridTicks(), deltaMouse));
+      }
+      if (input.isMouseReleased()) { commitEdit("z"); input.resetTicks(); }
+    } else {
+      if (input.isPressed(UP)) { previewEdit("y", deltaKeys * -1); commitEdit("y"); }
+      if (input.isPressed(DOWN)) { previewEdit("y", deltaKeys); commitEdit("y"); }
+      if (input.isMousePressed()) {
+        previewEdit("x", snap(input.getXGridTicks(), deltaMouse));
+        previewEdit("y", snap(input.getYGridTicks(), deltaMouse));
+      }
+      if (input.isMouseReleased()) { commitEdit("x"); commitEdit("y"); input.resetTicks(); }
     }
 
-    if (input.isPressed(DOWN)) {
-      previewEdit("y", deltaKeys);
-      commitEdit("y");
-    }
+    if (input.isPressed(RIGHT)) { previewEdit("x", deltaKeys); commitEdit("x"); }
+    if (input.isPressed(LEFT)) { previewEdit("x", deltaKeys * -1); commitEdit("x"); }
 
-    if (input.isPressed(RIGHT)) {
-      previewEdit("x", deltaKeys);
-      commitEdit("x");
-    }
-
-    if (input.isPressed(LEFT)) {
-      previewEdit("x", deltaKeys * -1);
-      commitEdit("x");
-    }
-
-    if (input.isMousePressed()) {
-      previewEdit("x", snap(input.getXGridTicks(), deltaMouse));
-      previewEdit("y", snap(input.getYGridTicks(), deltaMouse));
-    }
-
-    if (input.isMouseReleased()) {
-      commitEdit("x");
-      commitEdit("y");
-      input.resetTicks();
-    }
+    if (input.isShiftReleased()) {}
   }
+
+  float DELTA_RESIZE_PRECISE_KEYS = 50;
+  float DELTA_RESIZE_SNAP_KEYS = 5;
+  float DELTA_RESIZE_PRECISE_MOUSE = 50;
+  float DELTA_RESIZE_SNAP_MOUSE = 5;
 
   private void handleToolResizeInputs() {
-    int delta = DELTA_RESIZE;
+    float deltaKeys = DELTA_RESIZE_PRECISE_KEYS;
+    float deltaMouse = DELTA_RESIZE_PRECISE_MOUSE;
 
-    if (input.isHoldingShift) {
-      delta = DELTA_RESIZE_SHIFT;
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_RESIZE_SNAP_KEYS;
+      deltaMouse = DELTA_RESIZE_SNAP_MOUSE;
     }
 
-    if (input.isHoldingControl) {
-      delta = DELTA_RESIZE_CTRL;
-    }
-
-    if (input.isPressed(UP)) {
-      objects.getActiveVariable().previewSize(delta * -1).commitSize();
-    }
-
-    if (input.isPressed(DOWN)) {
-      objects.getActiveVariable().previewSize(delta).commitSize();
-    }
+    if (input.isPressed(UP)) { previewEdit("size", deltaKeys * -1); commitEdit("size"); }
+    if (input.isPressed(DOWN)) { previewEdit("size", deltaKeys); commitEdit("size"); }
 
     if (input.isMousePressed()) {
-      objects.getActiveVariable().previewSize(input.getYGridTicks() * delta);
+      previewEdit("size", snap(input.getYGridTicks() * -1, deltaMouse));
     }
 
     if (input.isMouseReleased()) {
-      objects.getActiveVariable().commitSize();
+      commitEdit("size");
       input.resetTicks();
     }
+
+    if (input.isShiftReleased()) {}
   }
 
+  float DELTA_TRANSFORM_PRECISE_KEYS = 50;
+  float DELTA_TRANSFORM_SNAP_KEYS = 5;
+  float DELTA_TRANSFORM_PRECISE_MOUSE = 50;
+  float DELTA_TRANSFORM_SNAP_MOUSE = 5;
+
   private void handleToolTransformInputs() {
-    int delta = DELTA_TRANSFORM;
+    float deltaKeys = DELTA_TRANSFORM_PRECISE_KEYS;
+    float deltaMouse = DELTA_TRANSFORM_PRECISE_MOUSE;
+
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_TRANSFORM_SNAP_KEYS;
+      deltaMouse = DELTA_TRANSFORM_SNAP_MOUSE;
+    }
 
     if (input.isHoldingShift) {
-      delta = DELTA_TRANSFORM_SHIFT;
+      if (input.isPressed(UP)) { previewEdit("l", deltaKeys * -1); commitEdit("l"); }
+      if (input.isPressed(DOWN)) { previewEdit("l", deltaKeys); commitEdit("l"); }
+      if (input.isMousePressed()) {
+        previewEdit("l", snap(input.getYGridTicks() * -1, deltaMouse));
+      }
+      if (input.isMouseReleased()) { commitEdit("l"); input.resetTicks(); }
+    } else {
+      if (input.isPressed(UP)) { previewEdit("h", deltaKeys); commitEdit("h"); }
+      if (input.isPressed(DOWN)) { previewEdit("h", deltaKeys * -1); commitEdit("h"); }
+      if (input.isMousePressed()) {
+        previewEdit("w", snap(input.getXGridTicks(), deltaMouse));
+        previewEdit("h", snap(input.getYGridTicks() * -1, deltaMouse));
+      }
+      if (input.isMouseReleased()) { commitEdit("w"); commitEdit("h"); input.resetTicks(); }
     }
 
-    if (input.isHoldingControl) {
-      delta = DELTA_TRANSFORM_CTRL;
-    }
+    if (input.isPressed(RIGHT)) { previewEdit("w", deltaKeys); commitEdit("w"); }
+    if (input.isPressed(LEFT)) { previewEdit("w", deltaKeys * -1); commitEdit("w"); }
 
-    if (input.isPressed(RIGHT)) {
-      objects.getActiveVariable().previewW(delta * -1).commitW();
-    }
-
-    if (input.isPressed(LEFT)) {
-      objects.getActiveVariable().previewW(delta).commitW();
-    }
-
-    if (input.isPressed(UP)) {
-      objects.getActiveVariable().previewH(delta * -1).commitH();
-    }
-
-    if (input.isPressed(DOWN)) {
-      objects.getActiveVariable().previewH(delta).commitH();
-    }
-
-    if (input.isMousePressed()) {
-      objects.getActiveVariable().previewW(input.getXGridTicks() * delta);
-      objects.getActiveVariable().previewH(input.getYGridTicks() * delta);
-    }
-
-    if (input.isMouseReleased()) {
-      objects.getActiveVariable().commitW();
-      objects.getActiveVariable().commitH();
-      input.resetTicks();
-    }
+    if (input.isShiftReleased()) {}
   }
 
   private void handleToolRotateInputs() {
@@ -344,35 +326,6 @@ public class OavpEditor {
 
     if (input.isMouseReleased()) {
       objects.getActiveVariable().commitZR();
-      input.resetTicks();
-    }
-  }
-
-  private void handleToolArrangeInputs() {
-    int delta = DELTA_ARRANGE;
-
-    if (input.isHoldingShift) {
-      delta = DELTA_ARRANGE_SHIFT;
-    }
-
-    if (input.isHoldingControl) {
-      delta = DELTA_ARRANGE_CTRL;
-    }
-
-    if (input.isPressed(UP)) {
-      objects.getActiveVariable().previewZ(delta * -1).commitZ();
-    }
-
-    if (input.isPressed(DOWN)) {
-      objects.getActiveVariable().previewZ(delta).commitZ();
-    }
-
-    if (input.isMousePressed()) {
-      objects.getActiveVariable().previewZ(input.getYGridTicks() * delta);
-    }
-
-    if (input.isMouseReleased()) {
-      objects.getActiveVariable().commitZ();
       input.resetTicks();
     }
   }
@@ -626,35 +579,6 @@ public class OavpEditor {
     }
   }
 
-  private void handleToolLengthInputs() {
-    int delta = DELTA_LENGTH;
-
-    if (input.isHoldingShift) {
-      delta = DELTA_LENGTH_SHIFT;
-    }
-
-    if (input.isHoldingControl) {
-      delta = DELTA_LENGTH_CTRL;
-    }
-
-    if (input.isPressed(UP)) {
-      objects.getActiveVariable().previewL(delta * -1).commitL();
-    }
-
-    if (input.isPressed(DOWN)) {
-      objects.getActiveVariable().previewL(delta).commitL();
-    }
-
-    if (input.isMousePressed()) {
-      objects.getActiveVariable().previewL(input.getYGridTicks() * delta);
-    }
-
-    if (input.isMouseReleased()) {
-      objects.getActiveVariable().commitL();
-      input.resetTicks();
-    }
-  }
-
   private void handleCreateModeSelection(int index) {
     if (index < this.selectableObjects.size()) {
       this.isCreateMode = false;
@@ -717,13 +641,6 @@ public class OavpEditor {
     float toolMetaBoxH = height * 0.05;
     float toolMetaTextPosition = width * 0.17;
 
-    visualizers
-      .create()
-      .noStrokeStyle()
-      .fillColor(palette.flat.black)
-      .draw.basicRectangle(toolMetaBoxW, toolMetaBoxH, 0, CORNER)
-      .done();
-
     switch (activeTool) {
       case 0: // MOVE
         visualizers
@@ -737,17 +654,6 @@ public class OavpEditor {
           .draw.basicSquare(100)
           .draw.basicCircle(10)
           .done();
-
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.blue)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("move " + activeVariable.name + "\nx: " + activeVariable.x + ", y: " + activeVariable.y)
-          .done();
-
         break;
 
       case 1: // RESIZE
@@ -762,16 +668,6 @@ public class OavpEditor {
           .draw.basicSquare(25)
           .draw.basicCircle(5)
           .done();
-
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.orange)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("resize " + activeVariable.name + "\nsize: " + activeVariable.size)
-          .done();
         break;
 
       case 2: // TRANSFORM
@@ -784,18 +680,8 @@ public class OavpEditor {
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
           .draw.positionalLines(width)
-          .draw.basicRectangle(activeVariable.w - 5, activeVariable.h - 5)
+          .draw.basicBox(activeVariable.w, activeVariable.h, activeVariable.l)
           .draw.basicCircle(10)
-          .done();
-
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.yellow)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("transform " + activeVariable.name + "\nw: " + activeVariable.w + ", h: " + activeVariable.h)
           .done();
         break;
 
@@ -821,30 +707,6 @@ public class OavpEditor {
           .moveDown(toolMetaBoxH * 0.2)
           .alignLeft()
           .write("rotate " + activeVariable.name + "\nzr: " + activeVariable.zr)
-          .done();
-        break;
-
-      case 4: // ARRANGE
-        visualizers
-          .create()
-          .center().middle()
-          .strokeColor(palette.flat.teal)
-          .noFillStyle()
-          .strokeWeightStyle(0.5)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .draw.positionalLines(width)
-          .draw.basicSquare(100)
-          .draw.basicCircle(10)
-          .done();
-
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.teal)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("arrange " + activeVariable.name + "\nz: " + activeVariable.z)
           .done();
         break;
 
@@ -1051,31 +913,6 @@ public class OavpEditor {
           .write("variation of " + activeVariable.name + "\ntype: " + activeVariable.getVariation())
           .done();
         break;
-
-      case 10: // LENGTH
-        visualizers
-          .create()
-          .center().middle()
-          .strokeColor(palette.flat.darkYellow)
-          .noFillStyle()
-          .strokeWeightStyle(0.5)
-          .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .rotate(activeVariable.xr, activeVariable.yr, activeVariable.zr)
-          .draw.positionalLines(width)
-          .draw.basicBox(activeVariable.w - 5, activeVariable.h - 5, activeVariable.l - 5)
-          .draw.basicCircle(10)
-          .done();
-
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.darkYellow)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("lengthen " + activeVariable.name + "\nl: " + activeVariable.l)
-          .done();
-        break;
     }
   }
 
@@ -1203,13 +1040,11 @@ int TOOL_MOVE = 0;
 int TOOL_RESIZE = 1;
 int TOOL_TRANSFORM = 2;
 int TOOL_ROTATE = 3;
-int TOOL_ARRANGE = 4;
 int TOOL_TURN = 5;
 int TOOL_COLOR = 6;
 int TOOL_WEIGHT = 7;
 int TOOL_MODIFIER = 8;
 int TOOL_VARIATION = 9;
-int TOOL_LENGTH = 10;
 
 // KEYS
 int KEY_ENTER = 10;
@@ -1240,21 +1075,9 @@ int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
 
-int DELTA_RESIZE = 10;
-int DELTA_RESIZE_SHIFT = 5;
-int DELTA_RESIZE_CTRL = 1;
-
-int DELTA_TRANSFORM = 10;
-int DELTA_TRANSFORM_SHIFT = 5;
-int DELTA_TRANSFORM_CTRL = 1;
-
 int DELTA_ROTATE = 3;
 int DELTA_ROTATE_SHIFT = 2;
 int DELTA_ROTATE_CTRL = 1;
-
-int DELTA_ARRANGE = 10;
-int DELTA_ARRANGE_SHIFT = 5;
-int DELTA_ARRANGE_CTRL = 1;
 
 int DELTA_TURN = 3;
 int DELTA_TURN_SHIFT = 2;
@@ -1267,10 +1090,6 @@ float DELTA_WEIGHT_CTRL = 0.25;
 float DELTA_MODIFIER = 50.0;
 float DELTA_MODIFIER_SHIFT = 25.0;
 float DELTA_MODIFIER_CTRL = 5.0;
-
-int DELTA_LENGTH = 10;
-int DELTA_LENGTH_SHIFT = 5;
-int DELTA_LENGTH_CTRL = 1;
 
 int CREATE_MODE_COLUMN_COUNT = 5;
 int CREATE_MODE_ROW_COUNT = 10;

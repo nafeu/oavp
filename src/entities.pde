@@ -790,7 +790,6 @@ public class OavpVariable {
   public int y = 0;
   public float yMod = 0;
   public String yModType = "";
-  public int yOrig = 0;
   public int yr = 0;
   public float yrMod = 0;
   public String yrModType = "";
@@ -798,7 +797,6 @@ public class OavpVariable {
   public int z = 0;
   public float zMod = 0;
   public String zModType = "";
-  public int zOrig = 0;
   public int zr = 0;
   public float zrMod = 0;
   public String zrModType = "";
@@ -806,19 +804,15 @@ public class OavpVariable {
   public float w = 100;
   public float wMod = 0;
   public String wModType = "";
-  public float wOrig = 100;
   public float h = 100;
   public float hMod = 0;
   public String hModType = "";
-  public float hOrig = 100;
   public float l = 100;
   public float lMod = 0;
   public String lModType = "";
-  public float lOrig = 100;
   public float size = 100;
   public float sizeMod = 0;
   public String sizeModType = "";
-  public float sizeOrig = 100;
   public int gridScale = 5;
   public color strokeColor;
   public float strokeColorMod = 0;
@@ -1016,7 +1010,6 @@ public class OavpVariable {
 
   public OavpVariable size(float input) {
     this.size = input;
-    this.sizeOrig = input;
     return this;
   }
 
@@ -1027,16 +1020,6 @@ public class OavpVariable {
 
   public OavpVariable sizeModType(String input) {
     this.sizeModType = input;
-    return this;
-  }
-
-  public OavpVariable previewSize(int multiplier) {
-    this.size = this.sizeOrig + ((multiplier * -1) * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitSize() {
-    this.sizeOrig = this.size;
     return this;
   }
 
@@ -1068,7 +1051,6 @@ public class OavpVariable {
 
   public OavpVariable w(float input) {
     this.w = input;
-    this.wOrig = input;
     return this;
   }
 
@@ -1082,19 +1064,8 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable previewW(int multiplier) {
-    this.w = this.wOrig + ((multiplier * -1) * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitW() {
-    this.wOrig = this.w;
-    return this;
-  }
-
   public OavpVariable h(float input) {
     this.h = input;
-    this.hOrig = input;
     return this;
   }
 
@@ -1108,19 +1079,8 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable previewH(int multiplier) {
-    this.h = this.hOrig + ((multiplier * -1) * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitH() {
-    this.hOrig = this.h;
-    return this;
-  }
-
   public OavpVariable l(float input) {
     this.l = input;
-    this.lOrig = input;
     return this;
   }
 
@@ -1131,16 +1091,6 @@ public class OavpVariable {
 
   public OavpVariable lModType(String input) {
     this.lModType = input;
-    return this;
-  }
-
-  public OavpVariable previewL(int multiplier) {
-    this.l = this.lOrig + ((multiplier * -1) * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitL() {
-    this.lOrig = this.l;
     return this;
   }
 
@@ -1199,16 +1149,6 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable previewY(int multiplier) {
-    this.y = this.yOrig + (multiplier * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitY() {
-    this.yOrig = this.y;
-    return this;
-  }
-
   public OavpVariable yr(int input) {
     this.yr = input;
     return this;
@@ -1246,16 +1186,6 @@ public class OavpVariable {
 
   public OavpVariable zModType(String input) {
     this.zModType = input;
-    return this;
-  }
-
-  public OavpVariable previewZ(int multiplier) {
-    this.z = this.zOrig + (multiplier * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitZ() {
-    this.zOrig = this.z;
     return this;
   }
 
@@ -2003,7 +1933,6 @@ public class OavpObject {
     cloneVariable.y = this.variable.y;
     cloneVariable.yMod = this.variable.yMod;
     cloneVariable.yModType = this.variable.yModType;
-    cloneVariable.yOrig = this.variable.yOrig;
     cloneVariable.yr = this.variable.yr;
     cloneVariable.yrMod = this.variable.yrMod;
     cloneVariable.yrModType = this.variable.yrModType;
@@ -2011,7 +1940,6 @@ public class OavpObject {
     cloneVariable.z = this.variable.z;
     cloneVariable.zMod = this.variable.zMod;
     cloneVariable.zModType = this.variable.zModType;
-    cloneVariable.zOrig = this.variable.zOrig;
     cloneVariable.zr = this.variable.zr;
     cloneVariable.zrMod = this.variable.zrMod;
     cloneVariable.zrModType = this.variable.zrModType;
@@ -2019,19 +1947,15 @@ public class OavpObject {
     cloneVariable.w = this.variable.w;
     cloneVariable.wMod = this.variable.wMod;
     cloneVariable.wModType = this.variable.wModType;
-    cloneVariable.wOrig = this.variable.wOrig;
     cloneVariable.h = this.variable.h;
     cloneVariable.hMod = this.variable.hMod;
     cloneVariable.hModType = this.variable.hModType;
-    cloneVariable.hOrig = this.variable.hOrig;
     cloneVariable.l = this.variable.l;
     cloneVariable.lMod = this.variable.lMod;
     cloneVariable.lModType = this.variable.lModType;
-    cloneVariable.lOrig = this.variable.lOrig;
     cloneVariable.size = this.variable.size;
     cloneVariable.sizeMod = this.variable.sizeMod;
     cloneVariable.sizeModType = this.variable.sizeModType;
-    cloneVariable.sizeOrig = this.variable.sizeOrig;
     cloneVariable.strokeColor = this.variable.strokeColor;
     cloneVariable.strokeColorMod = this.variable.strokeColorMod;
     cloneVariable.strokeColorModType = this.variable.strokeColorModType;
