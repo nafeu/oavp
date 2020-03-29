@@ -4,16 +4,15 @@ public class OavpInput {
   private boolean isHoldingControl = false;
   private boolean isMousePressed = false;
 
-  private float xStart = 0;
-  private float xEnd = 0;
-  private float yStart = 0;
-  private float yEnd = 0;
+  private int xStart = 0;
+  private int xEnd = 0;
+  private int yStart = 0;
+  private int yEnd = 0;
   private float xDist = 0;
   private float yDist = 0;
 
   private int xGridTicks = 0;
   private int yGridTicks = 0;
-  private float snapGrid = 0.05;
 
   OavpInput() {}
 
@@ -30,16 +29,16 @@ public class OavpInput {
   void handleMousePressed() {
     noCursor();
     this.isMousePressed = true;
-    this.xStart = normalMouseX;
-    this.yStart = normalMouseY;
+    this.xStart = mouseX;
+    this.yStart = mouseY;
   }
 
   void update() {
-    this.xEnd = normalMouseX;
-    this.yEnd = normalMouseY;
+    this.xEnd = mouseX;
+    this.yEnd = mouseY;
     if (this.isMousePressed) {
-      this.xGridTicks = floor((xEnd - xStart) / snapGrid);
-      this.yGridTicks = floor((yEnd - yStart) / snapGrid);
+      this.xGridTicks = xEnd - xStart;
+      this.yGridTicks = yEnd - yStart;
     }
   }
 

@@ -783,7 +783,6 @@ public class OavpVariable {
   public int x = 0;
   public float xMod = 0;
   public String xModType = "";
-  public int xOrig = 0;
   public int xr = 0;
   public float xrMod = 0;
   public String xrModType = "";
@@ -1157,16 +1156,6 @@ public class OavpVariable {
 
   public OavpVariable xModType(String input) {
     this.xModType = input;
-    return this;
-  }
-
-  public OavpVariable previewX(int multiplier) {
-    this.x = this.xOrig + (multiplier * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitX() {
-    this.xOrig = this.x;
     return this;
   }
 
@@ -2007,7 +1996,6 @@ public class OavpObject {
     cloneVariable.x = this.variable.x;
     cloneVariable.xMod = this.variable.xMod;
     cloneVariable.xModType = this.variable.xModType;
-    cloneVariable.xOrig = this.variable.xOrig;
     cloneVariable.xr = this.variable.xr;
     cloneVariable.xrMod = this.variable.xrMod;
     cloneVariable.xrModType = this.variable.xrModType;

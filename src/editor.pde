@@ -3,6 +3,7 @@ public class OavpEditor {
   private boolean isHelpMode = false;
   private boolean isCreateMode = false;
   private boolean isSelectModifierTypeMode = false;
+  private boolean isSnappingEnabled = true;
   private OavpInput input;
   private OavpObjectManager objects;
   private OavpText text;
@@ -16,6 +17,8 @@ public class OavpEditor {
   private List<String> availableModifierTypes;
   private int selectedModifierFieldIndex = 0;
   private int selectedModifierTypeIndex = 0;
+  private HashMap<String, Object> originalValues;
+
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
@@ -25,6 +28,7 @@ public class OavpEditor {
     this.selectableObjects = new ArrayList<String>();
     this.availableModifierFields = new ArrayList<String>();
     this.availableModifierTypes = new ArrayList<String>();
+    this.originalValues = new HashMap<String, Object>();
 
     for (String objectType : OBJECT_LIST) {
       selectableObjects.add(objectType);
@@ -37,6 +41,19 @@ public class OavpEditor {
     }
   }
 
+  public boolean isToolSwitchable() {
+    // return this.isEditMode && !this.isCreateMode && !cp5.get(Textfield.class,"controlP5TestInput").isFocus();
+    return this.isEditMode && !this.isCreateMode;
+  }
+
+  public boolean isEditable() {
+    return this.isEditMode && !this.isCreateMode;
+  }
+
+  public boolean isCreateable() {
+    return this.isEditMode && this.isCreateMode;
+  }
+
   public void handleKeyInputs() {
     if (input.isPressed(KEY_E)) {
       toggleEditMode();
@@ -46,10 +63,8 @@ public class OavpEditor {
       println(cp5.get(Textfield.class,"controlP5TestInput").isFocus());
     }
 
-    if (this.isEditMode) {
-      if (this.isCreateMode) {
-        handleCreateModeInputs();
-      } else if (this.activeTool == TOOL_MOVE) {
+    if (isEditable()) {
+      if (this.activeTool == TOOL_MOVE) {
         handleToolMoveInputs();
       } else if (this.activeTool == TOOL_RESIZE) {
         handleToolResizeInputs();
@@ -72,7 +87,13 @@ public class OavpEditor {
       } else if (this.activeTool == TOOL_LENGTH) {
         handleToolLengthInputs();
       }
+    }
 
+    if (isCreateable()) {
+      handleCreateModeInputs();
+    }
+
+    if (this.isEditMode) {
       if (input.isPressed(KEY_L)) {
         objects.nextActiveVariable();
       }
@@ -81,44 +102,55 @@ public class OavpEditor {
         objects.prevActiveVariable();
       }
 
-      if (input.isPressed(KEY_T)) {
-        this.activeTool = TOOL_TRANSFORM;
-      }
+      if (isToolSwitchable()) {
+        if (input.isPressed(KEY_M)) {
+          this.activeTool = TOOL_MOVE;
+          originalValues.put("x", objects.getActiveVariable().x);
+          originalValues.put("y", objects.getActiveVariable().y);
+        }
 
-      if (input.isPressed(KEY_S)) {
-        this.activeTool = TOOL_RESIZE;
-      }
+        if (input.isPressed(KEY_T)) {
+          this.activeTool = TOOL_TRANSFORM;
+        }
 
-      if (input.isPressed(KEY_M)) {
-        this.activeTool = TOOL_MOVE;
-      }
+        if (input.isPressed(KEY_S)) {
+          this.activeTool = TOOL_RESIZE;
+        }
 
-      if (input.isPressed(KEY_R)) {
-        this.activeTool = TOOL_ROTATE;
-      }
+        if (input.isPressed(KEY_R)) {
+          this.activeTool = TOOL_ROTATE;
+        }
 
-      if (input.isPressed(KEY_N)) {
-        this.activeTool = TOOL_ARRANGE;
-      }
+        if (input.isPressed(KEY_N)) {
+          this.activeTool = TOOL_ARRANGE;
+        }
 
-      if (input.isPressed(KEY_Y)) {
-        this.activeTool = TOOL_TURN;
-      }
+        if (input.isPressed(KEY_Y)) {
+          this.activeTool = TOOL_TURN;
+        }
 
-      if (input.isPressed(KEY_C)) {
-        this.activeTool = TOOL_COLOR;
-      }
+        if (input.isPressed(KEY_C)) {
+          this.activeTool = TOOL_COLOR;
+        }
 
-      if (input.isPressed(KEY_B)) {
-        this.activeTool = TOOL_WEIGHT;
-      }
+        if (input.isPressed(KEY_B)) {
+          this.activeTool = TOOL_WEIGHT;
+        }
 
-      if (input.isPressed(KEY_V)) {
-        this.activeTool = TOOL_VARIATION;
-      }
+        if (input.isPressed(KEY_V)) {
+          this.activeTool = TOOL_VARIATION;
+        }
 
-      if (input.isPressed(KEY_G)) {
-        this.activeTool = TOOL_LENGTH;
+        if (input.isPressed(KEY_G)) {
+          this.activeTool = TOOL_LENGTH;
+        }
+
+        if (input.isPressed(KEY_Z)) {
+          if (this.activeTool == TOOL_MODIFIER) {
+            this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
+          }
+          this.activeTool = TOOL_MODIFIER;
+        }
       }
 
       if (input.isPressed(KEY_D)) {
@@ -129,6 +161,14 @@ public class OavpEditor {
         toggleCreateMode();
       }
 
+      if (input.isPressed(KEY_H)) {
+        toggleCreateMode();
+      }
+
+      if (input.isPressed(KEY_Q)) {
+        toggleSnappingMode();
+      }
+
       if (input.isPressed(KEY_X)) {
         objects.printObjectData();
       }
@@ -136,61 +176,78 @@ public class OavpEditor {
       if (input.isPressed(KEY_W)) {
         objects.remove();
       }
-
-      if (input.isPressed(KEY_Z)) {
-        if (this.activeTool == TOOL_MODIFIER) {
-          this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
-        }
-        this.activeTool = TOOL_MODIFIER;
-      }
     }
-
   }
 
-  private void handleToolMoveInputs() {
-    int delta = DELTA_MOVEMENT;
-
-    if (input.isHoldingShift) {
-      delta = DELTA_MOVEMENT_SHIFT;
+  private void previewEdit(String fieldName, Object value) {
+    try {
+      OavpVariable activeVariable = objects.getActiveVariable();
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      if (value instanceof Integer) {
+        field.set(activeVariable, ((Integer) originalValues.get(fieldName)) + (Integer) value);
+      } else if (value instanceof String) {
+        field.set(activeVariable, (String) value);
+      } else if (value instanceof Float) {
+        field.set(activeVariable, ((float) originalValues.get(fieldName)) + (float) value);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 
-    if (input.isHoldingControl) {
-      delta = DELTA_MOVEMENT_CTRL;
+  private void commitEdit(String fieldName) {
+    try {
+      OavpVariable activeVariable = objects.getActiveVariable();
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      originalValues.replace(fieldName, field.get(activeVariable));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  int DELTA_MOVEMENT_PRECISE_KEYS = 50;
+  int DELTA_MOVEMENT_SNAP_KEYS = 5;
+  int DELTA_MOVEMENT_PRECISE_MOUSE = 50;
+  int DELTA_MOVEMENT_SNAP_MOUSE = 5;
+
+  private void handleToolMoveInputs() {
+    int deltaKeys = DELTA_MOVEMENT_PRECISE_KEYS;
+    int deltaMouse = DELTA_MOVEMENT_PRECISE_MOUSE;
+
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_MOVEMENT_SNAP_KEYS;
+      deltaMouse = DELTA_MOVEMENT_SNAP_MOUSE;
     }
 
     if (input.isPressed(UP)) {
-      objects.getActiveVariable().previewY(delta * -1).commitY();
+      previewEdit("y", deltaKeys * -1);
+      commitEdit("y");
     }
 
     if (input.isPressed(DOWN)) {
-      objects.getActiveVariable().previewY(delta).commitY();
+      previewEdit("y", deltaKeys);
+      commitEdit("y");
     }
 
     if (input.isPressed(RIGHT)) {
-      objects.getActiveVariable().previewX(delta).commitX();
+      previewEdit("x", deltaKeys);
+      commitEdit("x");
     }
 
     if (input.isPressed(LEFT)) {
-      objects.getActiveVariable().previewX(delta * -1).commitX();
+      previewEdit("x", deltaKeys * -1);
+      commitEdit("x");
     }
 
     if (input.isMousePressed()) {
-      objects.getActiveVariable().previewY(input.getYGridTicks() * delta);
-      objects.getActiveVariable().previewX(input.getXGridTicks() * delta);
+      previewEdit("x", snap(input.getXGridTicks(), deltaMouse));
+      previewEdit("y", snap(input.getYGridTicks(), deltaMouse));
     }
 
     if (input.isMouseReleased()) {
-      objects.getActiveVariable().commitY();
-      objects.getActiveVariable().commitX();
+      commitEdit("x");
+      commitEdit("y");
       input.resetTicks();
-    }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
     }
   }
 
@@ -220,14 +277,6 @@ public class OavpEditor {
     if (input.isMouseReleased()) {
       objects.getActiveVariable().commitSize();
       input.resetTicks();
-    }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
     }
   }
 
@@ -268,14 +317,6 @@ public class OavpEditor {
       objects.getActiveVariable().commitH();
       input.resetTicks();
     }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
-    }
   }
 
   private void handleToolRotateInputs() {
@@ -305,14 +346,6 @@ public class OavpEditor {
       objects.getActiveVariable().commitZR();
       input.resetTicks();
     }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
-    }
   }
 
   private void handleToolArrangeInputs() {
@@ -341,14 +374,6 @@ public class OavpEditor {
     if (input.isMouseReleased()) {
       objects.getActiveVariable().commitZ();
       input.resetTicks();
-    }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
     }
   }
 
@@ -388,14 +413,6 @@ public class OavpEditor {
       objects.getActiveVariable().commitYR();
       objects.getActiveVariable().commitXR();
       input.resetTicks();
-    }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
     }
   }
 
@@ -452,25 +469,6 @@ public class OavpEditor {
         objects.getActiveVariable().strokeColor(0);
       }
     }
-
-    if (input.isMousePressed()) {
-      // input.getYGridTicks();
-      // input.getXGridTicks();
-    }
-
-    if (input.isMouseReleased()) {
-      // objects.getActiveVariable().commitYR();
-      // objects.getActiveVariable().commitXR();
-      input.resetTicks();
-    }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
-    }
   }
 
   private void handleToolWeightInputs() {
@@ -499,14 +497,6 @@ public class OavpEditor {
     if (input.isMouseReleased()) {
       objects.getActiveVariable().commitStrokeWeight();
       input.resetTicks();
-    }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
     }
   }
 
@@ -547,20 +537,8 @@ public class OavpEditor {
       handleCreateModeSelection(this.createModeSelectionIndex);
     }
 
-    if (input.isMousePressed()) {
-
-    }
-
     if (input.isMouseReleased()) {
       handleCreateModeSelection(this.createModeSelectionIndex);
-    }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
     }
   }
 
@@ -646,22 +624,6 @@ public class OavpEditor {
         activeVariable.variation += 1;
       }
     }
-
-    if (input.isPressed(RIGHT)) {
-
-    }
-
-    if (input.isPressed(LEFT)) {
-
-    }
-
-    if (input.isPressed(ENTER)) {
-
-    }
-
-    if (input.isMouseReleased()) {
-
-    }
   }
 
   private void handleToolLengthInputs() {
@@ -691,14 +653,6 @@ public class OavpEditor {
       objects.getActiveVariable().commitL();
       input.resetTicks();
     }
-
-    if (input.isShiftReleased()) {
-
-    }
-
-    if (input.isControlReleased()) {
-
-    }
   }
 
   private void handleCreateModeSelection(int index) {
@@ -725,6 +679,10 @@ public class OavpEditor {
       //   cp5.hide();
       // }
     }
+  }
+
+  private void toggleSnappingMode() {
+    this.isSnappingEnabled = !this.isSnappingEnabled;
   }
 
   private void toggleCreateMode() {
@@ -1281,10 +1239,6 @@ int KEY_W = 87;
 int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
-
-int DELTA_MOVEMENT = 10;
-int DELTA_MOVEMENT_SHIFT = 5;
-int DELTA_MOVEMENT_CTRL = 1;
 
 int DELTA_RESIZE = 10;
 int DELTA_RESIZE_SHIFT = 5;

@@ -64,6 +64,10 @@ color opacity(color c, float alpha) {
   return out;
 }
 
+int snap(int x, int grid) {
+  return x % grid == 0 ? x : x - (x % grid);
+}
+
 public boolean isNumber(String str){
   int i=0, len=str.length();
   boolean a=false,b=false,c=false, d=false;
