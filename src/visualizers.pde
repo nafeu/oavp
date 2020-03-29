@@ -423,6 +423,11 @@ class OavpVisualizer {
     return this;
   }
 
+  public OavpVisualizer useInterval(Object name) {
+    currInterval = entities.getInterval((String) name);
+    return this;
+  }
+
   /**
    * Select a GridInterval entity to use
    * @param name the name of the GridInterval entity
@@ -438,6 +443,11 @@ class OavpVisualizer {
    */
   public OavpVisualizer useEmissions(String name) {
     currEmissions = entities.getEmissions(name);
+    return this;
+  }
+
+  public OavpVisualizer useEmissions(Object name) {
+    currEmissions = entities.getEmissions((String) name);
     return this;
   }
 
@@ -1434,7 +1444,7 @@ class OavpVisualizer {
      * @param scaleFactor the scale factor of the svg
      * @use draw
      */
-    public OavpVisualizer centeredSvg(String svgName, float scaleFactor) {
+    public OavpVisualizer centeredSvg(Object svgName, float scaleFactor) {
       PShape shape = entities.getSvg(svgName);
       pushStyle();
       shape.disableStyle();

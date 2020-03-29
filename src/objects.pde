@@ -184,7 +184,7 @@ public class OavpObjSvg extends OavpObject {
       .create()
       .center().middle()
       .use(variable)
-      .draw.centeredSvg(variable.customStringAttrs.get("svgName"), variable.size() / 100)
+      .draw.centeredSvg(variable.customAttrs.get("svgName"), variable.size() / 100)
       .done();
   }
 }
@@ -219,20 +219,20 @@ public class OavpObjBullseye extends OavpObject {
       .l(100)
       .set("varName", variable.name)
       .strokeColor(palette.flat.white);
-    entities.addPulser(variable.customStringAttrs.get("varName"));
-    entities.addInterval(variable.customStringAttrs.get("varName"), 10, 1);
+    entities.addPulser(variable.customAttrs.get("varName"));
+    entities.addInterval(variable.customAttrs.get("varName"), 10, 1);
   }
 
   public void update() {
-    entities.getPulser(variable.customStringAttrs.get("varName"))
+    entities.getPulser(variable.customAttrs.get("varName"))
       .pulseIf(analysis.isBeatOnset());
-    entities.getInterval(variable.customStringAttrs.get("varName"))
-      .update(entities.getPulser(variable.customStringAttrs.get("varName")).getValue());
+    entities.getInterval(variable.customAttrs.get("varName"))
+      .update(entities.getPulser(variable.customAttrs.get("varName")).getValue());
   }
 
   public void draw() {
     visualizers
-      .useInterval(variable.customStringAttrs.get("varName"))
+      .useInterval(variable.customAttrs.get("varName"))
       .create()
       .center().middle()
       .use(variable);
@@ -262,17 +262,17 @@ public class OavpObjSplash extends OavpObject {
       .l(100)
       .set("varName", variable.name)
       .strokeColor(palette.flat.white);
-    entities.addEmissions(variable.customStringAttrs.get("varName"));
+    entities.addEmissions(variable.customAttrs.get("varName"));
   }
 
   public void update() {
-    emitters.useEmissions(variable.customStringAttrs.get("varName"))
+    emitters.useEmissions(variable.customAttrs.get("varName"))
       .emitIf(analysis.isBeatOnset());
   }
 
   public void draw() {
     visualizers
-      .useEmissions(variable.customStringAttrs.get("varName"))
+      .useEmissions(variable.customAttrs.get("varName"))
       .create()
       .center().middle()
       .use(variable);
@@ -346,12 +346,12 @@ public class OavpObjZRectangles extends OavpObject {
       .center().middle()
       .use(variable);
 
-    int count = variable.customIntAttrs.get("count");
-    float gap = variable.customFloatAttrs.get("gap");
+    int count = (int) variable.customAttrs.get("count");
+    float gap = (float) variable.customAttrs.get("gap");
 
     for (int i = 0; i < count; i++) {
       if (variable.ofVariation("radial")) {
-        int radius = variable.customIntAttrs.get("radius");
+        int radius = (int) variable.customAttrs.get("radius");
         visualizers
           .draw.basicZRectangle(
             variable.w() * (1.00 - (gap * i)),

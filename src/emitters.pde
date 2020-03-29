@@ -29,8 +29,18 @@ public class OavpEmitter {
     return this;
   }
 
+  public OavpEmitter usePulser(Object name) {
+    currPulser = entities.getPulser((String) name);
+    return this;
+  }
+
   public OavpEmitter useInterval(String name) {
     currInterval = entities.getInterval(name);
+    return this;
+  }
+
+  public OavpEmitter useInterval(Object name) {
+    currInterval = entities.getInterval((String) name);
     return this;
   }
 
@@ -39,8 +49,18 @@ public class OavpEmitter {
     return this;
   }
 
+  public OavpEmitter useGridInterval(Object name) {
+    currGridInterval = entities.getGridInterval((String) name);
+    return this;
+  }
+
   public OavpEmitter useEmissions(String name) {
     currEmissions = entities.getEmissions(name);
+    return this;
+  }
+
+  public OavpEmitter useEmissions(Object name) {
+    currEmissions = entities.getEmissions((String) name);
     return this;
   }
 

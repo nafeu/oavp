@@ -822,171 +822,51 @@ public class OavpVariable {
   public String strokeWeightModType = "";
   public float strokeWeightOrig = 2;
   public String name = "";
-  public HashMap<String, Float> customFloatAttrs;
-  public HashMap<String, Integer> customIntAttrs;
-  public HashMap<String, String> customStringAttrs;
+  public HashMap<String, Object> customAttrs;
   public List<String> variations;
   public int variation = 0;
 
   OavpVariable() {
-    this.customFloatAttrs = new HashMap<String, Float>();
-    this.customIntAttrs = new HashMap<String, Integer>();
-    this.customStringAttrs = new HashMap<String, String>();
+    this.customAttrs = new HashMap<String, Object>();
     this.variations = new ArrayList();
     this.variations("default");
   }
 
   OavpVariable(String name) {
     this.name = name;
-    this.customFloatAttrs = new HashMap<String, Float>();
-    this.customIntAttrs = new HashMap<String, Integer>();
-    this.customStringAttrs = new HashMap<String, String>();
+    this.customAttrs = new HashMap<String, Object>();
     this.variations = new ArrayList();
     this.variations("default");
   }
 
-  public OavpVariable set(String prop, int input) {
-    switch (prop) {
-      case "x":
-        this.x(input);
-        break;
-      case "xr":
-        this.xr(input);
-        break;
-      case "y":
-        this.y(input);
-        break;
-      case "yr":
-        this.yr(input);
-        break;
-      case "z":
-        this.z(input);
-        break;
-      case "zr":
-        this.zr(input);
-        break;
-      case "strokeColor":
-        this.strokeColor(input);
-        break;
-      case "strokeWeight":
-        this.strokeWeight(input);
-        break;
-      case "fillColor":
-        this.fillColor(input);
-        break;
-      default:
-        this.customIntAttrs.put(prop, input);
+  public OavpVariable set(String prop, Object input) {
+    Set<String> fields = this.getDeclaredFields();
+    try {
+      if (fields.contains(prop)) {
+        Field field = this.getClass().getDeclaredField(prop);
+        if (prop == "variation") {
+          field.set(this, this.getVariationIndex(input));
+        } else {
+          field.set(this, input);
+        }
+      } else if (this.customAttrs.containsKey(prop)) {
+        this.customAttrs.replace(prop, input);
+      } else {
+        this.customAttrs.put(prop, input);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+
     return this;
   }
 
-  public OavpVariable set(String prop, float input) {
-    switch (prop) {
-      case "xMod":
-        this.xMod(input);
-        break;
-      case "xrMod":
-        this.xrMod(input);
-        break;
-      case "yMod":
-        this.yMod(input);
-        break;
-      case "yrMod":
-        this.yrMod(input);
-        break;
-      case "zMod":
-        this.zMod(input);
-        break;
-      case "zrMod":
-        this.zrMod(input);
-        break;
-      case "strokeColorMod":
-        this.strokeColorMod(input);
-        break;
-      case "strokeWeightMod":
-        this.strokeWeightMod(input);
-        break;
-      case "fillColorMod":
-        this.fillColorMod(input);
-        break;
-      case "w":
-        this.w(input);
-        break;
-      case "wMod":
-        this.wMod(input);
-        break;
-      case "h":
-        this.h(input);
-        break;
-      case "hMod":
-        this.hMod(input);
-        break;
-      case "l":
-        this.l(input);
-        break;
-      case "lMod":
-        this.lMod(input);
-        break;
-      case "size":
-        this.size(input);
-        break;
-      case "sizeMod":
-        this.sizeMod(input);
-        break;
-      default:
-        this.customFloatAttrs.put(prop, input);
+  public int getVariationIndex(Object option) {
+    if (this.variations.contains((String) option)) {
+      return this.variations.indexOf((String) option);
+    } else {
+      return 0;
     }
-    return this;
-  }
-
-  public OavpVariable set(String prop, String input) {
-    switch(prop) {
-      case "xModType":
-        this.xModType(input);
-        break;
-      case "xrModType":
-        this.xrModType(input);
-        break;
-      case "yModType":
-        this.yModType(input);
-        break;
-      case "yrModType":
-        this.yrModType(input);
-        break;
-      case "zModType":
-        this.zModType(input);
-        break;
-      case "zrModType":
-        this.zrModType(input);
-        break;
-      case "wModType":
-        this.wModType(input);
-        break;
-      case "hModType":
-        this.hModType(input);
-        break;
-      case "lModType":
-        this.lModType(input);
-        break;
-      case "sizeModType":
-        this.sizeModType(input);
-        break;
-      case "strokeColorModType":
-        this.strokeColorModType(input);
-        break;
-      case "strokeWeightModType":
-        this.xModType(input);
-        break;
-      case "fillColorModType":
-        this.fillColorModType(input);
-        break;
-      case "variation":
-        this.variation(input);
-        break;
-      default:
-        this.customStringAttrs.put(prop, input);
-    }
-    return this;
   }
 
   public OavpVariable variation(String option) {
@@ -1286,17 +1166,39 @@ public class OavpVariable {
         thisClass = Class.forName(this.getClass().getName());
 
         Field[] aClassFields = thisClass.getDeclaredFields();
-        sb.append(this.getClass().getSimpleName() + " [ ");
+        // sb.append(this.getClass().getSimpleName() + " [ ");
+        // for(Field f : aClassFields){
+        //     String fName = f.getName();
+        //     sb.append("(" + f.getType() + ") " + fName + " = " + f.get(this) + ", ");
+        // }
+        // sb.append("]");
         for(Field f : aClassFields){
             String fName = f.getName();
-            sb.append("(" + f.getType() + ") " + fName + " = " + f.get(this) + ", ");
+            sb.append(fName + ", ");
         }
-        sb.append("]");
     } catch (Exception e) {
         e.printStackTrace();
     }
 
     return sb.toString();
+  }
+
+  public Set<String> getDeclaredFields() {
+    Set<String> output = new HashSet<String>();
+    Class<?> thisClass = null;
+
+    try {
+        thisClass = Class.forName(this.getClass().getName());
+        Field[] aClassFields = thisClass.getDeclaredFields();
+        for(Field f : aClassFields){
+            String fName = f.getName();
+            output.add(fName);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return output;
   }
 }
 
@@ -1363,6 +1265,10 @@ public class OavpEntityManager {
     return svgs.get(name);
   }
 
+  public PShape getSvg(Object name) {
+    return svgs.get((String) name);
+  }
+
   public void addImg(String filename) {
     String[] fn = filename.split("\\.");
     imgs.put(fn[0], loadImage(filename));
@@ -1382,8 +1288,8 @@ public class OavpEntityManager {
     return movies.get(name);
   }
 
-  public OavpPulser addPulser(String name) {
-    pulsers.put(name, new OavpPulser());
+  public OavpPulser addPulser(Object name) {
+    pulsers.put((String) name, new OavpPulser());
     return pulsers.get(name);
   }
 
@@ -1398,12 +1304,24 @@ public class OavpEntityManager {
     return pulsers.get(name);
   }
 
+  public OavpPulser getPulser(Object name) {
+    return pulsers.get((String) name);
+  }
+
   public void addInterval(String name, int storageSize, int snapshotSize) {
     intervals.put(name, new OavpInterval(storageSize, snapshotSize));
   }
 
+  public void addInterval(Object name, int storageSize, int snapshotSize) {
+    intervals.put((String) name, new OavpInterval(storageSize, snapshotSize));
+  }
+
   public OavpInterval getInterval(String name) {
     return intervals.get(name);
+  }
+
+  public OavpInterval getInterval(Object name) {
+    return intervals.get((String) name);
   }
 
   public OavpGridInterval addGridInterval(String name, int numRows, int numCols) {
@@ -1417,6 +1335,10 @@ public class OavpEntityManager {
 
   public void addEmissions(String name) {
     emissionsStorage.put(name, new ArrayList());
+  }
+
+  public void addEmissions(Object name) {
+    emissionsStorage.put((String) name, new ArrayList());
   }
 
   public OavpEntityManager addEmissions(String... names) {
@@ -1844,16 +1766,14 @@ public class OavpObjectManager {
       if (variable.fillColorModType != "") { objectData.append(".set(\"fillColorModType\",\"" + variable.fillColorModType + "\")"); }
       if (variable.variation != 0) { objectData.append(".set(\"variation\",\"" + variable.getVariation() + "\")"); }
 
-      for (HashMap.Entry<String, Float> customAttrEntry : variable.customFloatAttrs.entrySet()) {
-        objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
-      }
-
-      for (HashMap.Entry<String, Integer> customAttrEntry : variable.customIntAttrs.entrySet()) {
-        objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
-      }
-
-      for (HashMap.Entry<String, String> customAttrEntry : variable.customStringAttrs.entrySet()) {
-        objectData.append(".set(\"" + customAttrEntry.getKey() + "\", \"" + customAttrEntry.getValue() + "\")");
+      for (HashMap.Entry<String, Object> customAttrEntry : variable.customAttrs.entrySet()) {
+        if (customAttrEntry.getValue().getClass() == Float.class) {
+          objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
+        } else if (customAttrEntry.getValue().getClass() == String.class) {
+          objectData.append(".set(\"" + customAttrEntry.getKey() + "\", \"" + customAttrEntry.getValue() + "\")");
+        } else if (customAttrEntry.getValue().getClass() == Integer.class) {
+          objectData.append(".set(\"" + customAttrEntry.getKey() + "\", " + customAttrEntry.getValue() + ")");
+        }
       }
 
       objectData.append(";");
@@ -1932,16 +1852,8 @@ public class OavpObject {
     cloneVariable.fillColorModType = this.variable.fillColorModType;
     cloneVariable.variation = this.variable.variation;
 
-    for (HashMap.Entry<String, Float> entry : this.variable.customFloatAttrs.entrySet()) {
-      cloneVariable.set(entry.getKey(), (float) entry.getValue());
-    }
-
-    for (HashMap.Entry<String, Integer> entry : this.variable.customIntAttrs.entrySet()) {
-      cloneVariable.set(entry.getKey(), (int) entry.getValue());
-    }
-
-    for (HashMap.Entry<String, String> entry : this.variable.customStringAttrs.entrySet()) {
-      cloneVariable.set(entry.getKey(), (String) entry.getValue());
+    for (HashMap.Entry<String, Object> customAttrEntry : this.variable.customAttrs.entrySet()) {
+      cloneVariable.set(customAttrEntry.getKey(), customAttrEntry.getValue());
     }
 
     return clone;
