@@ -786,21 +786,18 @@ public class OavpVariable {
   public int xr = 0;
   public float xrMod = 0;
   public String xrModType = "";
-  public int xrOrig = 0;
   public int y = 0;
   public float yMod = 0;
   public String yModType = "";
   public int yr = 0;
   public float yrMod = 0;
   public String yrModType = "";
-  public int yrOrig = 0;
   public int z = 0;
   public float zMod = 0;
   public String zModType = "";
   public int zr = 0;
   public float zrMod = 0;
   public String zrModType = "";
-  public int zrOrig = 0;
   public float w = 100;
   public float wMod = 0;
   public String wModType = "";
@@ -1124,16 +1121,6 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable previewXR(int multiplier) {
-    this.xr = this.xrOrig + (multiplier * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitXR() {
-    this.xrOrig = this.xr;
-    return this;
-  }
-
   public OavpVariable y(int input) {
     this.y = input;
     return this;
@@ -1164,16 +1151,6 @@ public class OavpVariable {
     return this;
   }
 
-  public OavpVariable previewYR(int multiplier) {
-    this.yr = this.yrOrig + (multiplier * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitYR() {
-    this.yrOrig = this.yr;
-    return this;
-  }
-
   public OavpVariable z(int input) {
     this.z = input;
     return this;
@@ -1201,16 +1178,6 @@ public class OavpVariable {
 
   public OavpVariable zrModType(String input) {
     this.zrModType = input;
-    return this;
-  }
-
-  public OavpVariable previewZR(int multiplier) {
-    this.zr = this.zrOrig + (multiplier * gridScale);
-    return this;
-  }
-
-  public OavpVariable commitZR() {
-    this.zrOrig = this.zr;
     return this;
   }
 
@@ -1929,21 +1896,18 @@ public class OavpObject {
     cloneVariable.xr = this.variable.xr;
     cloneVariable.xrMod = this.variable.xrMod;
     cloneVariable.xrModType = this.variable.xrModType;
-    cloneVariable.xrOrig = this.variable.xrOrig;
     cloneVariable.y = this.variable.y;
     cloneVariable.yMod = this.variable.yMod;
     cloneVariable.yModType = this.variable.yModType;
     cloneVariable.yr = this.variable.yr;
     cloneVariable.yrMod = this.variable.yrMod;
     cloneVariable.yrModType = this.variable.yrModType;
-    cloneVariable.yrOrig = this.variable.yrOrig;
     cloneVariable.z = this.variable.z;
     cloneVariable.zMod = this.variable.zMod;
     cloneVariable.zModType = this.variable.zModType;
     cloneVariable.zr = this.variable.zr;
     cloneVariable.zrMod = this.variable.zrMod;
     cloneVariable.zrModType = this.variable.zrModType;
-    cloneVariable.zrOrig = this.variable.zrOrig;
     cloneVariable.w = this.variable.w;
     cloneVariable.wMod = this.variable.wMod;
     cloneVariable.wModType = this.variable.wModType;
