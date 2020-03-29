@@ -98,49 +98,35 @@ public class OavpEditor {
 
       if (isToolSwitchable()) {
         if (input.isPressed(KEY_M)) {
-          this.activeTool = TOOL_MOVE;
-          originalValues.put("x", objects.getActiveVariable().x);
-          originalValues.put("y", objects.getActiveVariable().y);
-          originalValues.put("z", objects.getActiveVariable().z);
+          this.switchTool(TOOL_MOVE);
         }
 
         if (input.isPressed(KEY_S)) {
-          this.activeTool = TOOL_RESIZE;
-          originalValues.put("size", objects.getActiveVariable().size);
+          this.switchTool(TOOL_RESIZE);
         }
 
         if (input.isPressed(KEY_T)) {
-          this.activeTool = TOOL_TRANSFORM;
-          originalValues.put("w", objects.getActiveVariable().w);
-          originalValues.put("h", objects.getActiveVariable().h);
-          originalValues.put("l", objects.getActiveVariable().l);
+          this.switchTool(TOOL_TRANSFORM);
         }
 
         if (input.isPressed(KEY_R)) {
-          this.activeTool = TOOL_ROTATE;
-          originalValues.put("xr", objects.getActiveVariable().xr);
-          originalValues.put("yr", objects.getActiveVariable().yr);
-          originalValues.put("zr", objects.getActiveVariable().zr);
+          this.switchTool(TOOL_ROTATE);
         }
 
         if (input.isPressed(KEY_C)) {
-          this.activeTool = TOOL_COLOR;
+          this.switchTool(TOOL_COLOR);
         }
 
         if (input.isPressed(KEY_B)) {
-          this.activeTool = TOOL_WEIGHT;
-          originalValues.put("strokeWeight", objects.getActiveVariable().strokeWeight);
+          this.switchTool(TOOL_WEIGHT);
         }
 
         if (input.isPressed(KEY_V)) {
-          this.activeTool = TOOL_VARIATION;
+          this.switchTool(TOOL_VARIATION);
         }
 
         if (input.isPressed(KEY_Z)) {
-          if (this.activeTool == TOOL_MODIFIER) {
-            this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
-          }
-          this.activeTool = TOOL_MODIFIER;
+          this.switchTool(TOOL_MODIFIER);
         }
       }
 
@@ -167,6 +153,56 @@ public class OavpEditor {
       if (input.isPressed(KEY_W)) {
         objects.remove();
       }
+    }
+  }
+
+  public void switchTool(int toolId) {
+    deselectAllToolbarTools();
+    hideAllEditorGroups();
+    switch (toolId) {
+      case 0:
+        this.activeTool = TOOL_MOVE;
+        editorGroupMove.show();
+        originalValues.put("x", objects.getActiveVariable().x);
+        originalValues.put("y", objects.getActiveVariable().y);
+        originalValues.put("z", objects.getActiveVariable().z);
+        editorToolbar.changeItem("move", "selected", true);
+        editorGroupMove.show();
+        break;
+      case 1:
+        this.activeTool = TOOL_RESIZE;
+        originalValues.put("size", objects.getActiveVariable().size);
+        editorToolbar.changeItem("resize", "selected", true);
+        break;
+      case 2:
+        this.activeTool = TOOL_TRANSFORM;
+        originalValues.put("w", objects.getActiveVariable().w);
+        originalValues.put("h", objects.getActiveVariable().h);
+        originalValues.put("l", objects.getActiveVariable().l);
+        editorToolbar.changeItem("transform", "selected", true);
+        break;
+      case 3:
+        this.activeTool = TOOL_ROTATE;
+        originalValues.put("xr", objects.getActiveVariable().xr);
+        originalValues.put("yr", objects.getActiveVariable().yr);
+        originalValues.put("zr", objects.getActiveVariable().zr);
+        break;
+      case 4:
+        this.activeTool = TOOL_COLOR;
+        break;
+      case 5:
+        this.activeTool = TOOL_WEIGHT;
+        originalValues.put("strokeWeight", objects.getActiveVariable().strokeWeight);
+        break;
+      case 6:
+        this.activeTool = TOOL_COLOR;
+        break;
+      case 7:
+        if (this.activeTool == TOOL_MODIFIER) {
+          this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
+        }
+        this.activeTool = TOOL_MODIFIER;
+        break;
     }
   }
 
@@ -231,6 +267,10 @@ public class OavpEditor {
     if (input.isPressed(LEFT)) { previewEdit("x", deltaKeys * -1); commitEdit("x"); }
 
     if (input.isShiftReleased()) {}
+
+    editorGroupMoveX.setText("x: " + objects.getActiveVariable().x);
+    editorGroupMoveY.setText("y: " + objects.getActiveVariable().y);
+    editorGroupMoveZ.setText("z: " + objects.getActiveVariable().z);
   }
 
   float DELTA_RESIZE_PRECISE_KEYS = 5;
@@ -564,12 +604,13 @@ public class OavpEditor {
     if (objects.activeObjects.size() > 0 && !this.isCreateMode) {
       this.isEditMode = !this.isEditMode;
       if (this.isEditMode) {
+        editorToolbar.show();
         originalValues.put("x", objects.getActiveVariable().x);
         originalValues.put("y", objects.getActiveVariable().y);
         originalValues.put("z", objects.getActiveVariable().z);
-      //   cp5.show();
       } else {
-      //   cp5.hide();
+        editorToolbar.hide();
+        hideAllEditorGroups();
       }
     }
   }
@@ -669,7 +710,7 @@ public class OavpEditor {
           .done();
         break;
 
-      case 6: // COLOR
+      case 4: // COLOR
         visualizers
           .create()
           .center().middle()
@@ -726,7 +767,7 @@ public class OavpEditor {
 
         break;
 
-      case 7: // WEIGHT
+      case 5: // WEIGHT
         visualizers
           .create()
           .center().middle()
@@ -749,7 +790,7 @@ public class OavpEditor {
 
         break;
 
-      case 8: // MODIFIER
+      case 6: // MODIFIER
         if (this.isSelectModifierTypeMode) {
           palette.reset(palette.flat.black, palette.flat.white, 2);
 
@@ -827,7 +868,7 @@ public class OavpEditor {
         }
         break;
 
-      case 9: // VARIATION
+      case 7: // VARIATION
         visualizers
           .create()
           .center().middle()
@@ -963,22 +1004,79 @@ public class OavpEditor {
   }
 }
 
+ButtonBar editorToolbar;
+
+Group editorGroupMove;
+Textlabel editorGroupMoveX;
+Textlabel editorGroupMoveY;
+Textlabel editorGroupMoveZ;
+
 public void setupEditorGui() {
-  cp5.hide();
-  cp5.addTextfield("controlP5TestInput")
-     .setPosition(20,100)
-     .setSize(200,40)
-     .setColor(color(255,0,0));
+  editorToolbar = cp5.addButtonBar("editorToolbar")
+      .setColorBackground(color(0, 0, 0))
+     .setPosition(10, 10)
+     .setSize(500, 10)
+     .addItems(split("move resize transform rotate color weight modifiers variation"," "))
+     .hide()
+     ;
+
+  editorGroupMove = cp5.addGroup("move")
+                .setColorBackground(color(0, 0, 0))
+                .setPosition(10,40)
+                .setBackgroundHeight(100)
+                .setBackgroundColor(color(0, 0, 0))
+                .hide()
+                ;
+
+  editorGroupMoveX = cp5.addTextlabel("x")
+    .setText("")
+    .setPosition(10,10)
+    .setColorValue(color(255, 255, 255))
+    .setGroup("move")
+    ;
+
+  editorGroupMoveY = cp5.addTextlabel("y")
+    .setText("")
+    .setPosition(10,20)
+    .setColorValue(color(255, 255, 255))
+    .setGroup("move")
+    ;
+
+  editorGroupMoveZ = cp5.addTextlabel("z")
+    .setText("")
+    .setPosition(10,30)
+    .setColorValue(color(255, 255, 255))
+    .setGroup("move")
+    ;
+}
+
+public void hideAllEditorGroups() {
+  editorGroupMove.hide();
+}
+
+public void deselectAllToolbarTools() {
+  editorToolbar.changeItem("move", "selected", false);
+  editorToolbar.changeItem("resize", "selected", false);
+  editorToolbar.changeItem("transform", "selected", false);
+  editorToolbar.changeItem("rotate", "selected", false);
+  editorToolbar.changeItem("color", "selected", false);
+  editorToolbar.changeItem("weight", "selected", false);
+  editorToolbar.changeItem("modifiers", "selected", false);
+  editorToolbar.changeItem("variation", "selected", false);
+}
+
+public void editorToolbar(int toolId) {
+  editor.switchTool(toolId);
 }
 
 int TOOL_MOVE = 0;
 int TOOL_RESIZE = 1;
 int TOOL_TRANSFORM = 2;
 int TOOL_ROTATE = 3;
-int TOOL_COLOR = 6;
-int TOOL_WEIGHT = 7;
-int TOOL_MODIFIER = 8;
-int TOOL_VARIATION = 9;
+int TOOL_COLOR = 4;
+int TOOL_WEIGHT = 5;
+int TOOL_MODIFIER = 6;
+int TOOL_VARIATION = 7;
 
 // KEYS
 int KEY_ENTER = 10;
