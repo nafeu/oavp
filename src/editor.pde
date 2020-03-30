@@ -439,6 +439,8 @@ public class OavpEditor {
         objects.getActiveVariable().strokeColor(0);
       }
     }
+
+    updateEditorVariableMeta();
   }
 
   float DELTA_WEIGHT_PRECISE_KEYS = 0.25;
@@ -1052,6 +1054,11 @@ Textlabel wVarMeta;
 Textlabel lVarMeta;
 Textlabel hVarMeta;
 Textlabel sizeVarMeta;
+Textlabel strokeWeightVarMeta;
+Textlabel strokeColorVarMeta;
+Bang strokeColorVarMetaButton;
+Textlabel fillColorVarMeta;
+Bang fillColorVarMetaButton;
 
 String toolbarLabelMove = "[m] move";
 String toolbarLabelResize = "[s] resize";
@@ -1090,27 +1097,33 @@ public void setupEditorGui() {
      .hide()
      ;
 
-  editorVariableMeta = cp5.addGroup("structure")
+  editorVariableMeta = cp5.addGroup("variableMeta")
     .setLabel("selected variable")
     .setColorBackground(COLOR_BLACK)
-    .setPosition(10, 40)
-    .setBackgroundHeight(100)
+    .setPosition(10, 35)
+    .setSize(300, 70)
     .setBackgroundColor(COLOR_BLACK)
     .hide()
     ;
 
-  xVarMeta = cp5.addTextlabel("x").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("structure");
-  yVarMeta = cp5.addTextlabel("y").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("structure");
-  zVarMeta = cp5.addTextlabel("z").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("structure");
+  xVarMeta = cp5.addTextlabel("x").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  yVarMeta = cp5.addTextlabel("y").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  zVarMeta = cp5.addTextlabel("z").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
 
-  xrVarMeta = cp5.addTextlabel("xr").setPosition(10 * 4, 10).setColorValue(COLOR_WHITE).setGroup("structure");
-  yrVarMeta = cp5.addTextlabel("yr").setPosition(10 * 4, 20).setColorValue(COLOR_WHITE).setGroup("structure");
-  zrVarMeta = cp5.addTextlabel("zr").setPosition(10 * 4, 30).setColorValue(COLOR_WHITE).setGroup("structure");
+  xrVarMeta = cp5.addTextlabel("xr").setPosition(10 * 6, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  yrVarMeta = cp5.addTextlabel("yr").setPosition(10 * 6, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  zrVarMeta = cp5.addTextlabel("zr").setPosition(10 * 6, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
 
-  wVarMeta = cp5.addTextlabel("w").setPosition(10 * 8, 10).setColorValue(COLOR_WHITE).setGroup("structure");
-  hVarMeta = cp5.addTextlabel("h").setPosition(10 * 8, 20).setColorValue(COLOR_WHITE).setGroup("structure");
-  lVarMeta = cp5.addTextlabel("l").setPosition(10 * 8, 30).setColorValue(COLOR_WHITE).setGroup("structure");
-  sizeVarMeta = cp5.addTextlabel("size").setPosition(10 * 8, 40).setColorValue(COLOR_WHITE).setGroup("structure");
+  wVarMeta = cp5.addTextlabel("w").setPosition(10 * 11, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  hVarMeta = cp5.addTextlabel("h").setPosition(10 * 11, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  lVarMeta = cp5.addTextlabel("l").setPosition(10 * 11, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  sizeVarMeta = cp5.addTextlabel("size").setPosition(10 * 11, 40).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+
+  strokeWeightVarMeta = cp5.addTextlabel("strokeWeight").setPosition(10 * 16, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  strokeColorVarMeta = cp5.addTextlabel("strokeColor").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  strokeColorVarMetaButton = cp5.addBang("strokeColorButton").setPosition(10 * 16 + 60, 20 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("variableMeta");
+  fillColorVarMeta = cp5.addTextlabel("fillColor").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  fillColorVarMetaButton = cp5.addBang("fillColorButton").setPosition(10 * 16 + 60, 30 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("variableMeta");
 }
 
 public void updateEditorVariableMeta() {
@@ -1124,6 +1137,9 @@ public void updateEditorVariableMeta() {
   hVarMeta.setText("h: " + objects.getActiveVariable().h);
   lVarMeta.setText("l: " + objects.getActiveVariable().l);
   sizeVarMeta.setText("size: " + objects.getActiveVariable().size);
+  strokeWeightVarMeta.setText("strokeWeight: " + objects.getActiveVariable().strokeWeight);
+  strokeColorVarMetaButton.setColorForeground(objects.getActiveVariable().strokeColor);
+  fillColorVarMetaButton.setColorForeground(objects.getActiveVariable().fillColor);
 }
 
 public void deselectAllToolbarTools() {
@@ -1132,7 +1148,7 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelTransform, "selected", false);
   editorToolbar.changeItem(toolbarLabelRotate, "selected", false);
   editorToolbar.changeItem(toolbarLabelColor, "selected", false);
-  editorToolbar.changeItem(toolbarLabelWeight, "sebected", false);
+  editorToolbar.changeItem(toolbarLabelWeight, "selected", false);
   editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
 }
