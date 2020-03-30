@@ -603,6 +603,9 @@ public class OavpEditor {
       this.isCreateMode = false;
       String className = this.selectableObjects.get(index);
       objects.add(getNewObjectName(className, 1), className);
+      editorToolbar.show();
+      editorToggleSnappingButton.show();
+      editorVariableMeta.show();
     }
   }
 
@@ -643,6 +646,15 @@ public class OavpEditor {
   private void toggleCreateMode() {
     if (this.isEditMode) {
       this.isCreateMode = !this.isCreateMode;
+      if (this.isCreateMode) {
+        editorToolbar.hide();
+        editorToggleSnappingButton.hide();
+        editorVariableMeta.hide();
+      } else {
+        editorToolbar.show();
+        editorToggleSnappingButton.show();
+        editorVariableMeta.show();
+      }
     }
   }
 

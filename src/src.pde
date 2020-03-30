@@ -264,6 +264,17 @@ void loadApplication() {
 }
 
 void keyPressed() {
+  switch(key) {
+    case ESC:
+      key = 0;
+      if (editor.isCreateMode) {
+        editor.toggleCreateMode();
+      } else if (editor.isEditMode) {
+        editor.toggleEditMode();
+      }
+      break;
+  }
+
   input.handleKeyPressed(keyCode);
 }
 
