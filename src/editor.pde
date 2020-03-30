@@ -90,10 +90,12 @@ public class OavpEditor {
     if (this.isEditMode) {
       if (input.isPressed(KEY_L)) {
         objects.nextActiveVariable();
+        updateEditorVariableMeta();
       }
 
       if (input.isPressed(KEY_J)) {
         objects.prevActiveVariable();
+        updateEditorVariableMeta();
       }
 
       if (isToolSwitchable()) {
@@ -158,50 +160,55 @@ public class OavpEditor {
 
   public void switchTool(int toolId) {
     deselectAllToolbarTools();
-    hideAllEditorGroups();
     switch (toolId) {
       case 0:
         this.activeTool = TOOL_MOVE;
-        editorGroupMove.show();
         originalValues.put("x", objects.getActiveVariable().x);
         originalValues.put("y", objects.getActiveVariable().y);
         originalValues.put("z", objects.getActiveVariable().z);
-        editorToolbar.changeItem("move", "selected", true);
-        editorGroupMove.show();
+        editorToolbar.changeItem(toolbarLabelMove, "selected", true);
         break;
       case 1:
         this.activeTool = TOOL_RESIZE;
         originalValues.put("size", objects.getActiveVariable().size);
-        editorToolbar.changeItem("resize", "selected", true);
+        editorToolbar.changeItem(toolbarLabelResize, "selected", true);
         break;
       case 2:
         this.activeTool = TOOL_TRANSFORM;
         originalValues.put("w", objects.getActiveVariable().w);
         originalValues.put("h", objects.getActiveVariable().h);
         originalValues.put("l", objects.getActiveVariable().l);
-        editorToolbar.changeItem("transform", "selected", true);
+        editorToolbar.changeItem(toolbarLabelTransform, "selected", true);
         break;
       case 3:
         this.activeTool = TOOL_ROTATE;
         originalValues.put("xr", objects.getActiveVariable().xr);
         originalValues.put("yr", objects.getActiveVariable().yr);
         originalValues.put("zr", objects.getActiveVariable().zr);
+        editorToolbar.changeItem(toolbarLabelRotate, "selected", true);
         break;
       case 4:
         this.activeTool = TOOL_COLOR;
+        originalValues.put("strokeColor", objects.getActiveVariable().strokeColor);
+        originalValues.put("fillColor", objects.getActiveVariable().fillColor);
+        editorToolbar.changeItem(toolbarLabelColor, "selected", true);
         break;
       case 5:
         this.activeTool = TOOL_WEIGHT;
         originalValues.put("strokeWeight", objects.getActiveVariable().strokeWeight);
+        editorToolbar.changeItem(toolbarLabelWeight, "sebected", true);
         break;
       case 6:
-        this.activeTool = TOOL_COLOR;
-        break;
-      case 7:
         if (this.activeTool == TOOL_MODIFIER) {
           this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
         }
         this.activeTool = TOOL_MODIFIER;
+        editorToolbar.changeItem(toolbarLabelModifier, "selected", true);
+        break;
+      case 7:
+        this.activeTool = TOOL_VARIATION;
+        originalValues.put("variation", objects.getActiveVariable().variation);
+        editorToolbar.changeItem(toolbarLabelVariation, "selected", true);
         break;
     }
   }
@@ -268,9 +275,7 @@ public class OavpEditor {
 
     if (input.isShiftReleased()) {}
 
-    editorGroupMoveX.setText("x: " + objects.getActiveVariable().x);
-    editorGroupMoveY.setText("y: " + objects.getActiveVariable().y);
-    editorGroupMoveZ.setText("z: " + objects.getActiveVariable().z);
+    updateEditorVariableMeta();
   }
 
   float DELTA_RESIZE_PRECISE_KEYS = 5;
@@ -287,8 +292,8 @@ public class OavpEditor {
       deltaMouse = DELTA_RESIZE_SNAP_MOUSE;
     }
 
-    if (input.isPressed(UP)) { previewEdit("size", deltaKeys * -1); commitEdit("size"); }
-    if (input.isPressed(DOWN)) { previewEdit("size", deltaKeys); commitEdit("size"); }
+    if (input.isPressed(UP)) { previewEdit("size", deltaKeys); commitEdit("size"); }
+    if (input.isPressed(DOWN)) { previewEdit("size", deltaKeys * -1); commitEdit("size"); }
 
     if (input.isMousePressed()) {
       previewEdit("size", snap(input.getYGridTicks() * -1, deltaMouse));
@@ -300,6 +305,8 @@ public class OavpEditor {
     }
 
     if (input.isShiftReleased()) {}
+
+    updateEditorVariableMeta();
   }
 
   float DELTA_TRANSFORM_PRECISE_KEYS = 5;
@@ -317,8 +324,8 @@ public class OavpEditor {
     }
 
     if (input.isHoldingShift) {
-      if (input.isPressed(UP)) { previewEdit("l", deltaKeys * -1); commitEdit("l"); }
-      if (input.isPressed(DOWN)) { previewEdit("l", deltaKeys); commitEdit("l"); }
+      if (input.isPressed(UP)) { previewEdit("l", deltaKeys); commitEdit("l"); }
+      if (input.isPressed(DOWN)) { previewEdit("l", deltaKeys * -1); commitEdit("l"); }
       if (input.isMousePressed()) {
         previewEdit("l", snap(input.getYGridTicks() * -1, deltaMouse));
       }
@@ -337,6 +344,8 @@ public class OavpEditor {
     if (input.isPressed(LEFT)) { previewEdit("w", deltaKeys * -1); commitEdit("w"); }
 
     if (input.isShiftReleased()) {}
+
+    updateEditorVariableMeta();
   }
 
   int DELTA_ROTATE_PRECISE_KEYS = 5;
@@ -373,6 +382,8 @@ public class OavpEditor {
     }
 
     if (input.isShiftReleased()) {}
+
+    updateEditorVariableMeta();
   }
 
   private void handleToolColorInputs() {
@@ -457,6 +468,8 @@ public class OavpEditor {
     }
 
     if (input.isShiftReleased()) {}
+
+    updateEditorVariableMeta();
   }
 
   private void handleCreateModeInputs() {
@@ -589,7 +602,7 @@ public class OavpEditor {
     if (index < this.selectableObjects.size()) {
       this.isCreateMode = false;
       String className = this.selectableObjects.get(index);
-      objects.add(className + "-" + UUID.randomUUID().toString(), className);
+      objects.add(getNewObjectName(className, 1), className);
     }
   }
 
@@ -605,12 +618,13 @@ public class OavpEditor {
       this.isEditMode = !this.isEditMode;
       if (this.isEditMode) {
         editorToolbar.show();
-        originalValues.put("x", objects.getActiveVariable().x);
-        originalValues.put("y", objects.getActiveVariable().y);
-        originalValues.put("z", objects.getActiveVariable().z);
+        updateEditorVariableMeta();
+        editorVariableMeta.setLabel(objects.getActiveVariable().name);
+        editorVariableMeta.show();
+        this.switchTool(this.activeTool);
       } else {
         editorToolbar.hide();
-        hideAllEditorGroups();
+        editorVariableMeta.hide();
       }
     }
   }
@@ -1006,67 +1020,106 @@ public class OavpEditor {
 
 ButtonBar editorToolbar;
 
-Group editorGroupMove;
-Textlabel editorGroupMoveX;
-Textlabel editorGroupMoveY;
-Textlabel editorGroupMoveZ;
+Group editorVariableMeta;
+Textlabel xVarMeta;
+Textlabel yVarMeta;
+Textlabel zVarMeta;
+Textlabel xrVarMeta;
+Textlabel yrVarMeta;
+Textlabel zrVarMeta;
+Textlabel wVarMeta;
+Textlabel lVarMeta;
+Textlabel hVarMeta;
+Textlabel sizeVarMeta;
+
+String toolbarLabelMove = "[m] move";
+String toolbarLabelResize = "[s] resize";
+String toolbarLabelTransform = "[t] transform";
+String toolbarLabelRotate = "[r] rotate";
+String toolbarLabelColor = "[c] color";
+String toolbarLabelWeight = "[b] weight";
+String toolbarLabelModifier = "[z] modifiers";
+String toolbarLabelVariation = "[v] variation";
+color COLOR_WHITE = color(255, 255, 255);
+color COLOR_BLACK = color(0, 0, 0);
 
 public void setupEditorGui() {
+
   editorToolbar = cp5.addButtonBar("editorToolbar")
-      .setColorBackground(color(0, 0, 0))
+     .setColorBackground(color(0, 0, 0))
      .setPosition(10, 10)
      .setSize(500, 10)
-     .addItems(split("move resize transform rotate color weight modifiers variation"," "))
+     .addItems(new String[] {
+       toolbarLabelMove,
+       toolbarLabelResize,
+       toolbarLabelTransform,
+       toolbarLabelRotate,
+       toolbarLabelColor,
+       toolbarLabelWeight,
+       toolbarLabelModifier,
+       toolbarLabelVariation
+     })
      .hide()
      ;
 
-  editorGroupMove = cp5.addGroup("move")
-                .setColorBackground(color(0, 0, 0))
-                .setPosition(10,40)
-                .setBackgroundHeight(100)
-                .setBackgroundColor(color(0, 0, 0))
-                .hide()
-                ;
-
-  editorGroupMoveX = cp5.addTextlabel("x")
-    .setText("")
-    .setPosition(10,10)
-    .setColorValue(color(255, 255, 255))
-    .setGroup("move")
+  editorVariableMeta = cp5.addGroup("structure")
+    .setLabel("selected variable")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10, 40)
+    .setBackgroundHeight(100)
+    .setBackgroundColor(COLOR_BLACK)
+    .hide()
     ;
 
-  editorGroupMoveY = cp5.addTextlabel("y")
-    .setText("")
-    .setPosition(10,20)
-    .setColorValue(color(255, 255, 255))
-    .setGroup("move")
-    ;
+  xVarMeta = cp5.addTextlabel("x").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("structure");
+  yVarMeta = cp5.addTextlabel("y").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("structure");
+  zVarMeta = cp5.addTextlabel("z").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("structure");
 
-  editorGroupMoveZ = cp5.addTextlabel("z")
-    .setText("")
-    .setPosition(10,30)
-    .setColorValue(color(255, 255, 255))
-    .setGroup("move")
-    ;
+  xrVarMeta = cp5.addTextlabel("xr").setPosition(10 * 4, 10).setColorValue(COLOR_WHITE).setGroup("structure");
+  yrVarMeta = cp5.addTextlabel("yr").setPosition(10 * 4, 20).setColorValue(COLOR_WHITE).setGroup("structure");
+  zrVarMeta = cp5.addTextlabel("zr").setPosition(10 * 4, 30).setColorValue(COLOR_WHITE).setGroup("structure");
+
+  wVarMeta = cp5.addTextlabel("w").setPosition(10 * 8, 10).setColorValue(COLOR_WHITE).setGroup("structure");
+  hVarMeta = cp5.addTextlabel("h").setPosition(10 * 8, 20).setColorValue(COLOR_WHITE).setGroup("structure");
+  lVarMeta = cp5.addTextlabel("l").setPosition(10 * 8, 30).setColorValue(COLOR_WHITE).setGroup("structure");
+  sizeVarMeta = cp5.addTextlabel("size").setPosition(10 * 8, 40).setColorValue(COLOR_WHITE).setGroup("structure");
+
 }
 
-public void hideAllEditorGroups() {
-  editorGroupMove.hide();
+public void updateEditorVariableMeta() {
+  xVarMeta.setText("x: " + objects.getActiveVariable().x);
+  yVarMeta.setText("y: " + objects.getActiveVariable().y);
+  zVarMeta.setText("z: " + objects.getActiveVariable().z);
+  xrVarMeta.setText("xr: " + objects.getActiveVariable().xr);
+  yrVarMeta.setText("yr: " + objects.getActiveVariable().yr);
+  zrVarMeta.setText("zr: " + objects.getActiveVariable().zr);
+  wVarMeta.setText("w: " + objects.getActiveVariable().w);
+  hVarMeta.setText("h: " + objects.getActiveVariable().h);
+  lVarMeta.setText("l: " + objects.getActiveVariable().l);
+  sizeVarMeta.setText("size: " + objects.getActiveVariable().size);
 }
 
 public void deselectAllToolbarTools() {
-  editorToolbar.changeItem("move", "selected", false);
-  editorToolbar.changeItem("resize", "selected", false);
-  editorToolbar.changeItem("transform", "selected", false);
-  editorToolbar.changeItem("rotate", "selected", false);
-  editorToolbar.changeItem("color", "selected", false);
-  editorToolbar.changeItem("weight", "selected", false);
-  editorToolbar.changeItem("modifiers", "selected", false);
-  editorToolbar.changeItem("variation", "selected", false);
+  editorToolbar.changeItem(toolbarLabelMove, "selected", false);
+  editorToolbar.changeItem(toolbarLabelResize, "selected", false);
+  editorToolbar.changeItem(toolbarLabelTransform, "selected", false);
+  editorToolbar.changeItem(toolbarLabelRotate, "selected", false);
+  editorToolbar.changeItem(toolbarLabelColor, "selected", false);
+  editorToolbar.changeItem(toolbarLabelWeight, "sebected", false);
+  editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
+  editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
 }
 
 public void editorToolbar(int toolId) {
   editor.switchTool(toolId);
+}
+
+public String getNewObjectName(String className, int increment) {
+  if (!objects.has(className + "-" + increment)) {
+    return className + "-" + increment;
+  } else {
+    return getNewObjectName(className, increment + 1);
+  }
 }
 
 int TOOL_MOVE = 0;

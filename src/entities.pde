@@ -1697,11 +1697,13 @@ public class OavpObjectManager {
       this.selectedObjectIndex += 1;
     }
     println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
+    editorVariableMeta.setLabel(objects.getActiveVariable().name);
   }
 
   public void lastActiveVariable() {
     this.selectedObjectIndex = this.activeObjects.size() - 1;
     println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
+    editorVariableMeta.setLabel(objects.getActiveVariable().name);
   }
 
   public void prevActiveVariable() {
@@ -1711,6 +1713,7 @@ public class OavpObjectManager {
       this.selectedObjectIndex -= 1;
     }
     println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
+    editorVariableMeta.setLabel(objects.getActiveVariable().name);
   }
 
   public void printObjectData() {
