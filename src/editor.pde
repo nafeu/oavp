@@ -618,12 +618,14 @@ public class OavpEditor {
       this.isEditMode = !this.isEditMode;
       if (this.isEditMode) {
         editorToolbar.show();
+        editorToggleSnappingButton.show();
         updateEditorVariableMeta();
         editorVariableMeta.setLabel(objects.getActiveVariable().name);
         editorVariableMeta.show();
         this.switchTool(this.activeTool);
       } else {
         editorToolbar.hide();
+        editorToggleSnappingButton.hide();
         editorVariableMeta.hide();
       }
     }
@@ -631,6 +633,11 @@ public class OavpEditor {
 
   private void toggleSnappingMode() {
     this.isSnappingEnabled = !this.isSnappingEnabled;
+    if (this.isSnappingEnabled) {
+      editorToggleSnappingButton.setLabel("[q] disable snapping");
+    } else {
+      editorToggleSnappingButton.setLabel("[q] enable snapping");
+    }
   }
 
   private void toggleCreateMode() {
@@ -1019,6 +1026,8 @@ public class OavpEditor {
 }
 
 ButtonBar editorToolbar;
+Button editorToggleSnappingButton;
+Button editorClipboardButton;
 
 Group editorVariableMeta;
 Textlabel xVarMeta;
@@ -1062,6 +1071,13 @@ public void setupEditorGui() {
      .hide()
      ;
 
+  editorToggleSnappingButton = cp5.addButton("editorToggleSnappingButton")
+     .setLabel("[q] disable snapping")
+     .setPosition(10, height - 20)
+     .setSize(100, 10)
+     .hide()
+     ;
+
   editorVariableMeta = cp5.addGroup("structure")
     .setLabel("selected variable")
     .setColorBackground(COLOR_BLACK)
@@ -1083,7 +1099,6 @@ public void setupEditorGui() {
   hVarMeta = cp5.addTextlabel("h").setPosition(10 * 8, 20).setColorValue(COLOR_WHITE).setGroup("structure");
   lVarMeta = cp5.addTextlabel("l").setPosition(10 * 8, 30).setColorValue(COLOR_WHITE).setGroup("structure");
   sizeVarMeta = cp5.addTextlabel("size").setPosition(10 * 8, 40).setColorValue(COLOR_WHITE).setGroup("structure");
-
 }
 
 public void updateEditorVariableMeta() {
@@ -1112,6 +1127,10 @@ public void deselectAllToolbarTools() {
 
 public void editorToolbar(int toolId) {
   editor.switchTool(toolId);
+}
+
+public void editorToggleSnappingButton() {
+  editor.toggleSnappingMode();
 }
 
 public String getNewObjectName(String className, int increment) {
