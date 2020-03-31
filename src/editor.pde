@@ -192,6 +192,8 @@ public class OavpEditor {
         originalValues.put("strokeColor", objects.getActiveVariable().strokeColor);
         originalValues.put("fillColor", objects.getActiveVariable().fillColor);
         editorToolbar.changeItem(toolbarLabelColor, "selected", true);
+        editorColorBarA.show();
+        editorColorBarB.show();
         break;
       case 5:
         this.activeTool = TOOL_WEIGHT;
@@ -387,60 +389,70 @@ public class OavpEditor {
   }
 
   private void handleToolColorInputs() {
-    if (input.isHoldingShift) {
-
-    }
-
     if (input.isHoldingControl) {
-
+      if (input.isPressed(ENTER)) { this.assignActiveFillColor(); this.assignActiveStrokeColor(); }
+      if (input.isPressed(BACKSPACE)) { this.resetFillColor(); this.resetStrokeColor(); }
+    } else if (input.isHoldingShift) {
+      if (input.isPressed(ENTER)) { this.assignActiveFillColor(); }
+      if (input.isPressed(BACKSPACE)) { this.resetFillColor(); }
+    } else {
+      if (input.isPressed(ENTER)) { this.assignActiveStrokeColor(); }
+      if (input.isPressed(BACKSPACE)) { this.resetStrokeColor(); }
     }
 
-    if (input.isPressed(LEFT)) {
-      if (this.colorIndex == 0) {
-        this.colorIndex = this.activePalette.length - 1;
-      } else {
-        this.colorIndex = (this.colorIndex - 1) % this.activePalette.length;
-      }
-    }
+    if (input.isPressed(LEFT)) { this.previousActiveColor(); }
+    if (input.isPressed(RIGHT)) { this.nextActiveColor(); }
+    if (input.isPressed(DOWN)) { this.nextPalette(); }
+    if (input.isPressed(UP)) { this.previousPalette(); }
 
-    if (input.isPressed(RIGHT)) {
-      this.colorIndex = (this.colorIndex + 1) % this.activePalette.length;
-    }
+    if (input.isShiftReleased()) {}
+    if (input.isControlReleased()) {}
 
-    if (input.isPressed(DOWN)) {
-      this.colorPaletteIndex = (this.colorPaletteIndex + 1) % palette.table.length;
+    updateEditorVariableMeta();
+  }
+
+  public void nextActiveColor() {
+    this.colorIndex = (this.colorIndex + 1) % this.activePalette.length;
+  }
+
+  public void previousActiveColor() {
+    if (this.colorIndex == 0) {
+      this.colorIndex = this.activePalette.length - 1;
+    } else {
+      this.colorIndex = (this.colorIndex - 1) % this.activePalette.length;
+    }
+  }
+
+  public void nextPalette() {
+    this.colorPaletteIndex = (this.colorPaletteIndex + 1) % palette.table.length;
+    this.activePalette = palette.getPalette(colorPaletteIndex);
+    this.colorIndex = this.colorIndex % this.activePalette.length;
+  }
+
+  public void previousPalette() {
+    if (this.colorPaletteIndex == 0) {
+      this.colorPaletteIndex = palette.table.length - 1;
+    } else {
+      this.colorPaletteIndex = (this.colorPaletteIndex - 1) % palette.table.length;
       this.activePalette = palette.getPalette(colorPaletteIndex);
       this.colorIndex = this.colorIndex % this.activePalette.length;
     }
+  }
 
-    if (input.isPressed(UP)) {
-      if (this.colorPaletteIndex == 0) {
-        this.colorPaletteIndex = palette.table.length - 1;
-      } else {
-        this.colorPaletteIndex = (this.colorPaletteIndex - 1) % palette.table.length;
-        this.activePalette = palette.getPalette(colorPaletteIndex);
-        this.colorIndex = this.colorIndex % this.activePalette.length;
-      }
-    }
+  public void assignActiveFillColor() {
+    objects.getActiveVariable().fillColor(this.activePalette[this.colorIndex]);
+  }
 
-    if (input.isPressed(ENTER)) {
-      if (input.isHoldingShift) {
-        objects.getActiveVariable().fillColor(this.activePalette[this.colorIndex]);
-      } else {
-        objects.getActiveVariable().strokeColor(this.activePalette[this.colorIndex]);
-      }
-    }
+  public void assignActiveStrokeColor() {
+    objects.getActiveVariable().strokeColor(this.activePalette[this.colorIndex]);
+  }
 
-    if (input.isPressed(KEY_C)) {
-      if (input.isHoldingShift) {
-        objects.getActiveVariable().fillColor(0);
-      }
-      if (input.isHoldingControl) {
-        objects.getActiveVariable().strokeColor(0);
-      }
-    }
+  public void resetFillColor() {
+    objects.getActiveVariable().fillColor(0);
+  }
 
-    updateEditorVariableMeta();
+  public void resetStrokeColor() {
+    objects.getActiveVariable().strokeColor(0);
   }
 
   float DELTA_WEIGHT_PRECISE_KEYS = 0.25;
@@ -630,6 +642,8 @@ public class OavpEditor {
         this.switchTool(this.activeTool);
       } else {
         editorToolbar.hide();
+        editorColorBarA.hide();
+        editorColorBarB.hide();
         editorToggleSnappingButton.hide();
         editorVariableMeta.hide();
       }
@@ -650,10 +664,16 @@ public class OavpEditor {
       this.isCreateMode = !this.isCreateMode;
       if (this.isCreateMode) {
         editorToolbar.hide();
+        editorColorBarA.hide();
+        editorColorBarB.hide();
         editorToggleSnappingButton.hide();
         editorVariableMeta.hide();
       } else {
         editorToolbar.show();
+        if (this.activeTool == TOOL_COLOR) {
+          editorColorBarA.show();
+          editorColorBarB.show();
+        }
         editorToggleSnappingButton.show();
         editorVariableMeta.show();
       }
@@ -757,22 +777,10 @@ public class OavpEditor {
           .draw.positionalLines(width)
           .done();
 
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.grey)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("color " + activeVariable.name)
-          .done();
-
         visualizers
           .create()
-          .moveLeft(toolMetaTextPosition - 15)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .strokeWeightStyle(2)
-          .moveDown(toolMetaBoxH * 0.4);
+          .move(21, 105)
+          .strokeWeightStyle(2);
 
         if (input.isHoldingShift) {
           visualizers
@@ -812,17 +820,6 @@ public class OavpEditor {
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .draw.basicRectangle(50, 10)
           .done();
-
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.darkPrimary)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("weigh " + activeVariable.name + "\nweight: " + activeVariable.strokeWeight)
-          .done();
-
         break;
 
       case 6: // MODIFIER
@@ -912,16 +909,6 @@ public class OavpEditor {
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
           .draw.positionalLines(width)
-          .done();
-
-        text.create()
-          .moveLeft(toolMetaTextPosition)
-          .move(toolMetaXPadding, toolMetaYPadding)
-          .fillColor(palette.flat.darkRed)
-          .size(14)
-          .moveDown(toolMetaBoxH * 0.2)
-          .alignLeft()
-          .write("variation of " + activeVariable.name + "\ntype: " + activeVariable.getVariation())
           .done();
         break;
     }
@@ -1040,6 +1027,8 @@ public class OavpEditor {
 }
 
 ButtonBar editorToolbar;
+ButtonBar editorColorBarA;
+ButtonBar editorColorBarB;
 Button editorToggleSnappingButton;
 Button editorClipboardButton;
 
@@ -1074,7 +1063,7 @@ color COLOR_BLACK = color(0, 0, 0);
 public void setupEditorGui() {
 
   editorToolbar = cp5.addButtonBar("editorToolbar")
-     .setColorBackground(color(0, 0, 0))
+     .setColorBackground(COLOR_BLACK)
      .setPosition(10, 10)
      .setSize(500, 10)
      .addItems(new String[] {
@@ -1097,11 +1086,37 @@ public void setupEditorGui() {
      .hide()
      ;
 
+  editorColorBarA = cp5.addButtonBar("editorColorBarA")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10, 125)
+    .setSize(300, 10)
+    .setColorActive(COLOR_BLACK)
+    .addItems(new String[] {
+      "[left] prev", // 0
+      "[right] next", // 1
+      "[entr] stroke", // 2
+      "[shft+entr] fill" // 3
+    })
+    .hide();
+
+  editorColorBarB = cp5.addButtonBar("editorColorBarB")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10, 135)
+    .setSize(300, 10)
+    .setColorActive(COLOR_BLACK)
+    .addItems(new String[] {
+      "[ctrl+entr] both", // 0
+      "[del] no stroke", // 1
+      "[shft+del] no fill", // 2
+      "[ctrl+del] reset" // 3
+    })
+    .hide();
+
   editorVariableMeta = cp5.addGroup("variableMeta")
     .setLabel("selected variable")
     .setColorBackground(COLOR_BLACK)
     .setPosition(10, 35)
-    .setSize(300, 70)
+    .setSize(300, 60)
     .setBackgroundColor(COLOR_BLACK)
     .hide()
     ;
@@ -1151,10 +1166,56 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelWeight, "selected", false);
   editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
+  editorColorBarA.hide();
+  editorColorBarB.hide();
 }
 
 public void editorToolbar(int toolId) {
   editor.switchTool(toolId);
+}
+
+public void strokeColorButton() {
+  editor.switchTool(TOOL_COLOR);
+}
+
+public void fillColorButton() {
+  editor.switchTool(TOOL_COLOR);
+}
+
+public void editorColorBarA(int actionId) {
+  switch(actionId) {
+    case 0:
+      editor.previousActiveColor();
+      break;
+    case 1:
+      editor.nextActiveColor();
+      break;
+    case 2:
+      editor.assignActiveStrokeColor();
+      break;
+    case 3:
+      editor.assignActiveFillColor();
+      break;
+  }
+}
+
+public void editorColorBarB(int actionId) {
+  switch(actionId) {
+    case 0:
+      editor.assignActiveFillColor();
+      editor.assignActiveStrokeColor();
+      break;
+    case 1:
+      editor.resetStrokeColor();
+      break;
+    case 2:
+      editor.resetFillColor();
+      break;
+    case 3:
+      editor.resetFillColor();
+      editor.resetStrokeColor();
+      break;
+  }
 }
 
 public void editorToggleSnappingButton() {
