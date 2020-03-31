@@ -618,7 +618,12 @@ public class OavpEditor {
       String className = this.selectableObjects.get(index);
       objects.add(getNewObjectName(className, 1), className);
       editorToolbar.show();
+      if (this.activeTool == TOOL_COLOR) {
+        editorColorBarA.show();
+        editorColorBarB.show();
+      }
       editorToggleSnappingButton.show();
+      editorObjectsList.show();
       editorVariableMeta.show();
     }
   }
@@ -636,6 +641,7 @@ public class OavpEditor {
       if (this.isEditMode) {
         editorToolbar.show();
         editorToggleSnappingButton.show();
+        editorObjectsList.show();
         updateEditorVariableMeta();
         editorVariableMeta.setLabel(objects.getActiveVariable().name);
         editorVariableMeta.show();
@@ -645,6 +651,7 @@ public class OavpEditor {
         editorColorBarA.hide();
         editorColorBarB.hide();
         editorToggleSnappingButton.hide();
+        editorObjectsList.hide();
         editorVariableMeta.hide();
       }
     }
@@ -667,6 +674,7 @@ public class OavpEditor {
         editorColorBarA.hide();
         editorColorBarB.hide();
         editorToggleSnappingButton.hide();
+        editorObjectsList.hide();
         editorVariableMeta.hide();
       } else {
         editorToolbar.show();
@@ -675,6 +683,7 @@ public class OavpEditor {
           editorColorBarB.show();
         }
         editorToggleSnappingButton.show();
+        editorObjectsList.show();
         editorVariableMeta.show();
       }
     }
@@ -1031,6 +1040,7 @@ ButtonBar editorColorBarA;
 ButtonBar editorColorBarB;
 Button editorToggleSnappingButton;
 Button editorClipboardButton;
+ScrollableList editorObjectsList;
 
 Group editorVariableMeta;
 Textlabel xVarMeta;
@@ -1112,6 +1122,15 @@ public void setupEditorGui() {
     })
     .hide();
 
+  editorObjectsList = cp5.addScrollableList("editorObjectsList")
+    .setPosition(width - 150, 25)
+    .setLabel("select object")
+    .setColorBackground(COLOR_BLACK)
+    .setSize(140, 500)
+    .setBarHeight(10)
+    .setItemHeight(10)
+    .hide();
+
   editorVariableMeta = cp5.addGroup("variableMeta")
     .setLabel("selected variable")
     .setColorBackground(COLOR_BLACK)
@@ -1155,6 +1174,7 @@ public void updateEditorVariableMeta() {
   strokeWeightVarMeta.setText("strokeWeight: " + objects.getActiveVariable().strokeWeight);
   strokeColorVarMetaButton.setColorForeground(objects.getActiveVariable().strokeColor);
   fillColorVarMetaButton.setColorForeground(objects.getActiveVariable().fillColor);
+  editorObjectsList.setItems(objects.getObjectsList()).setLabel(objects.getActiveVariable().name);
 }
 
 public void deselectAllToolbarTools() {
@@ -1216,6 +1236,10 @@ public void editorColorBarB(int actionId) {
       editor.resetStrokeColor();
       break;
   }
+}
+
+public void editorObjectsList(int objectIndex) {
+  objects.setActiveVariable(objectIndex);
 }
 
 public void editorToggleSnappingButton() {

@@ -1627,6 +1627,16 @@ public class OavpObjectManager {
     return objectsStorage.size();
   }
 
+  public List<String> getObjectsList() {
+    List<String> output = new ArrayList<String>();
+
+    for (OavpObject obj : this.activeObjects) {
+      output.add(obj.getVariable().name);
+    }
+
+    return output;
+  }
+
   public String getCloneName(String originalName) {
     String output;
     Set<String> nameSplit = new HashSet<String>(Arrays.asList(originalName.split("-")));
@@ -1712,6 +1722,12 @@ public class OavpObjectManager {
     } else {
       this.selectedObjectIndex -= 1;
     }
+    println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
+    editorVariableMeta.setLabel(objects.getActiveVariable().name);
+  }
+
+  public void setActiveVariable(int index) {
+    this.selectedObjectIndex = index;
     println("[" + (selectionCounter++) + "] - Selected Variable: " + getActiveVariable().name);
     editorVariableMeta.setLabel(objects.getActiveVariable().name);
   }
