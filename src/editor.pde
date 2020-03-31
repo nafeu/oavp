@@ -136,11 +136,7 @@ public class OavpEditor {
         objects.duplicate();
       }
 
-      if (input.isPressed(KEY_H)) {
-        toggleCreateMode();
-      }
-
-      if (input.isPressed(KEY_H)) {
+      if (input.isPressed(KEY_N)) {
         toggleCreateMode();
       }
 
@@ -159,45 +155,32 @@ public class OavpEditor {
   }
 
   public void switchTool(int toolId) {
+    updateOriginalValues();
     deselectAllToolbarTools();
     switch (toolId) {
       case 0:
         this.activeTool = TOOL_MOVE;
-        originalValues.put("x", objects.getActiveVariable().x);
-        originalValues.put("y", objects.getActiveVariable().y);
-        originalValues.put("z", objects.getActiveVariable().z);
         editorToolbar.changeItem(toolbarLabelMove, "selected", true);
         break;
       case 1:
         this.activeTool = TOOL_RESIZE;
-        originalValues.put("size", objects.getActiveVariable().size);
         editorToolbar.changeItem(toolbarLabelResize, "selected", true);
         break;
       case 2:
         this.activeTool = TOOL_TRANSFORM;
-        originalValues.put("w", objects.getActiveVariable().w);
-        originalValues.put("h", objects.getActiveVariable().h);
-        originalValues.put("l", objects.getActiveVariable().l);
         editorToolbar.changeItem(toolbarLabelTransform, "selected", true);
         break;
       case 3:
         this.activeTool = TOOL_ROTATE;
-        originalValues.put("xr", objects.getActiveVariable().xr);
-        originalValues.put("yr", objects.getActiveVariable().yr);
-        originalValues.put("zr", objects.getActiveVariable().zr);
         editorToolbar.changeItem(toolbarLabelRotate, "selected", true);
         break;
       case 4:
         this.activeTool = TOOL_COLOR;
-        originalValues.put("strokeColor", objects.getActiveVariable().strokeColor);
-        originalValues.put("fillColor", objects.getActiveVariable().fillColor);
         editorToolbar.changeItem(toolbarLabelColor, "selected", true);
-        editorColorBarA.show();
-        editorColorBarB.show();
+        editorColorButtons.show();
         break;
       case 5:
         this.activeTool = TOOL_WEIGHT;
-        originalValues.put("strokeWeight", objects.getActiveVariable().strokeWeight);
         editorToolbar.changeItem(toolbarLabelWeight, "sebected", true);
         break;
       case 6:
@@ -209,9 +192,27 @@ public class OavpEditor {
         break;
       case 7:
         this.activeTool = TOOL_VARIATION;
-        originalValues.put("variation", objects.getActiveVariable().variation);
         editorToolbar.changeItem(toolbarLabelVariation, "selected", true);
         break;
+    }
+  }
+
+  public void updateOriginalValues() {
+    if (objects.getActiveVariable() != null) {
+      originalValues.put("x", objects.getActiveVariable().x);
+      originalValues.put("y", objects.getActiveVariable().y);
+      originalValues.put("z", objects.getActiveVariable().z);
+      originalValues.put("size", objects.getActiveVariable().size);
+      originalValues.put("w", objects.getActiveVariable().w);
+      originalValues.put("h", objects.getActiveVariable().h);
+      originalValues.put("l", objects.getActiveVariable().l);
+      originalValues.put("xr", objects.getActiveVariable().xr);
+      originalValues.put("yr", objects.getActiveVariable().yr);
+      originalValues.put("zr", objects.getActiveVariable().zr);
+      originalValues.put("strokeColor", objects.getActiveVariable().strokeColor);
+      originalValues.put("fillColor", objects.getActiveVariable().fillColor);
+      originalValues.put("strokeWeight", objects.getActiveVariable().strokeWeight);
+      originalValues.put("variation", objects.getActiveVariable().variation);
     }
   }
 
@@ -619,11 +620,11 @@ public class OavpEditor {
       objects.add(getNewObjectName(className, 1), className);
       editorToolbar.show();
       if (this.activeTool == TOOL_COLOR) {
-        editorColorBarA.show();
-        editorColorBarB.show();
+        editorColorButtons.show();
       }
       editorToggleSnappingButton.show();
       editorObjectsList.show();
+      editorObjectButtons.show();
       editorVariableMeta.show();
     }
   }
@@ -642,16 +643,17 @@ public class OavpEditor {
         editorToolbar.show();
         editorToggleSnappingButton.show();
         editorObjectsList.show();
+        editorObjectButtons.show();
         updateEditorVariableMeta();
         editorVariableMeta.setLabel(objects.getActiveVariable().name);
         editorVariableMeta.show();
         this.switchTool(this.activeTool);
       } else {
         editorToolbar.hide();
-        editorColorBarA.hide();
-        editorColorBarB.hide();
+        editorColorButtons.hide();
         editorToggleSnappingButton.hide();
         editorObjectsList.hide();
+        editorObjectButtons.hide();
         editorVariableMeta.hide();
       }
     }
@@ -671,19 +673,19 @@ public class OavpEditor {
       this.isCreateMode = !this.isCreateMode;
       if (this.isCreateMode) {
         editorToolbar.hide();
-        editorColorBarA.hide();
-        editorColorBarB.hide();
+        editorColorButtons.hide();
         editorToggleSnappingButton.hide();
         editorObjectsList.hide();
+        editorObjectButtons.hide();
         editorVariableMeta.hide();
       } else {
         editorToolbar.show();
         if (this.activeTool == TOOL_COLOR) {
-          editorColorBarA.show();
-          editorColorBarB.show();
+          editorColorButtons.show();
         }
         editorToggleSnappingButton.show();
         editorObjectsList.show();
+        editorObjectButtons.show();
         editorVariableMeta.show();
       }
     }
@@ -1036,13 +1038,12 @@ public class OavpEditor {
 }
 
 ButtonBar editorToolbar;
-ButtonBar editorColorBarA;
-ButtonBar editorColorBarB;
 Button editorToggleSnappingButton;
 Button editorClipboardButton;
 ScrollableList editorObjectsList;
-
+Group editorColorButtons;
 Group editorVariableMeta;
+Group editorObjectButtons;
 Textlabel xVarMeta;
 Textlabel yVarMeta;
 Textlabel zVarMeta;
@@ -1096,34 +1097,46 @@ public void setupEditorGui() {
      .hide()
      ;
 
-  editorColorBarA = cp5.addButtonBar("editorColorBarA")
-    .setColorBackground(COLOR_BLACK)
+  editorColorButtons = cp5.addGroup("editorColorButtons")
     .setPosition(10, 125)
-    .setSize(300, 10)
-    .setColorActive(COLOR_BLACK)
-    .addItems(new String[] {
-      "[left] prev", // 0
-      "[right] next", // 1
-      "[entr] stroke", // 2
-      "[shft+entr] fill" // 3
-    })
+    .hideBar()
     .hide();
 
-  editorColorBarB = cp5.addButtonBar("editorColorBarB")
-    .setColorBackground(COLOR_BLACK)
-    .setPosition(10, 135)
-    .setSize(300, 10)
-    .setColorActive(COLOR_BLACK)
-    .addItems(new String[] {
-      "[ctrl+entr] both", // 0
-      "[del] no stroke", // 1
-      "[shft+del] no fill", // 2
-      "[ctrl+del] reset" // 3
-    })
+  cp5.addButton("editorColorButtonPrev").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 0 + 5 * 0, 0).setLabel("[left] prev");
+  cp5.addButton("editorColorButtonNext").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 1 + 5 * 1, 0).setLabel("[right] next");
+  cp5.addButton("editorColorButtonStroke").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 2 + 5 * 2, 0).setLabel("[entr] stroke");
+  cp5.addButton("editorColorButtonFill").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 3 + 5 * 3, 0).setLabel("[shft+entr] fill");
+  cp5.addButton("editorColorButtonBoth").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 0 + 5 * 0, 10).setLabel("[ctrl+entr] both");
+  cp5.addButton("editorColorButtonNoStroke").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 1 + 5 * 1, 10).setLabel("[del] no stroke");
+  cp5.addButton("editorColorButtonNoFill").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 2 + 5 * 2, 10).setLabel("[shft+del] no fill");
+  cp5.addButton("editorColorButtonReset").setColorBackground(COLOR_BLACK).setSize(80, 10).setGroup("editorColorButtons")
+    .setPosition(80 * 3 + 5 * 3, 10).setLabel("[ctrl+del] reset");
+
+  editorObjectButtons = cp5.addGroup("editorObjectButtons")
+    .setPosition(width - 150, 25)
+    .hideBar()
     .hide();
+
+  cp5.addButton("editorObjectButtonPrev").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
+    .setPosition(70 * 0, 10 * 0).setLabel("[j] prev");
+  cp5.addButton("editorObjectButtonNext").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
+    .setPosition(70 * 1, 10 * 0).setLabel("[j] next");
+  cp5.addButton("editorObjectButtonDuplicate").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
+    .setPosition(70 * 0, 10 * 1).setLabel("[d] dupl");
+  cp5.addButton("editorObjectButtonCreate").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
+    .setPosition(70 * 1, 10 * 1).setLabel("[n] create");
+  cp5.addButton("editorObjectButtonDelete").setColorBackground(COLOR_BLACK).setSize(140, 10).setGroup("editorObjectButtons")
+    .setPosition(0, 10 * 2 + 5 * 1).setLabel("[w] delete object");
 
   editorObjectsList = cp5.addScrollableList("editorObjectsList")
-    .setPosition(width - 150, 25)
+    .setPosition(width - 150, 65)
     .setLabel("select object")
     .setColorBackground(COLOR_BLACK)
     .setSize(140, 500)
@@ -1186,65 +1199,27 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelWeight, "selected", false);
   editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
-  editorColorBarA.hide();
-  editorColorBarB.hide();
+  editorColorButtons.hide();
 }
 
-public void editorToolbar(int toolId) {
-  editor.switchTool(toolId);
-}
-
-public void strokeColorButton() {
-  editor.switchTool(TOOL_COLOR);
-}
-
-public void fillColorButton() {
-  editor.switchTool(TOOL_COLOR);
-}
-
-public void editorColorBarA(int actionId) {
-  switch(actionId) {
-    case 0:
-      editor.previousActiveColor();
-      break;
-    case 1:
-      editor.nextActiveColor();
-      break;
-    case 2:
-      editor.assignActiveStrokeColor();
-      break;
-    case 3:
-      editor.assignActiveFillColor();
-      break;
-  }
-}
-
-public void editorColorBarB(int actionId) {
-  switch(actionId) {
-    case 0:
-      editor.assignActiveFillColor();
-      editor.assignActiveStrokeColor();
-      break;
-    case 1:
-      editor.resetStrokeColor();
-      break;
-    case 2:
-      editor.resetFillColor();
-      break;
-    case 3:
-      editor.resetFillColor();
-      editor.resetStrokeColor();
-      break;
-  }
-}
-
-public void editorObjectsList(int objectIndex) {
-  objects.setActiveVariable(objectIndex);
-}
-
-public void editorToggleSnappingButton() {
-  editor.toggleSnappingMode();
-}
+public void editorToolbar(int toolId) { editor.switchTool(toolId); }
+public void strokeColorButton() { editor.switchTool(TOOL_COLOR); }
+public void fillColorButton() { editor.switchTool(TOOL_COLOR); }
+public void editorColorButtonPrev() { editor.previousActiveColor(); }
+public void editorColorButtonNext() { editor.nextActiveColor(); }
+public void editorColorButtonStroke() { editor.assignActiveStrokeColor(); }
+public void editorColorButtonFill() { editor.assignActiveFillColor(); }
+public void editorColorButtonNoStroke() { editor.resetStrokeColor(); }
+public void editorColorButtonNoFill() { editor.resetFillColor(); }
+public void editorColorButtonBoth() { editor.assignActiveFillColor(); editor.assignActiveStrokeColor(); }
+public void editorColorButtonReset() { editor.resetFillColor(); editor.resetStrokeColor(); }
+public void editorObjectButtonPrev() { objects.prevActiveVariable(); updateEditorVariableMeta(); }
+public void editorObjectButtonNext() { objects.nextActiveVariable(); updateEditorVariableMeta(); }
+public void editorObjectButtonDuplicate() { objects.duplicate(); }
+public void editorObjectButtonCreate() { editor.toggleCreateMode(); }
+public void editorObjectButtonDelete() { objects.remove(); }
+public void editorObjectsList(int objectIndex) { objects.setActiveVariable(objectIndex); }
+public void editorToggleSnappingButton() { editor.toggleSnappingMode(); }
 
 public String getNewObjectName(String className, int increment) {
   if (!objects.has(className + "-" + increment)) {
