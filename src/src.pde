@@ -81,10 +81,10 @@ boolean firstRender = true;
 synchronized void draw() {
   if (!loaded) {
     background(0);
-    textSize(25);
+    textSize(20);
     fill(255);
     textAlign(CENTER, CENTER);
-    text("[ loading ]", oavp.width(0.5), oavp.height(0.5));
+    text("[ oavp - v0.1.0 : github.com/nafeu/oavp ]", width * 0.5, height * 0.5);
   } else {
     try {
       if (oavp.ENABLE_VIDEO_RENDER) {
@@ -326,11 +326,4 @@ void drawSketchDefaults() {
     backgroundVariable.strokeColor,
     backgroundVariable.strokeWeight
   );
-}
-
-public void controlEvent(ControlEvent theEvent) {
-  println("got a control event from controller with id "+theEvent.getId());
-  // switch(theEvent.getId()) {
-
-  // }
 }

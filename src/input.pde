@@ -3,6 +3,7 @@ public class OavpInput {
   private boolean isHoldingShift = false;
   private boolean isHoldingControl = false;
   private boolean isMousePressed = false;
+  private boolean isUsingMouse = false;
 
   private int xStart = 0;
   private int xEnd = 0;
@@ -17,6 +18,7 @@ public class OavpInput {
   OavpInput() {}
 
   void handleKeyPressed(int code) {
+    this.isUsingMouse = false;
     if (code == SHIFT) {
       this.isHoldingShift = true;
     } else if (code == CONTROL) {
@@ -27,6 +29,7 @@ public class OavpInput {
   }
 
   void handleMousePressed() {
+    this.isUsingMouse = true;
     noCursor();
     this.isMousePressed = true;
     this.xStart = mouseX;

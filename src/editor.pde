@@ -488,43 +488,19 @@ public class OavpEditor {
   }
 
   private void handleCreateModeInputs() {
-    if (input.isHoldingShift) {
-
-    }
-
-    if (input.isHoldingControl) {
-
-    }
-
     if (input.isPressed(UP)) {
-      if (this.createModeSelectionIndex - CREATE_MODE_COLUMN_COUNT >= 0) {
-        this.createModeSelectionIndex -= CREATE_MODE_COLUMN_COUNT;
-      }
-    }
-
-    if (input.isPressed(DOWN)) {
-      if (this.createModeSelectionIndex + CREATE_MODE_COLUMN_COUNT < this.selectableObjects.size()) {
-        this.createModeSelectionIndex += CREATE_MODE_COLUMN_COUNT;
-      }
-    }
-
-    if (input.isPressed(RIGHT)) {
-      if (this.createModeSelectionIndex + 1 < this.selectableObjects.size()) {
-        this.createModeSelectionIndex += 1;
-      }
-    }
-
-    if (input.isPressed(LEFT)) {
-      if (this.createModeSelectionIndex - 1 >= 0) {
+      if (this.createModeSelectionIndex > 0) {
         this.createModeSelectionIndex -= 1;
       }
     }
 
-    if (input.isPressed(ENTER)) {
-      handleCreateModeSelection(this.createModeSelectionIndex);
+    if (input.isPressed(DOWN)) {
+      if (this.createModeSelectionIndex < OBJECT_LIST.length - 1) {
+        this.createModeSelectionIndex += 1;
+      }
     }
 
-    if (input.isMouseReleased()) {
+    if (input.isPressed(ENTER)) {
       handleCreateModeSelection(this.createModeSelectionIndex);
     }
   }
@@ -626,6 +602,7 @@ public class OavpEditor {
       editorObjectsList.show();
       editorObjectButtons.show();
       editorVariableMeta.show();
+      editorCreateObject.hide();
     }
   }
 
@@ -672,6 +649,7 @@ public class OavpEditor {
     if (this.isEditMode) {
       this.isCreateMode = !this.isCreateMode;
       if (this.isCreateMode) {
+        editorCreateObject.show();
         editorToolbar.hide();
         editorColorButtons.hide();
         editorToggleSnappingButton.hide();
@@ -679,6 +657,7 @@ public class OavpEditor {
         editorObjectButtons.hide();
         editorVariableMeta.hide();
       } else {
+        editorCreateObject.hide();
         editorToolbar.show();
         if (this.activeTool == TOOL_COLOR) {
           editorColorButtons.show();
@@ -984,54 +963,16 @@ public class OavpEditor {
   public void drawCreateMenu() {
     palette.reset(palette.flat.black, palette.flat.white, 2);
 
-    float colWidth = oavp.width(0.8) / CREATE_MODE_COLUMN_COUNT;
-    float rowHeight = oavp.height(0.8) / CREATE_MODE_ROW_COUNT;
-    float xPadding = oavp.width(0.1);
-    float yPadding = oavp.height(0.1);
-    float xScreenDisplacement = (width - oavp.width(1)) / 2;
-    float yScreenDisplacement = (height - oavp.height(1)) / 2;
-
-    for (int i = 0; i < CREATE_MODE_COLUMN_COUNT; i++) {
-      for (int j = 0; j < CREATE_MODE_ROW_COUNT; j++) {
-        float x0 = (i * colWidth) + xPadding;
-        float x1 = (i * colWidth) + colWidth + xPadding;
-        float y0 = (j * rowHeight) + yPadding;
-        float y1 = (j * rowHeight) + rowHeight + yPadding;
-
-        boolean isWithinSelectionArea = (
-          (mouseX >= (x0 + xScreenDisplacement) && mouseX < (x1 + xScreenDisplacement)) &&
-          (mouseY >= (y0 + yScreenDisplacement) && mouseY < (y1 + yScreenDisplacement)) || this.createModeSelectionIndex == i + (j * CREATE_MODE_COLUMN_COUNT)
-        );
-
-        if (isWithinSelectionArea) {
-          this.createModeSelectionIndex = i + (j * CREATE_MODE_COLUMN_COUNT);
-        }
-
-        int textIndex = i + (j * CREATE_MODE_COLUMN_COUNT);
-
-        if (textIndex < this.selectableObjects.size()) {
-          text
-            .create()
-            .move(x0, y0)
-            .moveRight(colWidth / 2)
-            .moveDown(rowHeight / 2)
-            .fillColor(palette.flat.white)
-            .size(14)
-            .alignCompleteCenter()
-            .write(this.selectableObjects.get(textIndex))
-            .done();
-            if (isWithinSelectionArea) {
-              visualizers
-                .create()
-                .move(x0, y0)
-                .moveRight(colWidth / 2)
-                .moveDown(rowHeight / 2)
-                .fillColor(palette.flat.white)
-                .moveDown(25)
-                .draw.basicRectangle(10, 10, 25)
-                .done();
-            }
-        }
+    for (int i = 0; i < OBJECT_LIST.length; i++) {
+      boolean isWithinSelectionArea = (this.createModeSelectionIndex == i);
+      if (isWithinSelectionArea) {
+        visualizers
+          .create()
+          .move(width / 4, height / 4)
+          .moveDown(20 * i)
+          .strokeColor(palette.flat.red)
+          .draw.basicRectangle(width / 2, 20, 0, CORNER)
+          .done();
       }
     }
   }
@@ -1044,6 +985,7 @@ ScrollableList editorObjectsList;
 Group editorColorButtons;
 Group editorVariableMeta;
 Group editorObjectButtons;
+Group editorCreateObject;
 Textlabel xVarMeta;
 Textlabel yVarMeta;
 Textlabel zVarMeta;
@@ -1127,7 +1069,7 @@ public void setupEditorGui() {
   cp5.addButton("editorObjectButtonPrev").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
     .setPosition(70 * 0, 10 * 0).setLabel("[j] prev");
   cp5.addButton("editorObjectButtonNext").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
-    .setPosition(70 * 1, 10 * 0).setLabel("[j] next");
+    .setPosition(70 * 1, 10 * 0).setLabel("[l] next");
   cp5.addButton("editorObjectButtonDuplicate").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
     .setPosition(70 * 0, 10 * 1).setLabel("[d] dupl");
   cp5.addButton("editorObjectButtonCreate").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
@@ -1152,6 +1094,21 @@ public void setupEditorGui() {
     .setBackgroundColor(COLOR_BLACK)
     .hide()
     ;
+
+  editorCreateObject = cp5.addGroup("editorCreateObject")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(width * 0.25, height * 0.25)
+    .setSize(int(width / 2), 20 * OBJECT_LIST.length)
+    .hideBar()
+    .hide();
+
+  for (int i = 0; i < OBJECT_LIST.length; i++) {
+    cp5.addButton("createObject" + OBJECT_LIST[i]).setColorBackground(COLOR_BLACK).setGroup("editorCreateObject")
+      .setPosition(0, 20 * i)
+      .setValue(i)
+      .setSize(int(width / 2), 20)
+      .setLabel(OBJECT_LIST[i]);
+  }
 
   xVarMeta = cp5.addTextlabel("x").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
   yVarMeta = cp5.addTextlabel("y").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
@@ -1200,6 +1157,20 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
   editorColorButtons.hide();
+}
+
+void controlEvent(ControlEvent theEvent) {
+  if (theEvent.isGroup()) {
+    println("event from group " + theEvent.getGroup().getName());
+  } else if (theEvent.isController()) {
+    if (theEvent.getController().getName().contains("createObject")) {
+      if (loaded) {
+        editor.handleCreateModeSelection(int(theEvent.getController().getValue()));
+      }
+    } else {
+      println("event from controller " + theEvent.getController().getName());
+    }
+  }
 }
 
 public void editorToolbar(int toolId) { editor.switchTool(toolId); }
