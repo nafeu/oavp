@@ -186,6 +186,11 @@ public class OavpEditor {
       case 6:
         if (this.activeTool == TOOL_MODIFIER) {
           this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
+          if (this.isSelectModifierTypeMode) {
+            editorSelectModifier.show();
+          } else {
+            editorSelectModifier.hide();
+          }
         }
         this.activeTool = TOOL_MODIFIER;
         editorToolbar.changeItem(toolbarLabelModifier, "selected", true);
@@ -518,8 +523,8 @@ public class OavpEditor {
 
     if (input.isPressed(UP)) {
       if (this.isSelectModifierTypeMode) {
-        if (this.selectedModifierTypeIndex - SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT >= 0) {
-          this.selectedModifierTypeIndex -= SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT;
+        if (this.selectedModifierTypeIndex > 0) {
+          this.selectedModifierTypeIndex -= 1;
         }
       } else {
         this.setModifierValue(this.getModifierValue() + delta);
@@ -528,45 +533,15 @@ public class OavpEditor {
 
     if (input.isPressed(DOWN)) {
       if (this.isSelectModifierTypeMode) {
-        if (this.selectedModifierTypeIndex + SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT < this.availableModifierTypes.size()) {
-          this.selectedModifierTypeIndex += SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT;
+        if (this.selectedModifierTypeIndex < MODIFIER_TYPES.length - 1) {
+          this.selectedModifierTypeIndex += 1;
         }
       } else {
         this.setModifierValue(this.getModifierValue() - delta);
       }
     }
 
-    if (input.isPressed(RIGHT)) {
-      if (this.isSelectModifierTypeMode) {
-        if (this.selectedModifierTypeIndex + 1 < this.selectableObjects.size()) {
-          this.selectedModifierTypeIndex += 1;
-        }
-      } else {
-        if (this.selectedModifierFieldIndex < availableModifierFields.size() - 1) {
-          this.selectedModifierFieldIndex += 1;
-        }
-      }
-    }
-
-    if (input.isPressed(LEFT)) {
-      if (this.isSelectModifierTypeMode) {
-        if (this.selectedModifierTypeIndex - 1 >= 0) {
-          this.selectedModifierTypeIndex -= 1;
-        }
-      } else {
-        if (this.selectedModifierFieldIndex > 0) {
-          this.selectedModifierFieldIndex -= 1;
-        }
-      }
-    }
-
     if (input.isPressed(ENTER)) {
-      if (this.isSelectModifierTypeMode) {
-        handleModifierTypeSelection(this.selectedModifierTypeIndex);
-      }
-    }
-
-    if (input.isMouseReleased()) {
       if (this.isSelectModifierTypeMode) {
         handleModifierTypeSelection(this.selectedModifierTypeIndex);
       }
@@ -610,6 +585,7 @@ public class OavpEditor {
     if (index < this.availableModifierFields.size()) {
       this.isSelectModifierTypeMode = false;
       setModifierType(this.availableModifierTypes.get(selectedModifierTypeIndex));
+      editorSelectModifier.hide();
     }
   }
 
@@ -816,54 +792,16 @@ public class OavpEditor {
         if (this.isSelectModifierTypeMode) {
           palette.reset(palette.flat.black, palette.flat.white, 2);
 
-          float colWidth = oavp.width(0.8) / SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT;
-          float rowHeight = oavp.height(0.8) / SELECT_MODIFIER_TYPE_MODE_ROW_COUNT;
-          float xPadding = oavp.width(0.1);
-          float yPadding = oavp.height(0.1);
-          float xScreenDisplacement = (width - oavp.width(1)) / 2;
-          float yScreenDisplacement = (height - oavp.height(1)) / 2;
-
-          for (int i = 0; i < SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT; i++) {
-            for (int j = 0; j < SELECT_MODIFIER_TYPE_MODE_ROW_COUNT; j++) {
-              float x0 = (i * colWidth) + xPadding;
-              float x1 = (i * colWidth) + colWidth + xPadding;
-              float y0 = (j * rowHeight) + yPadding;
-              float y1 = (j * rowHeight) + rowHeight + yPadding;
-
-              boolean isWithinSelectionArea = (
-                (mouseX >= (x0 + xScreenDisplacement) && mouseX < (x1 + xScreenDisplacement)) &&
-                (mouseY >= (y0 + yScreenDisplacement) && mouseY < (y1 + yScreenDisplacement)) || this.selectedModifierTypeIndex == i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT)
-              );
-
-              if (isWithinSelectionArea) {
-                this.selectedModifierTypeIndex = i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT);
-              }
-
-              int textIndex = i + (j * SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT);
-
-              if (textIndex < this.availableModifierTypes.size()) {
-                text
-                  .create()
-                  .move(x0, y0)
-                  .moveRight(colWidth / 2)
-                  .moveDown(rowHeight / 2)
-                  .fillColor(palette.flat.white)
-                  .size(14)
-                  .alignCompleteCenter()
-                  .write(this.availableModifierTypes.get(textIndex))
-                  .done();
-                  if (isWithinSelectionArea) {
-                    visualizers
-                      .create()
-                      .move(x0, y0)
-                      .moveRight(colWidth / 2)
-                      .moveDown(rowHeight / 2)
-                      .fillColor(palette.flat.white)
-                      .moveDown(25)
-                      .draw.basicRectangle(10, 10, 25)
-                      .done();
-                  }
-              }
+          for (int i = 0; i < MODIFIER_TYPES.length; i++) {
+            boolean isWithinSelectionArea = (this.selectedModifierTypeIndex == i);
+            if (isWithinSelectionArea) {
+              visualizers
+                .create()
+                .move(width / 4, height / 4)
+                .moveDown(20 * i)
+                .strokeColor(palette.flat.purple)
+                .draw.basicRectangle(width / 2, 20, 0, CORNER)
+                .done();
             }
           }
         } else {
@@ -877,16 +815,7 @@ public class OavpEditor {
             .draw.basicRectangle(95, 95)
             .draw.basicCircle(5)
             .done();
-
-          text.create()
-            .moveLeft(toolMetaTextPosition)
-            .move(toolMetaXPadding, toolMetaYPadding)
-            .fillColor(palette.flat.purple)
-            .size(14)
-            .moveDown(toolMetaBoxH * 0.2)
-            .alignLeft()
-            .write("modify " + activeVariable.name + "\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + ", type: " + this.getModifierType())
-            .done();
+            // .write("modify " + activeVariable.name + "\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + ", type: " + this.getModifierType())
         }
         break;
 
@@ -986,6 +915,7 @@ Group editorColorButtons;
 Group editorVariableMeta;
 Group editorObjectButtons;
 Group editorCreateObject;
+Group editorSelectModifier;
 Textlabel xVarMeta;
 Textlabel yVarMeta;
 Textlabel zVarMeta;
@@ -1110,6 +1040,21 @@ public void setupEditorGui() {
       .setLabel(OBJECT_LIST[i]);
   }
 
+  editorSelectModifier = cp5.addGroup("editorSelectModifier")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(width * 0.25, height * 0.25)
+    .setSize(int(width / 2), 20 * MODIFIER_TYPES.length)
+    .hideBar()
+    .hide();
+
+  for (int i = 0; i < MODIFIER_TYPES.length; i++) {
+    cp5.addButton("selectModifier" + MODIFIER_TYPES[i]).setColorBackground(COLOR_BLACK).setGroup("editorSelectModifier")
+      .setPosition(0, 20 * i)
+      .setValue(i)
+      .setSize(int(width / 2), 20)
+      .setLabel(MODIFIER_TYPES[i]);
+  }
+
   xVarMeta = cp5.addTextlabel("x").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
   yVarMeta = cp5.addTextlabel("y").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
   zVarMeta = cp5.addTextlabel("z").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
@@ -1160,15 +1105,19 @@ public void deselectAllToolbarTools() {
 }
 
 void controlEvent(ControlEvent theEvent) {
-  if (theEvent.isGroup()) {
-    println("event from group " + theEvent.getGroup().getName());
-  } else if (theEvent.isController()) {
-    if (theEvent.getController().getName().contains("createObject")) {
-      if (loaded) {
+  if (loaded) {
+    if (theEvent.isGroup()) {
+      println("event from group " + theEvent.getGroup().getName());
+    } else if (theEvent.isController()) {
+      if (theEvent.getController().getName().contains("createObject")) {
         editor.handleCreateModeSelection(int(theEvent.getController().getValue()));
+      } else if (theEvent.getController().getName().contains("selectModifier")) {
+        if (editor.isSelectModifierTypeMode) {
+          editor.handleModifierTypeSelection(editor.selectedModifierTypeIndex);
+        }
+      } else {
+        println("event from controller " + theEvent.getController().getName());
       }
-    } else {
-      println("event from controller " + theEvent.getController().getName());
     }
   }
 }

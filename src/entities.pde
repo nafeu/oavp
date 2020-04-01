@@ -1748,7 +1748,7 @@ public class OavpObjectManager {
       String objectClassName = extractOavpClassName(object.getClass().getName());
       OavpVariable variable = entry.getValue().getVariable();
 
-      objectData.append("\n  objects.add(\"" + objectKey + "\", \"" + objectClassName + "\")");
+      objectData.append("objects.add(\"" + objectKey + "\", \"" + objectClassName + "\")");
 
       if (variable.x != 0) { objectData.append(".set(\"x\"," + variable.x + ")"); }
       if (variable.xMod != 0) { objectData.append(".set(\"xMod\"," + variable.xMod + ")"); }
