@@ -782,44 +782,44 @@ public class OavpToggle {
 public class OavpVariable {
   public int x = 0;
   public float xMod = 0;
-  public String xModType = "";
+  public String xModType = "none";
   public int xr = 0;
   public float xrMod = 0;
-  public String xrModType = "";
+  public String xrModType = "none";
   public int y = 0;
   public float yMod = 0;
-  public String yModType = "";
+  public String yModType = "none";
   public int yr = 0;
   public float yrMod = 0;
-  public String yrModType = "";
+  public String yrModType = "none";
   public int z = 0;
   public float zMod = 0;
-  public String zModType = "";
+  public String zModType = "none";
   public int zr = 0;
   public float zrMod = 0;
-  public String zrModType = "";
+  public String zrModType = "none";
   public float w = 100;
   public float wMod = 0;
-  public String wModType = "";
+  public String wModType = "none";
   public float h = 100;
   public float hMod = 0;
-  public String hModType = "";
+  public String hModType = "none";
   public float l = 100;
   public float lMod = 0;
-  public String lModType = "";
+  public String lModType = "none";
   public float size = 100;
   public float sizeMod = 0;
-  public String sizeModType = "";
+  public String sizeModType = "none";
   public int gridScale = 5;
   public color strokeColor;
   public float strokeColorMod = 0;
-  public String strokeColorModType = "";
+  public String strokeColorModType = "none";
   public color fillColor;
   public float fillColorMod = 0;
-  public String fillColorModType = "";
+  public String fillColorModType = "none";
   public float strokeWeight = 2;
   public float strokeWeightMod = 0;
-  public String strokeWeightModType = "";
+  public String strokeWeightModType = "none";
   public float strokeWeightOrig = 2;
   public String name = "";
   public HashMap<String, Object> customAttrs;
@@ -1156,6 +1156,16 @@ public class OavpVariable {
     return this.strokeWeight + (this.strokeWeightMod * getMod(this.strokeWeightModType));
   }
 
+  private Object get(String fieldName) {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      return field.get(activeVariable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
   @Override
   public String toString() {

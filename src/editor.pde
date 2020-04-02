@@ -181,19 +181,12 @@ public class OavpEditor {
         break;
       case 5:
         this.activeTool = TOOL_WEIGHT;
-        editorToolbar.changeItem(toolbarLabelWeight, "sebected", true);
+        editorToolbar.changeItem(toolbarLabelWeight, "selected", true);
         break;
       case 6:
-        if (this.activeTool == TOOL_MODIFIER) {
-          this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
-          if (this.isSelectModifierTypeMode) {
-            editorSelectModifier.show();
-          } else {
-            editorSelectModifier.hide();
-          }
-        }
         this.activeTool = TOOL_MODIFIER;
         editorToolbar.changeItem(toolbarLabelModifier, "selected", true);
+        editorModifiers.show();
         break;
       case 7:
         this.activeTool = TOOL_VARIATION;
@@ -510,42 +503,29 @@ public class OavpEditor {
     }
   }
 
+  float DELTA_MODIFIER_PRECISE_KEYS = 5;
+  float DELTA_MODIFIER_SNAP_KEYS = 50;
+
   private void handleToolModifierInputs() {
-    float delta = DELTA_MODIFIER;
+    float deltaKeys = DELTA_MODIFIER_PRECISE_KEYS;
 
-    if (input.isHoldingShift) {
-      delta = DELTA_MODIFIER_SHIFT;
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_MODIFIER_SNAP_KEYS;
     }
 
-    if (input.isHoldingControl) {
-      delta = DELTA_MODIFIER_CTRL;
+    if (this.isSelectModifierTypeMode) {
+      if (input.isPressed(UP)) { this.setSelectedModifierTypeIndex(this.selectedModifierTypeIndex - 1); }
+      if (input.isPressed(DOWN)) { this.setSelectedModifierTypeIndex(this.selectedModifierTypeIndex + 1); }
+      if (input.isPressed(ENTER)) { handleModifierTypeSelection(this.selectedModifierTypeIndex); }
+    } else {
+      if (input.isPressed(UP)) { this.setSelectedModifierFieldIndex(this.selectedModifierFieldIndex - 1); }
+      if (input.isPressed(DOWN)) { this.setSelectedModifierFieldIndex(this.selectedModifierFieldIndex + 1); }
+      if (input.isPressed(ENTER)) { this.toggleSelectModifierTypeMode(); }
+      if (input.isPressed(RIGHT)) { this.setModifierValue(this.getModifierValue() + deltaKeys); }
+      if (input.isPressed(LEFT)) { this.setModifierValue(this.getModifierValue() - deltaKeys); }
     }
 
-    if (input.isPressed(UP)) {
-      if (this.isSelectModifierTypeMode) {
-        if (this.selectedModifierTypeIndex > 0) {
-          this.selectedModifierTypeIndex -= 1;
-        }
-      } else {
-        this.setModifierValue(this.getModifierValue() + delta);
-      }
-    }
-
-    if (input.isPressed(DOWN)) {
-      if (this.isSelectModifierTypeMode) {
-        if (this.selectedModifierTypeIndex < MODIFIER_TYPES.length - 1) {
-          this.selectedModifierTypeIndex += 1;
-        }
-      } else {
-        this.setModifierValue(this.getModifierValue() - delta);
-      }
-    }
-
-    if (input.isPressed(ENTER)) {
-      if (this.isSelectModifierTypeMode) {
-        handleModifierTypeSelection(this.selectedModifierTypeIndex);
-      }
-    }
+    updateEditorVariableMeta();
   }
 
   private void handleToolVariationInputs() {
@@ -583,9 +563,9 @@ public class OavpEditor {
 
   private void handleModifierTypeSelection(int index) {
     if (index < this.availableModifierFields.size()) {
-      this.isSelectModifierTypeMode = false;
       setModifierType(this.availableModifierTypes.get(selectedModifierTypeIndex));
-      editorSelectModifier.hide();
+      updateEditorVariableMeta();
+      this.toggleSelectModifierTypeMode();
     }
   }
 
@@ -608,6 +588,8 @@ public class OavpEditor {
         editorObjectsList.hide();
         editorObjectButtons.hide();
         editorVariableMeta.hide();
+        editorSelectModifier.hide();
+        editorModifiers.hide();
       }
     }
   }
@@ -643,6 +625,32 @@ public class OavpEditor {
         editorObjectButtons.show();
         editorVariableMeta.show();
       }
+    }
+  }
+
+  public void toggleSelectModifierTypeMode() {
+    this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
+    if (this.isSelectModifierTypeMode) {
+      editorSelectModifier.show();
+      editorCreateObject.hide();
+      editorToolbar.hide();
+      editorColorButtons.hide();
+      editorToggleSnappingButton.hide();
+      editorObjectsList.hide();
+      editorObjectButtons.hide();
+      editorVariableMeta.hide();
+      editorModifiers.hide();
+    } else {
+      editorSelectModifier.hide();
+      editorCreateObject.hide();
+      editorToolbar.show();
+      if (this.activeTool == TOOL_MODIFIER) {
+        editorModifiers.show();
+      }
+      editorToggleSnappingButton.show();
+      editorObjectsList.show();
+      editorObjectButtons.show();
+      editorVariableMeta.show();
     }
   }
 
@@ -805,17 +813,28 @@ public class OavpEditor {
             }
           }
         } else {
+          for (int i = 0; i < MODIFIER_FIELDS.length; i++) {
+            boolean isWithinSelectionArea = (this.selectedModifierFieldIndex == i);
+            if (isWithinSelectionArea && cp5.getGroup("editorModifiers").isOpen()) {
+              visualizers
+                .create()
+                .move(130, 135)
+                .moveDown(20 * (i - 1) + 5 * i)
+                .strokeColor(palette.flat.purple)
+                .draw.basicRectangle(165, 20, 0, CORNER)
+                .done();
+            }
+          }
           visualizers
             .create()
             .center().middle()
             .strokeColor(palette.flat.purple)
             .noFillStyle()
-            .strokeWeightStyle(2)
+            .strokeWeightStyle(0.5)
             .move(activeVariable.x, activeVariable.y, activeVariable.z)
-            .draw.basicRectangle(95, 95)
             .draw.basicCircle(5)
+            .draw.positionalLines(width)
             .done();
-            // .write("modify " + activeVariable.name + "\n" + this.getActiveModifierField() + ": " + this.getModifierValue() + ", type: " + this.getModifierType())
         }
         break;
 
@@ -905,6 +924,27 @@ public class OavpEditor {
       }
     }
   }
+
+  public void setSelectedModifierTypeIndex(int index) {
+    if (index >= MODIFIER_TYPES.length) {
+      this.selectedModifierTypeIndex = MODIFIER_TYPES.length - 1;
+    } else if (index < 0) {
+      this.selectedModifierTypeIndex = 0;
+    } else {
+      this.selectedModifierTypeIndex = index;
+    }
+  }
+
+  public void setSelectedModifierFieldIndex(int index) {
+    println(index);
+    if (index >= MODIFIER_FIELDS.length) {
+      this.selectedModifierFieldIndex = MODIFIER_FIELDS.length - 1;
+    } else if (index < 0) {
+      this.selectedModifierFieldIndex = 0;
+    } else {
+      this.selectedModifierFieldIndex = index;
+    }
+  }
 }
 
 ButtonBar editorToolbar;
@@ -916,6 +956,7 @@ Group editorVariableMeta;
 Group editorObjectButtons;
 Group editorCreateObject;
 Group editorSelectModifier;
+Group editorModifiers;
 Textlabel xVarMeta;
 Textlabel yVarMeta;
 Textlabel zVarMeta;
@@ -1016,7 +1057,7 @@ public void setupEditorGui() {
     .setItemHeight(10)
     .hide();
 
-  editorVariableMeta = cp5.addGroup("variableMeta")
+  editorVariableMeta = cp5.addGroup("editorVariableMeta")
     .setLabel("selected variable")
     .setColorBackground(COLOR_BLACK)
     .setPosition(10, 35)
@@ -1040,6 +1081,42 @@ public void setupEditorGui() {
       .setLabel(OBJECT_LIST[i]);
   }
 
+  editorModifiers = cp5.addGroup("editorModifiers")
+    .setLabel("modifiers")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10, 100)
+    .setSize(300, 370)
+    .setBackgroundColor(COLOR_BLACK)
+    .hide()
+    ;
+
+  for (int i = 0; i < MODIFIER_FIELDS.length; i++) {
+    cp5.addTextlabel(MODIFIER_FIELDS[i] + "Label")
+      .setText(MODIFIER_FIELDS[i])
+      .setPosition(10 * 1, 20 * (i + 1) + 5 * i)
+      .setColorValue(COLOR_WHITE)
+      .setGroup("editorModifiers");
+
+    cp5.addNumberbox("modifierVal-" + MODIFIER_FIELDS[i])
+      .setColorBackground(COLOR_BLACK)
+      .setPosition(10 * 12, (20 * (i + 1) + 5 * i) - 5)
+      .setLabel("")
+      .setSize(50, 20)
+      .setMultiplier(-5)
+      .setSensitivity(100)
+      .setValue(0)
+      .setId(i)
+      .setGroup("editorModifiers");
+
+    cp5.addButton("modifierButton-" + MODIFIER_FIELDS[i])
+      .setColorBackground(COLOR_BLACK)
+      .setPosition(10 * 18 - 5, (20 * (i + 1) + 5 * i) - 5)
+      .setValue(i)
+      .setSize(110, 20)
+      .setLabel("none")
+      .setGroup("editorModifiers");
+  }
+
   editorSelectModifier = cp5.addGroup("editorSelectModifier")
     .setColorBackground(COLOR_BLACK)
     .setPosition(width * 0.25, height * 0.25)
@@ -1055,41 +1132,49 @@ public void setupEditorGui() {
       .setLabel(MODIFIER_TYPES[i]);
   }
 
-  xVarMeta = cp5.addTextlabel("x").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  yVarMeta = cp5.addTextlabel("y").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  zVarMeta = cp5.addTextlabel("z").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  xVarMeta = cp5.addTextlabel("xVarMeta").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  yVarMeta = cp5.addTextlabel("yVarMeta").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  zVarMeta = cp5.addTextlabel("zVarMeta").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
 
-  xrVarMeta = cp5.addTextlabel("xr").setPosition(10 * 6, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  yrVarMeta = cp5.addTextlabel("yr").setPosition(10 * 6, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  zrVarMeta = cp5.addTextlabel("zr").setPosition(10 * 6, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  xrVarMeta = cp5.addTextlabel("xrVarMeta").setPosition(10 * 6, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  yrVarMeta = cp5.addTextlabel("yrVarMeta").setPosition(10 * 6, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  zrVarMeta = cp5.addTextlabel("zrVarMeta").setPosition(10 * 6, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
 
-  wVarMeta = cp5.addTextlabel("w").setPosition(10 * 11, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  hVarMeta = cp5.addTextlabel("h").setPosition(10 * 11, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  lVarMeta = cp5.addTextlabel("l").setPosition(10 * 11, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  sizeVarMeta = cp5.addTextlabel("size").setPosition(10 * 11, 40).setColorValue(COLOR_WHITE).setGroup("variableMeta");
+  wVarMeta = cp5.addTextlabel("wVarMeta").setPosition(10 * 11, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  hVarMeta = cp5.addTextlabel("hVarMeta").setPosition(10 * 11, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  lVarMeta = cp5.addTextlabel("lVarMeta").setPosition(10 * 11, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  sizeVarMeta = cp5.addTextlabel("sizeVarMeta").setPosition(10 * 11, 40).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
 
-  strokeWeightVarMeta = cp5.addTextlabel("strokeWeight").setPosition(10 * 16, 10).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  strokeColorVarMeta = cp5.addTextlabel("strokeColor").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  strokeColorVarMetaButton = cp5.addBang("strokeColorButton").setPosition(10 * 16 + 60, 20 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("variableMeta");
-  fillColorVarMeta = cp5.addTextlabel("fillColor").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("variableMeta");
-  fillColorVarMetaButton = cp5.addBang("fillColorButton").setPosition(10 * 16 + 60, 30 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("variableMeta");
+  strokeWeightVarMeta = cp5.addTextlabel("strokeWeightVarMeta").setPosition(10 * 16, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  strokeColorVarMeta = cp5.addTextlabel("strokeColorVarMeta").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  strokeColorVarMetaButton = cp5.addBang("strokeColorButtonVarMeta").setPosition(10 * 16 + 60, 20 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
+  fillColorVarMeta = cp5.addTextlabel("fillColorVarMeta").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  fillColorVarMetaButton = cp5.addBang("fillColorButtonVarMeta").setPosition(10 * 16 + 60, 30 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
 }
 
 public void updateEditorVariableMeta() {
-  xVarMeta.setText("x: " + objects.getActiveVariable().x);
-  yVarMeta.setText("y: " + objects.getActiveVariable().y);
-  zVarMeta.setText("z: " + objects.getActiveVariable().z);
-  xrVarMeta.setText("xr: " + objects.getActiveVariable().xr);
-  yrVarMeta.setText("yr: " + objects.getActiveVariable().yr);
-  zrVarMeta.setText("zr: " + objects.getActiveVariable().zr);
-  wVarMeta.setText("w: " + objects.getActiveVariable().w);
-  hVarMeta.setText("h: " + objects.getActiveVariable().h);
-  lVarMeta.setText("l: " + objects.getActiveVariable().l);
-  sizeVarMeta.setText("size: " + objects.getActiveVariable().size);
-  strokeWeightVarMeta.setText("strokeWeight: " + objects.getActiveVariable().strokeWeight);
-  strokeColorVarMetaButton.setColorForeground(objects.getActiveVariable().strokeColor);
-  fillColorVarMetaButton.setColorForeground(objects.getActiveVariable().fillColor);
-  editorObjectsList.setItems(objects.getObjectsList()).setLabel(objects.getActiveVariable().name);
+  OavpVariable activeVariable = objects.getActiveVariable();
+  xVarMeta.setText("x: " + activeVariable.x);
+  yVarMeta.setText("y: " + activeVariable.y);
+  zVarMeta.setText("z: " + activeVariable.z);
+  xrVarMeta.setText("xr: " + activeVariable.xr);
+  yrVarMeta.setText("yr: " + activeVariable.yr);
+  zrVarMeta.setText("zr: " + activeVariable.zr);
+  wVarMeta.setText("w: " + activeVariable.w);
+  hVarMeta.setText("h: " + activeVariable.h);
+  lVarMeta.setText("l: " + activeVariable.l);
+  sizeVarMeta.setText("size: " + activeVariable.size);
+  strokeWeightVarMeta.setText("strokeWeight: " + activeVariable.strokeWeight);
+  strokeColorVarMetaButton.setColorForeground(activeVariable.strokeColor);
+  fillColorVarMetaButton.setColorForeground(activeVariable.fillColor);
+  editorObjectsList.setItems(objects.getObjectsList()).setLabel(activeVariable.name);
+
+  for (String modifierField : MODIFIER_FIELDS) {
+    cp5.getController("modifierVal-" + modifierField).setBroadcast(false);
+    cp5.getController("modifierVal-" + modifierField).setValue((float) activeVariable.get(modifierField));
+    cp5.getController("modifierVal-" + modifierField).setBroadcast(true);
+    cp5.getController("modifierButton-" + modifierField).setLabel((String) activeVariable.get(modifierField + "Type"));
+  }
 }
 
 public void deselectAllToolbarTools() {
@@ -1102,6 +1187,7 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
   editorColorButtons.hide();
+  editorModifiers.hide();
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -1113,8 +1199,22 @@ void controlEvent(ControlEvent theEvent) {
         editor.handleCreateModeSelection(int(theEvent.getController().getValue()));
       } else if (theEvent.getController().getName().contains("selectModifier")) {
         if (editor.isSelectModifierTypeMode) {
+          editor.setSelectedModifierTypeIndex(int(theEvent.getController().getValue()));
           editor.handleModifierTypeSelection(editor.selectedModifierTypeIndex);
         }
+        println("event from selectModifier " + theEvent.getController().getName());
+      } else if (theEvent.getController().getName().contains("modifierVal")) {
+        float val = theEvent.getController().getValue();
+        String prop = theEvent.getController().getName().split("-")[1];
+        int index = int(theEvent.getController().getId());
+        editor.setSelectedModifierFieldIndex(index);
+        objects.getActiveVariable().set(prop, val);
+        println("event from modifierVal " + theEvent.getController().getName());
+      } else if (theEvent.getController().getName().contains("modifierButton")) {
+        int index = int(theEvent.getController().getValue());
+        editor.setSelectedModifierFieldIndex(index);
+        editor.toggleSelectModifierTypeMode();
+        println("event from modifierButton " + theEvent.getController().getName());
       } else {
         println("event from controller " + theEvent.getController().getName());
       }
@@ -1159,7 +1259,6 @@ int TOOL_MODIFIER = 6;
 int TOOL_VARIATION = 7;
 
 // KEYS
-int KEY_ENTER = 10;
 int KEY_A = 65;
 int KEY_B = 66;
 int KEY_C = 67;
@@ -1186,13 +1285,3 @@ int KEY_W = 87;
 int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
-
-float DELTA_MODIFIER = 50.0;
-float DELTA_MODIFIER_SHIFT = 25.0;
-float DELTA_MODIFIER_CTRL = 5.0;
-
-int CREATE_MODE_COLUMN_COUNT = 5;
-int CREATE_MODE_ROW_COUNT = 10;
-
-int SELECT_MODIFIER_TYPE_MODE_COLUMN_COUNT = 3;
-int SELECT_MODIFIER_TYPE_MODE_ROW_COUNT = 10;
