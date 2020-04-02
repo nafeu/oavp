@@ -191,6 +191,7 @@ public class OavpEditor {
       case 7:
         this.activeTool = TOOL_VARIATION;
         editorToolbar.changeItem(toolbarLabelVariation, "selected", true);
+        editorVariations.show();
         break;
     }
   }
@@ -542,6 +543,8 @@ public class OavpEditor {
         activeVariable.variation += 1;
       }
     }
+
+    updateEditorVariableMeta();
   }
 
   private void handleCreateModeSelection(int index) {
@@ -562,7 +565,7 @@ public class OavpEditor {
   }
 
   private void handleModifierTypeSelection(int index) {
-    if (index < this.availableModifierFields.size()) {
+    if (index < MODIFIER_TYPES.length) {
       setModifierType(this.availableModifierTypes.get(selectedModifierTypeIndex));
       updateEditorVariableMeta();
       this.toggleSelectModifierTypeMode();
@@ -578,7 +581,6 @@ public class OavpEditor {
         editorObjectsList.show();
         editorObjectButtons.show();
         updateEditorVariableMeta();
-        editorVariableMeta.setLabel(objects.getActiveVariable().name);
         editorVariableMeta.show();
         this.switchTool(this.activeTool);
       } else {
@@ -590,6 +592,7 @@ public class OavpEditor {
         editorVariableMeta.hide();
         editorSelectModifier.hide();
         editorModifiers.hide();
+        editorVariations.hide();
       }
     }
   }
@@ -640,12 +643,16 @@ public class OavpEditor {
       editorObjectButtons.hide();
       editorVariableMeta.hide();
       editorModifiers.hide();
+      editorVariations.hide();
     } else {
       editorSelectModifier.hide();
       editorCreateObject.hide();
       editorToolbar.show();
       if (this.activeTool == TOOL_MODIFIER) {
         editorModifiers.show();
+      }
+      if (this.activeTool == TOOL_VARIATION) {
+        editorVariations.show();
       }
       editorToggleSnappingButton.show();
       editorObjectsList.show();
@@ -957,6 +964,7 @@ Group editorObjectButtons;
 Group editorCreateObject;
 Group editorSelectModifier;
 Group editorModifiers;
+Group editorVariations;
 Textlabel xVarMeta;
 Textlabel yVarMeta;
 Textlabel zVarMeta;
@@ -1084,7 +1092,7 @@ public void setupEditorGui() {
   editorModifiers = cp5.addGroup("editorModifiers")
     .setLabel("modifiers")
     .setColorBackground(COLOR_BLACK)
-    .setPosition(10, 100)
+    .setPosition(10, 110)
     .setSize(300, 370)
     .setBackgroundColor(COLOR_BLACK)
     .hide()
@@ -1132,6 +1140,23 @@ public void setupEditorGui() {
       .setLabel(MODIFIER_TYPES[i]);
   }
 
+  editorVariations = cp5.addGroup("editorVariations")
+    .setLabel("variations")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10, 110)
+    .setSize(150, 30)
+    .setBackgroundColor(COLOR_BLACK)
+    .hide()
+    ;
+
+  cp5.addScrollableList("editorVariationList")
+    .setLabel("select variation")
+    .setPosition(10, 10)
+    .setColorBackground(COLOR_BLACK)
+    .setGroup("editorVariations")
+    .close()
+    ;
+
   xVarMeta = cp5.addTextlabel("xVarMeta").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   yVarMeta = cp5.addTextlabel("yVarMeta").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   zVarMeta = cp5.addTextlabel("zVarMeta").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
@@ -1154,6 +1179,7 @@ public void setupEditorGui() {
 
 public void updateEditorVariableMeta() {
   OavpVariable activeVariable = objects.getActiveVariable();
+  editorVariableMeta.setLabel(activeVariable.name + " (" + activeVariable.getVariation() + ")");
   xVarMeta.setText("x: " + activeVariable.x);
   yVarMeta.setText("y: " + activeVariable.y);
   zVarMeta.setText("z: " + activeVariable.z);
@@ -1175,6 +1201,10 @@ public void updateEditorVariableMeta() {
     cp5.getController("modifierVal-" + modifierField).setBroadcast(true);
     cp5.getController("modifierButton-" + modifierField).setLabel((String) activeVariable.get(modifierField + "Type"));
   }
+
+  cp5.get(ScrollableList.class, "editorVariationList")
+    .setLabel(activeVariable.getVariation())
+    .setItems(activeVariable.variations);
 }
 
 public void deselectAllToolbarTools() {
@@ -1188,6 +1218,7 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
   editorColorButtons.hide();
   editorModifiers.hide();
+  editorVariations.hide();
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -1199,6 +1230,7 @@ void controlEvent(ControlEvent theEvent) {
         editor.handleCreateModeSelection(int(theEvent.getController().getValue()));
       } else if (theEvent.getController().getName().contains("selectModifier")) {
         if (editor.isSelectModifierTypeMode) {
+          println(theEvent.getController().getName() + "--" + int(theEvent.getController().getValue()));
           editor.setSelectedModifierTypeIndex(int(theEvent.getController().getValue()));
           editor.handleModifierTypeSelection(editor.selectedModifierTypeIndex);
         }
@@ -1215,6 +1247,12 @@ void controlEvent(ControlEvent theEvent) {
         editor.setSelectedModifierFieldIndex(index);
         editor.toggleSelectModifierTypeMode();
         println("event from modifierButton " + theEvent.getController().getName());
+      } else if (theEvent.getController().getName().contains("editorVariationList")) {
+        println("event from editorVariationList " + theEvent.getController().getValue());
+        int index = int(theEvent.getController().getValue());
+        String val = (String) cp5.get(ScrollableList.class, "editorVariationList").getItem(index).get("name");
+        objects.getActiveVariable().set("variation", val);
+        updateEditorVariableMeta();
       } else {
         println("event from controller " + theEvent.getController().getName());
       }
