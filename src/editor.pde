@@ -99,60 +99,57 @@ public class OavpEditor {
       }
 
       if (isToolSwitchable()) {
-        if (input.isPressed(KEY_M)) {
-          this.switchTool(TOOL_MOVE);
+        if (input.isPressed(KEY_M)) { this.switchTool(TOOL_MOVE); }
+        if (input.isHoldingControl) {
+          if (input.isPressed(KEY_S)) { this.lazySave(); println("Sketch saved to " + sketchPath("sketch.pde")); }
+        } else {
+          if (input.isPressed(KEY_S)) { this.switchTool(TOOL_RESIZE); }
         }
-
-        if (input.isPressed(KEY_S)) {
-          this.switchTool(TOOL_RESIZE);
-        }
-
-        if (input.isPressed(KEY_T)) {
-          this.switchTool(TOOL_TRANSFORM);
-        }
-
-        if (input.isPressed(KEY_R)) {
-          this.switchTool(TOOL_ROTATE);
-        }
-
-        if (input.isPressed(KEY_C)) {
-          this.switchTool(TOOL_COLOR);
-        }
-
-        if (input.isPressed(KEY_B)) {
-          this.switchTool(TOOL_WEIGHT);
-        }
-
-        if (input.isPressed(KEY_V)) {
-          this.switchTool(TOOL_VARIATION);
-        }
-
-        if (input.isPressed(KEY_Z)) {
-          this.switchTool(TOOL_MODIFIER);
-        }
+        if (input.isPressed(KEY_T)) { this.switchTool(TOOL_TRANSFORM); }
+        if (input.isPressed(KEY_R)) { this.switchTool(TOOL_ROTATE); }
+        if (input.isPressed(KEY_C)) { this.switchTool(TOOL_COLOR); }
+        if (input.isPressed(KEY_B)) { this.switchTool(TOOL_WEIGHT); }
+        if (input.isPressed(KEY_V)) { this.switchTool(TOOL_VARIATION); }
+        if (input.isPressed(KEY_Z)) { this.switchTool(TOOL_MODIFIER); }
       }
 
-      if (input.isPressed(KEY_D)) {
-        objects.duplicate();
-      }
-
-      if (input.isPressed(KEY_N)) {
-        toggleCreateMode();
-      }
-
-      if (input.isPressed(KEY_Q)) {
-        toggleSnappingMode();
-      }
-
-      if (input.isPressed(KEY_X)) {
-        objects.printObjectData();
-      }
-
-      if (input.isPressed(KEY_W)) {
-        objects.remove();
-      }
+      if (input.isPressed(KEY_D)) { objects.duplicate(); }
+      if (input.isPressed(KEY_N)) { toggleCreateMode(); }
+      if (input.isPressed(KEY_Q)) { toggleSnappingMode(); }
+      if (input.isPressed(KEY_X)) { println(objects.exportSketchData()); }
+      if (input.isPressed(KEY_W)) { objects.remove(); }
     }
   }
+
+  public void lazySave() {
+    saveStrings(
+      sketchPath("sketch.pde"),
+      new String[] {
+        "void setupSketch() {",
+        objects.exportSketchData(),
+        "} /*--SETUP--*/",
+        "",
+        "void updateSketch() {",
+        "} /*--UPDATE--*/",
+        "",
+        "void drawSketch() {",
+        "} /*--DRAW--*/",
+        ""
+      }
+    );
+  }
+
+  // public void saveSketch() {
+  //   if (this.openedPath != "") {
+  //     println("Saving file...");
+  //   } else {
+  //     promptFileSave();
+  //   }
+  // }
+
+  // public void promptFileSave() {
+  //   this.fileSaveModalOpen = true;
+  // }
 
   public void switchTool(int toolId) {
     updateOriginalValues();

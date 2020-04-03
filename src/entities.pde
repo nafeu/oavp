@@ -1748,7 +1748,7 @@ public class OavpObjectManager {
     editor.updateOriginalValues();
   }
 
-  public void printObjectData() {
+  public String exportSketchData() {
     Date date = new Date();
     println("--- [ object data : " + date + " ] ---");
     StringBuilder objectData = new StringBuilder();
@@ -1816,7 +1816,7 @@ public class OavpObjectManager {
     StringSelection stringSelection = new StringSelection(objectData.toString());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     clipboard.setContents(stringSelection, null);
-    println(objectData.toString());
+    return objectData.toString();
   }
 }
 
