@@ -161,35 +161,71 @@ public class OavpEditor {
       case 0:
         this.activeTool = TOOL_MOVE;
         editorToolbar.changeItem(toolbarLabelMove, "selected", true);
+        setHelpText(""
+          + "[mouse or left/right] to edit x-axis position\n"
+          + "[mouse or up/down] to edit y-axis position\n"
+          + "[shift] + [mouse or up/down] to edit z-axis position\n"
+        );
         break;
       case 1:
         this.activeTool = TOOL_RESIZE;
+        setHelpText(""
+          + "[mouse or up/down] to edit size\n"
+          + "Note: size param unrelated to w, h and l\n"
+        );
         editorToolbar.changeItem(toolbarLabelResize, "selected", true);
         break;
       case 2:
         this.activeTool = TOOL_TRANSFORM;
+        setHelpText(""
+          + "[mouse or left/right] to edit width (x-axis)\n"
+          + "[mouse or up/down] to edit height (y-axis)\n"
+          + "[shift] + [mouse or up/down] to edit length (z-axis)\n"
+        );
         editorToolbar.changeItem(toolbarLabelTransform, "selected", true);
         break;
       case 3:
         this.activeTool = TOOL_ROTATE;
+        setHelpText(""
+          + "[mouse or left/right] to edit z-axis rotation\n"
+          + "[mouse or up/down] to edit y-axis rotation\n"
+          + "[shift] + [mouse or up/down] to edit x-axis rotation\n"
+        );
         editorToolbar.changeItem(toolbarLabelRotate, "selected", true);
         break;
       case 4:
         this.activeTool = TOOL_COLOR;
+        setHelpText(""
+          + "[left/right] to change color selection\n"
+          + "[up/down] to change palette\n"
+          + "[enter] to assign selected color to stroke\n"
+          + "[shift+enter] to assign selected color to fill\n"
+        );
         editorToolbar.changeItem(toolbarLabelColor, "selected", true);
         editorColorButtons.show();
         break;
       case 5:
         this.activeTool = TOOL_WEIGHT;
+        setHelpText(""
+          + "[up/down] to edit stroke weight\n"
+        );
         editorToolbar.changeItem(toolbarLabelWeight, "selected", true);
         break;
       case 6:
         this.activeTool = TOOL_MODIFIER;
+        setHelpText(""
+          + "[up/down] to select field to modify\n"
+          + "[left/right] to edit intensity of modification\n"
+          + "[enter] to select modifier type\n"
+        );
         editorToolbar.changeItem(toolbarLabelModifier, "selected", true);
         editorModifiers.show();
         break;
       case 7:
         this.activeTool = TOOL_VARIATION;
+        setHelpText(""
+          + "[up/down] to select variation of object\n"
+        );
         editorToolbar.changeItem(toolbarLabelVariation, "selected", true);
         editorVariations.show();
         break;
@@ -560,6 +596,7 @@ public class OavpEditor {
       editorObjectsList.show();
       editorObjectButtons.show();
       editorVariableMeta.show();
+      editorHelp.show();
       editorCreateObject.hide();
     }
   }
@@ -582,6 +619,7 @@ public class OavpEditor {
         editorObjectButtons.show();
         updateEditorVariableMeta();
         editorVariableMeta.show();
+        editorHelp.show();
         this.switchTool(this.activeTool);
       } else {
         editorToolbar.hide();
@@ -590,6 +628,7 @@ public class OavpEditor {
         editorObjectsList.hide();
         editorObjectButtons.hide();
         editorVariableMeta.hide();
+        editorHelp.hide();
         editorSelectModifier.hide();
         editorModifiers.hide();
         editorVariations.hide();
@@ -617,6 +656,7 @@ public class OavpEditor {
         editorObjectsList.hide();
         editorObjectButtons.hide();
         editorVariableMeta.hide();
+        editorHelp.hide();
       } else {
         editorCreateObject.hide();
         editorToolbar.show();
@@ -627,6 +667,7 @@ public class OavpEditor {
         editorObjectsList.show();
         editorObjectButtons.show();
         editorVariableMeta.show();
+        editorHelp.show();
       }
     }
   }
@@ -642,6 +683,7 @@ public class OavpEditor {
       editorObjectsList.hide();
       editorObjectButtons.hide();
       editorVariableMeta.hide();
+      editorHelp.hide();
       editorModifiers.hide();
       editorVariations.hide();
     } else {
@@ -658,6 +700,7 @@ public class OavpEditor {
       editorObjectsList.show();
       editorObjectButtons.show();
       editorVariableMeta.show();
+      editorHelp.show();
     }
   }
 
@@ -825,10 +868,10 @@ public class OavpEditor {
             if (isWithinSelectionArea && cp5.getGroup("editorModifiers").isOpen()) {
               visualizers
                 .create()
-                .move(130, 135)
-                .moveDown(20 * (i - 1) + 5 * i)
+                .move(22, 130)
+                .moveDown(10 * (i - 1) + 5 * i)
                 .strokeColor(palette.flat.purple)
-                .draw.basicRectangle(165, 20, 0, CORNER)
+                .draw.basicRectangle(255, 10, 0, CORNER)
                 .done();
             }
           }
@@ -965,6 +1008,8 @@ Group editorCreateObject;
 Group editorSelectModifier;
 Group editorModifiers;
 Group editorVariations;
+Group editorHelp;
+Textlabel editorHelpText;
 Textlabel xVarMeta;
 Textlabel yVarMeta;
 Textlabel zVarMeta;
@@ -1101,15 +1146,15 @@ public void setupEditorGui() {
   for (int i = 0; i < MODIFIER_FIELDS.length; i++) {
     cp5.addTextlabel(MODIFIER_FIELDS[i] + "Label")
       .setText(MODIFIER_FIELDS[i])
-      .setPosition(10 * 1, 20 * (i + 1) + 5 * i)
+      .setPosition(10 * 1, 10 * (i + 1) + 5 * i)
       .setColorValue(COLOR_WHITE)
       .setGroup("editorModifiers");
 
     cp5.addNumberbox("modifierVal-" + MODIFIER_FIELDS[i])
       .setColorBackground(COLOR_BLACK)
-      .setPosition(10 * 12, (20 * (i + 1) + 5 * i) - 5)
+      .setPosition(10 * 10, (10 * (i + 1) + 5 * i))
       .setLabel("")
-      .setSize(50, 20)
+      .setSize(50, 10)
       .setMultiplier(-5)
       .setSensitivity(100)
       .setValue(0)
@@ -1118,9 +1163,9 @@ public void setupEditorGui() {
 
     cp5.addButton("modifierButton-" + MODIFIER_FIELDS[i])
       .setColorBackground(COLOR_BLACK)
-      .setPosition(10 * 18 - 5, (20 * (i + 1) + 5 * i) - 5)
+      .setPosition(10 * 16 - 5, (10 * (i + 1) + 5 * i))
       .setValue(i)
-      .setSize(110, 20)
+      .setSize(110, 10)
       .setLabel("none")
       .setGroup("editorModifiers");
   }
@@ -1155,6 +1200,21 @@ public void setupEditorGui() {
     .setColorBackground(COLOR_BLACK)
     .setGroup("editorVariations")
     .close()
+    ;
+
+  editorHelp = cp5.addGroup("editorHelp")
+    .setLabel("help")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10 + 300 + 5, 35)
+    .setSize(250, 60)
+    .setBackgroundColor(COLOR_BLACK)
+    .hide()
+    ;
+
+  editorHelpText = cp5.addTextlabel("editorHelpText")
+    .setPosition(10, 10)
+    .setColorValue(COLOR_WHITE)
+    .setGroup("editorHelp")
     ;
 
   xVarMeta = cp5.addTextlabel("xVarMeta").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
@@ -1285,6 +1345,10 @@ public String getNewObjectName(String className, int increment) {
   } else {
     return getNewObjectName(className, increment + 1);
   }
+}
+
+public void setHelpText(String text) {
+  editorHelpText.setText(text);
 }
 
 int TOOL_MOVE = 0;
