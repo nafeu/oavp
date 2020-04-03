@@ -2,15 +2,19 @@ public class OavpShape {
 
   OavpShape() {}
 
-  public void flatbox(float x, float y, float z, float width, float height, float depth) {
-    float[] a = { x, y, z };
-    float[] b = { x + width, y, z };
-    float[] c = { x + width, y, z + depth };
-    float[] d = { x, y, z + depth };
-    float[] e = { x, y + height, z };
-    float[] f = { x + width, y + height, z };
-    float[] g = { x + width, y + height, z + depth };
-    float[] h = { x, y + height, z + depth };
+  public void flatbox(float x, float y, float z, float boxWidth, float boxHeight, float boxLength, color visibleColor, color shadeColor) {
+    float offsetX = x - (boxWidth/2);
+    float offsetY = y - (boxHeight/2);
+    float offsetZ = z - (boxLength/2);
+
+    float[] a = { offsetX, offsetY, offsetZ };
+    float[] b = { offsetX + boxWidth, offsetY, offsetZ };
+    float[] c = { offsetX + boxWidth, offsetY, offsetZ + boxLength };
+    float[] d = { offsetX, offsetY, offsetZ + boxLength };
+    float[] e = { offsetX, offsetY + boxHeight, offsetZ };
+    float[] f = { offsetX + boxWidth, offsetY + boxHeight, offsetZ };
+    float[] g = { offsetX + boxWidth, offsetY + boxHeight, offsetZ + boxLength };
+    float[] h = { offsetX, offsetY + boxHeight, offsetZ + boxLength };
 
     // Face 1
     beginShape();
@@ -29,7 +33,7 @@ public class OavpShape {
     endShape(CLOSE);
 
     pushStyle();
-    fill(palette.flat.white);
+    fill(visibleColor);
 
     // Face 3
     beginShape();
@@ -47,7 +51,7 @@ public class OavpShape {
     vertex(d[0], d[1], d[2]);
     endShape(CLOSE);
 
-    fill(palette.flat.black);
+    fill(shadeColor);
 
     // Face 5
     beginShape();

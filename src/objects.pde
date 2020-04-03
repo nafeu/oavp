@@ -5,6 +5,7 @@ String[] OBJECT_LIST = {
   "Circle",
   "Triangle",
   "Box",
+  "Flatbox",
   "Bullseye",
   "Splash",
   "SpectrumMesh",
@@ -33,6 +34,9 @@ public OavpObject createObject(String className) {
     case "Box":
       object = new OavpObjBox();
       break;
+    case "Flatbox":
+      object = new OavpObjFlatbox();
+      break;
     case "Bullseye":
       object = new OavpObjBullseye();
       break;
@@ -55,8 +59,10 @@ public OavpObject createObject(String className) {
 public class OavpObjRectangle extends OavpObject {
   public void setup() {
     variable
+      .variations("dashed")
       .w(200)
       .h(50)
+      .l(0)
       .strokeColor(palette.flat.white)
       .size(0);
   }
@@ -65,9 +71,14 @@ public class OavpObjRectangle extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable)
-      .draw.basicRectangle(variable.w(), variable.h(), variable.size())
-      .done();
+      .use(variable);
+
+    if (variable.ofVariation("dashed")) {
+      visualizers.draw.basicDashedRectangle(variable.w(), variable.h(), variable.size());
+    } else {
+      visualizers.draw.basicRectangle(variable.w(), variable.h(), variable.size());
+    }
+    visualizers.done();
   }
 }
 
@@ -202,6 +213,32 @@ public class OavpObjBox extends OavpObject {
       .center().middle()
       .use(variable)
       .draw.basicBox(variable.w(), variable.h(), variable.l())
+      .done();
+  }
+}
+
+public class OavpObjFlatbox extends OavpObject {
+  public void setup() {
+    variable
+      .w(100)
+      .h(100)
+      .l(100)
+      .strokeColor(palette.flat.white)
+      .fillColor(palette.flat.black);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable)
+      .draw.basicFlatbox(
+        variable.w(),
+        variable.h(),
+        variable.l(),
+        variable.strokeColor(),
+        variable.fillColor()
+      )
       .done();
   }
 }

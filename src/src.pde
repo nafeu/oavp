@@ -25,6 +25,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import controlP5.*;
+import garciadelcastillo.dashedlines.*;
 
 PApplet context;
 OavpConfig oavp;
@@ -45,6 +46,7 @@ OavpInput input;
 OavpEditor editor;
 boolean loaded = false;
 ControlP5 cp5;
+DashedLines dash;
 
 void setup() {
   context = this;
@@ -62,6 +64,9 @@ void setup() {
 
   cp5 = new ControlP5(this);
   setupEditorGui();
+
+  dash = new DashedLines(this);
+  dash.pattern(10, 5);
 
   try {
     thread("loadApplication");

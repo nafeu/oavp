@@ -545,6 +545,14 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicDashedRectangle(float w, float h, float offset) {
+      rectMode(CENTER);
+      dash.offset(offset);
+      dash.rect(0, 0, w, h);
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer basicEquilateralTriangle(float size) {
       triangle(
         0, -size,
@@ -923,11 +931,22 @@ class OavpVisualizer {
      * @param scale the scale of the visualizer
      * @use draw
      */
+    public OavpVisualizer basicFlatbox(float w, float h, float l, color visibleColor, color shadeColor) {
+      shapes.flatbox(0, 0, 0, w, h, l, visibleColor, shadeColor);
+      return OavpVisualizer.this;
+    }
+
+
+    /**
+     * Draw a basic level flatbox
+     * @param scale the scale of the visualizer
+     * @use draw
+     */
     public OavpVisualizer basicLevelFlatbox(float scale) {
       float rawLeftLevel = analysis.getLeftLevel();
       float rawRightLevel = analysis.getRightLevel();
       float boxLevel = ((analysis.scaleLeftLevel(rawLeftLevel) + analysis.scaleRightLevel(rawRightLevel)) / 2) * scale;
-      shapes.flatbox(0, 0, 0, scale, -boxLevel, scale);
+      shapes.flatbox(0, 0, 0, scale, -boxLevel, scale, palette.flat.white, palette.flat.black);
       return OavpVisualizer.this;
     }
 
@@ -983,7 +1002,7 @@ class OavpVisualizer {
      */
     public OavpVisualizer pulserFlatbox(float scale) {
       OavpPulser pulser = OavpVisualizer.this.currPulser;
-      shapes.flatbox(0, 0, 0, scale, -pulser.getValue() * scale, scale);
+      shapes.flatbox(0, 0, 0, scale, -pulser.getValue() * scale, scale, palette.flat.white, palette.flat.black);
       return OavpVisualizer.this;
     }
 
@@ -1139,7 +1158,7 @@ class OavpVisualizer {
           float x = (j * colScale);
           float z = (i * rowScale);
           float finalLevel = analysis.scaleLeftLevel(gridInterval.getData(i, j));
-          shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale);
+          shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale, palette.flat.white, palette.flat.black);
         }
       }
       return OavpVisualizer.this;
