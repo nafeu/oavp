@@ -1,6 +1,7 @@
 String[] OBJECT_LIST = {
   "Line",
   "Rectangle",
+  "Shader",
   "Spectrum",
   "Waveform",
   "Circle",
@@ -23,6 +24,9 @@ public OavpObject createObject(String className) {
       break;
     case "Rectangle":
       object = new OavpObjRectangle();
+      break;
+    case "Shader":
+      object = new OavpObjShader();
       break;
     case "Spectrum":
       object = new OavpObjSpectrum();
@@ -85,6 +89,52 @@ public class OavpObjRectangle extends OavpObject {
     } else {
       visualizers.draw.basicRectangle(variable.w(), variable.h(), variable.size());
     }
+    visualizers.done();
+  }
+}
+
+public class OavpObjShader extends OavpObject {
+  public void setup() {
+    variable
+      .variations(
+        "test-shader-2"
+      )
+      .w(100)
+      .h(100)
+      .fillColor(palette.flat.white)
+      .size(100);
+    entities.addShader(variable.name + "test-shader", "test-shader");
+    entities.addShader(variable.name + "test-shader-2", "test-shader-2");
+  }
+
+  public void update() {
+    PShader shader;
+
+    if (variable.ofVariation("test-shader-2")) {
+      shader = entities.getShader(variable.name + "test-shader-2");
+    } else {
+      shader = entities.getShader(variable.name + "test-shader");
+    }
+
+    shader.set("paramA", constrain(variable.size(), 0, 200) / 100);
+    shader.set("paramB", constrain(variable.size(), 0, 200) / 100);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .noStrokeStyle()
+      .use(variable);
+
+    if (variable.ofVariation("test-shader-2")) {
+      visualizers.useShader(variable.name + "test-shader-2");
+    } else {
+      visualizers.useShader(variable.name + "test-shader");
+    }
+
+    visualizers.draw.basicRectangle(variable.w(), variable.h());
+
     visualizers.done();
   }
 }

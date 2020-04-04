@@ -111,6 +111,7 @@ class OavpVisualizer {
    * Instantiates the next visualization
    */
   public OavpVisualizer next() {
+    resetShader();
     popMatrix();
     pushMatrix();
     return this;
@@ -401,6 +402,7 @@ class OavpVisualizer {
    * Conclude a visualization draw routine
    */
   public OavpVisualizer done() {
+    resetShader();
     popMatrix();
     return this;
   }
@@ -466,6 +468,11 @@ class OavpVisualizer {
    */
   public OavpVisualizer useTerrain(String name) {
     currTerrain = entities.getTerrain(name);
+    return this;
+  }
+
+  public OavpVisualizer useShader(String name) {
+    shader(entities.getShader(name));
     return this;
   }
 

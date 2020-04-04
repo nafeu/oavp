@@ -1231,6 +1231,7 @@ public class OavpEntityManager {
   private HashMap<String, OavpCamera> cameras;
   private HashMap<String, OavpToggle> toggles;
   private HashMap<String, OavpVariable> variables;
+  private HashMap<String, PShader> shaders;
   private List<OavpVariable> activeVariables;
   private int selectedVariableIndex = 0;
   public String selectedVariable = "";
@@ -1254,6 +1255,7 @@ public class OavpEntityManager {
     cameras = new HashMap<String, OavpCamera>();
     toggles = new HashMap<String, OavpToggle>();
     variables = new HashMap<String, OavpVariable>();
+    shaders = new HashMap<String, PShader>();
     activeVariables = new ArrayList();
     selectedVariableIndex = 0;
   }
@@ -1584,6 +1586,16 @@ public class OavpEntityManager {
     } else {
       this.selectedVariableIndex += 1;
     }
+  }
+
+  public PShader addShader(String name, String shaderFileName) {
+    PShader shader = loadShader(shaderFileName + ".glsl");
+    shaders.put(name, shader);
+    return shader;
+  }
+
+  public PShader getShader(String name) {
+    return shaders.get(name);
   }
 
   public void update() {
