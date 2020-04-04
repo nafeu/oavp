@@ -1086,6 +1086,26 @@ class OavpVisualizer {
     }
 
     /**
+     * Draw a grid interval level square
+     * @use draw
+     */
+    public OavpVisualizer gridIntervalSquares() {
+      OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
+      rectMode(CENTER);
+      float colScale = currWidth / gridInterval.getNumCols();
+      float rowScale = currHeight / gridInterval.getNumRows();
+      for (int i = 0; i < gridInterval.getNumRows(); i++) {
+        for (int j = 0; j < gridInterval.getNumCols(); j++) {
+          float x = (j * colScale) + (colScale * 0.5);
+          float y = (i * rowScale) + (rowScale * 0.5);
+          rect(x, y, constrain(gridInterval.getData(i, j), 0, colScale), constrain(gridInterval.getData(i, j), 0, rowScale));
+        }
+      }
+      rectMode(CORNER);
+      return OavpVisualizer.this;
+    }
+
+    /**
      * Draw a grid interval diamond
      * @use draw
      */

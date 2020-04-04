@@ -804,7 +804,7 @@ public class OavpVariable {
   public float h = 100;
   public float hMod = 0;
   public String hModType = "none";
-  public float l = 100;
+  public float l = 0;
   public float lMod = 0;
   public String lModType = "none";
   public float size = 100;

@@ -10,7 +10,8 @@ String[] OBJECT_LIST = {
   "Bullseye",
   "Splash",
   "SpectrumMesh",
-  "ZRectangles"
+  "ZRectangles",
+  "GridInterval"
 };
 
 public OavpObject createObject(String className) {
@@ -53,6 +54,9 @@ public OavpObject createObject(String className) {
     case "ZRectangles":
       object = new OavpObjZRectangles();
       break;
+    case "GridInterval":
+      object = new OavpObjGridInterval();
+      break;
     default:
       object = new OavpObject();
   }
@@ -66,7 +70,6 @@ public class OavpObjRectangle extends OavpObject {
       .variations("dashed")
       .w(200)
       .h(50)
-      .l(0)
       .strokeColor(palette.flat.white)
       .size(0);
   }
@@ -131,7 +134,6 @@ public class OavpObjLine extends OavpObject {
       .w(100)
       .h(100)
       .size(0)
-      .l(0)
       .strokeColor(palette.flat.white);
   }
 
@@ -201,7 +203,6 @@ public class OavpObjWaveform extends OavpObject {
       .variations("right-channel")
       .w(100)
       .h(100)
-      .l(0)
       .size(5)
       .strokeColor(palette.flat.white);
   }
@@ -262,6 +263,9 @@ public class OavpObjBox extends OavpObject {
   public void setup() {
     variable
       .size(100)
+      .w(100)
+      .h(100)
+      .l(100)
       .strokeColor(palette.flat.white);
   }
 
@@ -311,7 +315,6 @@ public class OavpObjBullseye extends OavpObject {
       .size(100)
       .w(100)
       .h(100)
-      .l(100)
       .set("varName", variable.name)
       .strokeColor(palette.flat.white);
     entities.addPulser(variable.customAttrs.get("varName"));
@@ -354,7 +357,6 @@ public class OavpObjSplash extends OavpObject {
       .size(100)
       .w(100)
       .h(100)
-      .l(100)
       .set("varName", variable.name)
       .strokeColor(palette.flat.white);
     entities.addEmissions(variable.customAttrs.get("varName"));
@@ -463,6 +465,49 @@ public class OavpObjZRectangles extends OavpObject {
           );
       }
     }
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjGridInterval extends OavpObject {
+  public void setup() {
+    variable
+      .variations(
+        "dimensional",
+        "diagonal"
+      )
+      .w(100)
+      .h(100)
+      .size(0)
+      .set("sizeModType", "level")
+      .strokeColor(palette.flat.white);
+    entities.addGridInterval(variable.name, 5, 5).delay(1);
+  }
+
+  public void update() {
+    OavpGridInterval interval = entities.getGridInterval(variable.name);
+
+    if (variable.ofVariation("dimensional")) {
+      interval.updateDimensional(variable.size());
+    } else if (variable.ofVariation("diagonal")) {
+      interval.updateDiagonal(variable.size());
+    } else {
+      interval.update(variable.size());
+    }
+  }
+
+  public void draw() {
+    visualizers
+      .useGridInterval(variable.name)
+      .create()
+      .center().middle()
+      .use(variable)
+      .moveLeft(variable.w / 2)
+      .moveUp(variable.h / 2);
+
+    visualizers
+      .draw.gridIntervalSquares();
 
     visualizers.done();
   }
