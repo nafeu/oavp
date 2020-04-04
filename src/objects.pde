@@ -2,6 +2,7 @@ String[] OBJECT_LIST = {
   "Line",
   "Rectangle",
   "Spectrum",
+  "Waveform",
   "Circle",
   "Triangle",
   "Box",
@@ -24,6 +25,9 @@ public OavpObject createObject(String className) {
       break;
     case "Spectrum":
       object = new OavpObjSpectrum();
+      break;
+    case "Waveform":
+      object = new OavpObjWaveform();
       break;
     case "Circle":
       object = new OavpObjCircle();
@@ -119,10 +123,14 @@ public class OavpObjLine extends OavpObject {
     variable
       .variations(
         "vertical",
-        "diagonal"
+        "diagonal",
+        "dashed-horizontal",
+        "dashed-vertical",
+        "dashed-diagonal"
       )
       .w(100)
       .h(100)
+      .size(0)
       .l(0)
       .strokeColor(palette.flat.white);
   }
@@ -137,6 +145,12 @@ public class OavpObjLine extends OavpObject {
       visualizers.draw.basicVerticalLine(variable.w(), variable.h(), variable.l());
     } else if (variable.ofVariation("diagonal")) {
       visualizers.draw.basicDiagonalLine(variable.w(), variable.h(), variable.l());
+    } else if (variable.ofVariation("dashed-horizontal")) {
+      visualizers.draw.basicDashedHorizontalLine(variable.w(), variable.h(), variable.l(), variable.size());
+    } else if (variable.ofVariation("dashed-vertical")) {
+      visualizers.draw.basicDashedVerticalLine(variable.w(), variable.h(), variable.l(), variable.size());
+    } else if (variable.ofVariation("dashed-diagonal")) {
+      visualizers.draw.basicDashedDiagonalLine(variable.w(), variable.h(), variable.l(), variable.size());
     } else {
       visualizers.draw.basicHorizontalLine(variable.w(), variable.h(), variable.l());
     }
@@ -148,6 +162,11 @@ public class OavpObjLine extends OavpObject {
 public class OavpObjSpectrum extends OavpObject {
   public void setup() {
     variable
+      .variations(
+        "bars",
+        "wire",
+        "dotted"
+      )
       .w(100)
       .h(100)
       .strokeColor(palette.flat.white);
@@ -160,9 +179,48 @@ public class OavpObjSpectrum extends OavpObject {
       .center().middle()
       .use(variable)
       .moveLeft(variable.w() / 2)
-      .moveUp(variable.h() / 2)
-      .draw.basicSpectrumLines()
-      .done();
+      .moveUp(variable.h() / 2);
+
+    if (variable.ofVariation("bars")) {
+      visualizers.draw.basicSpectrumBars();
+    } else if (variable.ofVariation("wire")) {
+      visualizers.draw.basicSpectrumWire();
+    } else if (variable.ofVariation("dotted")) {
+      visualizers.draw.basicSpectrumDotted();
+    } else {
+      visualizers.draw.basicSpectrumLines();
+    }
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjWaveform extends OavpObject {
+  public void setup() {
+    variable
+      .variations("right-channel")
+      .w(100)
+      .h(100)
+      .l(0)
+      .size(5)
+      .strokeColor(palette.flat.white);
+  }
+
+  public void draw() {
+    visualizers
+      .startStyle()
+      .create()
+      .center().middle()
+      .use(variable)
+      .moveLeft(variable.w() / 2);
+
+    if (variable.ofVariation("right-channel")) {
+      visualizers.draw.basicRightWaveformWire(variable.size());
+    } else {
+      visualizers.draw.basicLeftWaveformWire(variable.size());
+    }
+
+    visualizers.done();
   }
 }
 

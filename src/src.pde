@@ -54,8 +54,8 @@ void setup() {
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // DISPLAY_SETTINGS_START
-  // fullScreen(P3D, 2);
-  size(750, 750, P3D);
+  fullScreen(P3D, 2);
+  // size(750, 750, P3D);
   // DISPLAY_SETTINGS_END
 
   // Frame Setup
@@ -66,7 +66,7 @@ void setup() {
   setupEditorGui();
 
   dash = new DashedLines(this);
-  dash.pattern(10, 5);
+  dash.pattern(30, 10, 15, 10);
 
   try {
     thread("loadApplication");

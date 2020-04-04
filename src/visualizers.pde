@@ -594,13 +594,32 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicDashedVerticalLine(float w, float h, float l, float offset) {
+      dash.offset(offset);
+      dash.line(0, -h/2, 0, h/2);
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer basicHorizontalLine(float w, float h, float l) {
       line(-w/2, 0, 0, w/2, 0, l);
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicDashedHorizontalLine(float w, float h, float l, float offset) {
+      dash.offset(offset);
+      dash.line(-w/2, 0, w/2, 0);
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer basicDiagonalLine(float w, float h, float l) {
       line(-w/2, -h/2, 0, w/2, h/2, l);
+      return OavpVisualizer.this;
+    }
+
+
+    public OavpVisualizer basicDashedDiagonalLine(float w, float h, float l, float offset) {
+      dash.offset(offset);
+      dash.line(-w/2, -h/2, w/2, h/2);
       return OavpVisualizer.this;
     }
 
@@ -829,6 +848,17 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicSpectrumDotted() {
+      int avgSize = analysis.getAvgSize();
+      for (int i = 0; i < avgSize - 1; i++) {
+        float rawSpectrumValA = analysis.getSpectrumVal(i);
+        float rawSpectrumValB = analysis.getSpectrumVal(i + 1);
+        point(i * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValA) + currHeight);
+        point((i + 1) * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValB) + currHeight);
+      }
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a radial spectrum visualizer as bars
      * @param scale the scale of the visualizer
@@ -883,16 +913,45 @@ class OavpVisualizer {
      * Draw a basic waveform as a wire
      * @use draw
      */
-    public OavpVisualizer basicWaveformWire() {
+    public OavpVisualizer basicWaveformWire(float scale) {
+      beginShape(LINES);
       int audioBufferSize = analysis.getBufferSize();
       for (int i = 0; i < audioBufferSize - 1; i++) {
         float x1 = map( i, 0, audioBufferSize, 0, currWidth);
         float x2 = map( i + 1, 0, audioBufferSize, 0, currWidth);
-        float leftBufferScale = (currHeight / 4);
-        float rightBufferScale = (currHeight / 4) * 3;
-        float waveformScale = (currHeight / 4);
-        line(x1, leftBufferScale + analysis.getLeftBuffer(i) * waveformScale, x2, leftBufferScale + analysis.getLeftBuffer(i + 1) * waveformScale);
-        line(x1, rightBufferScale + analysis.getRightBuffer(i) * waveformScale, x2, rightBufferScale + analysis.getRightBuffer(i + 1) * waveformScale);
+        float waveformScale = currHeight * (scale / 5);
+        line(
+          x1,
+          ((analysis.getLeftBuffer(i) + analysis.getRightBuffer(i)) / 2) * waveformScale,
+          x2,
+          ((analysis.getLeftBuffer(i) + analysis.getRightBuffer(i)) / 2) * waveformScale
+        );
+      }
+      endShape();
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicLeftWaveformWire(float scale) {
+      beginShape(LINES);
+      int audioBufferSize = analysis.getBufferSize();
+      for (int i = 0; i < audioBufferSize - 1; i++) {
+        float x1 = map( i, 0, audioBufferSize, 0, currWidth);
+        float x2 = map( i + 1, 0, audioBufferSize, 0, currWidth);
+        float waveformScale = currHeight * (scale / 5);
+        line(x1, analysis.getLeftBuffer(i) * waveformScale, x2, analysis.getLeftBuffer(i + 1) * waveformScale);
+      }
+      endShape();
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicRightWaveformWire(float scale) {
+      beginShape(LINES);
+      int audioBufferSize = analysis.getBufferSize();
+      for (int i = 0; i < audioBufferSize - 1; i++) {
+        float x1 = map( i, 0, audioBufferSize, 0, currWidth);
+        float x2 = map( i + 1, 0, audioBufferSize, 0, currWidth);
+        float waveformScale = currHeight * (scale / 5);
+        line(x1, analysis.getRightBuffer(i) * waveformScale, x2, analysis.getRightBuffer(i + 1) * waveformScale);
       }
       endShape();
       return OavpVisualizer.this;
