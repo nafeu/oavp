@@ -491,10 +491,21 @@ class OavpVisualizer {
     this
       .strokeColor(variable.strokeColor())
       .fillColor(variable.fillColor())
-      .strokeWeightStyle(variable.strokeWeight())
-      .move(variable.x(), variable.y(), variable.z())
-      .rotate(variable.xr(), variable.yr(), variable.zr())
-      .dimensions(variable.w(), variable.h());
+      .strokeWeightStyle(variable.val("strokeWeight"))
+      .move(
+        variable.val("x"),
+        variable.val("y"),
+        variable.val("z")
+      )
+      .rotate(
+        variable.val("xr"),
+        variable.val("yr"),
+        variable.val("zr")
+      )
+      .dimensions(
+        variable.val("w"),
+        variable.val("h")
+      );
     return this;
   }
 
