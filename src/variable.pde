@@ -333,7 +333,7 @@ public class OavpVariable {
   }
 
   public boolean ofVariation(String input) {
-    return (input == this.variations.get(this.variation));
+    return this.variations.get(this.variation).contains(input);
   }
 
   public color strokeColor() {

@@ -546,14 +546,17 @@ public class OavpObjGridInterval extends OavpObject {
     variable
       .variations(
         "dimensional",
-        "diagonal"
+        "diagonal",
+        "circular",
+        "circular-dimensional",
+        "circular-diagonal"
       )
       .set("w", 100)
       .set("h", 100)
       .set("size", 0)
       .set("sizeModType", "level")
       .set("strokeColor", palette.flat.white);
-    entities.addGridInterval(variable.name, 5, 5).delay(1);
+    entities.addGridInterval(variable.name, 10, 10).delay(1);
   }
 
   public void update() {
@@ -577,8 +580,11 @@ public class OavpObjGridInterval extends OavpObject {
       .moveLeft(variable.w / 2)
       .moveUp(variable.h / 2);
 
-    visualizers
-      .draw.gridIntervalSquares();
+    if (variable.ofVariation("circular")) {
+      visualizers.draw.gridIntervalCircles();
+    } else {
+      visualizers.draw.gridIntervalSquares();
+    }
 
     visualizers.done();
   }

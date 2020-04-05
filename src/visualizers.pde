@@ -1123,6 +1123,20 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer gridIntervalCircles() {
+      OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
+      float colScale = currWidth / gridInterval.getNumCols();
+      float rowScale = currHeight / gridInterval.getNumRows();
+      for (int i = 0; i < gridInterval.getNumRows(); i++) {
+        for (int j = 0; j < gridInterval.getNumCols(); j++) {
+          float x = (j * colScale) + (colScale * 0.5);
+          float y = (i * rowScale) + (rowScale * 0.5);
+          ellipse(x, y, constrain(gridInterval.getData(i, j), 0, colScale), constrain(gridInterval.getData(i, j), 0, rowScale));
+        }
+      }
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a grid interval diamond
      * @use draw
