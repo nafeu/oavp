@@ -149,10 +149,10 @@ public class OavpObject {
 public class OavpObjRectangle extends OavpObject {
   public void setup() {
     variable
-      .w(200)
-      .h(50)
-      .strokeColor(palette.flat.white)
-      .size(0);
+      .set("w", 200)
+      .set("h", 50)
+      .set("strokeColor", palette.flat.white)
+      .set("size", 0);
   }
 
   public void draw() {
@@ -175,10 +175,10 @@ public class OavpObjShader extends OavpObject {
       .variations(
         "test-shader-2"
       )
-      .w(100)
-      .h(100)
-      .fillColor(palette.flat.white)
-      .size(100);
+      .set("w", 100)
+      .set("h", 100)
+      .set("fillColor", palette.flat.white)
+      .set("size", 100);
     entities.addShader(variable.name + "test-shader", "test-shader");
     entities.addShader(variable.name + "test-shader-2", "test-shader-2");
   }
@@ -223,8 +223,8 @@ public class OavpObjTriangle extends OavpObject {
         "left-right",
         "right-right"
       )
-      .size(100)
-      .strokeColor(palette.flat.white);
+      .set("size", 100)
+      .set("strokeColor", palette.flat.white);
   }
 
   public void draw() {
@@ -257,10 +257,10 @@ public class OavpObjLine extends OavpObject {
         "dashed-vertical",
         "dashed-diagonal"
       )
-      .w(100)
-      .h(100)
-      .size(0)
-      .strokeColor(palette.flat.white);
+      .set("w", 100)
+      .set("h", 100)
+      .set("size", 0)
+      .set("strokeColor", palette.flat.white);
   }
 
   public void draw() {
@@ -295,9 +295,9 @@ public class OavpObjSpectrum extends OavpObject {
         "wire",
         "dotted"
       )
-      .w(100)
-      .h(100)
-      .strokeColor(palette.flat.white);
+      .set("w", 100)
+      .set("h", 100)
+      .set("strokeColor", palette.flat.white);
   }
 
   public void draw() {
@@ -327,10 +327,10 @@ public class OavpObjWaveform extends OavpObject {
   public void setup() {
     variable
       .variations("right-channel")
-      .w(100)
-      .h(100)
+      .set("w", 100)
+      .set("h", 100)
       .size(5)
-      .strokeColor(palette.flat.white);
+      .set("strokeColor", palette.flat.white);
   }
 
   public void draw() {
@@ -354,8 +354,8 @@ public class OavpObjWaveform extends OavpObject {
 public class OavpObjCircle extends OavpObject {
   public void setup() {
     variable
-      .size(100)
-      .strokeColor(palette.flat.white);
+      .set("size", 100)
+      .set("strokeColor", palette.flat.white);
   }
 
   public void draw() {
@@ -371,7 +371,7 @@ public class OavpObjCircle extends OavpObject {
 public class OavpObjSvg extends OavpObject {
   public void setup() {
     variable
-      .size(100)
+      .set("size", 100)
       .set("svgName", variable.name);
   }
 
@@ -388,11 +388,11 @@ public class OavpObjSvg extends OavpObject {
 public class OavpObjBox extends OavpObject {
   public void setup() {
     variable
-      .size(100)
-      .w(100)
-      .h(100)
-      .l(100)
-      .strokeColor(palette.flat.white);
+      .set("size", 100)
+      .set("w", 100)
+      .set("h", 100)
+      .set("l", 100)
+      .set("strokeColor", palette.flat.white);
   }
 
   public void draw() {
@@ -408,11 +408,11 @@ public class OavpObjBox extends OavpObject {
 public class OavpObjFlatbox extends OavpObject {
   public void setup() {
     variable
-      .w(100)
-      .h(100)
-      .l(100)
-      .strokeColor(palette.flat.white)
-      .fillColor(palette.flat.black);
+      .set("w", 100)
+      .set("h", 100)
+      .set("l", 100)
+      .set("strokeColor", palette.flat.white)
+      .set("fillColor", palette.flat.black);
   }
 
   public void draw() {
@@ -438,11 +438,11 @@ public class OavpObjBullseye extends OavpObject {
         "rectangular",
         "boxed"
       )
-      .size(100)
-      .w(100)
-      .h(100)
+      .set("size", 100)
+      .set("w", 100)
+      .set("h", 100)
       .set("varName", variable.name)
-      .strokeColor(palette.flat.white);
+      .set("strokeColor", palette.flat.white);
     entities.addPulser(variable.customAttrs.get("varName"));
     entities.addInterval(variable.customAttrs.get("varName"), 10, 1);
   }
@@ -480,11 +480,11 @@ public class OavpObjSplash extends OavpObject {
         "rectangular",
         "boxed"
       )
-      .size(100)
-      .w(100)
-      .h(100)
+      .set("size", 100)
+      .set("w", 100)
+      .set("h", 100)
       .set("varName", variable.name)
-      .strokeColor(palette.flat.white);
+      .set("strokeColor", palette.flat.white);
     entities.addEmissions(variable.customAttrs.get("varName"));
   }
 
@@ -520,8 +520,8 @@ public class OavpObjSpectrumMesh extends OavpObject {
         "z-lines",
         "x-lines"
       )
-      .size(100)
-      .strokeColor(palette.flat.white);
+      .set("size", 100)
+      .set("strokeColor", palette.flat.white);
     entities.addInterval(variable.name, 30, analysis.getAvgSize());
   }
 
@@ -556,11 +556,11 @@ public class OavpObjZRectangles extends OavpObject {
   public void setup() {
     variable
       .variations("radial")
-      .size(100)
+      .set("size", 100)
       .set("count", 3)
       .set("gap", 0.10)
       .set("radius", 50)
-      .strokeColor(palette.flat.white);
+      .set("strokeColor", palette.flat.white);
   }
 
   public void draw() {
@@ -603,11 +603,11 @@ public class OavpObjGridInterval extends OavpObject {
         "dimensional",
         "diagonal"
       )
-      .w(100)
-      .h(100)
-      .size(0)
+      .set("w", 100)
+      .set("h", 100)
+      .set("size", 0)
       .set("sizeModType", "level")
-      .strokeColor(palette.flat.white);
+      .set("strokeColor", palette.flat.white);
     entities.addGridInterval(variable.name, 5, 5).delay(1);
   }
 

@@ -38,6 +38,11 @@ public class OavpVariable {
   public color strokeColor; public float strokeColorMod = 0; public String strokeColorModType = "none";
   public color fillColor; public float fillColorMod = 0; public String fillColorModType = "none";
   public float strokeWeight = 2; public float strokeWeightMod = 0; public String strokeWeightModType = "none";
+  public float paramA = 0; public float paramAMod = 0; public String paramAModType = "none";
+  public float paramB = 0; public float paramBMod = 0; public String paramBModType = "none";
+  public float paramC = 0; public float paramCMod = 0; public String paramCModType = "none";
+  public float paramD = 0; public float paramDMod = 0; public String paramDModType = "none";
+  public float paramE = 0; public float paramEMod = 0; public String paramEModType = "none";
 
   public HashMap<String, Object> customAttrs;
 
@@ -331,56 +336,12 @@ public class OavpVariable {
     return (input == this.variations.get(this.variation));
   }
 
-  public float x() {
-    return this.x + (this.xMod * getMod(this.xModType));
-  }
-
-  public float xr() {
-    return this.xr + (this.xrMod * getMod(this.xrModType));
-  }
-
-  public float y() {
-    return this.y + (this.yMod * getMod(this.yModType));
-  }
-
-  public float yr() {
-    return this.yr + (this.yrMod * getMod(this.yrModType));
-  }
-
-  public float z() {
-    return this.z + (this.zMod * getMod(this.zModType));
-  }
-
-  public float zr() {
-    return this.zr + (this.zrMod * getMod(this.zrModType));
-  }
-
-  public float w() {
-    return this.w + (this.wMod * getMod(this.wModType));
-  }
-
-  public float h() {
-    return this.h + (this.hMod * getMod(this.hModType));
-  }
-
-  public float l() {
-    return this.l + (this.lMod * getMod(this.lModType));
-  }
-
-  public float size() {
-    return this.size + (this.sizeMod * getMod(this.sizeModType));
-  }
-
   public color strokeColor() {
     return this.strokeColorMod == 0 ? this.strokeColor : opacity(this.strokeColor, (map(this.strokeColorMod, 0, 200, 0, 20) * getMod(this.strokeColorModType)));
   }
 
   public color fillColor() {
     return this.fillColorMod == 0 ? this.fillColor : opacity(this.fillColor, (map(this.fillColorMod, 0, 200, 0, 20) * getMod(this.fillColorModType)));
-  }
-
-  public float strokeWeight() {
-    return this.strokeWeight + (this.strokeWeightMod * getMod(this.strokeWeightModType));
   }
 
   private Object get(String fieldName) {
