@@ -19,50 +19,21 @@ public OavpObject createObject(String className) {
   OavpObject object;
 
   switch (className) {
-    case "Line":
-      object = new OavpObjLine();
-      break;
-    case "Rectangle":
-      object = new OavpObjRectangle();
-      break;
-    case "Shader":
-      object = new OavpObjShader();
-      break;
-    case "Spectrum":
-      object = new OavpObjSpectrum();
-      break;
-    case "Waveform":
-      object = new OavpObjWaveform();
-      break;
-    case "Circle":
-      object = new OavpObjCircle();
-      break;
-    case "Triangle":
-      object = new OavpObjTriangle();
-      break;
-    case "Box":
-      object = new OavpObjBox();
-      break;
-    case "Flatbox":
-      object = new OavpObjFlatbox();
-      break;
-    case "Bullseye":
-      object = new OavpObjBullseye();
-      break;
-    case "Splash":
-      object = new OavpObjSplash();
-      break;
-    case "SpectrumMesh":
-      object = new OavpObjSpectrumMesh();
-      break;
-    case "ZRectangles":
-      object = new OavpObjZRectangles();
-      break;
-    case "GridInterval":
-      object = new OavpObjGridInterval();
-      break;
-    default:
-      object = new OavpObject();
+    case "Line": object = new OavpObjLine(); break;
+    case "Rectangle": object = new OavpObjRectangle(); break;
+    case "Shader": object = new OavpObjShader(); break;
+    case "Spectrum": object = new OavpObjSpectrum(); break;
+    case "Waveform": object = new OavpObjWaveform(); break;
+    case "Circle": object = new OavpObjCircle(); break;
+    case "Triangle": object = new OavpObjTriangle(); break;
+    case "Box": object = new OavpObjBox(); break;
+    case "Flatbox": object = new OavpObjFlatbox(); break;
+    case "Bullseye": object = new OavpObjBullseye(); break;
+    case "Splash": object = new OavpObjSplash(); break;
+    case "SpectrumMesh": object = new OavpObjSpectrumMesh(); break;
+    case "ZRectangles": object = new OavpObjZRectangles(); break;
+    case "GridInterval": object = new OavpObjGridInterval(); break;
+    default: object = new OavpObject();
   }
 
   return object;
@@ -71,17 +42,9 @@ public OavpObject createObject(String className) {
 public class OavpObject {
   public OavpVariable variable;
 
-  OavpObject() {
-    this.variable = new OavpVariable();
-  }
-
-  public OavpVariable getVariable() {
-    return this.variable;
-  }
-
-  public void setName(String name) {
-    this.variable.name = name;
-  }
+  OavpObject() { this.variable = new OavpVariable(); }
+  public OavpVariable getVariable() { return this.variable; }
+  public void setName(String name) { this.variable.name = name; }
 
   public OavpObject clone(String cloneName) {
     String rawClassName = this.getClass().getName();
@@ -93,45 +56,27 @@ public class OavpObject {
     clone.setup();
 
     cloneVariable.name = cloneName;
-    cloneVariable.x = this.variable.x;
-    cloneVariable.xMod = this.variable.xMod;
-    cloneVariable.xModType = this.variable.xModType;
-    cloneVariable.xr = this.variable.xr;
-    cloneVariable.xrMod = this.variable.xrMod;
-    cloneVariable.xrModType = this.variable.xrModType;
-    cloneVariable.y = this.variable.y;
-    cloneVariable.yMod = this.variable.yMod;
-    cloneVariable.yModType = this.variable.yModType;
-    cloneVariable.yr = this.variable.yr;
-    cloneVariable.yrMod = this.variable.yrMod;
-    cloneVariable.yrModType = this.variable.yrModType;
-    cloneVariable.z = this.variable.z;
-    cloneVariable.zMod = this.variable.zMod;
-    cloneVariable.zModType = this.variable.zModType;
-    cloneVariable.zr = this.variable.zr;
-    cloneVariable.zrMod = this.variable.zrMod;
-    cloneVariable.zrModType = this.variable.zrModType;
-    cloneVariable.w = this.variable.w;
-    cloneVariable.wMod = this.variable.wMod;
-    cloneVariable.wModType = this.variable.wModType;
-    cloneVariable.h = this.variable.h;
-    cloneVariable.hMod = this.variable.hMod;
-    cloneVariable.hModType = this.variable.hModType;
-    cloneVariable.l = this.variable.l;
-    cloneVariable.lMod = this.variable.lMod;
-    cloneVariable.lModType = this.variable.lModType;
-    cloneVariable.size = this.variable.size;
-    cloneVariable.sizeMod = this.variable.sizeMod;
-    cloneVariable.sizeModType = this.variable.sizeModType;
-    cloneVariable.strokeColor = this.variable.strokeColor;
-    cloneVariable.strokeColorMod = this.variable.strokeColorMod;
-    cloneVariable.strokeColorModType = this.variable.strokeColorModType;
-    cloneVariable.strokeWeight = this.variable.strokeWeight;
-    cloneVariable.strokeWeightMod = this.variable.strokeWeightMod;
-    cloneVariable.strokeWeightModType = this.variable.strokeWeightModType;
-    cloneVariable.fillColor = this.variable.fillColor;
-    cloneVariable.fillColorMod = this.variable.fillColorMod;
-    cloneVariable.fillColorModType = this.variable.fillColorModType;
+
+    for (String rawFieldName : MODIFIER_FIELDS) {
+      String fieldName = rawFieldName.split("Mod")[0];
+
+      try {
+        Field field = this.variable.getClass().getDeclaredField(fieldName);
+        Field fieldMod = this.variable.getClass().getDeclaredField(fieldName + "Mod");
+        Field fieldModType = this.variable.getClass().getDeclaredField(fieldName + "ModType");
+
+        Object fieldValue = field.get(this.variable);
+        Object fieldModValue = fieldMod.get(this.variable);
+        Object fieldModTypeValue = fieldModType.get(this.variable);
+
+        cloneVariable.set(fieldName, fieldValue);
+        cloneVariable.set(fieldName + "Mod", fieldModValue);
+        cloneVariable.set(fieldName + "ModType", fieldModTypeValue);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
     cloneVariable.variation = this.variable.variation;
 
     for (HashMap.Entry<String, Object> customAttrEntry : this.variable.customAttrs.entrySet()) {

@@ -166,45 +166,26 @@ public class OavpObjectManager {
 
       objectData.append("objects.add(\"" + objectKey + "\", \"" + objectClassName + "\")");
 
-      if (variable.x != 0) { objectData.append(".set(\"x\"," + variable.x + ")"); }
-      if (variable.xMod != 0) { objectData.append(".set(\"xMod\"," + variable.xMod + ")"); }
-      if (variable.xModType != "") { objectData.append(".set(\"xModType\",\"" + variable.xModType + "\")"); }
-      if (variable.xr != 0) { objectData.append(".set(\"xr\"," + variable.xr + ")"); }
-      if (variable.xrMod != 0) { objectData.append(".set(\"xrMod\"," + variable.xrMod + ")"); }
-      if (variable.xrModType != "") { objectData.append(".set(\"xrModType\",\"" + variable.xrModType + "\")"); }
-      if (variable.y != 0) { objectData.append(".set(\"y\"," + variable.y + ")"); }
-      if (variable.yMod != 0) { objectData.append(".set(\"yMod\"," + variable.yMod + ")"); }
-      if (variable.yModType != "") { objectData.append(".set(\"yModType\",\"" + variable.yModType + "\")"); }
-      if (variable.yr != 0) { objectData.append(".set(\"yr\"," + variable.yr + ")"); }
-      if (variable.yrMod != 0) { objectData.append(".set(\"yrMod\"," + variable.yrMod + ")"); }
-      if (variable.yrModType != "") { objectData.append(".set(\"yrModType\",\"" + variable.yrModType + "\")"); }
-      if (variable.z != 0) { objectData.append(".set(\"z\"," + variable.z + ")"); }
-      if (variable.zMod != 0) { objectData.append(".set(\"zMod\"," + variable.zMod + ")"); }
-      if (variable.zModType != "") { objectData.append(".set(\"zModType\",\"" + variable.zModType + "\")"); }
-      if (variable.zr != 0) { objectData.append(".set(\"zr\"," + variable.zr + ")"); }
-      if (variable.zrMod != 0) { objectData.append(".set(\"zrMod\"," + variable.zrMod + ")"); }
-      if (variable.zrModType != "") { objectData.append(".set(\"zrModType\",\"" + variable.zrModType + "\")"); }
-      objectData.append(".set(\"w\"," + variable.w + ")");
-      if (variable.wMod != 0) { objectData.append(".set(\"wMod\"," + variable.wMod + ")"); }
-      if (variable.wModType != "") { objectData.append(".set(\"wModType\",\"" + variable.wModType + "\")"); }
-      objectData.append(".set(\"h\"," + variable.h + ")");
-      if (variable.hMod != 0) { objectData.append(".set(\"hMod\"," + variable.hMod + ")"); }
-      if (variable.hModType != "") { objectData.append(".set(\"hModType\",\"" + variable.hModType + "\")"); }
-      objectData.append(".set(\"l\"," + variable.l + ")");
-      if (variable.lMod != 0) { objectData.append(".set(\"lMod\"," + variable.lMod + ")"); }
-      if (variable.lModType != "") { objectData.append(".set(\"lModType\",\"" + variable.lModType + "\")"); }
-      objectData.append(".set(\"size\"," + variable.size + ")");
-      if (variable.sizeMod != 0) { objectData.append(".set(\"sizeMod\"," + variable.sizeMod + ")"); }
-      if (variable.sizeModType != "") { objectData.append(".set(\"sizeModType\",\"" + variable.sizeModType + "\")"); }
-      objectData.append(".set(\"strokeColor\"," + variable.strokeColor + ")");
-      if (variable.strokeColorMod != 0) { objectData.append(".set(\"strokeColorMod\"," + variable.strokeColorMod + ")"); }
-      if (variable.strokeColorModType != "") { objectData.append(".set(\"strokeColorModType\",\"" + variable.strokeColorModType + "\")"); }
-      objectData.append(".set(\"strokeWeight\"," + variable.strokeWeight + ")");
-      if (variable.strokeWeightMod != 0) { objectData.append(".set(\"strokeWeightMod\"," + variable.strokeWeightMod + ")"); }
-      if (variable.strokeWeightModType != "") { objectData.append(".set(\"strokeWeightModType\",\"" + variable.strokeWeightModType + "\")"); }
-      objectData.append(".set(\"fillColor\"," + variable.fillColor + ")");
-      if (variable.fillColorMod != 0) { objectData.append(".set(\"fillColorMod\"," + variable.fillColorMod + ")"); }
-      if (variable.fillColorModType != "") { objectData.append(".set(\"fillColorModType\",\"" + variable.fillColorModType + "\")"); }
+      for (String rawFieldName : MODIFIER_FIELDS) {
+        String fieldName = rawFieldName.split("Mod")[0];
+
+        try {
+          Field field = variable.getClass().getDeclaredField(fieldName);
+          Field fieldMod = variable.getClass().getDeclaredField(fieldName + "Mod");
+          Field fieldModType = variable.getClass().getDeclaredField(fieldName + "ModType");
+
+          Object fieldValue = field.get(variable);
+          Object fieldModValue = fieldMod.get(variable);
+          Object fieldModTypeValue = fieldModType.get(variable);
+
+          objectData.append(".set(\"" + fieldName + "\"," + fieldValue + ")");
+          objectData.append(".set(\"" + fieldName + "Mod" + "\"," + fieldModValue + ")");
+          objectData.append(".set(\"" + fieldName + "ModType" + "\",\"" + fieldModTypeValue + "\")");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
       if (variable.variation != 0) { objectData.append(".set(\"variation\",\"" + variable.getVariation() + "\")"); }
 
       for (HashMap.Entry<String, Object> customAttrEntry : variable.customAttrs.entrySet()) {
@@ -217,7 +198,7 @@ public class OavpObjectManager {
         }
       }
 
-      objectData.append(";");
+      objectData.append(";\n");
     }
     StringSelection stringSelection = new StringSelection(objectData.toString());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

@@ -111,3 +111,7 @@ void debugError(Exception e) {
   println("---");
   exit();
 }
+
+public static boolean inArray(String[] arr, String targetValue) {
+  return Arrays.asList(arr).contains(targetValue);
+}
