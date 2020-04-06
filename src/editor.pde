@@ -42,7 +42,6 @@ public class OavpEditor {
   }
 
   public boolean isToolSwitchable() {
-    // return this.isEditMode && !this.isCreateMode && !cp5.get(Textfield.class,"controlP5TestInput").isFocus();
     return this.isEditMode && !this.isCreateMode;
   }
 
@@ -231,19 +230,20 @@ public class OavpEditor {
 
   public void updateOriginalValues() {
     if (objects.getActiveVariable() != null) {
-      originalValues.put("x", objects.getActiveVariable().x);
-      originalValues.put("y", objects.getActiveVariable().y);
-      originalValues.put("z", objects.getActiveVariable().z);
-      originalValues.put("size", objects.getActiveVariable().size);
-      originalValues.put("w", objects.getActiveVariable().w);
-      originalValues.put("h", objects.getActiveVariable().h);
-      originalValues.put("l", objects.getActiveVariable().l);
-      originalValues.put("xr", objects.getActiveVariable().xr);
-      originalValues.put("yr", objects.getActiveVariable().yr);
-      originalValues.put("zr", objects.getActiveVariable().zr);
-      originalValues.put("strokeColor", objects.getActiveVariable().strokeColor);
-      originalValues.put("fillColor", objects.getActiveVariable().fillColor);
-      originalValues.put("strokeWeight", objects.getActiveVariable().strokeWeight);
+      for (String rawFieldName : MODIFIER_FIELDS) {
+        String fieldName = rawFieldName.split("Mod")[0];
+
+        try {
+          Field field = objects.getActiveVariable().getClass().getDeclaredField(fieldName);
+
+          Object fieldValue = field.get(objects.getActiveVariable());
+
+          originalValues.put(fieldName, fieldValue);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
       originalValues.put("variation", objects.getActiveVariable().variation);
     }
   }
@@ -1007,20 +1007,7 @@ Group editorModifiers;
 Group editorVariations;
 Group editorHelp;
 Textlabel editorHelpText;
-Textlabel xVarMeta;
-Textlabel yVarMeta;
-Textlabel zVarMeta;
-Textlabel xrVarMeta;
-Textlabel yrVarMeta;
-Textlabel zrVarMeta;
-Textlabel wVarMeta;
-Textlabel lVarMeta;
-Textlabel hVarMeta;
-Textlabel sizeVarMeta;
-Textlabel strokeWeightVarMeta;
-Textlabel strokeColorVarMeta;
 Bang strokeColorVarMetaButton;
-Textlabel fillColorVarMeta;
 Bang fillColorVarMetaButton;
 
 String toolbarLabelMove = "[m] move";
@@ -1031,6 +1018,7 @@ String toolbarLabelColor = "[c] color";
 String toolbarLabelWeight = "[b] weight";
 String toolbarLabelModifier = "[z] modifiers";
 String toolbarLabelVariation = "[v] variation";
+
 color COLOR_WHITE = color(255, 255, 255);
 color COLOR_BLACK = color(0, 0, 0);
 
@@ -1214,40 +1202,41 @@ public void setupEditorGui() {
     .setGroup("editorHelp")
     ;
 
-  xVarMeta = cp5.addTextlabel("xVarMeta").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  yVarMeta = cp5.addTextlabel("yVarMeta").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  zVarMeta = cp5.addTextlabel("zVarMeta").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("xVarMeta").setPosition(10 * 1, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("yVarMeta").setPosition(10 * 1, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("zVarMeta").setPosition(10 * 1, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("xrVarMeta").setPosition(10 * 6, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("yrVarMeta").setPosition(10 * 6, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("zrVarMeta").setPosition(10 * 6, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("wVarMeta").setPosition(10 * 11, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("hVarMeta").setPosition(10 * 11, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("lVarMeta").setPosition(10 * 11, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("sizeVarMeta").setPosition(10 * 11, 40).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("strokeWeightVarMeta").setPosition(10 * 16, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("strokeColorVarMeta").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("fillColorVarMeta").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
 
-  xrVarMeta = cp5.addTextlabel("xrVarMeta").setPosition(10 * 6, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  yrVarMeta = cp5.addTextlabel("yrVarMeta").setPosition(10 * 6, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  zrVarMeta = cp5.addTextlabel("zrVarMeta").setPosition(10 * 6, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-
-  wVarMeta = cp5.addTextlabel("wVarMeta").setPosition(10 * 11, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  hVarMeta = cp5.addTextlabel("hVarMeta").setPosition(10 * 11, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  lVarMeta = cp5.addTextlabel("lVarMeta").setPosition(10 * 11, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  sizeVarMeta = cp5.addTextlabel("sizeVarMeta").setPosition(10 * 11, 40).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-
-  strokeWeightVarMeta = cp5.addTextlabel("strokeWeightVarMeta").setPosition(10 * 16, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  strokeColorVarMeta = cp5.addTextlabel("strokeColorVarMeta").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   strokeColorVarMetaButton = cp5.addBang("strokeColorButtonVarMeta").setPosition(10 * 16 + 60, 20 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
-  fillColorVarMeta = cp5.addTextlabel("fillColorVarMeta").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   fillColorVarMetaButton = cp5.addBang("fillColorButtonVarMeta").setPosition(10 * 16 + 60, 30 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
 }
 
 public void updateEditorVariableMeta() {
   OavpVariable activeVariable = objects.getActiveVariable();
+
   editorVariableMeta.setLabel(activeVariable.name + " (" + activeVariable.getVariation() + ")");
-  xVarMeta.setText("x: " + activeVariable.x);
-  yVarMeta.setText("y: " + activeVariable.y);
-  zVarMeta.setText("z: " + activeVariable.z);
-  xrVarMeta.setText("xr: " + activeVariable.xr);
-  yrVarMeta.setText("yr: " + activeVariable.yr);
-  zrVarMeta.setText("zr: " + activeVariable.zr);
-  wVarMeta.setText("w: " + activeVariable.w);
-  hVarMeta.setText("h: " + activeVariable.h);
-  lVarMeta.setText("l: " + activeVariable.l);
-  sizeVarMeta.setText("size: " + activeVariable.size);
-  strokeWeightVarMeta.setText("strokeWeight: " + activeVariable.strokeWeight);
+
+  cp5.get(Textlabel.class, "xVarMeta").setText("x: " + activeVariable.x);
+  cp5.get(Textlabel.class, "yVarMeta").setText("y: " + activeVariable.y);
+  cp5.get(Textlabel.class, "zVarMeta").setText("z: " + activeVariable.z);
+  cp5.get(Textlabel.class, "xrVarMeta").setText("xr: " + activeVariable.xr);
+  cp5.get(Textlabel.class, "yrVarMeta").setText("yr: " + activeVariable.yr);
+  cp5.get(Textlabel.class, "zrVarMeta").setText("zr: " + activeVariable.zr);
+  cp5.get(Textlabel.class, "wVarMeta").setText("w: " + activeVariable.w);
+  cp5.get(Textlabel.class, "hVarMeta").setText("h: " + activeVariable.h);
+  cp5.get(Textlabel.class, "lVarMeta").setText("l: " + activeVariable.l);
+  cp5.get(Textlabel.class, "sizeVarMeta").setText("size: " + activeVariable.size);
+  cp5.get(Textlabel.class, "strokeWeightVarMeta").setText("strokeWeight: " + activeVariable.strokeWeight);
+
   strokeColorVarMetaButton.setColorForeground(activeVariable.strokeColor);
   fillColorVarMetaButton.setColorForeground(activeVariable.fillColor);
   editorObjectsList.setItems(objects.getObjectsList()).setLabel(activeVariable.name);
