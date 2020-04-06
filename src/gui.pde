@@ -9,6 +9,7 @@ Group editorCreateObject;
 Group editorSelectModifier;
 Group editorModifiers;
 Group editorVariations;
+Group editorParams;
 Group editorHelp;
 Textlabel editorHelpText;
 Bang strokeColorVarMetaButton;
@@ -23,6 +24,7 @@ String toolbarLabelColor = "[c] color";
 String toolbarLabelWeight = "[b] weight";
 String toolbarLabelModifier = "[z] modifiers";
 String toolbarLabelVariation = "[v] variation";
+String toolbarLabelParams = "[p] params";
 
 color COLOR_WHITE = color(255, 255, 255);
 color COLOR_BLACK = color(0, 0, 0);
@@ -34,7 +36,7 @@ public void setupEditorGui() {
   editorToolbar = cp5.addButtonBar("editorToolbar")
      .setColorBackground(COLOR_BLACK)
      .setPosition(10, 10)
-     .setSize(500, 10)
+     .setSize(550, 10)
      .addItems(new String[] {
        toolbarLabelMove,
        toolbarLabelResize,
@@ -43,7 +45,8 @@ public void setupEditorGui() {
        toolbarLabelColor,
        toolbarLabelWeight,
        toolbarLabelModifier,
-       toolbarLabelVariation
+       toolbarLabelVariation,
+       toolbarLabelParams
      })
      .hide()
      ;
@@ -160,6 +163,34 @@ public void setupEditorGui() {
       .setSize(110, 10)
       .setLabel("none")
       .setGroup("editorModifiers");
+  }
+
+  editorParams = cp5.addGroup("editorParams")
+    .setLabel("additional parameters")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10, 110)
+    .setSize(300, 370)
+    .setBackgroundColor(COLOR_BLACK)
+    .hide()
+    ;
+
+  for (int i = 0; i < PARAM_FIELDS.length; i++) {
+    cp5.addTextlabel(PARAM_FIELDS[i] + "Label")
+      .setText(PARAM_FIELDS[i])
+      .setPosition(10 * 1, 10 * (i + 1) + 5 * i)
+      .setColorValue(COLOR_WHITE)
+      .setGroup("editorParams");
+
+    cp5.addNumberbox("paramVal-" + PARAM_FIELDS[i])
+      .setColorBackground(COLOR_BLACK)
+      .setPosition(10 * 10, (10 * (i + 1) + 5 * i))
+      .setLabel("")
+      .setSize(50, 10)
+      .setMultiplier(-5)
+      .setSensitivity(100)
+      .setValue(0)
+      .setId(i)
+      .setGroup("editorParams");
   }
 
   editorSelectModifier = cp5.addGroup("editorSelectModifier")

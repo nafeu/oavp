@@ -1,3 +1,41 @@
+int TOOL_MOVE = 0;
+int TOOL_RESIZE = 1;
+int TOOL_TRANSFORM = 2;
+int TOOL_ROTATE = 3;
+int TOOL_COLOR = 4;
+int TOOL_WEIGHT = 5;
+int TOOL_MODIFIER = 6;
+int TOOL_VARIATION = 7;
+int TOOL_PARAMS = 8;
+
+// KEYS
+int KEY_A = 65;
+int KEY_B = 66;
+int KEY_C = 67;
+int KEY_D = 68;
+int KEY_E = 69;
+int KEY_F = 70;
+int KEY_G = 71;
+int KEY_H = 72;
+int KEY_I = 73;
+int KEY_J = 74;
+int KEY_K = 75;
+int KEY_L = 76;
+int KEY_M = 77;
+int KEY_N = 78;
+int KEY_O = 79;
+int KEY_P = 80;
+int KEY_Q = 81;
+int KEY_R = 82;
+int KEY_S = 83;
+int KEY_T = 84;
+int KEY_U = 85;
+int KEY_V = 86;
+int KEY_W = 87;
+int KEY_X = 88;
+int KEY_Y = 89;
+int KEY_Z = 90;
+
 public class OavpEditor {
   private boolean isEditMode = false;
   private boolean isHelpMode = false;
@@ -17,6 +55,7 @@ public class OavpEditor {
   private List<String> availableModifierTypes;
   private int selectedModifierFieldIndex = 0;
   private int selectedModifierTypeIndex = 0;
+  private int selectedParamIndex = 0;
   private HashMap<String, Object> originalValues;
 
 
@@ -79,6 +118,8 @@ public class OavpEditor {
         handleToolModifierInputs();
       } else if (this.activeTool == TOOL_VARIATION) {
         handleToolVariationInputs();
+      } else if (this.activeTool == TOOL_PARAMS) {
+        handleToolParamsInputs();
       }
     }
 
@@ -110,6 +151,7 @@ public class OavpEditor {
         if (input.isPressed(KEY_B)) { this.switchTool(TOOL_WEIGHT); }
         if (input.isPressed(KEY_V)) { this.switchTool(TOOL_VARIATION); }
         if (input.isPressed(KEY_Z)) { this.switchTool(TOOL_MODIFIER); }
+        if (input.isPressed(KEY_P)) { this.switchTool(TOOL_PARAMS); }
       }
 
       if (input.isPressed(KEY_D)) { objects.duplicate(); }
@@ -224,6 +266,15 @@ public class OavpEditor {
         );
         editorToolbar.changeItem(toolbarLabelVariation, "selected", true);
         editorVariations.show();
+        break;
+      case 8:
+        this.activeTool = TOOL_PARAMS;
+        setHelpText(""
+          + "[up/down] to select param of object\n"
+          + "[left/right] to edit value of parameter\n"
+        );
+        editorToolbar.changeItem(toolbarLabelParams, "selected", true);
+        editorParams.show();
         break;
     }
   }
@@ -580,6 +631,24 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
+  float DELTA_PARAMS_PRECISE_KEYS = 5;
+  float DELTA_PARAMS_SNAP_KEYS = 50;
+
+  private void handleToolParamsInputs() {
+    float deltaKeys = DELTA_PARAMS_PRECISE_KEYS;
+
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_PARAMS_SNAP_KEYS;
+    }
+
+    if (input.isPressed(UP)) { this.setSelectedParamIndex(this.selectedParamIndex - 1); }
+    if (input.isPressed(DOWN)) { this.setSelectedParamIndex(this.selectedParamIndex + 1); }
+    if (input.isPressed(RIGHT)) { this.setParamValue(this.getParamValue() + deltaKeys); }
+    if (input.isPressed(LEFT)) { this.setParamValue(this.getParamValue() - deltaKeys); }
+
+    updateEditorVariableMeta();
+  }
+
   private void handleCreateModeSelection(int index) {
     if (index < this.selectableObjects.size()) {
       this.isCreateMode = false;
@@ -631,6 +700,7 @@ public class OavpEditor {
         editorSelectModifier.hide();
         editorModifiers.hide();
         editorVariations.hide();
+        editorParams.hide();
       }
     }
   }
@@ -685,6 +755,7 @@ public class OavpEditor {
       editorHelp.hide();
       editorModifiers.hide();
       editorVariations.hide();
+      editorParams.hide();
     } else {
       editorSelectModifier.hide();
       editorCreateObject.hide();
@@ -694,6 +765,9 @@ public class OavpEditor {
       }
       if (this.activeTool == TOOL_VARIATION) {
         editorVariations.show();
+      }
+      if (this.activeTool == TOOL_PARAMS) {
+        editorParams.show();
       }
       editorToggleSnappingButton.show();
       editorObjectsList.show();
@@ -891,6 +965,31 @@ public class OavpEditor {
         visualizers
           .create()
           .center().middle()
+          .strokeColor(palette.flat.red)
+          .noFillStyle()
+          .strokeWeightStyle(0.5)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.positionalLines(width)
+          .done();
+        break;
+
+      case 8: // PARAMS
+        for (int i = 0; i < PARAM_FIELDS.length; i++) {
+          boolean isWithinSelectionArea = (this.selectedParamIndex == i);
+          if (isWithinSelectionArea && cp5.getGroup("editorParams").isOpen()) {
+            visualizers
+              .create()
+              .move(22, 130)
+              .moveDown(10 * (i - 1) + 5 * i)
+              .strokeColor(palette.flat.darkRed)
+              .draw.basicRectangle(255, 10, 0, CORNER)
+              .done();
+          }
+        }
+
+        visualizers
+          .create()
+          .center().middle()
           .strokeColor(palette.flat.darkRed)
           .noFillStyle()
           .strokeWeightStyle(0.5)
@@ -925,6 +1024,30 @@ public class OavpEditor {
     OavpVariable activeVariable = objects.getActiveVariable();
     try {
       String fieldName = this.availableModifierFields.get(this.selectedModifierFieldIndex);
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      field.set(activeVariable, value);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
+  }
+
+  private float getParamValue() {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = PARAM_FIELDS[this.selectedParamIndex];
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      return (float) field.get(activeVariable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
+  }
+
+  private float setParamValue(float value) {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = PARAM_FIELDS[this.selectedParamIndex];
       Field field = activeVariable.getClass().getDeclaredField(fieldName);
       field.set(activeVariable, value);
     } catch (Exception e) {
@@ -985,13 +1108,22 @@ public class OavpEditor {
   }
 
   public void setSelectedModifierFieldIndex(int index) {
-    println(index);
     if (index >= MODIFIER_FIELDS.length) {
       this.selectedModifierFieldIndex = MODIFIER_FIELDS.length - 1;
     } else if (index < 0) {
       this.selectedModifierFieldIndex = 0;
     } else {
       this.selectedModifierFieldIndex = index;
+    }
+  }
+
+  public void setSelectedParamIndex(int index) {
+    if (index >= PARAM_FIELDS.length) {
+      this.selectedParamIndex = PARAM_FIELDS.length - 1;
+    } else if (index < 0) {
+      this.selectedParamIndex = 0;
+    } else {
+      this.selectedParamIndex = index;
     }
   }
 }
@@ -1024,6 +1156,14 @@ public void updateEditorVariableMeta() {
     cp5.getController("modifierButton-" + modifierField).setLabel((String) activeVariable.get(modifierField + "Type"));
   }
 
+  for (String paramField : PARAM_FIELDS) {
+    cp5.getController("paramVal-" + paramField).setBroadcast(false);
+    cp5.getController("paramVal-" + paramField).setValue((float) activeVariable.get(paramField));
+    cp5.getController("paramVal-" + paramField).setBroadcast(true);
+
+    cp5.get(Textlabel.class, paramField + "Label").setText(activeVariable.getParamLabel(paramField));
+  }
+
   cp5.get(ScrollableList.class, "editorVariationList")
     .setLabel(activeVariable.getVariation())
     .setItems(activeVariable.variations);
@@ -1038,9 +1178,11 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelWeight, "selected", false);
   editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
+  editorToolbar.changeItem(toolbarLabelParams, "selected", false);
   editorColorButtons.hide();
   editorModifiers.hide();
   editorVariations.hide();
+  editorParams.hide();
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -1064,6 +1206,13 @@ void controlEvent(ControlEvent theEvent) {
         editor.setSelectedModifierFieldIndex(index);
         objects.getActiveVariable().set(prop, val);
         // println("event from modifierVal " + theEvent.getController().getName());
+      } else if (theEvent.getController().getName().contains("paramVal")) {
+        float val = theEvent.getController().getValue();
+        String prop = theEvent.getController().getName().split("-")[1];
+        int index = int(theEvent.getController().getId());
+        editor.setSelectedParamIndex(index);
+        objects.getActiveVariable().set(prop, val);
+        // println("event from paramVal " + theEvent.getController().getName());
       } else if (theEvent.getController().getName().contains("modifierButton")) {
         int index = int(theEvent.getController().getValue());
         editor.setSelectedModifierFieldIndex(index);
@@ -1112,40 +1261,3 @@ public String getNewObjectName(String className, int increment) {
 public void setHelpText(String text) {
   cp5.get(Textlabel.class, "editorHelpText").setText(text);
 }
-
-int TOOL_MOVE = 0;
-int TOOL_RESIZE = 1;
-int TOOL_TRANSFORM = 2;
-int TOOL_ROTATE = 3;
-int TOOL_COLOR = 4;
-int TOOL_WEIGHT = 5;
-int TOOL_MODIFIER = 6;
-int TOOL_VARIATION = 7;
-
-// KEYS
-int KEY_A = 65;
-int KEY_B = 66;
-int KEY_C = 67;
-int KEY_D = 68;
-int KEY_E = 69;
-int KEY_F = 70;
-int KEY_G = 71;
-int KEY_H = 72;
-int KEY_I = 73;
-int KEY_J = 74;
-int KEY_K = 75;
-int KEY_L = 76;
-int KEY_M = 77;
-int KEY_N = 78;
-int KEY_O = 79;
-int KEY_P = 80;
-int KEY_Q = 81;
-int KEY_R = 82;
-int KEY_S = 83;
-int KEY_T = 84;
-int KEY_U = 85;
-int KEY_V = 86;
-int KEY_W = 87;
-int KEY_X = 88;
-int KEY_Y = 89;
-int KEY_Z = 90;

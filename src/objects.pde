@@ -94,8 +94,9 @@ public class OavpObject {
 public class OavpObjRectangle extends OavpObject {
   public void setup() {
     variable
-      .set("w", 200)
-      .set("h", 50)
+      .params("border-radius")
+      .set("w", 100)
+      .set("h", 100)
       .set("strokeColor", palette.flat.white)
       .set("size", 0);
   }
@@ -108,7 +109,7 @@ public class OavpObjRectangle extends OavpObject {
       .draw.basicRectangle(
         variable.val("w"),
         variable.val("h"),
-        variable.val("size")
+        variable.val("paramA")
       )
       .done();
   }

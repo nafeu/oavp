@@ -1,26 +1,10 @@
-String[] VARIABLE_PROPS = {
-  "name", "string",
-  "x", "int",
-  "xr", "int",
-  "y", "int",
-  "yr", "int",
-  "z", "int",
-  "zr", "int",
-  "w", "float",
-  "h", "float",
-  "l", "float",
-  "size", "float",
-  "strokeColor", "color",
-  "fillColor", "color",
-  "strokeWeight", "float",
-  "paramA", "float",
-  "paramB", "float",
-  "paramC", "float",
-  "paramD", "float",
-  "paramE", "float"
+String[] PARAM_FIELDS = {
+  "paramA",
+  "paramB",
+  "paramC",
+  "paramD",
+  "paramE"
 };
-
-int VARIABLE_PROP_LENGTH = VARIABLE_PROPS.length / 2;
 
 public class OavpVariable {
   public String name = "";
@@ -44,12 +28,16 @@ public class OavpVariable {
   public float paramD = 0; public float paramDMod = 0; public String paramDModType = "none";
   public float paramE = 0; public float paramEMod = 0; public String paramEModType = "none";
 
+  public HashMap<String, String> paramLabels;
+
   public HashMap<String, Object> customAttrs;
 
   public List<String> variations;
   public int variation = 0;
 
   OavpVariable() {
+    this.paramLabels = new HashMap<String, String>();
+    paramLabels.put("paramA", "-"); paramLabels.put("paramB", "-"); paramLabels.put("paramC", "-"); paramLabels.put("paramD", "-"); paramLabels.put("paramE", "-");
     this.customAttrs = new HashMap<String, Object>();
     this.variations = new ArrayList();
     this.variations("default");
@@ -57,9 +45,25 @@ public class OavpVariable {
 
   OavpVariable(String name) {
     this.name = name;
+    this.paramLabels = new HashMap<String, String>();
+    paramLabels.put("paramA", "-"); paramLabels.put("paramB", "-"); paramLabels.put("paramC", "-"); paramLabels.put("paramD", "-"); paramLabels.put("paramE", "-");
     this.customAttrs = new HashMap<String, Object>();
     this.variations = new ArrayList();
     this.variations("default");
+  }
+
+  public String getParamLabel(String paramKey) {
+    return this.paramLabels.get(paramKey);
+  }
+
+  public OavpVariable params(String ...paramNames) {
+    String[] paramKeys = { "paramA", "paramB", "paramC", "paramD", "paramE" };
+    int index = 0;
+    for (String paramName : paramNames) {
+      this.paramLabels.replace(paramKeys[index], paramName);
+      index++;
+    }
+    return this;
   }
 
   public OavpVariable set(String prop, Object input) {
