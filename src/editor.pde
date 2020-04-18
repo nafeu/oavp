@@ -42,6 +42,7 @@ public class OavpEditor {
   private boolean isCreateMode = false;
   private boolean isSelectModifierTypeMode = false;
   private boolean isSnappingEnabled = true;
+  private boolean isModalOpen = false;
   private OavpInput input;
   private OavpObjectManager objects;
   private OavpText text;
@@ -57,7 +58,10 @@ public class OavpEditor {
   private int selectedModifierTypeIndex = 0;
   private int selectedParamIndex = 0;
   private HashMap<String, Object> originalValues;
-
+  private HashMap<String, String[]> modalOptions;
+  private HashMap<String, Object> modalValues;
+  private String modalHeader;
+  private int queuedObjectToCreate = 0;
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
@@ -68,6 +72,9 @@ public class OavpEditor {
     this.availableModifierFields = new ArrayList<String>();
     this.availableModifierTypes = new ArrayList<String>();
     this.originalValues = new HashMap<String, Object>();
+    this.modalOptions = new HashMap<String, String[]>();
+    this.modalValues = new HashMap<String, Object>();
+    this.modalHeader = "default modal header";
 
     for (String objectType : OBJECT_LIST) {
       selectableObjects.add(objectType);
@@ -78,6 +85,26 @@ public class OavpEditor {
     for (String modifierType : MODIFIER_TYPES) {
       availableModifierTypes.add(modifierType);
     }
+  }
+
+  public void addModalOption(String name, String optionType, String values) {
+    this.modalOptions.put(name, new String[] { optionType, values });
+  }
+
+  public void addModalOption(String name, String optionType) {
+    this.modalOptions.put(name, new String[] { optionType, "" });
+  }
+
+  public void setModalValue(String name, Object value) {
+    this.modalValues.put(name, value);
+  }
+
+  public void setModalHeader(String header) {
+    this.modalHeader = header;
+  }
+
+  public Object getModalValue(String name) {
+    return this.modalValues.get(name);
   }
 
   public boolean isToolSwitchable() {
@@ -92,13 +119,40 @@ public class OavpEditor {
     return this.isEditMode && this.isCreateMode;
   }
 
+  public void openModal() {
+    if (this.isModalOpen == false) {
+      this.isModalOpen = true;
+      this.modalValues.clear();
+      openModalGui();
+    }
+  }
+
+  public void confirmModal() {
+    this.finalizeCreation();
+    this.closeModal();
+  }
+
+  public void cancelModal() {
+    this.cancelCreation();
+    this.closeModal();
+  }
+
+  public void closeModal() {
+    if (this.isModalOpen == true) {
+      this.isModalOpen = false;
+      this.modalOptions.clear();
+      closeModalGui();
+    }
+  }
+
   public void handleKeyInputs() {
-    if (input.isPressed(KEY_E)) {
-      toggleEditMode();
+    if (this.isModalOpen) {
+      handleModalInputs();
+      return;
     }
 
-    if (input.isPressed(KEY_O)) {
-      println(cp5.get(Textfield.class,"controlP5TestInput").isFocus());
+    if (input.isPressed(KEY_E)) {
+      toggleEditMode();
     }
 
     if (isEditable()) {
@@ -159,6 +213,16 @@ public class OavpEditor {
       if (input.isPressed(KEY_Q)) { toggleSnappingMode(); }
       if (input.isPressed(KEY_X)) { println(objects.exportSketchData()); }
       if (input.isPressed(KEY_W)) { objects.remove(); }
+    }
+  }
+
+  public void handleModalInputs() {
+    if (input.isPressed(ESC)) {
+      cancelModal();
+    }
+
+    if (input.isPressed(ENTER)) {
+      confirmModal();
     }
   }
 
@@ -650,9 +714,19 @@ public class OavpEditor {
   }
 
   private void handleCreateModeSelection(int index) {
-    if (index < this.selectableObjects.size()) {
-      this.isCreateMode = false;
-      String className = this.selectableObjects.get(index);
+    this.queuedObjectToCreate = index;
+    this.isCreateMode = false;
+    objects.useOptions(this.selectableObjects.get(index));
+    if (this.modalOptions.size() == 0) {
+      this.finalizeCreation();
+    } else {
+      this.openModal();
+    }
+  }
+
+  private void finalizeCreation() {
+    if (this.queuedObjectToCreate < this.selectableObjects.size()) {
+      String className = this.selectableObjects.get(this.queuedObjectToCreate);
       objects.add(getNewObjectName(className, 1), className);
       editorToolbar.show();
       if (this.activeTool == TOOL_COLOR) {
@@ -665,6 +739,19 @@ public class OavpEditor {
       editorHelp.show();
       editorCreateObject.hide();
     }
+  }
+
+  private void cancelCreation() {
+    editorToolbar.show();
+    if (this.activeTool == TOOL_COLOR) {
+      editorColorButtons.show();
+    }
+    editorToggleSnappingButton.show();
+    editorObjectsList.show();
+    editorObjectButtons.show();
+    editorVariableMeta.show();
+    editorHelp.show();
+    editorCreateObject.hide();
   }
 
   private void handleModifierTypeSelection(int index) {
@@ -797,6 +884,8 @@ public class OavpEditor {
   }
 
   public void drawToolMeta(OavpVariable activeVariable, int activeTool) {
+    if (this.isModalOpen) { return; }
+
     float toolMetaXPadding = width * 0.025;
     float toolMetaYPadding = height * 0.0075;
     float toolMetaBoxW = width * 1.5;
@@ -1126,6 +1215,41 @@ public class OavpEditor {
       this.selectedParamIndex = index;
     }
   }
+
+  public String[] getModalOptions() {
+    if (this.modalOptions.size() < 1) {
+      return new String[] {};
+    }
+
+    String[] options = new String[this.modalOptions.size()];
+
+    List<String> keyList = new ArrayList<String>(this.modalOptions.keySet());
+
+    for (int i = 0; i < keyList.size(); i++) {
+      String optionKey = keyList.get(i);
+      String[] values = this.modalOptions.get(optionKey);
+
+      String optionType = values[0];
+      String optionValue = values[1];
+
+      options[i] = optionKey + "=" + optionType + ":" + optionValue;
+    }
+
+    return options;
+  }
+
+  public void setModalOption(String optionKey, String optionType, String optionValue) {
+    String[] values = new String[] { optionType, optionValue };
+    modalOptions.put(optionKey, values);
+  }
+
+  public void resetModalOptions() {
+    modalOptions.clear();
+  }
+
+  public String getModalHeader() {
+    return this.modalHeader;
+  }
 }
 
 public void updateEditorVariableMeta() {
@@ -1191,7 +1315,9 @@ void controlEvent(ControlEvent theEvent) {
       // println("event from group " + theEvent.getGroup().getName());
     } else if (theEvent.isController()) {
       if (theEvent.getController().getName().contains("createObject")) {
-        editor.handleCreateModeSelection(int(theEvent.getController().getValue()));
+        if (!editor.isModalOpen) {
+          editor.handleCreateModeSelection(int(theEvent.getController().getValue()));
+        }
       } else if (theEvent.getController().getName().contains("selectModifier")) {
         if (editor.isSelectModifierTypeMode) {
           println(theEvent.getController().getName() + "--" + int(theEvent.getController().getValue()));
@@ -1260,4 +1386,8 @@ public String getNewObjectName(String className, int increment) {
 
 public void setHelpText(String text) {
   cp5.get(Textlabel.class, "editorHelpText").setText(text);
+}
+
+public Object getModalValue(String name) {
+  return editor.getModalValue(name);
 }

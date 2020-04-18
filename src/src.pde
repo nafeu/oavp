@@ -45,6 +45,7 @@ BufferedReader reader;
 OavpInput input;
 OavpEditor editor;
 boolean loaded = false;
+boolean isInitializing = true;
 ControlP5 cp5;
 DashedLines dash;
 
@@ -54,8 +55,8 @@ void setup() {
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
 
   // DISPLAY_SETTINGS_START
-  // fullScreen(P3D, 2);
-  size(750, 750, P3D);
+  fullScreen(P3D, 2);
+  // size(750, 750, P3D);
   // DISPLAY_SETTINGS_END
 
   // Frame Setup
@@ -67,6 +68,8 @@ void setup() {
 
   dash = new DashedLines(this);
   dash.pattern(30, 10, 15, 10);
+
+  println("[ oavp ] Initializing app...");
 
   try {
     thread("loadApplication");
@@ -256,6 +259,9 @@ void loadApplication() {
   setupPreSketchDefaults();
   setupSketch();
   setupPostSketchDefaults();
+
+  println("[ oavp ] Initialization complete.");
+  isInitializing = false;
 
   // Typography Setup
   text = new OavpText(oavp, entityPosition);

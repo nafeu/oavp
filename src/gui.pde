@@ -15,6 +15,7 @@ Textlabel editorHelpText;
 Bang strokeColorVarMetaButton;
 Bang fillColorVarMetaButton;
 Textlabel framerate;
+ControlFont cfModal;
 
 String toolbarLabelMove = "[m] move";
 String toolbarLabelResize = "[s] resize";
@@ -28,10 +29,18 @@ String toolbarLabelParams = "[p] params";
 
 color COLOR_WHITE = color(255, 255, 255);
 color COLOR_BLACK = color(0, 0, 0);
+color COLOR_BLUE = color(41, 128, 185);
+color COLOR_MIDNIGHT = color(44, 62, 80);
+color COLOR_GRAY = color(52, 73, 94);
+color COLOR_RED = color(192, 57, 43);
+color COLOR_YELLOW = color(241, 196, 15);
+color COLOR_GREEN = color(39, 174, 96);
 
 public void setupEditorGui() {
 
   framerate = cp5.addFrameRate().setInterval(10).setPosition(width - 20, height - 15).hide();
+
+  cfModal = new ControlFont(createFont("Arial", 20));
 
   editorToolbar = cp5.addButtonBar("editorToolbar")
      .setColorBackground(COLOR_BLACK)
@@ -252,4 +261,155 @@ public void setupEditorGui() {
 
   strokeColorVarMetaButton = cp5.addBang("strokeColorButtonVarMeta").setPosition(10 * 16 + 60, 20 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
   fillColorVarMetaButton = cp5.addBang("fillColorButtonVarMeta").setPosition(10 * 16 + 60, 30 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
+}
+
+String[] activeModalOptions;
+
+public void openModalGui() {
+  activeModalOptions = editor.getModalOptions();
+  String header = editor.getModalHeader();
+
+  if (cp5.getGroup("editorModalBackground") != null) { cp5.getGroup("editorModalBackground").remove(); }
+  if (cp5.getGroup("editorModalOptions") != null) { cp5.getGroup("editorModalOptions").remove(); }
+
+  cp5.addGroup("editorModalBackground")
+    .hideBar()
+    .setColorBackground(COLOR_MIDNIGHT)
+    .setBackgroundColor(COLOR_MIDNIGHT)
+    .setPosition(0, 0)
+    .setSize(width, height);
+
+  cp5.addGroup("editorModalOptions")
+    .hideBar()
+    .setColorBackground(COLOR_GRAY)
+    .setBackgroundColor(COLOR_GRAY)
+    .setPosition(width / 4, height / 4)
+    .setSize(width / 2, height / 2);
+
+    cp5.addTextlabel("editorModalOptionHeader")
+      .setPosition(10, 10)
+      .setSize(80, 20)
+      .setFont(cfModal)
+      .setText(header)
+      .setGroup("editorModalOptions");
+
+    for (int i = 0; i < activeModalOptions.length; i++) {
+      String option = activeModalOptions[i].split("=")[1].split(":")[0];
+      String optionName = activeModalOptions[i].split("=")[0];
+
+      cp5.addTextlabel("editorModalOption" + i)
+        .setPosition(10, 20 + 30 + (35 * i))
+        .setSize(width / 4, 30)
+        .setText(optionName)
+        .setFont(cfModal)
+        .setGroup("editorModalOptions");
+
+      if (option.contains("select")) {
+        String[] items = activeModalOptions[i].split(":")[1].split(",");
+        cp5.addScrollableList("editorModalValue" + i).setType(ControlP5.DROPDOWN)
+          .setColorBackground(COLOR_BLACK)
+          .setPosition(width / 4, 20 + 30 + (35 * i))
+          .close()
+          .setLabel(optionName)
+          .setId(i)
+          .setBarHeight(30)
+          .setWidth((width / 4) - 10)
+          .setItemHeight(30)
+          .addItems(items)
+          .addCallback(new CallbackListener() { public void controlEvent(CallbackEvent theEvent) {
+            if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
+              ScrollableList component = cp5.get(ScrollableList.class, theEvent.getController().getName());
+              component.bringToFront();
+              String optionName = activeModalOptions[component.getId()].split("=")[0];
+              editor.setModalValue(optionName, component.getItem(int(component.getValue())).get("name"));
+            }
+          }})
+          .setGroup("editorModalOptions");
+        editor.setModalValue(optionName, items[0]);
+      } else if (option.contains("input")) {
+        cp5.addTextfield("editorModalValue" + i)
+          .setColorBackground(COLOR_BLACK)
+          .setPosition(width / 4, 20 + 30 + (35 * i))
+          .setId(i)
+          .setLabel("")
+          .setSize((width / 4) - 10, 30)
+          .addCallback(new CallbackListener() { public void controlEvent(CallbackEvent theEvent) {
+            if (theEvent.getAction() == ControlP5.ACTION_CLICK || theEvent.getAction() == ControlP5.ACTION_ENTER || theEvent.getAction() == ControlP5.ACTION_EXIT) {
+              Textfield component = cp5.get(Textfield.class, theEvent.getController().getName());
+              String optionName = activeModalOptions[component.getId()].split("=")[0];
+              editor.setModalValue(optionName, component.getText());
+            }
+          }})
+          .setGroup("editorModalOptions");
+        editor.setModalValue(optionName, "");
+      } else if (option.contains("slider")) {
+        cp5.addSlider("editorModalValue" + i)
+          .setColorBackground(COLOR_BLACK)
+          .setPosition(width / 4, 20 + 30 + (35 * i))
+          .setId(i)
+          .setLabel("")
+          .setSize((width / 4) - 10, 30)
+          .setRange(1, 10)
+          .setValue(1.0)
+          .setNumberOfTickMarks(10)
+          .setSliderMode(Slider.FLEXIBLE)
+          .addCallback(new CallbackListener() { public void controlEvent(CallbackEvent theEvent) {
+            if (theEvent.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE || theEvent.getAction() == ControlP5.ACTION_RELEASE) {
+              Slider component = cp5.get(Slider.class, theEvent.getController().getName());
+              String optionName = activeModalOptions[component.getId()].split("=")[0];
+              editor.setModalValue(optionName, component.getValue());
+            }
+          }})
+          .setGroup("editorModalOptions");
+        editor.setModalValue(optionName, 1.0);
+      } else {
+        cp5.addNumberbox("editorModalValue" + i)
+          .setColorBackground(COLOR_BLACK)
+          .setPosition(width / 4, 20 + 30 + (35 * i))
+          .setId(i)
+          .setLabel("")
+          .setSize((width / 4) - 10, 30)
+          .setMultiplier(-5)
+          .setSensitivity(100)
+          .setValue(10.0)
+          .addCallback(new CallbackListener() { public void controlEvent(CallbackEvent theEvent) {
+            if (theEvent.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE || theEvent.getAction() == ControlP5.ACTION_RELEASE) {
+              Numberbox component = cp5.get(Numberbox.class, theEvent.getController().getName());
+              String optionName = activeModalOptions[component.getId()].split("=")[0];
+              editor.setModalValue(optionName, component.getValue());
+            }
+          }})
+          .setGroup("editorModalOptions");
+        editor.setModalValue(optionName, 10.0);
+      }
+    }
+
+    cp5.addButton("editorModalOptionConfirm")
+      .setColorBackground(COLOR_BLACK)
+      .setPosition(((width / 4) - ((80 + 10 + 80) / 2)), height / 2 - 30)
+      .setSize(80, 20)
+      .setLabel("confirm")
+      .addCallback(new CallbackListener() { public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
+          editor.confirmModal();
+        }
+      }})
+      .setGroup("editorModalOptions");
+
+    cp5.addButton("editorModalOptionCancel")
+      .setColorBackground(COLOR_BLACK)
+      .setPosition(((width / 4) - ((80 + 10 + 80) / 2)) + 80 + 10, height / 2 - 30)
+      .setSize(80, 20)
+      .setLabel("cancel")
+      .addCallback(new CallbackListener() { public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
+          editor.cancelModal();
+        }
+      }})
+      .setGroup("editorModalOptions");
+}
+
+public void closeModalGui() {
+  if (cp5.getGroup("editorModalBackground") != null) { cp5.getGroup("editorModalBackground").hide(); }
+  if (cp5.getGroup("editorModalOptions") != null) { cp5.getGroup("editorModalOptions").hide(); }
 }

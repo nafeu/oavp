@@ -29,7 +29,6 @@ public class OavpVariable {
   public float paramE = 0; public float paramEMod = 0; public String paramEModType = "none";
 
   public HashMap<String, String> paramLabels;
-
   public HashMap<String, Object> customAttrs;
 
   public List<String> variations;

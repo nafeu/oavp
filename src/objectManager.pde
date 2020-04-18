@@ -10,6 +10,12 @@ public class OavpObjectManager {
     selectedObjectIndex = 0;
   }
 
+  public void useOptions(String className) {
+    OavpObject object = createObject(className);
+    object.useOptions();
+    object = null;
+  }
+
   public OavpVariable add(String name, String className) {
     OavpObject object = createObject(className);
     object.setName(name);
@@ -103,8 +109,10 @@ public class OavpObjectManager {
   }
 
   public void draw() {
-    for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
-      entry.getValue().draw();
+    if (!editor.isModalOpen) {
+      for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
+        entry.getValue().draw();
+      }
     }
   }
 

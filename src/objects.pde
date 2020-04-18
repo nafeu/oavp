@@ -46,6 +46,21 @@ public class OavpObject {
   public OavpVariable getVariable() { return this.variable; }
   public void setName(String name) { this.variable.name = name; }
 
+  public OavpObject header(String header) {
+    editor.setModalHeader(header);
+    return this;
+  }
+
+  public OavpObject option(String name, String optionType, String values) {
+    editor.addModalOption(name, optionType, values);
+    return this;
+  }
+
+  public OavpObject option(String name, String optionType) {
+    editor.addModalOption(name, optionType);
+    return this;
+  }
+
   public OavpObject clone(String cloneName) {
     String rawClassName = this.getClass().getName();
     String className = rawClassName.split("OavpObj")[1];
@@ -89,6 +104,7 @@ public class OavpObject {
   public void setup() {}
   public void draw() {}
   public void update() {}
+  public void useOptions() {}
 }
 
 public class OavpObjRectangle extends OavpObject {
@@ -499,12 +515,18 @@ public class OavpObjSpectrumMesh extends OavpObject {
 }
 
 public class OavpObjZRectangles extends OavpObject {
+  public void useOptions() {
+    header("Configure Z Rectangles")
+      .option("count", "slider")
+      .option("gap", "number");
+  }
+
   public void setup() {
     variable
       .variations("radial")
       .set("size", 100)
-      .set("count", 3)
-      .set("gap", 0.10)
+      .set("count", int((float) getModalValue("count")))
+      .set("gap", ((float) getModalValue("gap")) * 0.01)
       .set("radius", 50)
       .set("strokeColor", palette.flat.white);
   }
