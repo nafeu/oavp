@@ -15,6 +15,11 @@ String[] OBJECT_LIST = {
   "GridInterval"
 };
 
+String[] SHADER_LIST = {
+  "test-shader",
+  "test-shader-2"
+};
+
 public OavpObject createObject(String className) {
   OavpObject object;
 
@@ -37,6 +42,10 @@ public OavpObject createObject(String className) {
   }
 
   return object;
+}
+
+public String getAvailableShaders() {
+  return String.join(",", SHADER_LIST);
 }
 
 public class OavpObject {
@@ -132,30 +141,36 @@ public class OavpObjRectangle extends OavpObject {
 }
 
 public class OavpObjShader extends OavpObject {
+  public void useOptions() {
+    header("Select shader")
+      .option("shader", "select", getAvailableShaders());
+  }
+
   public void setup() {
+    String shader = (String) getModalValue("shader");
     variable
-      .variations(
-        "test-shader-2"
+      .params(
+        "Shader Parameter A",
+        "Shader Parameter B",
+        "Shader Parameter C",
+        "Shader Parameter D",
+        "Shader Parameter E"
       )
+      .set("shader", shader)
       .set("w", 100)
       .set("h", 100)
       .set("fillColor", palette.flat.white)
       .set("size", 100);
-    entities.addShader(variable.name + "test-shader", "test-shader");
-    entities.addShader(variable.name + "test-shader-2", "test-shader-2");
+    entities.addShader(variable.name + shader, shader);
   }
 
   public void update() {
-    PShader shader;
-
-    if (variable.ofVariation("test-shader-2")) {
-      shader = entities.getShader(variable.name + "test-shader-2");
-    } else {
-      shader = entities.getShader(variable.name + "test-shader");
-    }
-
-    shader.set("paramA", constrain(variable.val("size"), 0, 200) / 100);
-    shader.set("paramB", constrain(variable.val("size"), 0, 200) / 100);
+    PShader shader = entities.getShader(variable.name + (String) variable.customAttrs.get("shader"));
+    shader.set("paramA", constrain(variable.val("paramA"), 0, 200) / 200);
+    shader.set("paramB", constrain(variable.val("paramB"), 0, 200) / 200);
+    shader.set("paramC", constrain(variable.val("paramC"), 0, 200) / 200);
+    shader.set("paramD", constrain(variable.val("paramD"), 0, 200) / 200);
+    shader.set("paramE", constrain(variable.val("paramE"), 0, 200) / 200);
   }
 
   public void draw() {
@@ -165,14 +180,8 @@ public class OavpObjShader extends OavpObject {
       .noStrokeStyle()
       .use(variable);
 
-    if (variable.ofVariation("test-shader-2")) {
-      visualizers.useShader(variable.name + "test-shader-2");
-    } else {
-      visualizers.useShader(variable.name + "test-shader");
-    }
-
+    visualizers.useShader(variable.name + (String) variable.customAttrs.get("shader"));
     visualizers.draw.basicRectangle(variable.val("w"), variable.val("h"));
-
     visualizers.done();
   }
 }
