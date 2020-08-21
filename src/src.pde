@@ -48,6 +48,8 @@ boolean loaded = false;
 boolean isInitializing = true;
 ControlP5 cp5;
 DashedLines dash;
+String[] lyrics;
+int lyricIndex = 0;
 
 void setup() {
   context = this;
@@ -272,6 +274,9 @@ void loadApplication() {
   synchronized(this) {
     loaded = true;
   }
+
+  // Load Lyrics
+  lyrics = loadStrings("lyrics.txt");
 }
 
 void keyPressed() {
@@ -287,6 +292,10 @@ void keyPressed() {
   }
 
   input.handleKeyPressed(keyCode);
+
+  if (!editor.isEditMode) {
+    handleEvents(keyCode);
+  }
 }
 
 void mousePressed() {

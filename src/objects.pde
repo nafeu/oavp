@@ -12,7 +12,8 @@ String[] OBJECT_LIST = {
   "Splash",
   "SpectrumMesh",
   "ZRectangles",
-  "GridInterval"
+  "GridInterval",
+  "Lyrics"
 };
 
 String[] SHADER_LIST = {
@@ -38,6 +39,7 @@ public OavpObject createObject(String className) {
     case "SpectrumMesh": object = new OavpObjSpectrumMesh(); break;
     case "ZRectangles": object = new OavpObjZRectangles(); break;
     case "GridInterval": object = new OavpObjGridInterval(); break;
+    case "Lyrics": object = new OavpObjLyrics(); break;
     default: object = new OavpObject();
   }
 
@@ -619,5 +621,25 @@ public class OavpObjGridInterval extends OavpObject {
     }
 
     visualizers.done();
+  }
+}
+
+public class OavpObjLyrics extends OavpObject {
+  public void useOptions() {
+    header("Configure Lyrics")
+      .option("size", "number");
+  }
+
+  public void setup() {
+    variable
+      .set("size", int((float) getModalValue("size")));
+  }
+
+  public void draw() {
+    text.create()
+      .center().middle()
+      .use(variable)
+      .write(getLyricText())
+      .done();
   }
 }

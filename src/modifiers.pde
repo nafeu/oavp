@@ -1,3 +1,5 @@
+float spacebarModTypeValue = 1.0;
+
 String[] MODIFIER_FIELDS = {
   "xMod",
   "xrMod",
@@ -21,6 +23,7 @@ String[] MODIFIER_FIELDS = {
 
 String[] MODIFIER_TYPES = {
   "none",
+  "spacebar",
   "framecount",
   "level",
   "osc-fast",
@@ -43,6 +46,9 @@ String[] MODIFIER_TYPES = {
 public float getMod(String type) {
   float out;
   switch(type) {
+    case "spacebar":
+      out = spacebarModTypeValue;
+      break;
     case "framecount":
       out = frameCount(0.01);
       break;

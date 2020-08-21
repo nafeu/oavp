@@ -128,3 +128,11 @@ public class OavpInput {
     this.xGridTicks = 0;
   }
 }
+
+void handleEvents(int code) {
+  if (code == 32 /* SPACE */) {
+    spacebarModTypeValue = 0.0;
+    Ani.to(this, 0.3, "spacebarModTypeValue", 1.0, Ani.EXPO_IN_OUT);
+    nextLyric();
+  }
+}

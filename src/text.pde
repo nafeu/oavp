@@ -65,6 +65,11 @@ public class OavpText {
     return this;
   }
 
+  public OavpText size(float size) {
+    textSize(size);
+    return this;
+  }
+
   public OavpText write(String text, float x, float y, float w, float h, float padding) {
     text(text, x + padding, y + padding, w - padding * 2, h - padding * 2);
     return this;
@@ -193,19 +198,8 @@ public class OavpText {
     return this;
   }
 
-  public OavpText opacity(float opacity) {
+  public OavpText textOpacity(float opacity) {
     this.opacity = opacity;
-    return this;
-  }
-
-  public OavpText fillColor(color inputColour) {
-    fill(red(inputColour), green(inputColour), blue(inputColour), this.opacity * 255);
-    return this;
-  }
-
-  public OavpText fillColor(String inputColour) {
-    color unhexedColor = unhex("FF" + inputColour.substring(1));
-    fill(red(unhexedColor), green(unhexedColor), blue(unhexedColor), this.opacity * 255);
     return this;
   }
 
@@ -233,5 +227,66 @@ public class OavpText {
     String[] lines = loadStrings(path);
     String text = String.join("\n", lines);
     return text;
+  }
+
+  public OavpText fillColor(color customColor) {
+    if (customColor != 0) {
+      fill(customColor);
+    } else {
+      noFill();
+    }
+    return this;
+  }
+
+  public OavpText fillColor(String customColor) {
+    fill(unhex("FF" + customColor.substring(1)));
+    return this;
+  }
+
+  public OavpText fillColor(color customColor, float opacity) {
+    fill(opacity(customColor, opacity));
+    return this;
+  }
+
+  public OavpText strokeColor(color customColor) {
+    if (customColor != 0) {
+      stroke(customColor);
+    } else {
+      noStroke();
+    }
+    return this;
+  }
+
+  public OavpText strokeColor(String customColor) {
+    stroke(unhex("FF" + customColor.substring(1)));
+    return this;
+  }
+
+  /**
+   * Set stroke color
+   * @param customColor the color
+   * @param opacity the opacity value
+   */
+  public OavpText strokeColor(color customColor, float opacity) {
+    stroke(opacity(customColor, opacity));
+    return this;
+  }
+
+  public OavpText use(OavpVariable variable) {
+    this
+      .strokeColor(variable.strokeColor(), exampleOpacity)
+      .fillColor(variable.fillColor(), exampleOpacity)
+      .size(variable.val("size"))
+      .move(
+        variable.val("x"),
+        variable.val("y"),
+        variable.val("z")
+      )
+      .rotate(
+        variable.val("xr"),
+        variable.val("yr"),
+        variable.val("zr")
+      );
+    return this;
   }
 }
