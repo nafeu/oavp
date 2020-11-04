@@ -274,8 +274,8 @@ public class OavpText {
 
   public OavpText use(OavpVariable variable) {
     this
-      .strokeColor(variable.strokeColor(), exampleOpacity)
-      .fillColor(variable.fillColor(), exampleOpacity)
+      .strokeColor(variable.strokeColor(), 255)
+      .fillColor(variable.fillColor(), 255)
       .size(variable.val("size"))
       .move(
         variable.val("x"),
