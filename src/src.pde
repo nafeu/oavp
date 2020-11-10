@@ -25,7 +25,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import controlP5.*;
-import garciadelcastillo.dashedlines.*;
 
 PApplet context;
 OavpConfig oavp;
@@ -47,9 +46,9 @@ OavpEditor editor;
 boolean loaded = false;
 boolean isInitializing = true;
 ControlP5 cp5;
-DashedLines dash;
 String[] lyrics;
 int lyricIndex = 0;
+int loadingDelay = 2000;
 
 void setup() {
   context = this;
@@ -67,9 +66,6 @@ void setup() {
 
   cp5 = new ControlP5(this);
   setupEditorGui();
-
-  dash = new DashedLines(this);
-  dash.pattern(30, 10, 15, 10);
 
   println("[ oavp ] Initializing app...");
 
@@ -94,7 +90,7 @@ synchronized void draw() {
     textSize(20);
     fill(255);
     textAlign(CENTER, CENTER);
-    text("[ oavp - v0.1.0 : github.com/nafeu/oavp ]", width * 0.5, height * 0.5);
+    text("oavp - v0.1.0 : github.com/nafeu/oavp\n\npress 'e' to enter edit mode", width * 0.5, height * 0.5);
   } else {
     try {
       if (oavp.ENABLE_VIDEO_RENDER) {
@@ -272,6 +268,7 @@ void loadApplication() {
   editor = new OavpEditor(input, objects, text);
 
   synchronized(this) {
+    delay(loadingDelay);
     loaded = true;
   }
 

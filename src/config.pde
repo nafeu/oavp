@@ -34,14 +34,6 @@ public boolean ENABLE_VIDEO_RENDER = false;
 public boolean ANALYZE_AUDIO = false;
 public int FRAME_OFFSET_MULTIPLIER = 0;
 public String FRAME_TITLE = "oavp";
-public String TOPIC_NAME = "Phrakture";
-public String TOPIC_TITLE = "Reinvented By Silence";
-public String COLOR_A = "#B2DFDB";
-public String COLOR_B = "#EF9A9A";
-public String COLOR_C = "#8E24AA";
-public String COLOR_D = "#F57F17";
-public String COLOR_E = "#FF5252";
-public String COLOR_BG = "#1A237E";
 
 public DefaultEvents DEFAULT_EVENTS;
 

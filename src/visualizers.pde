@@ -563,14 +563,6 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicDashedRectangle(float w, float h, float offset) {
-      rectMode(CENTER);
-      dash.offset(offset);
-      dash.rect(0, 0, w, h);
-      rectMode(CORNER);
-      return OavpVisualizer.this;
-    }
-
     public OavpVisualizer basicEquilateralTriangle(float size) {
       triangle(
         0, -size,
@@ -612,20 +604,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicDashedVerticalLine(float w, float h, float l, float offset) {
-      dash.offset(offset);
-      dash.line(0, -h/2, 0, h/2);
-      return OavpVisualizer.this;
-    }
-
     public OavpVisualizer basicHorizontalLine(float w, float h, float l) {
       line(-w/2, 0, 0, w/2, 0, l);
-      return OavpVisualizer.this;
-    }
-
-    public OavpVisualizer basicDashedHorizontalLine(float w, float h, float l, float offset) {
-      dash.offset(offset);
-      dash.line(-w/2, 0, w/2, 0);
       return OavpVisualizer.this;
     }
 
@@ -633,18 +613,6 @@ class OavpVisualizer {
       line(-w/2, -h/2, 0, w/2, h/2, l);
       return OavpVisualizer.this;
     }
-
-
-    public OavpVisualizer basicDashedDiagonalLine(float w, float h, float l, float offset) {
-      dash.offset(offset);
-      dash.line(-w/2, -h/2, w/2, h/2);
-      return OavpVisualizer.this;
-    }
-
-    // public OavpVisualizer basicLine(float w, float h, float l) {
-    //   line(x0, y0, z0, x1, y1, z1);
-    //   return OavpVisualizer.this;
-    // }
 
     public OavpVisualizer positionalLines(float distance) {
       line(0 - distance, 0, 0, 0 + distance, 0, 0);

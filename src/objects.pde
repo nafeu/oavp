@@ -225,10 +225,7 @@ public class OavpObjLine extends OavpObject {
     variable
       .variations(
         "vertical",
-        "diagonal",
-        "dashed-horizontal",
-        "dashed-vertical",
-        "dashed-diagonal"
+        "diagonal"
       )
       .set("w", 100)
       .set("h", 100)
@@ -246,12 +243,6 @@ public class OavpObjLine extends OavpObject {
       visualizers.draw.basicVerticalLine(variable.val("w"), variable.val("h"), variable.val("l"));
     } else if (variable.ofVariation("diagonal")) {
       visualizers.draw.basicDiagonalLine(variable.val("w"), variable.val("h"), variable.val("l"));
-    } else if (variable.ofVariation("dashed-horizontal")) {
-      visualizers.draw.basicDashedHorizontalLine(variable.val("w"), variable.val("h"), variable.val("l"), variable.val("size"));
-    } else if (variable.ofVariation("dashed-vertical")) {
-      visualizers.draw.basicDashedVerticalLine(variable.val("w"), variable.val("h"), variable.val("l"), variable.val("size"));
-    } else if (variable.ofVariation("dashed-diagonal")) {
-      visualizers.draw.basicDashedDiagonalLine(variable.val("w"), variable.val("h"), variable.val("l"), variable.val("size"));
     } else {
       visualizers.draw.basicHorizontalLine(variable.val("w"), variable.val("h"), variable.val("l"));
     }
