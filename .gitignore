@@ -13,3 +13,5 @@ sketches/
 ffmpeg.txt
 ffmpeg-audio.txt
 **/data/*.svg
+configure-build.sh
+oavp.app
