@@ -1559,11 +1559,12 @@ class OavpVisualizer {
      * @param scaleFactor the scale factor of the image
      * @use draw
      */
-    public OavpVisualizer img(String imgName, float scaleFactor) {
+    public OavpVisualizer img(String imgName, float scaleFactor, float opacity) {
       PImage image = entities.getImg(imgName);
       pushMatrix();
       scale(scaleFactor);
-      image(image, 0, 0);
+      tint(255, opacity * 255);
+      image(image, -(image.width / 2), -(image.height / 2));
       popMatrix();
       return OavpVisualizer.this;
     }

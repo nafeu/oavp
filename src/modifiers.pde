@@ -1,5 +1,3 @@
-float spacebarModTypeValue = 1.0;
-
 String[] MODIFIER_FIELDS = {
   "xMod",
   "xrMod",
@@ -23,7 +21,10 @@ String[] MODIFIER_FIELDS = {
 
 String[] MODIFIER_TYPES = {
   "none",
-  "spacebar",
+  "spacebar-pulser",
+  "spacebar-toggle-hard",
+  "spacebar-toggle-soft",
+  "spacebar-counter",
   "framecount",
   "level",
   "osc-fast",
@@ -46,8 +47,17 @@ String[] MODIFIER_TYPES = {
 public float getMod(String type) {
   float out;
   switch(type) {
-    case "spacebar":
-      out = spacebarModTypeValue;
+    case "spacebar-pulser":
+      out = entities.getPulser("spacebar-pulser").getValue();
+      break;
+    case "spacebar-toggle-hard":
+      out = entities.getToggle("spacebar-toggle-hard").getValue();
+      break;
+    case "spacebar-toggle-soft":
+      out = entities.getToggle("spacebar-toggle-soft").getValue();
+      break;
+    case "spacebar-counter":
+      out = entities.getCounter("spacebar-counter").getValue();
       break;
     case "framecount":
       out = frameCount(0.01);

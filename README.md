@@ -9,6 +9,7 @@ Check out the full guide and docs available [at the repo's wiki here](https://gi
 # Requirements
 
 - [`ffmpeg`](https://evermeet.cx/ffmpeg/)
+- [`youtube-dl`](https://evermeet.cx/ffmpeg/)
 
 # Setup and Installation
 
@@ -26,6 +27,12 @@ cd [PROJECT_NAME]
 ## Creating & Running Sketches
 
 ...
+
+## Using MP3 Files For Visualization
+
+```
+youtube-dl -x --audio-format mp3 https://www.youtube.com/watch?v=3jZqAqVMKvo
+```
 
 ## Credits
 

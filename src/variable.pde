@@ -331,6 +331,16 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable paramAMod(float input) {
+    this.paramAMod = input;
+    return this;
+  }
+
+  public OavpVariable paramAModType(String input) {
+    this.paramAModType = input;
+    return this;
+  }
+
   public String getVariation() {
     return this.variations.get(this.variation);
   }

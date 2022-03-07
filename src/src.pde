@@ -54,10 +54,14 @@ void setup() {
   context = this;
 
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
+  println("[ oavp ] For recording on MAC make sure:");
+  println("[ oavp ]   1. soundflower is set up properly");
+  println("[ oavp ]   2. microphone is currently set to soundflower aggregated device");
+  println("[ oavp ]   3. sound output is using set to soundflower included multi-output device");
 
   // DISPLAY_SETTINGS_START
-  // fullScreen(P3D, 2);
-  size(1080, 864, P3D);
+  fullScreen(P3D, 2);
+  // size(1080, 864, P3D);
   // DISPLAY_SETTINGS_END
 
   // Frame Setup
@@ -308,6 +312,10 @@ void setupPreSketchDefaults() {
   entities.addToggle("beat-toggle-hard").duration(0.3);
   entities.addToggle("beat-toggle-soft").duration(0.3);
   entities.addCounter("beat-counter").duration(0.3);
+  entities.addPulser("spacebar-pulser").duration(0.3);
+  entities.addToggle("spacebar-toggle-hard").duration(0.3);
+  entities.addToggle("spacebar-toggle-soft").duration(0.3);
+  entities.addCounter("spacebar-counter").duration(0.3);
   entities.addPulser("quantized-pulser").duration(0.3);
   entities.addToggle("quantized-toggle-hard").duration(0.3);
   entities.addToggle("quantized-toggle-soft").duration(0.3);

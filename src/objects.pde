@@ -1,4 +1,5 @@
 String[] OBJECT_LIST = {
+  "Image",
   "Line",
   "Rectangle",
   "Shader",
@@ -25,6 +26,7 @@ public OavpObject createObject(String className) {
   OavpObject object;
 
   switch (className) {
+    case "Image": object = new OavpObjImage(); break;
     case "Line": object = new OavpObjLine(); break;
     case "Rectangle": object = new OavpObjRectangle(); break;
     case "Shader": object = new OavpObjShader(); break;
@@ -48,6 +50,10 @@ public OavpObject createObject(String className) {
 
 public String getAvailableShaders() {
   return String.join(",", SHADER_LIST);
+}
+
+public String getAvailableImages() {
+  return String.join(",", entities.getImgs());
 }
 
 public class OavpObject {
@@ -631,6 +637,43 @@ public class OavpObjLyrics extends OavpObject {
       .center().middle()
       .use(variable)
       .write(getLyricText())
+      .done();
+  }
+}
+
+public class OavpObjImage extends OavpObject {
+  public void useOptions() {
+    header("Select image")
+      .option("image", "select", getAvailableImages());
+  }
+
+  public void setup() {
+    variable.set("size", 100);
+
+    if (!variable.customAttrs.containsKey("image")) {
+      variable.set("image", (String) getModalValue("image"));
+    }
+  }
+
+  public void draw() {
+    String imageName = (String) variable.customAttrs.get("image");
+
+    float opacity = 1.0;
+
+    if (variable.val("paramA") > 0) {
+      opacity = 1 - constrain(variable.val("paramA") / 100, 0, 1.0);
+    } else if (variable.val("paramA") < 0) {
+      opacity = constrain(abs(variable.val("paramA")) / 100, 0, 1.0);
+    }
+
+    visualizers.create()
+      .center().middle()
+      .use(variable)
+      .draw.img(
+        imageName,
+        max(variable.val("size") / 100, 0),
+        opacity
+      )
       .done();
   }
 }

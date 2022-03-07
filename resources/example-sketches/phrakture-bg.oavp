@@ -1,0 +1,97 @@
+float anim1 = 0.0;
+float anim2 = 0.0;
+float anim3 = 0.0;
+
+String message1 = "Streaming Music Production tonight @ 10PM EST!";
+String message2 = "twitch.tv/phrakturemusic";
+String message3 = "Come chill and enjoy some progressive breakbeats.";
+
+int spaceCount = 0;
+
+void setupSketch() {
+// objects.add("Waveform-1", "Waveform").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",150).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",400.0).set("wMod",0.0).set("wModType","none").set("h",100.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",5.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+// objects.add("Flatbox-1", "Flatbox").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",75).set("xrMod",0.0).set("xrModType","none").set("y",250).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",50).set("zMod",50.0).set("zModType","level").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",400.0).set("wMod",50.0).set("wModType","level").set("h",10.0).set("hMod",0.0).set("hModType","none").set("l",100.0).set("lMod",0.0).set("lModType","none").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",-16777216).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+// objects.add("Image-2-copy", "Image").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",-25).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",-50).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",100.0).set("wMod",0.0).set("wModType","none").set("h",100.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",50.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",0).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",-50.0).set("paramAModType","level").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("image", "logo");
+// objects.add("Image-2", "Image").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",-25).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",100.0).set("wMod",0.0).set("wModType","none").set("h",100.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",50.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",0).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("image", "logo");
+// objects.add("Image-1", "Image").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",0).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",-250).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",100.0).set("wMod",0.0).set("wModType","none").set("h",150.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",120.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",0).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",-150.0).set("paramAModType","level").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("image", "background-purple");
+// objects.add("Box-1-copy", "Box").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",-15.0).set("xrModType","framecount").set("y",-350).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",-15.0).set("yrModType","framecount").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",-15.0).set("zrModType","framecount").set("w",0.0).set("wMod",300.0).set("wModType","level").set("h",0.0).set("hMod",300.0).set("hModType","level").set("l",0.0).set("lMod",300.0).set("lModType","level").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+// objects.add("background", "OavpObject").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",0).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",150).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",100.0).set("wMod",0.0).set("wModType","none").set("h",100.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",-16777216).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+// objects.add("Box-1", "Box").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",5.0).set("xrModType","framecount").set("y",-350).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",5.0).set("yrModType","framecount").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",5.0).set("zrModType","framecount").set("w",0.0).set("wMod",400.0).set("wModType","level").set("h",0.0).set("hMod",400.0).set("hModType","level").set("l",0.0).set("lMod",400.0).set("lModType","level").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+// objects.add("Rectangle-1", "Rectangle").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",0).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",400.0).set("wMod",0.0).set("wModType","none").set("h",400.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",0.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+// objects.add("SpectrumMesh-1", "SpectrumMesh").set("x",-5).set("xMod",0.0).set("xModType","none").set("xr",45).set("xrMod",0.0).set("xrModType","none").set("y",220).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",90).set("zrMod",0.0).set("zrModType","none").set("w",50.0).set("wMod",0.0).set("wModType","none").set("h",350.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",165.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("variation","dotted");
+// objects.add("Flatbox-1-copy", "Flatbox").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",75).set("xrMod",0.0).set("xrModType","none").set("y",300).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",50).set("zMod",150.0).set("zModType","level").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",450.0).set("wMod",150.0).set("wModType","level").set("h",10.0).set("hMod",0.0).set("hModType","none").set("l",100.0).set("lMod",0.0).set("lModType","none").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",-16777216).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+// objects.add("Flatbox-1-copy-1", "Flatbox").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",75).set("xrMod",0.0).set("xrModType","none").set("y",350).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",50).set("zMod",300.0).set("zModType","level").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",500.0).set("wMod",300.0).set("wModType","level").set("h",10.0).set("hMod",0.0).set("hModType","none").set("l",100.0).set("lMod",0.0).set("lModType","none").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",-16777216).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+
+// objects.add("Splash-1", "Splash").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",0).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",100.0).set("wMod",0.0).set("wModType","none").set("h",100.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("varName", "Splash-1");
+
+objects.add("background", "OavpObject").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",0).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",100.0).set("wMod",0.0).set("wModType","none").set("h",100.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",-16777216).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+objects.add("Spectrum-1", "Spectrum").set("x",0).set("xMod",0.0).set("xModType","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("y",170).set("yMod",0.0).set("yModType","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("w",750.0).set("wMod",0.0).set("wModType","none").set("h",50.0).set("hMod",0.0).set("hModType","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("size",100.0).set("sizeMod",0.0).set("sizeModType","none").set("strokeColor",-1).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("fillColor",0).set("fillColorMod",0.0).set("fillColorModType","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none");
+
+}
+
+void updateSketch() {
+  // println(normalMouseX);
+}
+
+void drawSketch() {
+  visualizers
+    .create()
+    .center().middle()
+    .moveLeft(getMod("frameCount") * 500)
+    .moveBackward(1000)
+    .draw.img("background-purple", 2, getMod("level"))
+    .done();
+
+  visualizers
+    .create()
+    .center().middle()
+    .moveUp(150)
+    .draw.img("logo", 0.5, getMod("level"))
+    .done();
+
+  text
+    .create()
+    .center().middle()
+    .size(28)
+    .fillColor(#FFFFFF, anim1)
+    .moveDown((1 - anim1) * 100)
+    .write(message1)
+    .done();
+
+  text
+    .create()
+    .center().middle()
+    .size(40)
+    .fillColor(#FFFFFF, anim2)
+    .moveDown(50 + (1 - anim2) * 100)
+    .write(message2)
+    .done();
+
+  text
+    .create()
+    .center().middle()
+    .size(24)
+    .fillColor(#FFFFFF, anim3)
+    .moveDown(50 + 50 + (1 - anim3) * 100)
+    .write(message3)
+    .done();
+}
+
+void handleEvents(int code) {
+  if (code == 32 /* SPACE */) {
+
+    switch (spaceCount) {
+      case 0:
+        Ani.to(this, 1.0, "anim1", 1.0, Ani.EXPO_IN_OUT);
+        break;
+      case 1:
+        Ani.to(this, 1.0, "anim2", 1.0, Ani.EXPO_IN_OUT);
+        break;
+      case 3:
+        Ani.to(th\is, 1.0, "anim3", 1.0, Ani.EXPO_IN_OUT);
+        break;
+    }
+
+    spaceCount++;
+  }
+}

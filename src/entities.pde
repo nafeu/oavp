@@ -857,6 +857,10 @@ public class OavpEntityManager {
     return imgs.get(name);
   }
 
+  public String[] getImgs() {
+    return imgs.keySet().toArray(new String[imgs.size()]);
+  }
+
   public void addMovie(String filename) {
     String[] fn = filename.split("\\.");
     movies.put(fn[0], new Movie(context, filename));
