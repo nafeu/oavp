@@ -316,6 +316,13 @@ void setupPreSketchDefaults() {
   entities.addToggle("spacebar-toggle-hard").duration(0.3);
   entities.addToggle("spacebar-toggle-soft").duration(0.3);
   entities.addCounter("spacebar-counter").duration(0.3);
+  entities.addCounter("spacebar-counter-2").duration(0.3);
+  entities.addCounter("spacebar-counter-4").duration(0.3);
+  entities.addCounter("spacebar-counter-8").duration(0.3);
+  entities.addRotator("spacebar-rotator").duration(1.0).add(0.0).add(1.0).add(2.0).add(3.0);
+  entities.addRotator("spacebar-rotator-2").duration(1.0).add(0.0).add(1.0).add(2.0).add(3.0);
+  entities.addRotator("spacebar-rotator-4").duration(1.0).add(0.0).add(1.0).add(2.0).add(3.0);
+  entities.addRotator("spacebar-rotator-8").duration(1.0).add(0.0).add(1.0).add(2.0).add(3.0);
   entities.addPulser("quantized-pulser").duration(0.3);
   entities.addToggle("quantized-toggle-hard").duration(0.3);
   entities.addToggle("quantized-toggle-soft").duration(0.3);

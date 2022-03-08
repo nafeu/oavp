@@ -25,6 +25,13 @@ String[] MODIFIER_TYPES = {
   "spacebar-toggle-hard",
   "spacebar-toggle-soft",
   "spacebar-counter",
+  "spacebar-counter-2",
+  "spacebar-counter-4",
+  "spacebar-counter-8",
+  "spacebar-rotator",
+  "spacebar-rotator-2",
+  "spacebar-rotator-4",
+  "spacebar-rotator-8",
   "framecount",
   "level",
   "osc-fast",
@@ -58,6 +65,27 @@ public float getMod(String type) {
       break;
     case "spacebar-counter":
       out = entities.getCounter("spacebar-counter").getValue();
+      break;
+    case "spacebar-counter-2":
+      out = entities.getCounter("spacebar-counter-2").getValue();
+      break;
+    case "spacebar-counter-4":
+      out = entities.getCounter("spacebar-counter-4").getValue();
+      break;
+    case "spacebar-counter-8":
+      out = entities.getCounter("spacebar-counter-8").getValue();
+      break;
+    case "spacebar-rotator":
+      out = entities.getRotator("spacebar-rotator").getX();
+      break;
+    case "spacebar-rotator-2":
+      out = entities.getRotator("spacebar-rotator-2").getX();
+      break;
+    case "spacebar-rotator-4":
+      out = entities.getRotator("spacebar-rotator-4").getX();
+      break;
+    case "spacebar-rotator-8":
+      out = entities.getRotator("spacebar-rotator-8").getX();
       break;
     case "framecount":
       out = frameCount(0.01);
