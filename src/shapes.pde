@@ -71,6 +71,84 @@ public class OavpShape {
     popStyle();
   }
 
+  public void flatbox2(float x0, float y0, float z0, float inputW, float inputH, float inputL, color visibleColor, color shadeColor) {
+    float x = x0 - (inputW/2);
+    float y = y0 - (inputH/2);
+    float z = z0 - (inputL/2);
+
+    float boxWidth = x + inputW;
+    float boxHeight = y + inputH;
+    float boxLength = z + inputL;
+
+    float[] a = { x,        y,         z };
+    float[] b = { boxWidth, y,         z };
+    float[] c = { x,        boxHeight, z };
+    float[] d = { boxWidth, boxHeight, z };
+
+    float[] e = { x,        y,         boxLength };
+    float[] f = { boxWidth, y,         boxLength };
+    float[] g = { x,        boxHeight, boxLength };
+    float[] h = { boxWidth, boxHeight, boxLength };
+
+    pushStyle();
+    fill(visibleColor);
+    stroke(shadeColor);
+
+    // Face 3
+    beginShape();
+    vertex(e[0], e[1], e[2]);
+    vertex(f[0], f[1], f[2]);
+    vertex(h[0], h[1], h[2]);
+    vertex(g[0], g[1], g[2]);
+    endShape(CLOSE);
+
+    fill(shadeColor);
+    stroke(visibleColor);
+
+    // Face 1
+    beginShape();
+    vertex(a[0], a[1], a[2]);
+    vertex(b[0], b[1], b[2]);
+    vertex(f[0], f[1], f[2]);
+    vertex(e[0], e[1], e[2]);
+    endShape(CLOSE);
+
+    // Face 2
+    beginShape();
+    vertex(c[0], c[1], c[2]);
+    vertex(d[0], d[1], d[2]);
+    vertex(h[0], h[1], h[2]);
+    vertex(g[0], g[1], g[2]);
+    endShape(CLOSE);
+
+    // Face 4
+    beginShape();
+    vertex(a[0], a[1], a[2]);
+    vertex(e[0], e[1], e[2]);
+    vertex(g[0], g[1], g[2]);
+    vertex(c[0], c[1], c[2]);
+    endShape(CLOSE);
+
+
+    // Face 5
+    beginShape();
+    vertex(a[0], a[1], a[2]);
+    vertex(b[0], b[1], b[2]);
+    vertex(d[0], d[1], d[2]);
+    vertex(c[0], c[1], c[2]);
+    endShape(CLOSE);
+
+    // Face 6
+    beginShape();
+    vertex(b[0], b[1], b[2]);
+    vertex(f[0], f[1], f[2]);
+    vertex(h[0], h[1], h[2]);
+    vertex(d[0], d[1], d[2]);
+    endShape(CLOSE);
+
+    popStyle();
+  }
+
   public void chevron(float x, float y, float w, float h) {
     pushStyle();
     noFill();

@@ -139,7 +139,7 @@ public float getMod(String type) {
       out = entities.getCounter("quantized-counter").getValue();
       break;
     default:
-      out = 0;
+      out = 1.0;
   }
   return out;
 }

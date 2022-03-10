@@ -445,6 +445,10 @@ public class OavpObjBullseye extends OavpObject {
 
 public class OavpObjSplash extends OavpObject {
   public void setup() {
+    println(
+      "[OavpObjSplash - CUSTOM PARAMS] : paramA > 0 => useSpacebar, paramB => configure trigger cadence (1, 2, 4, 8)"
+    );
+
     variable
       .variations(
         "rectangular",
@@ -464,8 +468,25 @@ public class OavpObjSplash extends OavpObject {
   }
 
   public void draw() {
+    boolean useSpacebar = variable.val("paramA") > 0;
+
+    if (useSpacebar) {
+      float triggerCadence = variable.val("paramB");
+
+      if (triggerCadence < 100) {
+        visualizers.useEmissions("spacebar");
+      } else if (triggerCadence < 200) {
+        visualizers.useEmissions("spacebar-2");
+      } else if (triggerCadence < 300) {
+        visualizers.useEmissions("spacebar-4");
+      } else {
+        visualizers.useEmissions("spacebar-8");
+      }
+    } else {
+      visualizers.useEmissions(variable.customAttrs.get("varName"));
+    }
+
     visualizers
-      .useEmissions(variable.customAttrs.get("varName"))
       .create()
       .center().middle()
       .use(variable);
@@ -574,13 +595,20 @@ public class OavpObjZRectangles extends OavpObject {
 
 public class OavpObjGridInterval extends OavpObject {
   public void setup() {
+    println(
+      "[OavpObjGridInterval - CUSTOM PARAMS] : paramA changes the scale"
+    );
+
     variable
       .variations(
         "dimensional",
         "diagonal",
         "circular",
         "circular-dimensional",
-        "circular-diagonal"
+        "circular-diagonal",
+        "flatbox",
+        "flatbox-dimensional",
+        "flatbox-diagonal"
       )
       .set("w", 100)
       .set("h", 100)
@@ -592,6 +620,18 @@ public class OavpObjGridInterval extends OavpObject {
 
   public void update() {
     OavpGridInterval interval = entities.getGridInterval(variable.name);
+
+    if (variable.val("paramA") >= 0) {
+      interval.averageWeight(
+        map(
+          variable.val("paramA"),
+          0.0, 500.0,
+          0.1, 10.0
+        )
+      );
+    } else {
+      interval.averageWeight(1);
+    }
 
     if (variable.ofVariation("dimensional")) {
       interval.updateDimensional(variable.val("size"));
@@ -613,6 +653,8 @@ public class OavpObjGridInterval extends OavpObject {
 
     if (variable.ofVariation("circular")) {
       visualizers.draw.gridIntervalCircles();
+    } else if (variable.ofVariation("flatbox")) {
+      visualizers.draw.gridIntervalFlatboxes(variable.val("l"), variable.strokeColor(), variable.fillColor());
     } else {
       visualizers.draw.gridIntervalSquares();
     }

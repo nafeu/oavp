@@ -148,6 +148,13 @@ public class OavpPalette {
   }
 
   public int[][] table = {
+    // FLAT-DUTCH
+    {
+      #FFC312, #F79F1F, #EE5A24, #EA2027, #C4E538, #A3CB38,
+      #009432, #006266, #12CBC4, #1289A7, #0652DD, #1B1464,
+      #FDA7DF, #D980FA, #9980FA, #5758BB, #ED4C67, #B53471,
+      #833471, #6F1E51,
+    },
     // FLAT-LIGHT
     {
       #1abc9c, #2ecc71, #3498db, #9b59b6, #e74c3c, #e67e22,

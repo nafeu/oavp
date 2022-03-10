@@ -977,7 +977,7 @@ class OavpVisualizer {
      * @use draw
      */
     public OavpVisualizer basicFlatbox(float w, float h, float l, color visibleColor, color shadeColor) {
-      shapes.flatbox(0, 0, 0, w, h, l, visibleColor, shadeColor);
+      shapes.flatbox2(0, 0, 0, w, h, l, visibleColor, shadeColor);
       return OavpVisualizer.this;
     }
 
@@ -1238,6 +1238,24 @@ class OavpVisualizer {
           float z = (i * rowScale);
           float finalLevel = analysis.scaleLeftLevel(gridInterval.getData(i, j));
           shapes.flatbox(x, 0, z, colScale, -finalLevel * scale, rowScale, palette.flat.white, palette.flat.black);
+        }
+      }
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer gridIntervalFlatboxes(float scale, color visibleColor, color shadeColor) {
+      OavpGridInterval gridInterval = OavpVisualizer.this.currGridInterval;
+      float colScale = currWidth / gridInterval.getNumCols();
+      float rowScale = currHeight / gridInterval.getNumRows();
+      for (int i = 0; i < gridInterval.getNumRows(); i++) {
+        for (int j = 0; j < gridInterval.getNumCols(); j++) {
+          float x = (j * colScale);
+          float y = (i * rowScale);
+          shapes.flatbox2(
+            x, y, 0,
+            colScale, rowScale, constrain(gridInterval.getData(i, j), 0, scale),
+            visibleColor, shadeColor
+          );
         }
       }
       return OavpVisualizer.this;

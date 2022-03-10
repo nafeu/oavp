@@ -327,6 +327,65 @@ void setupPreSketchDefaults() {
   entities.addToggle("quantized-toggle-hard").duration(0.3);
   entities.addToggle("quantized-toggle-soft").duration(0.3);
   entities.addCounter("quantized-counter").duration(0.3);
+  entities.addEmissions("spacebar");
+  entities.addEmissions("spacebar-2");
+  entities.addEmissions("spacebar-4");
+  entities.addEmissions("spacebar-8");
+}
+
+void setGlobalDurations(float duration) {
+  entities.addPulser("beat-pulser").duration(duration);
+  entities.addToggle("beat-toggle-hard").duration(duration);
+  entities.addToggle("beat-toggle-soft").duration(duration);
+  entities.addCounter("beat-counter").duration(duration);
+  entities.addPulser("spacebar-pulser").duration(duration);
+  entities.addToggle("spacebar-toggle-hard").duration(duration);
+  entities.addToggle("spacebar-toggle-soft").duration(duration);
+  entities.addCounter("spacebar-counter").duration(duration);
+  entities.addCounter("spacebar-counter-2").duration(duration);
+  entities.addCounter("spacebar-counter-4").duration(duration);
+  entities.addCounter("spacebar-counter-8").duration(duration);
+  entities.addPulser("quantized-pulser").duration(duration);
+  entities.addToggle("quantized-toggle-hard").duration(duration);
+  entities.addToggle("quantized-toggle-soft").duration(duration);
+  entities.addCounter("quantized-counter").duration(duration);
+  emitters.useEmissions("spacebar").duration(duration);
+  emitters.useEmissions("spacebar-2").duration(duration);
+  emitters.useEmissions("spacebar-4").duration(duration);
+  emitters.useEmissions("spacebar-8").duration(duration);
+}
+
+void handleEvents(int code) {
+  if (code == 32 /* SPACE */) {
+    println("[ KEY: SPACE ] Incrementing spacebar entities...");
+    entities.getCounter("spacebar-counter").increment();
+    entities.getPulser("spacebar-pulser").pulse();
+    entities.getToggle("spacebar-toggle-hard").toggle();
+    entities.getToggle("spacebar-toggle-soft").softToggle();
+
+    int spacebarCount = entities.getCounter("spacebar-counter").getCount();
+    boolean isSecondCount = spacebarCount % 2 == 0;
+    boolean isFourthCount = spacebarCount % 4 == 0;
+    boolean isEigthCount = spacebarCount % 8 == 0;
+
+    entities.getCounter("spacebar-counter-2").incrementIf(isSecondCount);
+    entities.getCounter("spacebar-counter-4").incrementIf(isFourthCount);
+    entities.getCounter("spacebar-counter-8").incrementIf(isEigthCount);
+    entities.getRotator("spacebar-rotator").rotate();
+    entities.getRotator("spacebar-rotator-2").rotateIf(isSecondCount);
+    entities.getRotator("spacebar-rotator-4").rotateIf(isFourthCount);
+    entities.getRotator("spacebar-rotator-8").rotateIf(isEigthCount);
+
+    emitters.useEmissions("spacebar").emit();
+    emitters.useEmissions("spacebar-2").emitIf(isSecondCount);
+    emitters.useEmissions("spacebar-4").emitIf(isFourthCount);
+    emitters.useEmissions("spacebar-8").emitIf(isEigthCount);
+  }
+
+  if (code == 49 /* 1 */) { setGlobalDurations(0.3); }
+  if (code == 50 /* 2 */) { setGlobalDurations(1); }
+  if (code == 51 /* 3 */) { setGlobalDurations(2); }
+  if (code == 52 /* 4 */) { setGlobalDurations(5); }
 }
 
 void setupPostSketchDefaults() {

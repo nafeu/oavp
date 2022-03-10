@@ -37,7 +37,6 @@ color COLOR_YELLOW = color(241, 196, 15);
 color COLOR_GREEN = color(39, 174, 96);
 
 public void setupEditorGui() {
-
   framerate = cp5.addFrameRate().setInterval(10).setPosition(width - 20, height - 15).hide();
 
   cfModal = new ControlFont(createFont("Arial", 20));
