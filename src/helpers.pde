@@ -116,24 +116,3 @@ public static boolean inArray(String[] arr, String targetValue) {
   return Arrays.asList(arr).contains(targetValue);
 }
 
-public void nextLyric() {
-  if (lyricIndex == lyrics.length - 1) {
-    lyricIndex = 0;
-  } else {
-    lyricIndex += 1;
-  }
-}
-
-public String getLyricText() {
-  if (lyrics[lyricIndex].contains("|")) {
-    return split(lyrics[lyricIndex], "|")[1];
-  }
-  return lyrics[lyricIndex];
-}
-
-public int getLyricModifier() {
-  if (lyrics[lyricIndex].contains("|")) {
-    return Integer.valueOf(split(lyrics[lyricIndex], "|")[0]);
-  }
-  return 0;
-}

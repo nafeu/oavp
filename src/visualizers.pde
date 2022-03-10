@@ -1549,6 +1549,11 @@ class OavpVisualizer {
       OavpTerrain terrain = OavpVisualizer.this.currTerrain;
       shapes.hill(0, 0, currWidth, currHeight, scale, displacement,
                   terrain.getValues(position, windowSize, phaseShift), position);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer terrainTrees(float scale, float displacement, int windowSize, int phaseShift, float position) {
+      OavpTerrain terrain = OavpVisualizer.this.currTerrain;
       shapes.trees(0, 0, currWidth, currHeight, scale, displacement,
                    terrain.getWindow(position, windowSize, phaseShift), position);
       return OavpVisualizer.this;

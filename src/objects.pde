@@ -1,9 +1,10 @@
 String[] OBJECT_LIST = {
-  "Image",
+  // "Image",
   "Line",
   "Rectangle",
-  "Shader",
+  // "Shader",
   "Spectrum",
+  "RadialSpectrum",
   "Waveform",
   "Circle",
   "Triangle",
@@ -14,7 +15,8 @@ String[] OBJECT_LIST = {
   "SpectrumMesh",
   "ZRectangles",
   "GridInterval",
-  "Lyrics"
+  // "Lyrics",
+  "Terrain"
 };
 
 String[] SHADER_LIST = {
@@ -31,6 +33,7 @@ public OavpObject createObject(String className) {
     case "Rectangle": object = new OavpObjRectangle(); break;
     case "Shader": object = new OavpObjShader(); break;
     case "Spectrum": object = new OavpObjSpectrum(); break;
+    case "RadialSpectrum": object = new OavpObjRadialSpectrum(); break;
     case "Waveform": object = new OavpObjWaveform(); break;
     case "Circle": object = new OavpObjCircle(); break;
     case "Triangle": object = new OavpObjTriangle(); break;
@@ -42,6 +45,7 @@ public OavpObject createObject(String className) {
     case "ZRectangles": object = new OavpObjZRectangles(); break;
     case "GridInterval": object = new OavpObjGridInterval(); break;
     case "Lyrics": object = new OavpObjLyrics(); break;
+    case "Terrain": object = new OavpObjTerrain(); break;
     default: object = new OavpObject();
   }
 
@@ -293,6 +297,47 @@ public class OavpObjSpectrum extends OavpObject {
   }
 }
 
+public class OavpObjRadialSpectrum extends OavpObject {
+  public void setup() {
+    println(
+      "[OavpObjRadialSpectrum - CUSTOM PARAMS] : paramA => scale"
+    );
+
+    variable
+      .variations(
+        "wire"
+      )
+      .set("w", 100)
+      .set("h", 100)
+      .set("strokeColor", palette.flat.white);
+  }
+
+  public void draw() {
+    visualizers
+      .startStyle()
+      .create()
+      .center().middle()
+      .use(variable);
+
+    if (variable.ofVariation("wire")) {
+      visualizers.draw.basicSpectrumRadialWire(
+        variable.val("size"),
+        variable.val("l"),
+        0
+      );
+    } else {
+      visualizers.draw.basicSpectrumRadialBars(
+        variable.val("paramA"),
+        variable.val("size"),
+        variable.val("l"),
+        0
+      );
+    }
+
+    visualizers.done();
+  }
+}
+
 public class OavpObjWaveform extends OavpObject {
   public void setup() {
     variable
@@ -406,7 +451,10 @@ public class OavpObjBullseye extends OavpObject {
     variable
       .variations(
         "rectangular",
-        "boxed"
+        "boxed",
+        "circle-spacebar",
+        "rectangular-spacebar",
+        "boxed-spacebar"
       )
       .set("size", 100)
       .set("w", 100)
@@ -425,8 +473,13 @@ public class OavpObjBullseye extends OavpObject {
   }
 
   public void draw() {
+    if (variable.ofVariation("spacebar")) {
+      visualizers.useInterval("spacebar-interval");
+    } else {
+      visualizers.useInterval(variable.customAttrs.get("varName"));
+    }
+
     visualizers
-      .useInterval(variable.customAttrs.get("varName"))
       .create()
       .center().middle()
       .use(variable);
@@ -445,11 +498,11 @@ public class OavpObjBullseye extends OavpObject {
 
 public class OavpObjSplash extends OavpObject {
   public void setup() {
-    println(
-      "[OavpObjSplash - CUSTOM PARAMS] : paramA > 0 => useSpacebar, paramB => configure trigger cadence (1, 2, 4, 8)"
-    );
-
     variable
+      .params(
+        "useSpacebar",
+        "cadence"
+      )
       .variations(
         "rectangular",
         "boxed"
@@ -595,11 +648,8 @@ public class OavpObjZRectangles extends OavpObject {
 
 public class OavpObjGridInterval extends OavpObject {
   public void setup() {
-    println(
-      "[OavpObjGridInterval - CUSTOM PARAMS] : paramA changes the scale"
-    );
-
     variable
+      .params("scale")
       .variations(
         "dimensional",
         "diagonal",
@@ -664,21 +714,17 @@ public class OavpObjGridInterval extends OavpObject {
 }
 
 public class OavpObjLyrics extends OavpObject {
-  public void useOptions() {
-    header("Configure Lyrics")
-      .option("size", "number");
-  }
-
   public void setup() {
     variable
-      .set("size", int((float) getModalValue("size")));
+      .set("size", 10)
+      .set("fillColor", palette.flat.white);
   }
 
   public void draw() {
     text.create()
       .center().middle()
       .use(variable)
-      .write(getLyricText())
+      .write("LYRICS HERE")
       .done();
   }
 }
@@ -717,5 +763,52 @@ public class OavpObjImage extends OavpObject {
         opacity
       )
       .done();
+  }
+}
+
+public class OavpObjTerrain extends OavpObject {
+  public void setup() {
+    variable
+      .variations(
+        "trees"
+      )
+      .params(
+        "displacement",
+        "window",
+        "phaseShift",
+        "position"
+      )
+      .set("size", 10)
+      .set("paramA", 50)
+      .set("paramB", 100)
+      .set("paramC", 100)
+      .set("paramD", 50)
+      .set("strokeColor", palette.flat.white);
+
+    entities.addTerrain(variable.name);
+  }
+
+  public void draw() {
+    float scale = variable.val("size");
+    float displacement = variable.val("paramA");
+    int window = max(1, int(variable.val("paramB")));
+    int phaseShift = max(1, int(variable.val("paramC")));
+    float position = max(0, variable.val("paramD"));
+
+    visualizers
+      .useTerrain(variable.name)
+      .create()
+      .center().middle()
+      .use(variable)
+      .moveLeft(variable.val("w") / 2)
+      .moveUp(variable.val("h") / 2);
+
+    if (variable.ofVariation("trees")) {
+      visualizers.draw.terrainTrees(scale, displacement, window, phaseShift, position);
+    } else {
+      visualizers.draw.terrainHills(scale, displacement, window, phaseShift, position);
+    }
+
+    visualizers.done();
   }
 }
