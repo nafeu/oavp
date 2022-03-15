@@ -26,6 +26,7 @@ String toolbarLabelWeight = "[b] weight";
 String toolbarLabelModifier = "[z] modifiers";
 String toolbarLabelVariation = "[v] variation";
 String toolbarLabelParams = "[p] params";
+String toolbarLabelModDelay = "[o] mod delay";
 
 color COLOR_WHITE = color(255, 255, 255);
 color COLOR_BLACK = color(0, 0, 0);
@@ -54,7 +55,8 @@ public void setupEditorGui() {
        toolbarLabelWeight,
        toolbarLabelModifier,
        toolbarLabelVariation,
-       toolbarLabelParams
+       toolbarLabelParams,
+       toolbarLabelModDelay
      })
      .hide()
      ;
@@ -257,6 +259,7 @@ public void setupEditorGui() {
   cp5.addTextlabel("strokeWeightVarMeta").setPosition(10 * 16, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("strokeColorVarMeta").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("fillColorVarMeta").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("modDelayVarMeta").setText("modDelay: ").setPosition(10 * 16, 40).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
 
   strokeColorVarMetaButton = cp5.addBang("strokeColorButtonVarMeta").setPosition(10 * 16 + 60, 20 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
   fillColorVarMetaButton = cp5.addBang("fillColorButtonVarMeta").setPosition(10 * 16 + 60, 30 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");

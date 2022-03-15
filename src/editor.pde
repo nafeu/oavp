@@ -7,6 +7,7 @@ int TOOL_WEIGHT = 5;
 int TOOL_MODIFIER = 6;
 int TOOL_VARIATION = 7;
 int TOOL_PARAMS = 8;
+int TOOL_MOD_DELAY = 9;
 
 // KEYS
 int KEY_A = 65;
@@ -174,6 +175,8 @@ public class OavpEditor {
         handleToolVariationInputs();
       } else if (this.activeTool == TOOL_PARAMS) {
         handleToolParamsInputs();
+      } else if (this.activeTool == TOOL_MOD_DELAY) {
+        handleToolModDelayInputs();
       }
     }
 
@@ -206,6 +209,7 @@ public class OavpEditor {
         if (input.isPressed(KEY_V)) { this.switchTool(TOOL_VARIATION); }
         if (input.isPressed(KEY_Z)) { this.switchTool(TOOL_MODIFIER); }
         if (input.isPressed(KEY_P)) { this.switchTool(TOOL_PARAMS); }
+        if (input.isPressed(KEY_O)) { this.switchTool(TOOL_MOD_DELAY); }
       }
 
       if (input.isPressed(KEY_D)) { objects.duplicate(); }
@@ -340,6 +344,13 @@ public class OavpEditor {
         editorToolbar.changeItem(toolbarLabelParams, "selected", true);
         editorParams.show();
         break;
+      case 9:
+        this.activeTool = TOOL_MOD_DELAY;
+        setHelpText(""
+          + "[mouse or up/down] to edit mod delay\n"
+        );
+        editorToolbar.changeItem(toolbarLabelModDelay, "selected", true);
+        break;
     }
   }
 
@@ -354,6 +365,18 @@ public class OavpEditor {
           Object fieldValue = field.get(objects.getActiveVariable());
 
           originalValues.put(fieldName, fieldValue);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
+      for (String rawFieldName : NON_MODIFIER_FIELDS) {
+        try {
+          Field field = objects.getActiveVariable().getClass().getDeclaredField(rawFieldName);
+
+          Object fieldValue = field.get(objects.getActiveVariable());
+
+          originalValues.put(rawFieldName, fieldValue);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -709,6 +732,37 @@ public class OavpEditor {
     if (input.isPressed(DOWN)) { this.setSelectedParamIndex(this.selectedParamIndex + 1); }
     if (input.isPressed(RIGHT)) { this.setParamValue(this.getParamValue() + deltaKeys); }
     if (input.isPressed(LEFT)) { this.setParamValue(this.getParamValue() - deltaKeys); }
+
+    updateEditorVariableMeta();
+  }
+
+  int DELTA_MOD_DELAY_PRECISE_KEYS = 1;
+  int DELTA_MOD_DELAY_SNAP_KEYS = 5;
+  int DELTA_MOD_DELAY_PRECISE_MOUSE = 1;
+  int DELTA_MOD_DELAY_SNAP_MOUSE = 5;
+
+  private void handleToolModDelayInputs() {
+    int deltaKeys = DELTA_MOD_DELAY_PRECISE_KEYS;
+    int deltaMouse = DELTA_MOD_DELAY_PRECISE_MOUSE;
+
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_MOD_DELAY_SNAP_KEYS;
+      deltaMouse = DELTA_MOD_DELAY_SNAP_MOUSE;
+    }
+
+    if (input.isPressed(UP)) { previewEdit("modDelay", deltaKeys); commitEdit("modDelay"); }
+    if (input.isPressed(DOWN)) { previewEdit("modDelay", deltaKeys * -1); commitEdit("modDelay"); }
+
+    if (input.isMousePressed()) {
+      previewEdit("modDelay", snap(input.getYGridTicks() * -1, deltaMouse));
+    }
+
+    if (input.isMouseReleased()) {
+      commitEdit("modDelay");
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {}
 
     updateEditorVariableMeta();
   }
@@ -1086,6 +1140,20 @@ public class OavpEditor {
           .draw.positionalLines(width)
           .done();
         break;
+
+      case 9: // MOD_DELAY
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.darkGreen)
+          .noFillStyle()
+          .strokeWeightStyle(0.5)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.basicRectangle(activeVariable.modDelay, activeVariable.modDelay, 50)
+          .draw.basicSquare(25)
+          .draw.basicCircle(5)
+          .done();
+        break;
     }
   }
 
@@ -1268,6 +1336,7 @@ public void updateEditorVariableMeta() {
   cp5.get(Textlabel.class, "lVarMeta").setText("l: " + activeVariable.l);
   cp5.get(Textlabel.class, "sizeVarMeta").setText("size: " + activeVariable.size);
   cp5.get(Textlabel.class, "strokeWeightVarMeta").setText("strokeWeight: " + activeVariable.strokeWeight);
+  cp5.get(Textlabel.class, "modDelayVarMeta").setText("modDelay: " + activeVariable.modDelay);
 
   strokeColorVarMetaButton.setColorForeground(activeVariable.strokeColor);
   fillColorVarMetaButton.setColorForeground(activeVariable.fillColor);
@@ -1303,6 +1372,7 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
   editorToolbar.changeItem(toolbarLabelParams, "selected", false);
+  editorToolbar.changeItem(toolbarLabelModDelay, "selected", false);
   editorColorButtons.hide();
   editorModifiers.hide();
   editorVariations.hide();

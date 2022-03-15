@@ -326,7 +326,10 @@ void setupPreSketchDefaults() {
   entities.addEmissions("spacebar-2");
   entities.addEmissions("spacebar-4");
   entities.addEmissions("spacebar-8");
-  entities.addInterval("spacebar-interval", 10, 1);
+
+  entities.addInterval("spacebar-pulser-interval", 10, 1);
+
+  setupPreSketchIntervals();
 }
 
 void setGlobalDurations(float duration) {
@@ -404,8 +407,10 @@ void updateSketchDefaults() {
   entities.getToggle("quantized-toggle-hard").toggleIf(isQuantizedOnset);
   entities.getToggle("quantized-toggle-soft").softToggleIf(isQuantizedOnset);
   entities.getCounter("quantized-counter").incrementIf(isQuantizedOnset);
-  entities.getInterval("spacebar-interval")
+  entities.getInterval("spacebar-pulser-interval")
     .update(entities.getPulser("spacebar-pulser").getValue());
+
+  updateDefaultIntervals();
 }
 
 void drawSketchDefaults() {

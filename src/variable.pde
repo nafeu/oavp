@@ -27,6 +27,7 @@ public class OavpVariable {
   public float paramC = 0; public float paramCMod = 0; public String paramCModType = "none";
   public float paramD = 0; public float paramDMod = 0; public String paramDModType = "none";
   public float paramE = 0; public float paramEMod = 0; public String paramEModType = "none";
+  public int modDelay = 0;
 
   public HashMap<String, String> paramLabels;
   public HashMap<String, Object> customAttrs;
@@ -119,14 +120,14 @@ public class OavpVariable {
       if (field.get(this).getClass() == Integer.class) {
         int baseValue = (int) field.get(this);
         float mod = (float) fieldMod.get(this);
-        float modMultiplier = getMod((String) fieldModType.get(this));
+        float modMultiplier = getMod((String) fieldModType.get(this), this.modDelay);
         float output = baseValue + (mod * modMultiplier);
         return output;
       }
       if (field.get(this).getClass() == Float.class) {
         float baseValue = (float) field.get(this);
         float mod = (float) fieldMod.get(this);
-        float modMultiplier = getMod((String) fieldModType.get(this));
+        float modMultiplier = getMod((String) fieldModType.get(this), this.modDelay);
         float output = baseValue + (mod * modMultiplier);
         return output;
       }
@@ -341,6 +342,11 @@ public class OavpVariable {
     return this;
   }
 
+  public OavpVariable modDelay(int input) {
+    this.modDelay = input;
+    return this;
+  }
+
   public String getVariation() {
     return this.variations.get(this.variation);
   }
@@ -350,11 +356,11 @@ public class OavpVariable {
   }
 
   public color strokeColor() {
-    return this.strokeColorMod == 0 ? this.strokeColor : opacity(this.strokeColor, (map(this.strokeColorMod, 0, 200, 0, 20) * getMod(this.strokeColorModType)));
+    return this.strokeColorMod == 0 ? this.strokeColor : opacity(this.strokeColor, (map(this.strokeColorMod, 0, 200, 0, 20) * getMod(this.strokeColorModType, 0)));
   }
 
   public color fillColor() {
-    return this.fillColorMod == 0 ? this.fillColor : opacity(this.fillColor, (map(this.fillColorMod, 0, 200, 0, 20) * getMod(this.fillColorModType)));
+    return this.fillColorMod == 0 ? this.fillColor : opacity(this.fillColor, (map(this.fillColorMod, 0, 200, 0, 20) * getMod(this.fillColorModType, 0)));
   }
 
   private Object get(String fieldName) {

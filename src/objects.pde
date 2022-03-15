@@ -2,7 +2,7 @@ String[] OBJECT_LIST = {
   // "Image",
   "Line",
   "Rectangle",
-  // "Shader",
+  "Shader",
   "Spectrum",
   "RadialSpectrum",
   "Waveform",
@@ -108,6 +108,16 @@ public class OavpObject {
         cloneVariable.set(fieldName, fieldValue);
         cloneVariable.set(fieldName + "Mod", fieldModValue);
         cloneVariable.set(fieldName + "ModType", fieldModTypeValue);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    for (String rawFieldName : NON_MODIFIER_FIELDS) {
+      try {
+        Field field = this.variable.getClass().getDeclaredField(rawFieldName);
+        Object fieldValue = field.get(this.variable);
+        cloneVariable.set(rawFieldName, fieldValue);
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -474,7 +484,7 @@ public class OavpObjBullseye extends OavpObject {
 
   public void draw() {
     if (variable.ofVariation("spacebar")) {
-      visualizers.useInterval("spacebar-interval");
+      visualizers.useInterval("spacebar-pulser-interval");
     } else {
       visualizers.useInterval(variable.customAttrs.get("varName"));
     }
