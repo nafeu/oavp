@@ -254,4 +254,34 @@ public class OavpShape {
       ellipse(x, y + (i * distance), (radius / 2) + (radius / 2) * mult, distance * 1.25);
     }
   }
+
+  public void curvedLine(
+    float xStart, float yStart,
+    float xEnd,   float yEnd,
+    float x1,     float y1
+  ) {
+    beginShape();
+    curveVertex(xStart, yStart);
+    curveVertex(xStart, yStart);
+    curveVertex(x1, y1);
+    curveVertex(xEnd, yEnd);
+    curveVertex(xEnd, yEnd);
+    endShape();
+  }
+
+  public void curvedLine(
+    float xStart, float yStart,
+    float xEnd,   float yEnd,
+    float x1,     float y1,
+    float x2,     float y2
+  ) {
+    beginShape();
+    curveVertex(xStart, yStart);
+    curveVertex(xStart, yStart);
+    curveVertex(x1, y1);
+    curveVertex(x2, y2);
+    curveVertex(xEnd, yEnd);
+    curveVertex(xEnd, yEnd);
+    endShape();
+  }
 }

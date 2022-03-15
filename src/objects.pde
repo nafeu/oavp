@@ -1,6 +1,7 @@
 String[] OBJECT_LIST = {
   // "Image",
   "Line",
+  "CurvedLine",
   "Rectangle",
   "Shader",
   "Spectrum",
@@ -30,6 +31,7 @@ public OavpObject createObject(String className) {
   switch (className) {
     case "Image": object = new OavpObjImage(); break;
     case "Line": object = new OavpObjLine(); break;
+    case "CurvedLine": object = new OavpObjCurvedLine(); break;
     case "Rectangle": object = new OavpObjRectangle(); break;
     case "Shader": object = new OavpObjShader(); break;
     case "Spectrum": object = new OavpObjSpectrum(); break;
@@ -265,6 +267,44 @@ public class OavpObjLine extends OavpObject {
       visualizers.draw.basicDiagonalLine(variable.val("w"), variable.val("h"), variable.val("l"));
     } else {
       visualizers.draw.basicHorizontalLine(variable.val("w"), variable.val("h"), variable.val("l"));
+    }
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjCurvedLine extends OavpObject {
+  public void setup() {
+    variable
+      .variations(
+        "two-point"
+      )
+      .set("w", 100)
+      .set("paramB", 100)
+      .set("paramD", -100)
+      .set("strokeColor", palette.flat.white);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable);
+
+    if (variable.ofVariation("two-point")) {
+      visualizers.draw.basicCurvedLine(
+        variable.val("w"),
+        variable.val("paramA"),
+        variable.val("paramB"),
+        variable.val("paramC"),
+        variable.val("paramD")
+      );
+    } else {
+      visualizers.draw.basicCurvedLine(
+        variable.val("w"),
+        variable.val("paramA"),
+        variable.val("paramB")
+      );
     }
 
     visualizers.done();
