@@ -604,8 +604,8 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicHorizontalLine(float w, float h, float l) {
-      line(-w/2, 0, 0, w/2, 0, l);
+    public OavpVisualizer basicHorizontalLine(float w, float h, float l, float displacement) {
+      line(-w/2 + displacement, 0, 0, w/2 + displacement, 0, l);
       return OavpVisualizer.this;
     }
 
@@ -614,19 +614,21 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicCurvedLine(float w, float x1, float y1) {
+    public OavpVisualizer basicCurvedLine(float w, float x1, float y1, float tightness) {
       shapes.curvedLine(
         -w/2, 0, w/2, 0,
-        x1, y1
+        x1, y1,
+        tightness
       );
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicCurvedLine(float w, float x1, float y1, float x2, float y2) {
+    public OavpVisualizer basicCurvedLine(float w, float x1, float y1, float x2, float y2, float tightness) {
       shapes.curvedLine(
         -w/2, 0, w/2, 0,
         -w/4 + x1, y1,
-        w/4 + x2, y2
+        w/4 + x2, y2,
+        tightness
       );
       return OavpVisualizer.this;
     }

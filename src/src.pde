@@ -385,6 +385,15 @@ void handleEvents(int code) {
   if (code == 50 /* 2 */) { setGlobalDurations(1); }
   if (code == 51 /* 3 */) { setGlobalDurations(2); }
   if (code == 52 /* 4 */) { setGlobalDurations(5); }
+
+  if (code == KEY_Y) {
+    String screenshotName = str(day())
+      + "-" + str(month())
+      + "-" + str(year())
+      + "-" + str(hour()) + str(minute()) + str(second());
+
+    saveFrame("screenshots/" + screenshotName + ".png");
+  }
 }
 
 void setupPostSketchDefaults() {

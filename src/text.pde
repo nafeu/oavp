@@ -276,7 +276,7 @@ public class OavpText {
     this
       .strokeColor(variable.strokeColor(), 255)
       .fillColor(variable.fillColor(), 255)
-      .size(variable.val("size"))
+      .size(variable.val("s"))
       .move(
         variable.val("x"),
         variable.val("y"),

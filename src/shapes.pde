@@ -258,8 +258,10 @@ public class OavpShape {
   public void curvedLine(
     float xStart, float yStart,
     float xEnd,   float yEnd,
-    float x1,     float y1
+    float x1,     float y1,
+    float tightness
   ) {
+    curveTightness(tightness);
     beginShape();
     curveVertex(xStart, yStart);
     curveVertex(xStart, yStart);
@@ -273,8 +275,10 @@ public class OavpShape {
     float xStart, float yStart,
     float xEnd,   float yEnd,
     float x1,     float y1,
-    float x2,     float y2
+    float x2,     float y2,
+    float tightness
   ) {
+    curveTightness(tightness);
     beginShape();
     curveVertex(xStart, yStart);
     curveVertex(xStart, yStart);

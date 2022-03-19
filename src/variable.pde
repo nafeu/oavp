@@ -18,7 +18,7 @@ public class OavpVariable {
   public float w = 100; public float wMod = 0; public String wModType = "none";
   public float h = 100; public float hMod = 0; public String hModType = "none";
   public float l = 0; public float lMod = 0; public String lModType = "none";
-  public float size = 100; public float sizeMod = 0; public String sizeModType = "none";
+  public float s = 100; public float sMod = 0; public String sModType = "none";
   public color strokeColor; public float strokeColorMod = 0; public String strokeColorModType = "none";
   public color fillColor; public float fillColorMod = 0; public String fillColorModType = "none";
   public float strokeWeight = 2; public float strokeWeightMod = 0; public String strokeWeightModType = "none";
@@ -117,6 +117,7 @@ public class OavpVariable {
       Field field = this.getClass().getDeclaredField(prop);
       Field fieldMod = this.getClass().getDeclaredField(prop + "Mod");
       Field fieldModType = this.getClass().getDeclaredField(prop + "ModType");
+
       if (field.get(this).getClass() == Integer.class) {
         int baseValue = (int) field.get(this);
         float mod = (float) fieldMod.get(this);
@@ -124,6 +125,7 @@ public class OavpVariable {
         float output = baseValue + (mod * modMultiplier);
         return output;
       }
+
       if (field.get(this).getClass() == Float.class) {
         float baseValue = (float) field.get(this);
         float mod = (float) fieldMod.get(this);
@@ -137,18 +139,18 @@ public class OavpVariable {
     return 0.0;
   }
 
-  public OavpVariable size(float input) {
-    this.size = input;
+  public OavpVariable s(float input) {
+    this.s = input;
     return this;
   }
 
-  public OavpVariable sizeMod(float input) {
-    this.sizeMod = input;
+  public OavpVariable sMod(float input) {
+    this.sMod = input;
     return this;
   }
 
-  public OavpVariable sizeModType(String input) {
-    this.sizeModType = input;
+  public OavpVariable sModType(String input) {
+    this.sModType = input;
     return this;
   }
 

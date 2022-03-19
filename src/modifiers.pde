@@ -8,7 +8,7 @@ String[] MODIFIER_FIELDS = {
   "wMod",
   "hMod",
   "lMod",
-  "sizeMod",
+  "sMod",
   "strokeColorMod",
   "strokeWeightMod",
   "fillColorMod",
@@ -53,6 +53,8 @@ String[] MODIFIER_TYPES = {
   "quantized-toggle-hard",
   "quantized-toggle-soft",
   "quantized-counter",
+  "mouse-x",
+  "mouse-y"
 };
 
 /*
@@ -118,6 +120,8 @@ void setupPreSketchIntervals() {
   entities.addInterval("quantized-toggle-hard", 100, 1);
   entities.addInterval("quantized-toggle-soft", 100, 1);
   entities.addInterval("quantized-counter", 100, 1);
+  entities.addInterval("mouse-x", 100, 1);
+  entities.addInterval("mouse-y", 100, 1);
 }
 
 void updateDefaultIntervals() {
@@ -149,6 +153,8 @@ void updateDefaultIntervals() {
   entities.getInterval("quantized-toggle-hard").updateRaw(entities.getToggle("quantized-toggle-hard").getValue());
   entities.getInterval("quantized-toggle-soft").updateRaw(entities.getToggle("quantized-toggle-soft").getValue());
   entities.getInterval("quantized-counter").updateRaw(entities.getCounter("quantized-counter").getValue());
+  entities.getInterval("mouse-x").updateRaw(normalMouseX);
+  entities.getInterval("mouse-y").updateRaw(normalMouseY);
 }
 
 public float getMod(String type, int modDelay) {
@@ -240,6 +246,12 @@ public float getMod(String type, int modDelay) {
       break;
     case "quantized-counter":
       out = entities.getInterval("quantized-counter").getOneDimensionalData(delayIndex);
+      break;
+    case "mouse-x":
+      out = entities.getInterval("mouse-x").getOneDimensionalData(delayIndex);
+      break;
+    case "mouse-y":
+      out = entities.getInterval("mouse-y").getOneDimensionalData(delayIndex);
       break;
     default:
       out = 1.0;

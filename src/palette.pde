@@ -152,6 +152,13 @@ public class OavpPalette {
     {
       #FFFFFF, #000000
     },
+    // 0
+    {
+      #1B1B1E, #96031A, #FAA916, #FBFFFE, #6D676E
+    },
+    {
+      #001B2E, #294C60, #FFC49B, #ADB6C4, #FFEFD3
+    },
     // 1
     {
       #031926, #468189, #77ACA2, #9DBEBB, #F4E9CD

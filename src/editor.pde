@@ -465,15 +465,15 @@ public class OavpEditor {
       deltaMouse = DELTA_RESIZE_SNAP_MOUSE;
     }
 
-    if (input.isPressed(UP)) { previewEdit("size", deltaKeys); commitEdit("size"); }
-    if (input.isPressed(DOWN)) { previewEdit("size", deltaKeys * -1); commitEdit("size"); }
+    if (input.isPressed(UP)) { previewEdit("s", deltaKeys); commitEdit("s"); }
+    if (input.isPressed(DOWN)) { previewEdit("s", deltaKeys * -1); commitEdit("s"); }
 
     if (input.isMousePressed()) {
-      previewEdit("size", snap(input.getYGridTicks() * -1, deltaMouse));
+      previewEdit("s", snap(input.getYGridTicks() * -1, deltaMouse));
     }
 
     if (input.isMouseReleased()) {
-      commitEdit("size");
+      commitEdit("s");
       input.resetTicks();
     }
 
@@ -969,7 +969,7 @@ public class OavpEditor {
           .noFillStyle()
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
-          .draw.basicRectangle(activeVariable.size, activeVariable.size, 50)
+          .draw.basicRectangle(activeVariable.s, activeVariable.s, 50)
           .draw.basicSquare(25)
           .draw.basicCircle(5)
           .done();
@@ -1334,7 +1334,7 @@ public void updateEditorVariableMeta() {
   cp5.get(Textlabel.class, "wVarMeta").setText("w: " + activeVariable.w);
   cp5.get(Textlabel.class, "hVarMeta").setText("h: " + activeVariable.h);
   cp5.get(Textlabel.class, "lVarMeta").setText("l: " + activeVariable.l);
-  cp5.get(Textlabel.class, "sizeVarMeta").setText("size: " + activeVariable.size);
+  cp5.get(Textlabel.class, "sVarMeta").setText("s: " + activeVariable.s);
   cp5.get(Textlabel.class, "strokeWeightVarMeta").setText("strokeWeight: " + activeVariable.strokeWeight);
   cp5.get(Textlabel.class, "modDelayVarMeta").setText("modDelay: " + activeVariable.modDelay);
 

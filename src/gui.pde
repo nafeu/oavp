@@ -255,7 +255,7 @@ public void setupEditorGui() {
   cp5.addTextlabel("wVarMeta").setPosition(10 * 11, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("hVarMeta").setPosition(10 * 11, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("lVarMeta").setPosition(10 * 11, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
-  cp5.addTextlabel("sizeVarMeta").setPosition(10 * 11, 40).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("sVarMeta").setPosition(10 * 11, 40).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("strokeWeightVarMeta").setPosition(10 * 16, 10).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("strokeColorVarMeta").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("fillColorVarMeta").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
