@@ -79,10 +79,6 @@ String[] MODIFIER_TYPES = {
   "mouse-y"
 };
 
-String[] ITERATION_FUNCS = {
-  "none"
-};
-
 /*
 
 entities.getPulser("spacebar-pulser").getValue();
@@ -285,10 +281,37 @@ public float getMod(String type, int modDelay) {
   return out;
 }
 
+String[] ITERATION_FUNCS = {
+  "i",
+  "1.618i",
+  "2i",
+  "i / 2",
+  "i^2",
+  "(i^2) / 2"
+};
+
 public float getFunc(String type, int iteration) {
   float out;
 
   switch(type) {
+    case "i":
+      out = iteration;
+      break;
+    case "1.618i":
+      out = 1.618 * iteration;
+      break;
+    case "2i":
+      out = 2 * iteration;
+      break;
+    case "i / 2":
+      out = iteration / 2;
+      break;
+    case "i^2":
+      out = iteration * iteration;
+      break;
+    case "(i^2) / 2":
+      out = (iteration * iteration) / 2;
+      break;
     default:
       out = iteration;
   }

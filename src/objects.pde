@@ -104,14 +104,20 @@ public class OavpObject {
         Field field = this.variable.getClass().getDeclaredField(fieldName);
         Field fieldMod = this.variable.getClass().getDeclaredField(fieldName + "Mod");
         Field fieldModType = this.variable.getClass().getDeclaredField(fieldName + "ModType");
+        Field fieldIter = this.variable.getClass().getDeclaredField(fieldName + "Iter");
+        Field fieldIterFunc = this.variable.getClass().getDeclaredField(fieldName + "IterFunc");
 
         Object fieldValue = field.get(this.variable);
         Object fieldModValue = fieldMod.get(this.variable);
         Object fieldModTypeValue = fieldModType.get(this.variable);
+        Object fieldIterValue = fieldIter.get(this.variable);
+        Object fieldIterFuncValue = fieldIterFunc.get(this.variable);
 
         cloneVariable.set(fieldName, fieldValue);
         cloneVariable.set(fieldName + "Mod", fieldModValue);
         cloneVariable.set(fieldName + "ModType", fieldModTypeValue);
+        cloneVariable.set(fieldName + "Iter", fieldIterValue);
+        cloneVariable.set(fieldName + "IterFunc", fieldIterFuncValue);
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -204,10 +210,10 @@ public class OavpObjShader extends OavpObject {
       .create()
       .center().middle()
       .noStrokeStyle()
-      .use(variable);
+      .use(variable, iteration);
 
     visualizers.useShader(variable.name + (String) variable.customAttrs.get("shader"));
-    visualizers.draw.basicRectangle(variable.val("w"), variable.val("h"));
+    visualizers.draw.basicRectangle(variable.val("w", iteration), variable.val("h", iteration));
     visualizers.done();
   }
 }
@@ -228,16 +234,16 @@ public class OavpObjTriangle extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     if (variable.ofVariation("equilateral")) {
-      visualizers.draw.basicEquilateralTriangle(variable.val("s"));
+      visualizers.draw.basicEquilateralTriangle(variable.val("s", iteration));
     } else if (variable.ofVariation("left-right")) {
-      visualizers.draw.basicLeftRightTriangle(variable.val("w"), variable.val("h"));
+      visualizers.draw.basicLeftRightTriangle(variable.val("w", iteration), variable.val("h", iteration));
     } else if (variable.ofVariation("right-right")) {
-      visualizers.draw.basicRightRightTriangle(variable.val("w"), variable.val("h"));
+      visualizers.draw.basicRightRightTriangle(variable.val("w", iteration), variable.val("h", iteration));
     } else {
-      visualizers.draw.basicTriangle(variable.val("w"), variable.val("h"));
+      visualizers.draw.basicTriangle(variable.val("w", iteration), variable.val("h", iteration));
     }
 
     visualizers.done();
@@ -261,14 +267,27 @@ public class OavpObjLine extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     if (variable.ofVariation("vertical")) {
-      visualizers.draw.basicVerticalLine(variable.val("w"), variable.val("h"), variable.val("l"));
+      visualizers.draw.basicVerticalLine(
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("l", iteration)
+      );
     } else if (variable.ofVariation("diagonal")) {
-      visualizers.draw.basicDiagonalLine(variable.val("w"), variable.val("h"), variable.val("l"));
+      visualizers.draw.basicDiagonalLine(
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("l", iteration)
+      );
     } else {
-      visualizers.draw.basicHorizontalLine(variable.val("w"), variable.val("h"), variable.val("l"), variable.val("s"));
+      visualizers.draw.basicHorizontalLine(
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("l", iteration),
+        variable.val("s", iteration)
+      );
     }
 
     visualizers.done();
@@ -292,23 +311,23 @@ public class OavpObjCurvedLine extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     if (variable.ofVariation("two-point")) {
       visualizers.draw.basicCurvedLine(
-        variable.val("w"),
-        variable.val("paramA"),
-        variable.val("paramB"),
-        variable.val("paramC"),
-        variable.val("paramD"),
-        map(variable.val("s"), -1000, 1000, -5.0, 5.0)
+        variable.val("w", iteration),
+        variable.val("paramA", iteration),
+        variable.val("paramB", iteration),
+        variable.val("paramC", iteration),
+        variable.val("paramD", iteration),
+        map(variable.val("s", iteration), -1000, 1000, -5.0, 5.0)
       );
     } else {
       visualizers.draw.basicCurvedLine(
-        variable.val("w"),
-        variable.val("paramA"),
-        variable.val("paramB"),
-        map(variable.val("s"), -1000, 1000, -5.0, 5.0)
+        variable.val("w", iteration),
+        variable.val("paramA", iteration),
+        variable.val("paramB", iteration),
+        map(variable.val("s", iteration), -1000, 1000, -5.0, 5.0)
       );
     }
 
@@ -335,8 +354,8 @@ public class OavpObjSpectrum extends OavpObject {
       .create()
       .center().middle()
       .use(variable)
-      .moveLeft(variable.val("w") / 2)
-      .moveUp(variable.val("h") / 2);
+      .moveLeft(variable.val("w", iteration) / 2)
+      .moveUp(variable.val("h", iteration) / 2);
 
     if (variable.ofVariation("bars")) {
       visualizers.draw.basicSpectrumBars();
@@ -372,19 +391,19 @@ public class OavpObjRadialSpectrum extends OavpObject {
       .startStyle()
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     if (variable.ofVariation("wire")) {
       visualizers.draw.basicSpectrumRadialWire(
-        variable.val("s"),
-        variable.val("l"),
+        variable.val("s", iteration),
+        variable.val("l", iteration),
         0
       );
     } else {
       visualizers.draw.basicSpectrumRadialBars(
-        variable.val("paramA"),
-        variable.val("s"),
-        variable.val("l"),
+        variable.val("paramA", iteration),
+        variable.val("s", iteration),
+        variable.val("l", iteration),
         0
       );
     }
@@ -409,12 +428,12 @@ public class OavpObjWaveform extends OavpObject {
       .create()
       .center().middle()
       .use(variable)
-      .moveLeft(variable.val("w") / 2);
+      .moveLeft(variable.val("w", iteration) / 2);
 
     if (variable.ofVariation("right-channel")) {
-      visualizers.draw.basicRightWaveformWire(variable.val("s"));
+      visualizers.draw.basicRightWaveformWire(variable.val("s", iteration));
     } else {
-      visualizers.draw.basicLeftWaveformWire(variable.val("s"));
+      visualizers.draw.basicLeftWaveformWire(variable.val("s", iteration));
     }
 
     visualizers.done();
@@ -433,7 +452,7 @@ public class OavpObjCircle extends OavpObject {
       .create()
       .center().middle()
       .use(variable)
-      .draw.basicCircle(variable.val("s"))
+      .draw.basicCircle(variable.val("s", iteration))
       .done();
   }
 }
@@ -450,7 +469,7 @@ public class OavpObjSvg extends OavpObject {
       .create()
       .center().middle()
       .use(variable)
-      .draw.centeredSvg(variable.customAttrs.get("svgName"), variable.val("s") / 100)
+      .draw.centeredSvg(variable.customAttrs.get("svgName"), variable.val("s", iteration) / 100)
       .done();
   }
 }
@@ -470,7 +489,11 @@ public class OavpObjBox extends OavpObject {
       .create()
       .center().middle()
       .use(variable)
-      .draw.basicBox(variable.val("w"), variable.val("h"), variable.val("l"))
+      .draw.basicBox(
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("l", iteration)
+      )
       .done();
   }
 }
@@ -491,9 +514,9 @@ public class OavpObjFlatbox extends OavpObject {
       .center().middle()
       .use(variable)
       .draw.basicFlatbox(
-        variable.val("w"),
-        variable.val("h"),
-        variable.val("l"),
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("l", iteration),
         variable.strokeColor(),
         variable.fillColor()
       )
@@ -537,14 +560,14 @@ public class OavpObjBullseye extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     if (variable.ofVariation("rectangular")) {
-      visualizers.draw.intervalBullseyeRectangle(variable.val("w"), variable.val("h"), 10);
+      visualizers.draw.intervalBullseyeRectangle(variable.val("w", iteration), variable.val("h", iteration), 10);
     } else if (variable.ofVariation("boxed")) {
-      visualizers.draw.intervalBullseyeBox(variable.val("w"), variable.val("h"), variable.val("l"), 10);
+      visualizers.draw.intervalBullseyeBox(variable.val("w", iteration), variable.val("h", iteration), variable.val("l", iteration), 10);
     } else {
-      visualizers.draw.intervalBullseyeCircle(variable.val("s"), 10);
+      visualizers.draw.intervalBullseyeCircle(variable.val("s", iteration), 10);
     }
 
     visualizers.done();
@@ -576,10 +599,10 @@ public class OavpObjSplash extends OavpObject {
   }
 
   public void draw(int iteration) {
-    boolean useSpacebar = variable.val("paramA") > 0;
+    boolean useSpacebar = variable.val("paramA", iteration) > 0;
 
     if (useSpacebar) {
-      float triggerCadence = variable.val("paramB");
+      float triggerCadence = variable.val("paramB", iteration);
 
       if (triggerCadence < 100) {
         visualizers.useEmissions("spacebar");
@@ -597,14 +620,14 @@ public class OavpObjSplash extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     if (variable.ofVariation("rectangular")) {
-      visualizers.draw.emissionSplashRectangle(variable.val("w"), variable.val("h"));
+      visualizers.draw.emissionSplashRectangle(variable.val("w", iteration), variable.val("h", iteration));
     } else if (variable.ofVariation("boxed")) {
-      visualizers.draw.emissionSplashBox(variable.val("w"), variable.val("h"), variable.val("l"));
+      visualizers.draw.emissionSplashBox(variable.val("w", iteration), variable.val("h", iteration), variable.val("l", iteration));
     } else {
-      visualizers.draw.emissionSplashCircle(variable.val("s"));
+      visualizers.draw.emissionSplashCircle(variable.val("s", iteration));
     }
 
     visualizers.done();
@@ -634,17 +657,17 @@ public class OavpObjSpectrumMesh extends OavpObject {
       .create()
       .center().middle()
       .use(variable)
-      .moveLeft(variable.val("w") / 2)
-      .moveUp(variable.val("h") / 2);
+      .moveLeft(variable.val("w", iteration) / 2)
+      .moveUp(variable.val("h", iteration) / 2);
 
     if (variable.ofVariation("dotted")) {
-      visualizers.draw.intervalSpectrumPoints(variable.val("s"), 2);
+      visualizers.draw.intervalSpectrumPoints(variable.val("s", iteration), 2);
     } else if (variable.ofVariation("z-lines")) {
-      visualizers.draw.intervalSpectrumZLines(variable.val("s"), 2);
+      visualizers.draw.intervalSpectrumZLines(variable.val("s", iteration), 2);
     } else if (variable.ofVariation("x-lines")) {
-      visualizers.draw.intervalSpectrumXLines(variable.val("s"), 2);
+      visualizers.draw.intervalSpectrumXLines(variable.val("s", iteration), 2);
     } else {
-      visualizers.draw.intervalSpectrumMesh(variable.val("s"), 2);
+      visualizers.draw.intervalSpectrumMesh(variable.val("s", iteration), 2);
     }
 
     visualizers.done();
@@ -672,7 +695,7 @@ public class OavpObjZRectangles extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     int count = (int) variable.customAttrs.get("count");
     float gap = (float) variable.customAttrs.get("gap");
@@ -682,17 +705,17 @@ public class OavpObjZRectangles extends OavpObject {
         int radius = (int) variable.customAttrs.get("radius");
         visualizers
           .draw.basicZRectangle(
-            variable.val("w") * (1.00 - (gap * i)),
-            variable.val("h") * (1.00 - (gap * i)),
-            oscillate(-variable.val("s"), variable.val("s"), 0.015 - (0.001 * i)),
+            variable.val("w", iteration) * (1.00 - (gap * i)),
+            variable.val("h", iteration) * (1.00 - (gap * i)),
+            oscillate(-variable.val("s", iteration), variable.val("s", iteration), 0.015 - (0.001 * i)),
             radius
           );
       } else {
         visualizers
           .draw.basicZRectangle(
-            variable.val("w") * (1.00 - (gap * i)),
-            variable.val("h") * (1.00 - (gap * i)),
-            oscillate(-variable.val("s"), variable.val("s"), 0.015 - (0.001 * i))
+            variable.val("w", iteration) * (1.00 - (gap * i)),
+            variable.val("h", iteration) * (1.00 - (gap * i)),
+            oscillate(-variable.val("s", iteration), variable.val("s", iteration), 0.015 - (0.001 * i))
           );
       }
     }
@@ -759,7 +782,7 @@ public class OavpObjGridInterval extends OavpObject {
     if (variable.ofVariation("circular")) {
       visualizers.draw.gridIntervalCircles();
     } else if (variable.ofVariation("flatbox")) {
-      visualizers.draw.gridIntervalFlatboxes(variable.val("l"), variable.strokeColor(), variable.fillColor());
+      visualizers.draw.gridIntervalFlatboxes(variable.val("l", iteration), variable.strokeColor(), variable.fillColor());
     } else {
       visualizers.draw.gridIntervalSquares();
     }
@@ -803,10 +826,10 @@ public class OavpObjImage extends OavpObject {
 
     float opacity = 1.0;
 
-    if (variable.val("paramA") > 0) {
-      opacity = 1 - constrain(variable.val("paramA") / 100, 0, 1.0);
-    } else if (variable.val("paramA") < 0) {
-      opacity = constrain(abs(variable.val("paramA")) / 100, 0, 1.0);
+    if (variable.val("paramA", iteration) > 0) {
+      opacity = 1 - constrain(variable.val("paramA", iteration) / 100, 0, 1.0);
+    } else if (variable.val("paramA", iteration) < 0) {
+      opacity = constrain(abs(variable.val("paramA", iteration)) / 100, 0, 1.0);
     }
 
     visualizers.create()
@@ -814,7 +837,7 @@ public class OavpObjImage extends OavpObject {
       .use(variable)
       .draw.img(
         imageName,
-        max(variable.val("s") / 100, 0),
+        max(variable.val("s", iteration) / 100, 0),
         opacity
       )
       .done();
@@ -844,19 +867,19 @@ public class OavpObjTerrain extends OavpObject {
   }
 
   public void draw(int iteration) {
-    float scale = variable.val("s");
-    float displacement = variable.val("paramA");
-    int window = max(1, int(variable.val("paramB")));
-    int phaseShift = max(1, int(variable.val("paramC")));
-    float position = max(0, variable.val("paramD"));
+    float scale = variable.val("s", iteration);
+    float displacement = variable.val("paramA", iteration);
+    int window = max(1, int(variable.val("paramB", iteration)));
+    int phaseShift = max(1, int(variable.val("paramC", iteration)));
+    float position = max(0, variable.val("paramD", iteration));
 
     visualizers
       .useTerrain(variable.name)
       .create()
       .center().middle()
       .use(variable)
-      .moveLeft(variable.val("w") / 2)
-      .moveUp(variable.val("h") / 2);
+      .moveLeft(variable.val("w", iteration) / 2)
+      .moveUp(variable.val("h", iteration) / 2);
 
     if (variable.ofVariation("trees")) {
       visualizers.draw.terrainTrees(scale, displacement, window, phaseShift, position);
@@ -879,11 +902,11 @@ public class OavpObjGradient extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable);
+      .use(variable, iteration);
 
     visualizers.draw.basicRectangleGradient(
-      variable.val("w"),
-      variable.val("h"),
+      variable.val("w", iteration),
+      variable.val("h", iteration),
       (color) variable.val("strokeColor"),
       (color) variable.val("fillColor")
     );
