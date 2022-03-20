@@ -509,6 +509,29 @@ class OavpVisualizer {
     return this;
   }
 
+  public OavpVisualizer use(OavpVariable variable, int iteration) {
+    // TODO: Use iterations to modify stroke and fill color
+    this
+      .strokeColor(variable.strokeColor())
+      .fillColor(variable.fillColor())
+      .strokeWeightStyle(variable.val("strokeWeight", iteration))
+      .move(
+        variable.val("x", iteration),
+        variable.val("y", iteration),
+        variable.val("z", iteration)
+      )
+      .rotate(
+        variable.val("xr", iteration),
+        variable.val("yr", iteration),
+        variable.val("zr", iteration)
+      )
+      .dimensions(
+        variable.val("w", iteration),
+        variable.val("h", iteration)
+      );
+    return this;
+  }
+
   class Draw {
 
     private OavpAnalysis analysis;

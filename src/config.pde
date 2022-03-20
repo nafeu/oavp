@@ -1,7 +1,7 @@
 public class OavpConfig {
 
 public String DISPLAY_SETTINGS = "fullscreen";
-public int FRAMERATE = 60;
+public int FRAMERATE = 5;
 public int MOVIE_FPS = 30;
 public String AUDIO_ANALYSIS_SEPERATOR = "|";
 public String EVENTS_SEPERATOR = ",";

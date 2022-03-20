@@ -137,7 +137,7 @@ public class OavpObject {
   }
 
   public void setup() {}
-  public void draw() {}
+  public void draw(int iteration) {}
   public void update() {}
   public void useOptions() {}
 }
@@ -152,15 +152,15 @@ public class OavpObjRectangle extends OavpObject {
       .set("s", 0);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .draw.basicRectangle(
-        variable.val("w"),
-        variable.val("h"),
-        variable.val("paramA")
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("paramA", iteration)
       )
       .done();
   }
@@ -199,7 +199,7 @@ public class OavpObjShader extends OavpObject {
     shader.set("paramE", constrain(variable.val("paramE"), 0, 200) / 200);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -224,7 +224,7 @@ public class OavpObjTriangle extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -257,7 +257,7 @@ public class OavpObjLine extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -288,7 +288,7 @@ public class OavpObjCurvedLine extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -329,7 +329,7 @@ public class OavpObjSpectrum extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .startStyle()
       .create()
@@ -367,7 +367,7 @@ public class OavpObjRadialSpectrum extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .startStyle()
       .create()
@@ -403,7 +403,7 @@ public class OavpObjWaveform extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .startStyle()
       .create()
@@ -428,7 +428,7 @@ public class OavpObjCircle extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -445,7 +445,7 @@ public class OavpObjSvg extends OavpObject {
       .set("svgName", variable.name);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -465,7 +465,7 @@ public class OavpObjBox extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -485,7 +485,7 @@ public class OavpObjFlatbox extends OavpObject {
       .set("fillColor", palette.flat.black);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -527,7 +527,7 @@ public class OavpObjBullseye extends OavpObject {
       .update(entities.getPulser(variable.customAttrs.get("varName")).getValue());
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     if (variable.ofVariation("spacebar")) {
       visualizers.useInterval("spacebar-pulser-interval");
     } else {
@@ -575,7 +575,7 @@ public class OavpObjSplash extends OavpObject {
       .emitIf(analysis.isBeatOnset());
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     boolean useSpacebar = variable.val("paramA") > 0;
 
     if (useSpacebar) {
@@ -628,7 +628,7 @@ public class OavpObjSpectrumMesh extends OavpObject {
     entities.getInterval(variable.name).update(analysis.getSpectrum());
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .useInterval(variable.name)
       .create()
@@ -668,7 +668,7 @@ public class OavpObjZRectangles extends OavpObject {
       .set("strokeColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()
@@ -747,7 +747,7 @@ public class OavpObjGridInterval extends OavpObject {
     }
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .useGridInterval(variable.name)
       .create()
@@ -775,7 +775,7 @@ public class OavpObjLyrics extends OavpObject {
       .set("fillColor", palette.flat.white);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     text.create()
       .center().middle()
       .use(variable)
@@ -798,7 +798,7 @@ public class OavpObjImage extends OavpObject {
     }
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     String imageName = (String) variable.customAttrs.get("image");
 
     float opacity = 1.0;
@@ -843,7 +843,7 @@ public class OavpObjTerrain extends OavpObject {
     entities.addTerrain(variable.name);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     float scale = variable.val("s");
     float displacement = variable.val("paramA");
     int window = max(1, int(variable.val("paramB")));
@@ -875,7 +875,7 @@ public class OavpObjGradient extends OavpObject {
       .set("h", 100);
   }
 
-  public void draw() {
+  public void draw(int iteration) {
     visualizers
       .create()
       .center().middle()

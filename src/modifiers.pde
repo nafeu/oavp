@@ -19,8 +19,30 @@ String[] MODIFIER_FIELDS = {
   "paramEMod"
 };
 
+String[] ITERATION_FIELDS = {
+  "xIter",
+  "xrIter",
+  "yIter",
+  "yrIter",
+  "zIter",
+  "zrIter",
+  "wIter",
+  "hIter",
+  "lIter",
+  "sIter",
+  "strokeColorIter",
+  "strokeWeightIter",
+  "fillColorIter",
+  "paramAIter",
+  "paramBIter",
+  "paramCIter",
+  "paramDIter",
+  "paramEIter"
+};
+
 String[] NON_MODIFIER_FIELDS = {
-  "modDelay"
+  "modDelay",
+  "i"
 };
 
 String[] MODIFIER_TYPES = {
@@ -55,6 +77,10 @@ String[] MODIFIER_TYPES = {
   "quantized-counter",
   "mouse-x",
   "mouse-y"
+};
+
+String[] ITERATION_FUNCS = {
+  "none"
 };
 
 /*
@@ -255,6 +281,16 @@ public float getMod(String type, int modDelay) {
       break;
     default:
       out = 1.0;
+  }
+  return out;
+}
+
+public float getFunc(String type, int iteration) {
+  float out;
+
+  switch(type) {
+    default:
+      out = iteration;
   }
   return out;
 }

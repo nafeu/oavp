@@ -8,6 +8,8 @@ int TOOL_MODIFIER = 6;
 int TOOL_VARIATION = 7;
 int TOOL_PARAMS = 8;
 int TOOL_MOD_DELAY = 9;
+int TOOL_ITERATION = 10;
+int TOOL_ITERATION_COUNT = 11;
 
 // KEYS
 int KEY_A = 65;
@@ -42,6 +44,7 @@ public class OavpEditor {
   private boolean isHelpMode = false;
   private boolean isCreateMode = false;
   private boolean isSelectModifierTypeMode = false;
+  private boolean isSelectIterationFuncMode = false;
   private boolean isSnappingEnabled = true;
   private boolean isModalOpen = false;
   private OavpInput input;
@@ -55,8 +58,12 @@ public class OavpEditor {
   private List<String> selectableObjects;
   private List<String> availableModifierFields;
   private List<String> availableModifierTypes;
+  private List<String> availableIterationFields;
+  private List<String> availableIterationFuncs;
   private int selectedModifierFieldIndex = 0;
   private int selectedModifierTypeIndex = 0;
+  private int selectedIterationFieldIndex = 0;
+  private int selectedIterationFuncIndex = 0;
   private int selectedParamIndex = 0;
   private HashMap<String, Object> originalValues;
   private HashMap<String, String[]> modalOptions;
@@ -72,6 +79,8 @@ public class OavpEditor {
     this.selectableObjects = new ArrayList<String>();
     this.availableModifierFields = new ArrayList<String>();
     this.availableModifierTypes = new ArrayList<String>();
+    this.availableIterationFields = new ArrayList<String>();
+    this.availableIterationFuncs = new ArrayList<String>();
     this.originalValues = new HashMap<String, Object>();
     this.modalOptions = new HashMap<String, String[]>();
     this.modalValues = new HashMap<String, Object>();
@@ -85,6 +94,12 @@ public class OavpEditor {
     }
     for (String modifierType : MODIFIER_TYPES) {
       availableModifierTypes.add(modifierType);
+    }
+    for (String iterationField : ITERATION_FIELDS) {
+      availableIterationFields.add(iterationField);
+    }
+    for (String iterationFunc : ITERATION_FUNCS) {
+      availableIterationFuncs.add(iterationFunc);
     }
   }
 
@@ -177,6 +192,10 @@ public class OavpEditor {
         handleToolParamsInputs();
       } else if (this.activeTool == TOOL_MOD_DELAY) {
         handleToolModDelayInputs();
+      } else if (this.activeTool == TOOL_ITERATION) {
+        handleToolIterationInputs();
+      } else if (this.activeTool == TOOL_ITERATION_COUNT) {
+        handleToolIterationCountInputs();
       }
     }
 
@@ -210,6 +229,8 @@ public class OavpEditor {
         if (input.isPressed(KEY_Z)) { this.switchTool(TOOL_MODIFIER); }
         if (input.isPressed(KEY_P)) { this.switchTool(TOOL_PARAMS); }
         if (input.isPressed(KEY_O)) { this.switchTool(TOOL_MOD_DELAY); }
+        if (input.isPressed(KEY_I)) { this.switchTool(TOOL_ITERATION); }
+        if (input.isPressed(KEY_A)) { this.switchTool(TOOL_ITERATION_COUNT); }
       }
 
       if (input.isPressed(KEY_D)) { objects.duplicate(); }
@@ -324,7 +345,7 @@ public class OavpEditor {
           + "[left/right] to edit intensity of modification\n"
           + "[enter] to select modifier type\n"
         );
-        editorToolbar.changeItem(toolbarLabelModifier, "selected", true);
+        editorToolbar.changeItem(toolbarLabelModifiers, "selected", true);
         editorModifiers.show();
         break;
       case 7:
@@ -350,6 +371,23 @@ public class OavpEditor {
           + "[mouse or up/down] to edit mod delay\n"
         );
         editorToolbar.changeItem(toolbarLabelModDelay, "selected", true);
+        break;
+      case 10:
+        this.activeTool = TOOL_ITERATION;
+        setHelpText(""
+          + "[up/down] to select field to modify\n"
+          + "[left/right] to edit intensity of iteration\n"
+          + "[enter] to select iteration func\n"
+        );
+        editorToolbar.changeItem(toolbarLabelIterations, "selected", true);
+        editorIterations.show();
+        break;
+      case 11:
+        this.activeTool = TOOL_ITERATION_COUNT;
+        setHelpText(""
+          + "[mouse or up/down] to edit iteration count\n"
+        );
+        editorToolbar.changeItem(toolbarLabelIterationCount, "selected", true);
         break;
     }
   }
@@ -767,6 +805,62 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
+  int DELTA_ITERATION_COUNT_PRECISE_KEYS = 1;
+  int DELTA_ITERATION_COUNT_SNAP_KEYS = 5;
+  int DELTA_ITERATION_COUNT_PRECISE_MOUSE = 1;
+  int DELTA_ITERATION_COUNT_SNAP_MOUSE = 5;
+
+  private void handleToolIterationCountInputs() {
+    int deltaKeys = DELTA_ITERATION_COUNT_PRECISE_KEYS;
+    int deltaMouse = DELTA_ITERATION_COUNT_PRECISE_MOUSE;
+
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_ITERATION_COUNT_SNAP_KEYS;
+      deltaMouse = DELTA_ITERATION_COUNT_SNAP_MOUSE;
+    }
+
+    if (input.isPressed(UP)) { previewEdit("i", deltaKeys); commitEdit("i"); }
+    if (input.isPressed(DOWN)) { previewEdit("i", deltaKeys * -1); commitEdit("i"); }
+
+    if (input.isMousePressed()) {
+      previewEdit("i", snap(input.getYGridTicks() * -1, deltaMouse));
+    }
+
+    if (input.isMouseReleased()) {
+      commitEdit("i");
+      input.resetTicks();
+    }
+
+    if (input.isShiftReleased()) {}
+
+    updateEditorVariableMeta();
+  }
+
+  float DELTA_ITERATION_PRECISE_KEYS = 5;
+  float DELTA_ITERATION_SNAP_KEYS = 50;
+
+  private void handleToolIterationInputs() {
+    float deltaKeys = DELTA_ITERATION_PRECISE_KEYS;
+
+    if (this.isSnappingEnabled) {
+      deltaKeys = DELTA_ITERATION_SNAP_KEYS;
+    }
+
+    if (this.isSelectModifierTypeMode) {
+      if (input.isPressed(UP)) { this.setSelectedIterationFuncIndex(this.selectedIterationFuncIndex - 1); }
+      if (input.isPressed(DOWN)) { this.setSelectedIterationFuncIndex(this.selectedIterationFuncIndex + 1); }
+      if (input.isPressed(ENTER)) { handleIterationFuncSelection(this.selectedIterationFuncIndex); }
+    } else {
+      if (input.isPressed(UP)) { this.setSelectedIterationFieldIndex(this.selectedIterationFieldIndex - 1); }
+      if (input.isPressed(DOWN)) { this.setSelectedIterationFieldIndex(this.selectedIterationFieldIndex + 1); }
+      if (input.isPressed(ENTER)) { this.toggleSelectIterationFuncMode(); }
+      if (input.isPressed(RIGHT)) { this.setIterationValue(this.getIterationValue() + deltaKeys); }
+      if (input.isPressed(LEFT)) { this.setIterationValue(this.getIterationValue() - deltaKeys); }
+    }
+
+    updateEditorVariableMeta();
+  }
+
   private void handleCreateModeSelection(int index) {
     this.queuedObjectToCreate = index;
     this.isCreateMode = false;
@@ -816,6 +910,14 @@ public class OavpEditor {
     }
   }
 
+  private void handleIterationFuncSelection(int index) {
+    if (index < ITERATION_FUNCS.length) {
+      setIterationFunc(this.availableIterationFuncs.get(selectedIterationFuncIndex));
+      updateEditorVariableMeta();
+      this.toggleSelectIterationFuncMode();
+    }
+  }
+
   private void toggleEditMode() {
     if (objects.activeObjects.size() > 0 && !this.isCreateMode) {
       this.isEditMode = !this.isEditMode;
@@ -839,7 +941,9 @@ public class OavpEditor {
         editorVariableMeta.hide();
         editorHelp.hide();
         editorSelectModifier.hide();
+        editorSelectIteration.hide();
         editorModifiers.hide();
+        editorIterations.hide();
         editorVariations.hide();
         editorParams.hide();
       }
@@ -886,6 +990,7 @@ public class OavpEditor {
     this.isSelectModifierTypeMode = !this.isSelectModifierTypeMode;
     if (this.isSelectModifierTypeMode) {
       editorSelectModifier.show();
+      editorSelectIteration.hide();
       editorCreateObject.hide();
       editorToolbar.hide();
       editorColorButtons.hide();
@@ -895,6 +1000,7 @@ public class OavpEditor {
       editorVariableMeta.hide();
       editorHelp.hide();
       editorModifiers.hide();
+      editorIterations.hide();
       editorVariations.hide();
       editorParams.hide();
     } else {
@@ -903,6 +1009,50 @@ public class OavpEditor {
       editorToolbar.show();
       if (this.activeTool == TOOL_MODIFIER) {
         editorModifiers.show();
+      }
+      if (this.activeTool == TOOL_ITERATION) {
+        editorIterations.show();
+      }
+      if (this.activeTool == TOOL_VARIATION) {
+        editorVariations.show();
+      }
+      if (this.activeTool == TOOL_PARAMS) {
+        editorParams.show();
+      }
+      editorToggleSnappingButton.show();
+      editorObjectsList.show();
+      editorObjectButtons.show();
+      editorVariableMeta.show();
+      editorHelp.show();
+    }
+  }
+
+  public void toggleSelectIterationFuncMode() {
+    this.isSelectIterationFuncMode = !this.isSelectIterationFuncMode;
+    if (this.isSelectIterationFuncMode) {
+      editorSelectModifier.hide();
+      editorSelectIteration.show();
+      editorCreateObject.hide();
+      editorToolbar.hide();
+      editorColorButtons.hide();
+      editorToggleSnappingButton.hide();
+      editorObjectsList.hide();
+      editorObjectButtons.hide();
+      editorVariableMeta.hide();
+      editorHelp.hide();
+      editorModifiers.hide();
+      editorIterations.hide();
+      editorVariations.hide();
+      editorParams.hide();
+    } else {
+      editorSelectIteration.hide();
+      editorCreateObject.hide();
+      editorToolbar.show();
+      if (this.activeTool == TOOL_MODIFIER) {
+        editorModifiers.show();
+      }
+      if (this.activeTool == TOOL_ITERATION) {
+        editorIterations.show();
       }
       if (this.activeTool == TOOL_VARIATION) {
         editorVariations.show();
@@ -1154,6 +1304,62 @@ public class OavpEditor {
           .draw.basicCircle(5)
           .done();
         break;
+
+      case 10: // ITERATION
+        if (this.isSelectIterationFuncMode) {
+          palette.reset(palette.flat.black, palette.flat.white, 2);
+
+          for (int i = 0; i < ITERATION_FUNCS.length; i++) {
+            boolean isWithinSelectionArea = (this.selectedIterationFuncIndex == i);
+            if (isWithinSelectionArea) {
+              visualizers
+                .create()
+                .move(width / 4, height / 4)
+                .moveDown(20 * i)
+                .strokeColor(palette.flat.darkBlue)
+                .draw.basicRectangle(width / 2, 20, 0, CORNER)
+                .done();
+            }
+          }
+        } else {
+          for (int i = 0; i < ITERATION_FIELDS.length; i++) {
+            boolean isWithinSelectionArea = (this.selectedIterationFieldIndex == i);
+            if (isWithinSelectionArea && cp5.getGroup("editorIterations").isOpen()) {
+              visualizers
+                .create()
+                .move(22, 130)
+                .moveDown(10 * (i - 1) + 5 * i)
+                .strokeColor(palette.flat.darkBlue)
+                .draw.basicRectangle(255, 10, 0, CORNER)
+                .done();
+            }
+          }
+          visualizers
+            .create()
+            .center().middle()
+            .strokeColor(palette.flat.darkBlue)
+            .noFillStyle()
+            .strokeWeightStyle(0.5)
+            .move(activeVariable.x, activeVariable.y, activeVariable.z)
+            .draw.basicCircle(5)
+            .draw.positionalLines(width)
+            .done();
+        }
+        break;
+
+      case 11: // ITERATION_COUNT
+        visualizers
+          .create()
+          .center().middle()
+          .strokeColor(palette.flat.darkSecondary)
+          .noFillStyle()
+          .strokeWeightStyle(0.5)
+          .move(activeVariable.x, activeVariable.y, activeVariable.z)
+          .draw.basicRectangle(activeVariable.i, activeVariable.i, 50)
+          .draw.basicSquare(25)
+          .draw.basicCircle(5)
+          .done();
+        break;
     }
   }
 
@@ -1163,6 +1369,14 @@ public class OavpEditor {
 
   private String getActiveModifierType() {
     return this.availableModifierTypes.get(this.selectedModifierTypeIndex);
+  }
+
+  private String getActiveIterationField() {
+    return this.availableIterationFields.get(this.selectedIterationFieldIndex);
+  }
+
+  private String getActiveIterationFunc() {
+    return this.availableIterationFuncs.get(this.selectedIterationFuncIndex);
   }
 
   private float getModifierValue() {
@@ -1237,6 +1451,55 @@ public class OavpEditor {
     return 0.0;
   }
 
+  private float getIterationValue() {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableIterationFields.get(this.selectedIterationFieldIndex);
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      return (float) field.get(activeVariable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
+  }
+
+  private float setIterationValue(float value) {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableIterationFields.get(this.selectedIterationFieldIndex);
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      field.set(activeVariable, value);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
+  }
+
+  private String getIterationFunc() {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableIterationFields.get(this.selectedIterationFieldIndex) + "Func";
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      return (String) field.get(activeVariable) == "" ? "none" : (String) field.get(activeVariable);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return "none";
+  }
+
+  private float setIterationFunc(String type) {
+    OavpVariable activeVariable = objects.getActiveVariable();
+    try {
+      String fieldName = this.availableIterationFields.get(this.selectedIterationFieldIndex) + "Func";
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+      field.set(activeVariable, type);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return 0.0;
+  }
+
+
   public void drawCreateMenu() {
     palette.reset(palette.flat.black, palette.flat.white, 2);
 
@@ -1271,6 +1534,26 @@ public class OavpEditor {
       this.selectedModifierFieldIndex = 0;
     } else {
       this.selectedModifierFieldIndex = index;
+    }
+  }
+
+  public void setSelectedIterationFuncIndex(int index) {
+    if (index >= ITERATION_FUNCS.length) {
+      this.selectedIterationFuncIndex = ITERATION_FUNCS.length - 1;
+    } else if (index < 0) {
+      this.selectedIterationFuncIndex = 0;
+    } else {
+      this.selectedIterationFuncIndex = index;
+    }
+  }
+
+  public void setSelectedIterationFieldIndex(int index) {
+    if (index >= ITERATION_FIELDS.length) {
+      this.selectedIterationFieldIndex = ITERATION_FIELDS.length - 1;
+    } else if (index < 0) {
+      this.selectedIterationFieldIndex = 0;
+    } else {
+      this.selectedIterationFieldIndex = index;
     }
   }
 
@@ -1337,6 +1620,7 @@ public void updateEditorVariableMeta() {
   cp5.get(Textlabel.class, "sVarMeta").setText("s: " + activeVariable.s);
   cp5.get(Textlabel.class, "strokeWeightVarMeta").setText("strokeWeight: " + activeVariable.strokeWeight);
   cp5.get(Textlabel.class, "modDelayVarMeta").setText("modDelay: " + activeVariable.modDelay);
+  cp5.get(Textlabel.class, "iVarMeta").setText("i: " + activeVariable.i);
 
   strokeColorVarMetaButton.setColorForeground(activeVariable.strokeColor);
   fillColorVarMetaButton.setColorForeground(activeVariable.fillColor);
@@ -1347,6 +1631,13 @@ public void updateEditorVariableMeta() {
     cp5.getController("modifierVal-" + modifierField).setValue((float) activeVariable.get(modifierField));
     cp5.getController("modifierVal-" + modifierField).setBroadcast(true);
     cp5.getController("modifierButton-" + modifierField).setLabel((String) activeVariable.get(modifierField + "Type"));
+  }
+
+  for (String iterationField : ITERATION_FIELDS) {
+    cp5.getController("iterationVal-" + iterationField).setBroadcast(false);
+    cp5.getController("iterationVal-" + iterationField).setValue((float) activeVariable.get(iterationField));
+    cp5.getController("iterationVal-" + iterationField).setBroadcast(true);
+    cp5.getController("iterationButton-" + iterationField).setLabel((String) activeVariable.get(iterationField + "Func"));
   }
 
   for (String paramField : PARAM_FIELDS) {
@@ -1369,12 +1660,15 @@ public void deselectAllToolbarTools() {
   editorToolbar.changeItem(toolbarLabelRotate, "selected", false);
   editorToolbar.changeItem(toolbarLabelColor, "selected", false);
   editorToolbar.changeItem(toolbarLabelWeight, "selected", false);
-  editorToolbar.changeItem(toolbarLabelModifier, "selected", false);
+  editorToolbar.changeItem(toolbarLabelModifiers, "selected", false);
+  editorToolbar.changeItem(toolbarLabelIterations, "selected", false);
   editorToolbar.changeItem(toolbarLabelVariation, "selected", false);
   editorToolbar.changeItem(toolbarLabelParams, "selected", false);
   editorToolbar.changeItem(toolbarLabelModDelay, "selected", false);
+  editorToolbar.changeItem(toolbarLabelIterationCount, "selected", false);
   editorColorButtons.hide();
   editorModifiers.hide();
+  editorIterations.hide();
   editorVariations.hide();
   editorParams.hide();
 }
@@ -1402,6 +1696,20 @@ void controlEvent(ControlEvent theEvent) {
         editor.setSelectedModifierFieldIndex(index);
         objects.getActiveVariable().set(prop, val);
         // println("event from modifierVal " + theEvent.getController().getName());
+      } else if (theEvent.getController().getName().contains("selectIteration")) {
+        if (editor.isSelectIterationFuncMode) {
+          println(theEvent.getController().getName() + "--" + int(theEvent.getController().getValue()));
+          editor.setSelectedIterationFuncIndex(int(theEvent.getController().getValue()));
+          editor.handleIterationFuncSelection(editor.selectedIterationFuncIndex);
+        }
+        // println("event from selectIteration " + theEvent.getController().getName());
+      } else if (theEvent.getController().getName().contains("iterationVal")) {
+        float val = theEvent.getController().getValue();
+        String prop = theEvent.getController().getName().split("-")[1];
+        int index = int(theEvent.getController().getId());
+        editor.setSelectedIterationFieldIndex(index);
+        objects.getActiveVariable().set(prop, val);
+        // println("event from iterationVal " + theEvent.getController().getName());
       } else if (theEvent.getController().getName().contains("paramVal")) {
         float val = theEvent.getController().getValue();
         String prop = theEvent.getController().getName().split("-")[1];
@@ -1414,6 +1722,11 @@ void controlEvent(ControlEvent theEvent) {
         editor.setSelectedModifierFieldIndex(index);
         editor.toggleSelectModifierTypeMode();
         // println("event from modifierButton " + theEvent.getController().getName());
+      } else if (theEvent.getController().getName().contains("iterationButton")) {
+        int index = int(theEvent.getController().getValue());
+        editor.setSelectedIterationFieldIndex(index);
+        editor.toggleSelectIterationFuncMode();
+        // println("event from iterationButton " + theEvent.getController().getName());
       } else if (theEvent.getController().getName().contains("editorVariationList")) {
         // println("event from editorVariationList " + theEvent.getController().getValue());
         int index = int(theEvent.getController().getValue());

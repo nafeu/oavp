@@ -111,7 +111,9 @@ public class OavpObjectManager {
   public void draw() {
     if (!editor.isModalOpen) {
       for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
-        entry.getValue().draw();
+        for (int iteration = 0; iteration < entry.getValue().getVariable().i; iteration++) {
+          entry.getValue().draw(iteration);
+        }
       }
     }
   }
@@ -181,14 +183,20 @@ public class OavpObjectManager {
           Field field = variable.getClass().getDeclaredField(fieldName);
           Field fieldMod = variable.getClass().getDeclaredField(fieldName + "Mod");
           Field fieldModType = variable.getClass().getDeclaredField(fieldName + "ModType");
+          Field fieldIter = variable.getClass().getDeclaredField(fieldName + "Iter");
+          Field fieldIterFunc = variable.getClass().getDeclaredField(fieldName + "IterFunc");
 
           Object fieldValue = field.get(variable);
           Object fieldModValue = fieldMod.get(variable);
           Object fieldModTypeValue = fieldModType.get(variable);
+          Object fieldIterValue = fieldIter.get(variable);
+          Object fieldIterFuncValue = fieldIterFunc.get(variable);
 
           objectData.append(".set(\"" + fieldName + "\"," + fieldValue + ")");
           objectData.append(".set(\"" + fieldName + "Mod" + "\"," + fieldModValue + ")");
           objectData.append(".set(\"" + fieldName + "ModType" + "\",\"" + fieldModTypeValue + "\")");
+          objectData.append(".set(\"" + fieldName + "Iter" + "\"," + fieldIterValue + ")");
+          objectData.append(".set(\"" + fieldName + "IterFunc" + "\",\"" + fieldIterFuncValue + "\")");
         } catch (Exception e) {
           e.printStackTrace();
         }

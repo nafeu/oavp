@@ -7,7 +7,9 @@ Group editorVariableMeta;
 Group editorObjectButtons;
 Group editorCreateObject;
 Group editorSelectModifier;
+Group editorSelectIteration;
 Group editorModifiers;
+Group editorIterations;
 Group editorVariations;
 Group editorParams;
 Group editorHelp;
@@ -23,10 +25,12 @@ String toolbarLabelTransform = "[t] transform";
 String toolbarLabelRotate = "[r] rotate";
 String toolbarLabelColor = "[c] color";
 String toolbarLabelWeight = "[b] weight";
-String toolbarLabelModifier = "[z] modifiers";
+String toolbarLabelModifiers = "[z] modifiers";
 String toolbarLabelVariation = "[v] variation";
 String toolbarLabelParams = "[p] params";
 String toolbarLabelModDelay = "[o] mod delay";
+String toolbarLabelIterations = "[i] iterations";
+String toolbarLabelIterationCount = "[a] iter count";
 
 color COLOR_WHITE = color(255, 255, 255);
 color COLOR_BLACK = color(0, 0, 0);
@@ -45,7 +49,7 @@ public void setupEditorGui() {
   editorToolbar = cp5.addButtonBar("editorToolbar")
      .setColorBackground(COLOR_BLACK)
      .setPosition(10, 10)
-     .setSize(550, 10)
+     .setSize(800, 10)
      .addItems(new String[] {
        toolbarLabelMove,
        toolbarLabelResize,
@@ -53,10 +57,12 @@ public void setupEditorGui() {
        toolbarLabelRotate,
        toolbarLabelColor,
        toolbarLabelWeight,
-       toolbarLabelModifier,
+       toolbarLabelModifiers,
        toolbarLabelVariation,
        toolbarLabelParams,
-       toolbarLabelModDelay
+       toolbarLabelModDelay,
+       toolbarLabelIterations,
+       toolbarLabelIterationCount
      })
      .hide()
      ;
@@ -175,6 +181,42 @@ public void setupEditorGui() {
       .setGroup("editorModifiers");
   }
 
+  editorIterations = cp5.addGroup("editorIterations")
+    .setLabel("iterations")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(10, 110)
+    .setSize(300, 370)
+    .setBackgroundColor(COLOR_BLACK)
+    .hide()
+    ;
+
+  for (int i = 0; i < ITERATION_FIELDS.length; i++) {
+    cp5.addTextlabel(ITERATION_FIELDS[i] + "Label")
+      .setText(ITERATION_FIELDS[i])
+      .setPosition(10 * 1, 10 * (i + 1) + 5 * i)
+      .setColorValue(COLOR_WHITE)
+      .setGroup("editorIterations");
+
+    cp5.addNumberbox("iterationVal-" + ITERATION_FIELDS[i])
+      .setColorBackground(COLOR_BLACK)
+      .setPosition(10 * 10, (10 * (i + 1) + 5 * i))
+      .setLabel("")
+      .setSize(50, 10)
+      .setMultiplier(-5)
+      .setSensitivity(100)
+      .setValue(0)
+      .setId(i)
+      .setGroup("editorIterations");
+
+    cp5.addButton("iterationButton-" + ITERATION_FIELDS[i])
+      .setColorBackground(COLOR_BLACK)
+      .setPosition(10 * 16 - 5, (10 * (i + 1) + 5 * i))
+      .setValue(i)
+      .setSize(110, 10)
+      .setLabel("none")
+      .setGroup("editorIterations");
+  }
+
   editorParams = cp5.addGroup("editorParams")
     .setLabel("additional parameters")
     .setColorBackground(COLOR_BLACK)
@@ -216,6 +258,21 @@ public void setupEditorGui() {
       .setValue(i)
       .setSize(int(width / 2), 20)
       .setLabel(MODIFIER_TYPES[i]);
+  }
+
+  editorSelectIteration = cp5.addGroup("editorSelectIteration")
+    .setColorBackground(COLOR_BLACK)
+    .setPosition(width * 0.25, height * 0.25)
+    .setSize(int(width / 2), 20 * ITERATION_FUNCS.length)
+    .hideBar()
+    .hide();
+
+  for (int i = 0; i < ITERATION_FUNCS.length; i++) {
+    cp5.addButton("selectIteration" + ITERATION_FUNCS[i]).setColorBackground(COLOR_BLACK).setGroup("editorSelectIteration")
+      .setPosition(0, 20 * i)
+      .setValue(i)
+      .setSize(int(width / 2), 20)
+      .setLabel(ITERATION_FUNCS[i]);
   }
 
   editorVariations = cp5.addGroup("editorVariations")
@@ -260,6 +317,7 @@ public void setupEditorGui() {
   cp5.addTextlabel("strokeColorVarMeta").setText("strokeColor: ").setPosition(10 * 16, 20).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("fillColorVarMeta").setText("fillColor: ").setPosition(10 * 16, 30).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
   cp5.addTextlabel("modDelayVarMeta").setText("modDelay: ").setPosition(10 * 16, 40).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
+  cp5.addTextlabel("iVarMeta").setText("i: ").setPosition(10 * 16, 50).setColorValue(COLOR_WHITE).setGroup("editorVariableMeta");
 
   strokeColorVarMetaButton = cp5.addBang("strokeColorButtonVarMeta").setPosition(10 * 16 + 60, 20 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
   fillColorVarMetaButton = cp5.addBang("fillColorButtonVarMeta").setPosition(10 * 16 + 60, 30 + 2).setSize(25, 10 - 4).setLabel("").setColorForeground(COLOR_BLACK).setGroup("editorVariableMeta");
