@@ -17,7 +17,8 @@ String[] OBJECT_LIST = {
   "ZRectangles",
   "GridInterval",
   // "Lyrics",
-  "Terrain"
+  "Terrain",
+  "Gradient"
 };
 
 String[] SHADER_LIST = {
@@ -48,6 +49,7 @@ public OavpObject createObject(String className) {
     case "GridInterval": object = new OavpObjGridInterval(); break;
     case "Lyrics": object = new OavpObjLyrics(); break;
     case "Terrain": object = new OavpObjTerrain(); break;
+    case "Gradient": object = new OavpObjGradient(); break;
     default: object = new OavpObject();
   }
 
@@ -861,6 +863,30 @@ public class OavpObjTerrain extends OavpObject {
     } else {
       visualizers.draw.terrainHills(scale, displacement, window, phaseShift, position);
     }
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjGradient extends OavpObject {
+  public void setup() {
+    variable
+      .set("w", 100)
+      .set("h", 100);
+  }
+
+  public void draw() {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable);
+
+    visualizers.draw.basicRectangleGradient(
+      variable.val("w"),
+      variable.val("h"),
+      (color) variable.val("strokeColor"),
+      (color) variable.val("fillColor")
+    );
 
     visualizers.done();
   }

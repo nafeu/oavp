@@ -563,6 +563,18 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicRectangleGradient(float w, float h, color colorA, color colorB) {
+      int numLines = int(h);
+      for (int i = 0; i < numLines; i++) {
+        color lineColor = lerpColor(colorA, colorB, float(i) / float(numLines));
+        pushStyle();
+        stroke(lineColor);
+        line(-w/2, -h/2 + i, w/2, -h/2 + i);
+        popStyle();
+      }
+      return OavpVisualizer.this;
+    }
+
     public OavpVisualizer basicEquilateralTriangle(float size) {
       triangle(
         0, -size,
