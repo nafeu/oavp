@@ -282,35 +282,76 @@ public float getMod(String type, int modDelay) {
 }
 
 String[] ITERATION_FUNCS = {
-  "i",
-  "1.618i",
-  "2i",
-  "i / 2",
-  "i^2",
-  "(i^2) / 2"
+  "fib 20",
+  "2x",
+  "x/2",
+  "x/3",
+  "x/4",
+  "1/x",
+  "x^2",
+  "mod 3",
+  "mod 5",
+  "mod 10",
+  "mod 25",
+  "random 100"
 };
+
+int[] FIRST_TWENTY_FIB = {
+  0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89,
+  144, 233, 377, 610, 987, 1597, 2584, 4181
+};
+
+float[] getRandomNumbers(int n) {
+  float[] output = new float[n];
+
+  for (int i = 0; i < n; i++) {
+    output[i] = random(1.0);
+  }
+
+  return output;
+}
+
+float[] RANDOM_HUNDRED = getRandomNumbers(100);
 
 public float getFunc(String type, int iteration) {
   float out;
 
   switch(type) {
-    case "i":
-      out = iteration;
+    case "fib 20":
+      out = float(FIRST_TWENTY_FIB[iteration % 20]);
       break;
-    case "1.618i":
-      out = 1.618 * iteration;
-      break;
-    case "2i":
+    case "2x":
       out = 2 * iteration;
       break;
-    case "i / 2":
-      out = iteration / 2;
+    case "x/2":
+      out = iteration/2;
       break;
-    case "i^2":
+    case "x/3":
+      out = iteration/3;
+      break;
+    case "x/4":
+      out = iteration/3;
+      break;
+    case "1/x":
+      out = iteration > 0 ? 1/iteration : 0;
+      break;
+    case "x^2":
       out = iteration * iteration;
       break;
-    case "(i^2) / 2":
-      out = (iteration * iteration) / 2;
+    case "mod 3":
+      out = iteration % 3;
+      break;
+    case "mod 5":
+      out = iteration % 5;
+      break;
+    case "mod 10":
+      out = iteration % 10;
+      break;
+    case "mod 25":
+      out = iteration % 25;
+      break;
+    case "random 100":
+      out = RANDOM_HUNDRED[iteration % 100];
       break;
     default:
       out = iteration;

@@ -151,8 +151,11 @@ public class OavpVariable {
       if (field.get(this).getClass() == Integer.class) {
         int baseValue = (int) field.get(this);
         float mod = (float) fieldMod.get(this);
-        float modMultiplier = getMod((String) fieldModType.get(this), this.modDelay);
         float iter = (float) fieldIter.get(this);
+        float modMultiplier = getMod(
+          (String) fieldModType.get(this),
+          iteration > 0 ? iteration : this.modDelay
+        );
         float iterMultiplier = getFunc((String) fieldIterFunc.get(this), iteration);
         float output = baseValue + (mod * modMultiplier) + (iter * iterMultiplier);
         // println("i_baseValue: ", baseValue);

@@ -353,7 +353,7 @@ public class OavpObjSpectrum extends OavpObject {
       .startStyle()
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .moveLeft(variable.val("w", iteration) / 2)
       .moveUp(variable.val("h", iteration) / 2);
 
@@ -427,7 +427,7 @@ public class OavpObjWaveform extends OavpObject {
       .startStyle()
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .moveLeft(variable.val("w", iteration) / 2);
 
     if (variable.ofVariation("right-channel")) {
@@ -451,7 +451,7 @@ public class OavpObjCircle extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .draw.basicCircle(variable.val("s", iteration))
       .done();
   }
@@ -468,7 +468,7 @@ public class OavpObjSvg extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .draw.centeredSvg(variable.customAttrs.get("svgName"), variable.val("s", iteration) / 100)
       .done();
   }
@@ -488,7 +488,7 @@ public class OavpObjBox extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .draw.basicBox(
         variable.val("w", iteration),
         variable.val("h", iteration),
@@ -512,7 +512,7 @@ public class OavpObjFlatbox extends OavpObject {
     visualizers
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .draw.basicFlatbox(
         variable.val("w", iteration),
         variable.val("h", iteration),
@@ -656,7 +656,7 @@ public class OavpObjSpectrumMesh extends OavpObject {
       .useInterval(variable.name)
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .moveLeft(variable.val("w", iteration) / 2)
       .moveUp(variable.val("h", iteration) / 2);
 
@@ -775,7 +775,7 @@ public class OavpObjGridInterval extends OavpObject {
       .useGridInterval(variable.name)
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .moveLeft(variable.w / 2)
       .moveUp(variable.h / 2);
 
@@ -834,7 +834,7 @@ public class OavpObjImage extends OavpObject {
 
     visualizers.create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .draw.img(
         imageName,
         max(variable.val("s", iteration) / 100, 0),
@@ -877,7 +877,7 @@ public class OavpObjTerrain extends OavpObject {
       .useTerrain(variable.name)
       .create()
       .center().middle()
-      .use(variable)
+      .use(variable, iteration)
       .moveLeft(variable.val("w", iteration) / 2)
       .moveUp(variable.val("h", iteration) / 2);
 

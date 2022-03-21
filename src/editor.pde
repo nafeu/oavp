@@ -836,8 +836,8 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  float DELTA_ITERATION_PRECISE_KEYS = 5;
-  float DELTA_ITERATION_SNAP_KEYS = 50;
+  float DELTA_ITERATION_PRECISE_KEYS = 1;
+  float DELTA_ITERATION_SNAP_KEYS = 5;
 
   private void handleToolIterationInputs() {
     float deltaKeys = DELTA_ITERATION_PRECISE_KEYS;
