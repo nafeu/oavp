@@ -846,7 +846,7 @@ public class OavpEditor {
       deltaKeys = DELTA_ITERATION_SNAP_KEYS;
     }
 
-    if (this.isSelectModifierTypeMode) {
+    if (this.isSelectIterationFuncMode) {
       if (input.isPressed(UP)) { this.setSelectedIterationFuncIndex(this.selectedIterationFuncIndex - 1); }
       if (input.isPressed(DOWN)) { this.setSelectedIterationFuncIndex(this.selectedIterationFuncIndex + 1); }
       if (input.isPressed(ENTER)) { handleIterationFuncSelection(this.selectedIterationFuncIndex); }

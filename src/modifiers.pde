@@ -282,17 +282,25 @@ public float getMod(String type, int modDelay) {
 }
 
 String[] ITERATION_FUNCS = {
+  "none",
   "fib 20",
+  "sin(x)",
+  "sqrt(x)",
   "2x",
   "x/2",
   "x/3",
   "x/4",
+  "x*(x/10)",
   "1/x",
   "x^2",
   "mod 3",
+  "floor(x/3)",
   "mod 5",
+  "floor(x/5)",
   "mod 10",
+  "floor(x/10)",
   "mod 25",
+  "floor(x/25)",
   "random 100"
 };
 
@@ -320,6 +328,12 @@ public float getFunc(String type, int iteration) {
     case "fib 20":
       out = float(FIRST_TWENTY_FIB[iteration % 20]);
       break;
+    case "sin(x)":
+      out = sin(iteration);
+      break;
+    case "sqrt(x)":
+      out = sqrt(iteration);
+      break;
     case "2x":
       out = 2 * iteration;
       break;
@@ -330,7 +344,10 @@ public float getFunc(String type, int iteration) {
       out = iteration/3;
       break;
     case "x/4":
-      out = iteration/3;
+      out = iteration/4;
+      break;
+    case "x*(x/10)":
+      out = iteration * (iteration / 10);
       break;
     case "1/x":
       out = iteration > 0 ? 1/iteration : 0;
@@ -341,14 +358,26 @@ public float getFunc(String type, int iteration) {
     case "mod 3":
       out = iteration % 3;
       break;
+    case "floor(x/3)":
+      out = floor(iteration/3);
+      break;
     case "mod 5":
       out = iteration % 5;
+      break;
+    case "floor(x/5)":
+      out = floor(iteration/5);
       break;
     case "mod 10":
       out = iteration % 10;
       break;
+    case "floor(x/10)":
+      out = floor(iteration/10);
+      break;
     case "mod 25":
       out = iteration % 25;
+      break;
+    case "floor(x/25)":
+      out = floor(iteration/25);
       break;
     case "random 100":
       out = RANDOM_HUNDRED[iteration % 100];

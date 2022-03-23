@@ -152,30 +152,33 @@ public class OavpPalette {
     {
       #FFFFFF, #000000
     },
-    // 0
+    {
+      #EEEEFF, #7F7CAF, #9FB4C7, #28587B, #9FB798
+    },
+    {
+      #002A22, #03012C, #190E4F, #B33C86, #EA638C
+    },
+    {
+      #F15025, #FFFFFF, #E6E8E6, #CED0CE, #191919
+    },
     {
       #A2FAA3, #92C9B1, #4F759B, #5D5179, #571F4E
     },
-    // 0
     {
       #A54657, #582630, #F7EE7F, #F1A66A, #F26157
     },
-    // 0
     {
       #1B1B1E, #96031A, #FAA916, #FBFFFE, #6D676E
     },
     {
       #001B2E, #294C60, #FFC49B, #ADB6C4, #FFEFD3
     },
-    // 1
     {
       #031926, #468189, #77ACA2, #9DBEBB, #F4E9CD
     },
-    // 2
     {
       #020202, #503B31, #705D56, #9097C0, #A7BBEC
     },
-    // 3
     {
       #12263A, #06BCC1, #C5D8D1, #F4EDEA, #F4D1AE
     },
