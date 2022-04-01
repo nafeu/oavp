@@ -2,6 +2,7 @@ String[] OBJECT_LIST = {
   // "Image",
   "Line",
   "CurvedLine",
+  "GoldenRatio",
   "Rectangle",
   "Shader",
   "Spectrum",
@@ -34,6 +35,7 @@ public OavpObject createObject(String className) {
     case "Line": object = new OavpObjLine(); break;
     case "CurvedLine": object = new OavpObjCurvedLine(); break;
     case "Rectangle": object = new OavpObjRectangle(); break;
+    case "GoldenRatio": object = new OavpObjGoldenRatio(); break;
     case "Shader": object = new OavpObjShader(); break;
     case "Spectrum": object = new OavpObjSpectrum(); break;
     case "RadialSpectrum": object = new OavpObjRadialSpectrum(); break;
@@ -910,6 +912,44 @@ public class OavpObjGradient extends OavpObject {
       (color) variable.val("strokeColor"),
       (color) variable.val("fillColor")
     );
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjGoldenRatio extends OavpObject {
+  public void setup() {
+    variable
+      .variations(
+        "spiral",
+        "circles",
+        "curves",
+        "rule-of-thirds",
+        "phi-grid"
+      )
+      .set("s", 100)
+      .set("strokeColor", palette.flat.white);
+  }
+
+  public void draw(int iteration) {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable, iteration);
+
+    if (variable.ofVariation("spiral")) {
+      visualizers.draw.basicGoldenSpiral(variable.val("s", iteration));
+    } else if (variable.ofVariation("circles")) {
+      visualizers.draw.basicGoldenSpiralCircles(variable.val("s", iteration));
+    } else if (variable.ofVariation("curves")) {
+      visualizers.draw.basicGoldenSpiralCurves(variable.val("s", iteration));
+    } else if (variable.ofVariation("rule-of-thirds")) {
+      visualizers.draw.basicRuleOfThirds(variable.val("s", iteration));
+    } else if (variable.ofVariation("phi-grid")) {
+      visualizers.draw.basicPhiGrid(variable.val("s", iteration));
+    } else {
+      visualizers.draw.basicGoldenRectangle(variable.val("s", iteration));
+    }
 
     visualizers.done();
   }

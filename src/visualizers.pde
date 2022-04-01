@@ -737,6 +737,36 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicGoldenRectangle(float size) {
+      shapes.goldenRectangle(0, 0, size);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicGoldenSpiral(float size) {
+      shapes.goldenSpiral(0, 0, size);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicGoldenSpiralCircles(float size) {
+      shapes.goldenSpiralCircles(0, 0, size);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicGoldenSpiralCurves(float size) {
+      shapes.goldenSpiralCurves(0, 0, size);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicRuleOfThirds(float size) {
+      shapes.ruleOfThirds(0, 0, size);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicPhiGrid(float size) {
+      shapes.phiGrid(0, 0, size);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a mesh generated with an interval of incoming spectrum values
      * @param scale the scale of the mesh

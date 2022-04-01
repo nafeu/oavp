@@ -2,6 +2,8 @@ float normalMouseX;
 float normalMouseY;
 boolean newMovieFrame;
 
+final float PHI = 1.618;
+
 float oscillate(float start, float end, float speed) {
   return map(sin(frameCount * speed), -1, 1, start, end);
 }

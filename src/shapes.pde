@@ -288,4 +288,162 @@ public class OavpShape {
     curveVertex(xEnd, yEnd);
     endShape();
   }
+
+  public void goldenRectangle(float x, float y, float size) {
+    float h = size;
+    float w = size * PHI;
+
+    rectMode(CENTER);
+    rect(x, y, w, h);
+    rectMode(CORNER);
+  }
+
+  public void goldenSpiral(float x, float y, float size) {
+    float scale = 0.125;
+    float unitSize = size * scale;
+
+    float currentX = x + unitSize * 2.5;
+    float currentY = y + unitSize;
+
+    rectMode(CORNER);
+
+    rect(currentX, currentY, unitSize, unitSize); // A
+    currentX -= unitSize;
+    rect(currentX, currentY, unitSize, unitSize); // B
+    currentY += unitSize;
+    rect(currentX, currentY, unitSize * 2, unitSize * 2); // C
+    currentX += unitSize * 2;
+    currentY -= unitSize;
+    rect(currentX, currentY, unitSize * 3, unitSize * 3); // D
+    currentX -= unitSize * 2;
+    currentY -= unitSize * 5;
+    rect(currentX, currentY, unitSize * 5, unitSize * 5); // E
+    currentX -= unitSize * 8;
+    rect(currentX, currentY, unitSize * 8, unitSize * 8); // F
+
+    rectMode(CORNER);
+  }
+
+  public void goldenSpiralCircles(float x, float y, float size) {
+    float scale = 0.125;
+    float unitSize = size * scale;
+
+    float currentX = x + unitSize * 2.5;
+    float currentY = y + unitSize;
+
+    rectMode(CORNER);
+    ellipseMode(CORNER);
+
+    rect(currentX, currentY, unitSize, unitSize); // A
+    ellipse(currentX, currentY, unitSize, unitSize); // A
+    currentX -= unitSize;
+    rect(currentX, currentY, unitSize, unitSize); // B
+    ellipse(currentX, currentY, unitSize, unitSize); // B
+    currentY += unitSize;
+    rect(currentX, currentY, unitSize * 2, unitSize * 2); // C
+    ellipse(currentX, currentY, unitSize * 2, unitSize * 2); // C
+    currentX += unitSize * 2;
+    currentY -= unitSize;
+    rect(currentX, currentY, unitSize * 3, unitSize * 3); // D
+    ellipse(currentX, currentY, unitSize * 3, unitSize * 3); // D
+    currentX -= unitSize * 2;
+    currentY -= unitSize * 5;
+    rect(currentX, currentY, unitSize * 5, unitSize * 5); // E
+    ellipse(currentX, currentY, unitSize * 5, unitSize * 5); // E
+    currentX -= unitSize * 8;
+    rect(currentX, currentY, unitSize * 8, unitSize * 8); // F
+    ellipse(currentX, currentY, unitSize * 8, unitSize * 8); // F
+
+    rectMode(CORNER);
+    ellipseMode(RADIUS);
+  }
+
+  public void goldenSpiralCurves(float x, float y, float size) {
+    float scale = 0.125;
+    float unitSize = size * scale;
+
+    float currentX = x + unitSize * 2.5;
+    float currentY = y + unitSize;
+
+    rectMode(CORNER);
+    ellipseMode(CENTER);
+
+    rect(currentX, currentY, unitSize, unitSize); // A
+    arc(currentX, currentY + unitSize, unitSize * 2, unitSize * 2, PI * 1.5, PI * 2);
+    currentX -= unitSize;
+    rect(currentX, currentY, unitSize, unitSize); // B
+    arc(currentX + unitSize, currentY + unitSize, unitSize * 2, unitSize * 2, PI, PI * 1.5);
+    currentY += unitSize;
+    rect(currentX, currentY, unitSize * 2, unitSize * 2); // C
+    arc(currentX + unitSize * 2, currentY, unitSize * 4, unitSize * 4, PI * 0.5, PI);
+    currentX += unitSize * 2;
+    currentY -= unitSize;
+    rect(currentX, currentY, unitSize * 3, unitSize * 3); // D
+    arc(currentX, currentY, unitSize * 6, unitSize * 6, 0, PI * 0.5);
+    currentX -= unitSize * 2;
+    currentY -= unitSize * 5;
+    rect(currentX, currentY, unitSize * 5, unitSize * 5); // E
+    arc(currentX, currentY + unitSize * 5, unitSize * 10, unitSize * 10, PI * 1.5, PI * 2);
+    currentX -= unitSize * 8;
+    rect(currentX, currentY, unitSize * 8, unitSize * 8); // F
+    arc(currentX + unitSize * 8, currentY + unitSize * 8, unitSize * 16, unitSize * 16, PI, PI * 1.5);
+
+    rectMode(CORNER);
+    ellipseMode(RADIUS);
+  }
+
+  public void ruleOfThirds(float x, float y, float size) {
+    float unitSize = size / 8;
+
+    float h = size;
+    float w = size * PHI;
+
+    float offsetX = x - w/2;
+    float offsetY = y - h/2;
+
+    float thirdH = h / 3;
+    float thirdW = w / 3;
+
+    rectMode(CENTER);
+    ellipseMode(CENTER);
+
+    rect(x, y, w, h);
+
+    line(offsetX, offsetY + thirdH, offsetX + w, offsetY + thirdH);
+    line(offsetX, offsetY + thirdH * 2, offsetX + w, offsetY + thirdH * 2);
+    line(offsetX + thirdW, offsetY, offsetX + thirdW, offsetY + h);
+    line(offsetX + thirdW * 2, offsetY, offsetX + thirdW * 2, offsetY + h);
+
+    ellipse(offsetX + thirdW, offsetY + thirdH, unitSize * 0.41, unitSize * 0.41);
+    ellipse(offsetX + thirdW * 2, offsetY + thirdH, unitSize * 0.20, unitSize * 0.20);
+    ellipse(offsetX + thirdW, offsetY + thirdH * 2, unitSize * 0.25, unitSize * 0.25);
+    ellipse(offsetX + thirdW * 2, offsetY + thirdH * 2, unitSize * 0.14, unitSize * 0.14);
+
+    rectMode(CORNER);
+    ellipseMode(RADIUS);
+  }
+
+  public void phiGrid(float x, float y, float size) {
+    float h = size;
+    float w = size * PHI;
+
+    float unitSizeH = h / 8;
+    float unitSizeW = w / 13;
+
+    float offsetX = x - w/2;
+    float offsetY = y - h/2;
+
+    rectMode(CENTER);
+    ellipseMode(CENTER);
+
+    rect(x, y, w, h);
+
+    line(offsetX, offsetY + unitSizeH * 3, offsetX + w, offsetY + unitSizeH * 3);
+    line(offsetX, offsetY + unitSizeH * 5, offsetX + w, offsetY + unitSizeH * 5);
+    line(offsetX + unitSizeW * 5, offsetY, offsetX + unitSizeW * 5, offsetY + h);
+    line(offsetX + unitSizeW * 8, offsetY, offsetX + unitSizeW * 8, offsetY + h);
+
+    rectMode(CORNER);
+    ellipseMode(RADIUS);
+  }
 }
