@@ -1,5 +1,6 @@
 String[] OBJECT_LIST = {
   // "Image",
+  "Arc",
   "Line",
   "CurvedLine",
   "GoldenRatio",
@@ -31,6 +32,7 @@ public OavpObject createObject(String className) {
   OavpObject object;
 
   switch (className) {
+    case "Arc": object = new OavpObjArc(); break;
     case "Image": object = new OavpObjImage(); break;
     case "Line": object = new OavpObjLine(); break;
     case "CurvedLine": object = new OavpObjCurvedLine(); break;
@@ -169,6 +171,35 @@ public class OavpObjRectangle extends OavpObject {
         variable.val("w", iteration),
         variable.val("h", iteration),
         variable.val("paramA", iteration)
+      )
+      .done();
+  }
+}
+
+public class OavpObjArc extends OavpObject {
+  public void setup() {
+    variable
+      .params(
+        "start",
+        "stop"
+      )
+      .set("w", 100)
+      .set("h", 100)
+      .set("strokeColor", palette.flat.white)
+      .set("paramA", 0)
+      .set("paramB", 180);
+  }
+
+  public void draw(int iteration) {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable, iteration)
+      .draw.basicArc(
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("paramA", iteration),
+        variable.val("paramB", iteration)
       )
       .done();
   }

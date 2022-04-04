@@ -696,7 +696,14 @@ class OavpVisualizer {
      * @use draw
      */
     public OavpVisualizer basicCircle(float radius) {
+      ellipseMode(CENTER);
       ellipse(0, 0, radius, radius);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicArc(float w, float h, float start, float stop) {
+      ellipseMode(CENTER);
+      arc(0, 0, w, h, radians(start), radians(stop));
       return OavpVisualizer.this;
     }
 
