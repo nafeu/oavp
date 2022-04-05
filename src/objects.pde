@@ -1,26 +1,27 @@
 String[] OBJECT_LIST = {
-  // "Image",
   "Arc",
-  "Line",
+  "Box",
+  "Bullseye",
+  "Circle",
   "CurvedLine",
+  "Flatbox",
   "GoldenRatio",
+  "Gradient",
+  "GridInterval",
+  "Line",
+  "RadialSpectrum",
   "Rectangle",
   "Shader",
   "Spectrum",
-  "RadialSpectrum",
-  "Waveform",
-  "Circle",
-  "Triangle",
-  "Box",
-  "Flatbox",
-  "Bullseye",
-  "Splash",
   "SpectrumMesh",
-  "ZRectangles",
-  "GridInterval",
-  // "Lyrics",
+  "Sphere",
+  "Splash",
   "Terrain",
-  "Gradient"
+  "Triangle",
+  "Waveform",
+  "ZRectangles"
+  // "Image",
+  // "Lyrics",
 };
 
 String[] SHADER_LIST = {
@@ -33,27 +34,28 @@ public OavpObject createObject(String className) {
 
   switch (className) {
     case "Arc": object = new OavpObjArc(); break;
+    case "Box": object = new OavpObjBox(); break;
+    case "Bullseye": object = new OavpObjBullseye(); break;
+    case "Circle": object = new OavpObjCircle(); break;
+    case "CurvedLine": object = new OavpObjCurvedLine(); break;
+    case "Flatbox": object = new OavpObjFlatbox(); break;
+    case "GoldenRatio": object = new OavpObjGoldenRatio(); break;
+    case "Gradient": object = new OavpObjGradient(); break;
+    case "GridInterval": object = new OavpObjGridInterval(); break;
     case "Image": object = new OavpObjImage(); break;
     case "Line": object = new OavpObjLine(); break;
-    case "CurvedLine": object = new OavpObjCurvedLine(); break;
+    case "Lyrics": object = new OavpObjLyrics(); break;
+    case "RadialSpectrum": object = new OavpObjRadialSpectrum(); break;
     case "Rectangle": object = new OavpObjRectangle(); break;
-    case "GoldenRatio": object = new OavpObjGoldenRatio(); break;
     case "Shader": object = new OavpObjShader(); break;
     case "Spectrum": object = new OavpObjSpectrum(); break;
-    case "RadialSpectrum": object = new OavpObjRadialSpectrum(); break;
-    case "Waveform": object = new OavpObjWaveform(); break;
-    case "Circle": object = new OavpObjCircle(); break;
-    case "Triangle": object = new OavpObjTriangle(); break;
-    case "Box": object = new OavpObjBox(); break;
-    case "Flatbox": object = new OavpObjFlatbox(); break;
-    case "Bullseye": object = new OavpObjBullseye(); break;
-    case "Splash": object = new OavpObjSplash(); break;
     case "SpectrumMesh": object = new OavpObjSpectrumMesh(); break;
-    case "ZRectangles": object = new OavpObjZRectangles(); break;
-    case "GridInterval": object = new OavpObjGridInterval(); break;
-    case "Lyrics": object = new OavpObjLyrics(); break;
+    case "Sphere": object = new OavpObjSphere(); break;
+    case "Splash": object = new OavpObjSplash(); break;
     case "Terrain": object = new OavpObjTerrain(); break;
-    case "Gradient": object = new OavpObjGradient(); break;
+    case "Triangle": object = new OavpObjTriangle(); break;
+    case "Waveform": object = new OavpObjWaveform(); break;
+    case "ZRectangles": object = new OavpObjZRectangles(); break;
     default: object = new OavpObject();
   }
 
@@ -486,6 +488,23 @@ public class OavpObjCircle extends OavpObject {
       .center().middle()
       .use(variable, iteration)
       .draw.basicCircle(variable.val("s", iteration))
+      .done();
+  }
+}
+
+public class OavpObjSphere extends OavpObject {
+  public void setup() {
+    variable
+      .set("s", 100)
+      .set("strokeColor", palette.flat.white);
+  }
+
+  public void draw(int iteration) {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable, iteration)
+      .draw.basicSphere(variable.val("s", iteration))
       .done();
   }
 }

@@ -707,6 +707,12 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicSphere(float radius) {
+      lights();
+      sphere(radius);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a basic square with displacement in the Z dimension
      * @param size the length and width of the square
