@@ -149,6 +149,56 @@ public class OavpShape {
     popStyle();
   }
 
+  public void squareBasePyramid(float x, float y, float z, float w, float h, float l, color visibleColor, color shadeColor) {
+    PVector a = new PVector(x - w/2, y + h/2, z + l/2);
+    PVector b = new PVector(x + w/2, y + h/2, z + l/2);
+    PVector c = new PVector(x + w/2, y + h/2, z - l/2);
+    PVector d = new PVector(x - w/2, y + h/2, z - l/2);
+    PVector e = new PVector(x      , y - h/2, z      );
+
+    pushStyle();
+    fill(shadeColor);
+    stroke(visibleColor);
+
+    // Face 1
+    beginShape();
+    vertex(a.x, a.y, a.z);
+    vertex(b.x, b.y, b.z);
+    vertex(e.x, e.y, e.z);
+    endShape(CLOSE);
+
+    // Face 2
+    beginShape();
+    vertex(b.x, b.y, b.z);
+    vertex(c.x, c.y, c.z);
+    vertex(e.x, e.y, e.z);
+    endShape(CLOSE);
+
+    // Face 3
+    beginShape();
+    vertex(c.x, c.y, c.z);
+    vertex(d.x, d.y, d.z);
+    vertex(e.x, e.y, e.z);
+    endShape(CLOSE);
+
+    // Face 4
+    beginShape();
+    vertex(d.x, d.y, d.z);
+    vertex(a.x, a.y, a.z);
+    vertex(e.x, e.y, e.z);
+    endShape(CLOSE);
+
+    // Face 5
+    beginShape();
+    vertex(a.x, a.y, a.z);
+    vertex(b.x, b.y, b.z);
+    vertex(c.x, c.y, c.z);
+    vertex(d.x, d.y, d.z);
+    endShape(CLOSE);
+
+    popStyle();
+  }
+
   public void chevron(float x, float y, float w, float h) {
     pushStyle();
     noFill();

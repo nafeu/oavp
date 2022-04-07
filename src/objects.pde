@@ -9,6 +9,7 @@ String[] OBJECT_LIST = {
   "Gradient",
   "GridInterval",
   "Line",
+  "Pyramid",
   "RadialSpectrum",
   "Rectangle",
   "Shader",
@@ -44,6 +45,7 @@ public OavpObject createObject(String className) {
     case "GridInterval": object = new OavpObjGridInterval(); break;
     case "Image": object = new OavpObjImage(); break;
     case "Line": object = new OavpObjLine(); break;
+    case "Pyramid": object = new OavpObjPyramid(); break;
     case "Lyrics": object = new OavpObjLyrics(); break;
     case "RadialSpectrum": object = new OavpObjRadialSpectrum(); break;
     case "Rectangle": object = new OavpObjRectangle(); break;
@@ -566,6 +568,32 @@ public class OavpObjFlatbox extends OavpObject {
       .center().middle()
       .use(variable, iteration)
       .draw.basicFlatbox(
+        variable.val("w", iteration),
+        variable.val("h", iteration),
+        variable.val("l", iteration),
+        variable.strokeColor(),
+        variable.fillColor()
+      )
+      .done();
+  }
+}
+
+public class OavpObjPyramid extends OavpObject {
+  public void setup() {
+    variable
+      .set("w", 100)
+      .set("h", 100)
+      .set("l", 100)
+      .set("strokeColor", palette.flat.white)
+      .set("fillColor", palette.flat.black);
+  }
+
+  public void draw(int iteration) {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable, iteration)
+      .draw.basicSquareBasePyramid(
         variable.val("w", iteration),
         variable.val("h", iteration),
         variable.val("l", iteration),

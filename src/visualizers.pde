@@ -1078,6 +1078,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicSquareBasePyramid(float w, float h, float l, color visibleColor, color shadeColor) {
+      shapes.squareBasePyramid(0, 0, 0, w, h, l, visibleColor, shadeColor);
+      return OavpVisualizer.this;
+    }
+
 
     /**
      * Draw a basic level flatbox
