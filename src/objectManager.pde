@@ -214,6 +214,9 @@ public class OavpObjectManager {
         }
       }
 
+      objectData.append(".set(\"modDelay\"," + variable.modDelay + ")");
+      objectData.append(".set(\"i\"," + variable.i + ")");
+
       objectData.append(";\n");
     }
     StringSelection stringSelection = new StringSelection(objectData.toString());

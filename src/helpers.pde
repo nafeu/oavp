@@ -2,10 +2,38 @@ float normalMouseX;
 float normalMouseY;
 boolean newMovieFrame;
 
+float globalSpeed = 0.01;
+
 final float PHI = 1.618;
 
 float oscillate(float start, float end, float speed) {
   return map(sin(frameCount * speed), -1, 1, start, end);
+}
+
+float modifierSine(float speed) {
+  return map(sin(frameCount * speed), -1, 1, 0, 1);
+}
+
+float modifierSquare(float speed) {
+  float x = frameCount * speed;
+
+  x /= TWO_PI;
+  x -= int(x);
+
+  return x < .5? -1 : 1;
+}
+
+float modifierTriangle(float speed) {
+  return map(sin(frameCount * speed), -1, 1, 0, 1);
+}
+
+float modifierSawtooth(float speed) {
+  float x = frameCount * speed;
+
+  x /= TWO_PI;
+  x -= int(x);
+
+  return x;
 }
 
 float refinedNoise(float phase, float granularity) {

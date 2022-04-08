@@ -9,6 +9,7 @@ String[] OBJECT_LIST = {
   "Gradient",
   "GridInterval",
   "Line",
+  "Orbital",
   "Pyramid",
   "RadialSpectrum",
   "Rectangle",
@@ -45,6 +46,7 @@ public OavpObject createObject(String className) {
     case "GridInterval": object = new OavpObjGridInterval(); break;
     case "Image": object = new OavpObjImage(); break;
     case "Line": object = new OavpObjLine(); break;
+    case "Orbital": object = new OavpObjOrbital(); break;
     case "Pyramid": object = new OavpObjPyramid(); break;
     case "Lyrics": object = new OavpObjLyrics(); break;
     case "RadialSpectrum": object = new OavpObjRadialSpectrum(); break;
@@ -326,6 +328,33 @@ public class OavpObjLine extends OavpObject {
         variable.val("s", iteration)
       );
     }
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjOrbital extends OavpObject {
+  public void setup() {
+    variable
+      .params("position")
+      .set("w", 100)
+      .set("h", 100)
+      .set("s", 100)
+      .set("strokeColor", palette.flat.white);
+  }
+
+  public void draw(int iteration) {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable, iteration);
+
+    visualizers.draw.basicOrbitalCircle(
+      variable.val("w", iteration),
+      variable.val("h", iteration),
+      variable.val("paramA", iteration),
+      variable.val("s", iteration)
+    );
 
     visualizers.done();
   }

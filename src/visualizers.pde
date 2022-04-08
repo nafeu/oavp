@@ -713,6 +713,11 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicOrbitalCircle(float w, float h, float position, float circleRadius) {
+      shapes.orbitalCircle(0, 0, w, h, position, circleRadius);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a basic square with displacement in the Z dimension
      * @param size the length and width of the square

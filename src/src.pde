@@ -333,21 +333,21 @@ void setupPreSketchDefaults() {
 }
 
 void setGlobalDurations(float duration) {
-  entities.addPulser("beat-pulser").duration(duration);
-  entities.addToggle("beat-toggle-hard").duration(duration);
-  entities.addToggle("beat-toggle-soft").duration(duration);
-  entities.addCounter("beat-counter").duration(duration);
-  entities.addPulser("spacebar-pulser").duration(duration);
-  entities.addToggle("spacebar-toggle-hard").duration(duration);
-  entities.addToggle("spacebar-toggle-soft").duration(duration);
-  entities.addCounter("spacebar-counter").duration(duration);
-  entities.addCounter("spacebar-counter-2").duration(duration);
-  entities.addCounter("spacebar-counter-4").duration(duration);
-  entities.addCounter("spacebar-counter-8").duration(duration);
-  entities.addPulser("quantized-pulser").duration(duration);
-  entities.addToggle("quantized-toggle-hard").duration(duration);
-  entities.addToggle("quantized-toggle-soft").duration(duration);
-  entities.addCounter("quantized-counter").duration(duration);
+  entities.getPulser("beat-pulser").duration(duration);
+  entities.getToggle("beat-toggle-hard").duration(duration);
+  entities.getToggle("beat-toggle-soft").duration(duration);
+  entities.getCounter("beat-counter").duration(duration);
+  entities.getPulser("spacebar-pulser").duration(duration);
+  entities.getToggle("spacebar-toggle-hard").duration(duration);
+  entities.getToggle("spacebar-toggle-soft").duration(duration);
+  entities.getCounter("spacebar-counter").duration(duration);
+  entities.getCounter("spacebar-counter-2").duration(duration);
+  entities.getCounter("spacebar-counter-4").duration(duration);
+  entities.getCounter("spacebar-counter-8").duration(duration);
+  entities.getPulser("quantized-pulser").duration(duration);
+  entities.getToggle("quantized-toggle-hard").duration(duration);
+  entities.getToggle("quantized-toggle-soft").duration(duration);
+  entities.getCounter("quantized-counter").duration(duration);
   emitters.useEmissions("spacebar").duration(duration);
   emitters.useEmissions("spacebar-2").duration(duration);
   emitters.useEmissions("spacebar-4").duration(duration);
@@ -381,10 +381,10 @@ void handleEvents(int code) {
     emitters.useEmissions("spacebar-8").emitIf(isEigthCount);
   }
 
-  if (code == 49 /* 1 */) { setGlobalDurations(0.3); }
-  if (code == 50 /* 2 */) { setGlobalDurations(1); }
-  if (code == 51 /* 3 */) { setGlobalDurations(2); }
-  if (code == 52 /* 4 */) { setGlobalDurations(5); }
+  if (code == 49 /* 1 */) { setGlobalDurations(0.3); globalSpeed = 0.1;   }
+  if (code == 50 /* 2 */) { setGlobalDurations(1);   globalSpeed = 0.05;  }
+  if (code == 51 /* 3 */) { setGlobalDurations(2);   globalSpeed = 0.01;  }
+  if (code == 52 /* 4 */) { setGlobalDurations(5);   globalSpeed = 0.001; }
 
   if (code == KEY_Y) {
     String screenshotName = str(day())

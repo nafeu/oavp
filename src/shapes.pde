@@ -496,4 +496,19 @@ public class OavpShape {
     rectMode(CORNER);
     ellipseMode(RADIUS);
   }
+
+  public void orbitalCircle(
+    float x,             float y,
+    float orbitalPlaneX, float orbitalPlaneY,
+    float position,
+    float circleRadius
+  ) {
+    float orbitalPosition = position / TWO_PI;
+    float satelliteX = x + cos(orbitalPosition) * orbitalPlaneX;
+    float satelliteY = y + sin(orbitalPosition) * orbitalPlaneY;
+
+    ellipseMode(CENTER);
+    ellipse(satelliteX, satelliteY, circleRadius, circleRadius);
+    ellipseMode(RADIUS);
+  }
 }

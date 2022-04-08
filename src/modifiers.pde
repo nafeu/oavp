@@ -1,3 +1,5 @@
+int modDistance = 100;
+
 String[] MODIFIER_FIELDS = {
   "xMod",
   "xrMod",
@@ -63,85 +65,59 @@ String[] MODIFIER_TYPES = {
   "osc-fast",
   "osc-normal",
   "osc-slow",
-  "lows",
-  "mid-lows",
-  "mid-highs",
-  "highs",
-  "beat-pulser",
-  "beat-toggle-hard",
-  "beat-toggle-soft",
-  "beat-counter",
-  "quantized-pulser",
-  "quantized-toggle-hard",
-  "quantized-toggle-soft",
-  "quantized-counter",
+  "sine",
+  "square",
+  "sawtooth",
+  // "lows",
+  // "mid-lows",
+  // "mid-highs",
+  // "highs",
+  // "beat-pulser",
+  // "beat-toggle-hard",
+  // "beat-toggle-soft",
+  // "beat-counter",
+  // "quantized-pulser",
+  // "quantized-toggle-hard",
+  // "quantized-toggle-soft",
+  // "quantized-counter",
   "mouse-x",
   "mouse-y"
 };
 
-/*
-
-entities.getPulser("spacebar-pulser").getValue();
-entities.getToggle("spacebar-toggle-hard").getValue();
-entities.getInterval("spacebar-toggle-soft").getOneDimensionalData(delayIndex);
-entities.getCounter("spacebar-counter").getValue();
-entities.getCounter("spacebar-counter-2").getValue();
-entities.getCounter("spacebar-counter-4").getValue();
-entities.getCounter("spacebar-counter-8").getValue();
-entities.getRotator("spacebar-rotator").getX();
-entities.getRotator("spacebar-rotator-2").getX();
-entities.getRotator("spacebar-rotator-4").getX();
-entities.getRotator("spacebar-rotator-8").getX();
-frameCount(0.01);
-analysis.getLevel();
-oscillate(-1, 1, 0.05);
-oscillate(-1, 1, 0.01);
-oscillate(-1, 1, 0.005);
-map(analysis.getSpectrumChunkAvg(0), -20, 20, 0, 1);
-map(analysis.getSpectrumChunkAvg(1), -20, 20, 0, 1);
-map(analysis.getSpectrumChunkAvg(2), -25, 15, 0, 1);
-map(analysis.getSpectrumChunkAvg(3), -30, 10, 0, 1);
-entities.getPulser("beat-pulser").getValue();
-entities.getToggle("beat-toggle-hard").getValue();
-entities.getToggle("beat-toggle-soft").getValue();
-entities.getCounter("beat-counter").getValue();
-entities.getPulser("quantized-pulser").getValue();
-entities.getToggle("quantized-toggle-hard").getValue();
-entities.getToggle("quantized-toggle-soft").getValue();
-entities.getCounter("quantized-counter").getValue();
-
-*/
-
 void setupPreSketchIntervals() {
-  entities.addInterval("spacebar-toggle-soft", 100, 1);
-  entities.addInterval("spacebar-pulser", 100, 1);
-  entities.addInterval("spacebar-toggle-hard", 100, 1);
-  entities.addInterval("spacebar-toggle-soft", 100, 1);
-  entities.addInterval("spacebar-counter", 100, 1);
-  entities.addInterval("spacebar-counter-2", 100, 1);
-  entities.addInterval("spacebar-counter-4", 100, 1);
-  entities.addInterval("spacebar-counter-8", 100, 1);
-  entities.addInterval("spacebar-rotator", 100, 1);
-  entities.addInterval("spacebar-rotator-2", 100, 1);
-  entities.addInterval("spacebar-rotator-4", 100, 1);
-  entities.addInterval("spacebar-rotator-8", 100, 1);
-  entities.addInterval("frame-count-0.01", 100, 1);
-  entities.addInterval("analysis-get-level", 100, 1);
-  entities.addInterval("oscillate-0.05", 100, 1);
-  entities.addInterval("oscillate-0.01", 100, 1);
-  entities.addInterval("oscillate-0.005", 100, 1);
-  entities.addInterval("analysis-spectrum-chunk-0", 100, 1);
-  entities.addInterval("analysis-spectrum-chunk-1", 100, 1);
-  entities.addInterval("analysis-spectrum-chunk-2", 100, 1);
-  entities.addInterval("analysis-spectrum-chunk-3", 100, 1);
-  entities.addInterval("beat-pulser", 100, 1);
-  entities.addInterval("beat-toggle-hard", 100, 1);
-  entities.addInterval("beat-toggle-soft", 100, 1);
-  entities.addInterval("beat-counter", 100, 1);
-  entities.addInterval("quantized-pulser", 100, 1);
-  entities.addInterval("quantized-toggle-hard", 100, 1);
-  entities.addInterval("quantized-toggle-soft", 100, 1);
-  entities.addInterval("quantized-counter", 100, 1);
+  entities.addInterval("spacebar-toggle-soft", modDistance, 1);
+  entities.addInterval("spacebar-pulser", modDistance, 1);
+  entities.addInterval("spacebar-toggle-hard", modDistance, 1);
+  entities.addInterval("spacebar-toggle-soft", modDistance, 1);
+  entities.addInterval("spacebar-counter", modDistance, 1);
+  entities.addInterval("spacebar-counter-2", modDistance, 1);
+  entities.addInterval("spacebar-counter-4", modDistance, 1);
+  entities.addInterval("spacebar-counter-8", modDistance, 1);
+  entities.addInterval("spacebar-rotator", modDistance, 1);
+  entities.addInterval("spacebar-rotator-2", modDistance, 1);
+  entities.addInterval("spacebar-rotator-4", modDistance, 1);
+  entities.addInterval("spacebar-rotator-8", modDistance, 1);
+  entities.addInterval("frame-count-0.01", modDistance, 1);
+  entities.addInterval("analysis-get-level", modDistance, 1);
+  entities.addInterval("oscillate-0.05", modDistance, 1);
+  entities.addInterval("oscillate-0.01", modDistance, 1);
+  entities.addInterval("oscillate-0.005", modDistance, 1);
+  entities.addInterval("sine", modDistance, 1);
+  entities.addInterval("square", modDistance, 1);
+  entities.addInterval("sawtooth", modDistance, 1);
+  // TODO: Re-enable uncommon modifiers
+  // entities.addInterval("analysis-spectrum-chunk-0", 100, 1);
+  // entities.addInterval("analysis-spectrum-chunk-1", 100, 1);
+  // entities.addInterval("analysis-spectrum-chunk-2", 100, 1);
+  // entities.addInterval("analysis-spectrum-chunk-3", 100, 1);
+  // entities.addInterval("beat-pulser", 100, 1);
+  // entities.addInterval("beat-toggle-hard", 100, 1);
+  // entities.addInterval("beat-toggle-soft", 100, 1);
+  // entities.addInterval("beat-counter", 100, 1);
+  // entities.addInterval("quantized-pulser", 100, 1);
+  // entities.addInterval("quantized-toggle-hard", 100, 1);
+  // entities.addInterval("quantized-toggle-soft", 100, 1);
+  // entities.addInterval("quantized-counter", 100, 1);
   entities.addInterval("mouse-x", 100, 1);
   entities.addInterval("mouse-y", 100, 1);
 }
@@ -163,18 +139,22 @@ void updateDefaultIntervals() {
   entities.getInterval("oscillate-0.05").updateRaw(oscillate(-1, 1, 0.05));
   entities.getInterval("oscillate-0.01").updateRaw(oscillate(-1, 1, 0.01));
   entities.getInterval("oscillate-0.005").updateRaw(oscillate(-1, 1, 0.005));
-  entities.getInterval("analysis-spectrum-chunk-0").updateRaw(map(analysis.getSpectrumChunkAvg(0), -20, 20, 0, 1));
-  entities.getInterval("analysis-spectrum-chunk-1").updateRaw(map(analysis.getSpectrumChunkAvg(1), -20, 20, 0, 1));
-  entities.getInterval("analysis-spectrum-chunk-2").updateRaw(map(analysis.getSpectrumChunkAvg(2), -25, 15, 0, 1));
-  entities.getInterval("analysis-spectrum-chunk-3").updateRaw(map(analysis.getSpectrumChunkAvg(3), -30, 10, 0, 1));
-  entities.getInterval("beat-pulser").updateRaw(entities.getPulser("beat-pulser").getValue());
-  entities.getInterval("beat-toggle-hard").updateRaw(entities.getToggle("beat-toggle-hard").getValue());
-  entities.getInterval("beat-toggle-soft").updateRaw(entities.getToggle("beat-toggle-soft").getValue());
-  entities.getInterval("beat-counter").updateRaw(entities.getCounter("beat-counter").getValue());
-  entities.getInterval("quantized-pulser").updateRaw(entities.getPulser("quantized-pulser").getValue());
-  entities.getInterval("quantized-toggle-hard").updateRaw(entities.getToggle("quantized-toggle-hard").getValue());
-  entities.getInterval("quantized-toggle-soft").updateRaw(entities.getToggle("quantized-toggle-soft").getValue());
-  entities.getInterval("quantized-counter").updateRaw(entities.getCounter("quantized-counter").getValue());
+  entities.getInterval("sine").updateRaw(modifierSine(globalSpeed));
+  entities.getInterval("square").updateRaw(modifierSquare(globalSpeed));
+  entities.getInterval("sawtooth").updateRaw(modifierSawtooth(globalSpeed));
+  // TODO: Re-enable uncommon modifiers
+  // entities.getInterval("analysis-spectrum-chunk-0").updateRaw(map(analysis.getSpectrumChunkAvg(0), -20, 20, 0, 1));
+  // entities.getInterval("analysis-spectrum-chunk-1").updateRaw(map(analysis.getSpectrumChunkAvg(1), -20, 20, 0, 1));
+  // entities.getInterval("analysis-spectrum-chunk-2").updateRaw(map(analysis.getSpectrumChunkAvg(2), -25, 15, 0, 1));
+  // entities.getInterval("analysis-spectrum-chunk-3").updateRaw(map(analysis.getSpectrumChunkAvg(3), -30, 10, 0, 1));
+  // entities.getInterval("beat-pulser").updateRaw(entities.getPulser("beat-pulser").getValue());
+  // entities.getInterval("beat-toggle-hard").updateRaw(entities.getToggle("beat-toggle-hard").getValue());
+  // entities.getInterval("beat-toggle-soft").updateRaw(entities.getToggle("beat-toggle-soft").getValue());
+  // entities.getInterval("beat-counter").updateRaw(entities.getCounter("beat-counter").getValue());
+  // entities.getInterval("quantized-pulser").updateRaw(entities.getPulser("quantized-pulser").getValue());
+  // entities.getInterval("quantized-toggle-hard").updateRaw(entities.getToggle("quantized-toggle-hard").getValue());
+  // entities.getInterval("quantized-toggle-soft").updateRaw(entities.getToggle("quantized-toggle-soft").getValue());
+  // entities.getInterval("quantized-counter").updateRaw(entities.getCounter("quantized-counter").getValue());
   entities.getInterval("mouse-x").updateRaw(normalMouseX);
   entities.getInterval("mouse-y").updateRaw(normalMouseY);
 }
@@ -182,7 +162,7 @@ void updateDefaultIntervals() {
 public float getMod(String type, int modDelay) {
   float out;
 
-  int delayIndex = abs(modDelay % 100);
+  int delayIndex = abs(modDelay % modDistance);
 
   switch(type) {
     case "spacebar-pulser":
@@ -233,42 +213,52 @@ public float getMod(String type, int modDelay) {
     case "osc-slow":
       out = entities.getInterval("oscillate-0.005").getOneDimensionalData(delayIndex);
       break;
-    case "lows":
-      out = entities.getInterval("analysis-spectrum-chunk-0").getOneDimensionalData(delayIndex);
+    case "sine":
+      out = entities.getInterval("sine").getOneDimensionalData(delayIndex);
       break;
-    case "mid-lows":
-      out = entities.getInterval("analysis-spectrum-chunk-1").getOneDimensionalData(delayIndex);
+    case "square":
+      out = entities.getInterval("square").getOneDimensionalData(delayIndex);
       break;
-    case "mid-highs":
-      out = entities.getInterval("analysis-spectrum-chunk-2").getOneDimensionalData(delayIndex);
+    case "sawtooth":
+      out = entities.getInterval("sawtooth").getOneDimensionalData(delayIndex);
       break;
-    case "highs":
-      out = entities.getInterval("analysis-spectrum-chunk-3").getOneDimensionalData(delayIndex);
-      break;
-    case "beat-pulser":
-      out = entities.getInterval("beat-pulser").getOneDimensionalData(delayIndex);
-      break;
-    case "beat-toggle-hard":
-      out = entities.getInterval("beat-toggle-hard").getOneDimensionalData(delayIndex);
-      break;
-    case "beat-toggle-soft":
-      out = entities.getInterval("beat-toggle-soft").getOneDimensionalData(delayIndex);
-      break;
-    case "beat-counter":
-      out = entities.getInterval("beat-counter").getOneDimensionalData(delayIndex);
-      break;
-    case "quantized-pulser":
-      out = entities.getInterval("quantized-pulser").getOneDimensionalData(delayIndex);
-      break;
-    case "quantized-toggle-hard":
-      out = entities.getInterval("quantized-toggle-hard").getOneDimensionalData(delayIndex);
-      break;
-    case "quantized-toggle-soft":
-      out = entities.getInterval("quantized-toggle-soft").getOneDimensionalData(delayIndex);
-      break;
-    case "quantized-counter":
-      out = entities.getInterval("quantized-counter").getOneDimensionalData(delayIndex);
-      break;
+    // TODO: Re-enable uncommon modifiers
+    // case "lows":
+    //   out = entities.getInterval("analysis-spectrum-chunk-0").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "mid-lows":
+    //   out = entities.getInterval("analysis-spectrum-chunk-1").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "mid-highs":
+    //   out = entities.getInterval("analysis-spectrum-chunk-2").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "highs":
+    //   out = entities.getInterval("analysis-spectrum-chunk-3").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "beat-pulser":
+    //   out = entities.getInterval("beat-pulser").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "beat-toggle-hard":
+    //   out = entities.getInterval("beat-toggle-hard").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "beat-toggle-soft":
+    //   out = entities.getInterval("beat-toggle-soft").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "beat-counter":
+    //   out = entities.getInterval("beat-counter").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "quantized-pulser":
+    //   out = entities.getInterval("quantized-pulser").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "quantized-toggle-hard":
+    //   out = entities.getInterval("quantized-toggle-hard").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "quantized-toggle-soft":
+    //   out = entities.getInterval("quantized-toggle-soft").getOneDimensionalData(delayIndex);
+    //   break;
+    // case "quantized-counter":
+    //   out = entities.getInterval("quantized-counter").getOneDimensionalData(delayIndex);
+    //   break;
     case "mouse-x":
       out = entities.getInterval("mouse-x").getOneDimensionalData(delayIndex);
       break;
