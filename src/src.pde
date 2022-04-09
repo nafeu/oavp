@@ -62,6 +62,9 @@ void setup() {
   // size(1080, 864, P3D);
   // DISPLAY_SETTINGS_END
 
+  // Anti-aliasing
+  smooth(8);
+
   // Frame Setup
   frameRate(60);
   surface.setTitle("oavp");

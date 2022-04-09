@@ -68,9 +68,9 @@ public void setupEditorGui() {
      ;
 
   editorToggleSnappingButton = cp5.addButton("editorToggleSnappingButton")
-     .setLabel("[q] disable snapping")
+     .setLabel("[q] toggle snap intensity - medium")
      .setPosition(10, height - 20)
-     .setSize(100, 10)
+     .setSize(160, 10)
      .hide()
      ;
 
@@ -102,9 +102,9 @@ public void setupEditorGui() {
     .hide();
 
   cp5.addButton("editorObjectButtonPrev").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
-    .setPosition(70 * 0, 10 * 0).setLabel("[j] prev");
+    .setPosition(70 * 0, 10 * 0).setLabel("[l brkt] prev");
   cp5.addButton("editorObjectButtonNext").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
-    .setPosition(70 * 1, 10 * 0).setLabel("[l] next");
+    .setPosition(70 * 1, 10 * 0).setLabel("[r brkt] next");
   cp5.addButton("editorObjectButtonDuplicate").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")
     .setPosition(70 * 0, 10 * 1).setLabel("[d] dupl");
   cp5.addButton("editorObjectButtonCreate").setColorBackground(COLOR_BLACK).setSize(70, 10).setGroup("editorObjectButtons")

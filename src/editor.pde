@@ -38,6 +38,11 @@ int KEY_W = 87;
 int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
+int KEY_PLUS = 61;
+int KEY_MINUS = 45;
+int KEY_RIGHT_BRACKET = 93;
+int KEY_LEFT_BRACKET = 91;
+int KEY_BACKSLASH = 92;
 
 public class OavpEditor {
   private boolean isEditMode = false;
@@ -45,7 +50,7 @@ public class OavpEditor {
   private boolean isCreateMode = false;
   private boolean isSelectModifierTypeMode = false;
   private boolean isSelectIterationFuncMode = false;
-  private boolean isSnappingEnabled = true;
+  private int snapIntensity = 2;
   private boolean isModalOpen = false;
   private OavpInput input;
   private OavpObjectManager objects;
@@ -204,12 +209,12 @@ public class OavpEditor {
     }
 
     if (this.isEditMode) {
-      if (input.isPressed(KEY_L)) {
+      if (input.isPressed(KEY_RIGHT_BRACKET)) {
         objects.nextActiveVariable();
         updateEditorVariableMeta();
       }
 
-      if (input.isPressed(KEY_J)) {
+      if (input.isPressed(KEY_LEFT_BRACKET)) {
         objects.prevActiveVariable();
         updateEditorVariableMeta();
       }
@@ -235,7 +240,7 @@ public class OavpEditor {
 
       if (input.isPressed(KEY_D)) { objects.duplicate(); }
       if (input.isPressed(KEY_N)) { toggleCreateMode(); }
-      if (input.isPressed(KEY_Q)) { toggleSnappingMode(); }
+      if (input.isPressed(KEY_Q)) { toggleSnapIntensity(); }
       if (input.isPressed(KEY_X)) { println(objects.exportSketchData()); }
       if (input.isPressed(KEY_W)) { objects.remove(); }
     }
@@ -327,6 +332,8 @@ public class OavpEditor {
           + "[up/down] to change palette\n"
           + "[enter] to assign selected color to stroke\n"
           + "[shift+enter] to assign selected color to fill\n"
+          + "[backslash] to select random palette\n"
+          + "[shift+backslash] to assign random colors\n"
         );
         editorToolbar.changeItem(toolbarLabelColor, "selected", true);
         editorColorButtons.show();
@@ -450,19 +457,12 @@ public class OavpEditor {
     }
   }
 
-  int DELTA_MOVEMENT_PRECISE_KEYS = 5;
-  int DELTA_MOVEMENT_SNAP_KEYS = 50;
-  int DELTA_MOVEMENT_PRECISE_MOUSE = 5;
-  int DELTA_MOVEMENT_SNAP_MOUSE = 50;
+  int[] DELTA_MOVEMENT_SNAP_CONFIGS_KEYS  = { 1, 5, 50, 200 };
+  int[] DELTA_MOVEMENT_SNAP_CONFIGS_MOUSE = { 1, 5, 50, 200 };
 
   private void handleToolMoveInputs() {
-    int deltaKeys = DELTA_MOVEMENT_PRECISE_KEYS;
-    int deltaMouse = DELTA_MOVEMENT_PRECISE_MOUSE;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_MOVEMENT_SNAP_KEYS;
-      deltaMouse = DELTA_MOVEMENT_SNAP_MOUSE;
-    }
+    int deltaKeys  = DELTA_MOVEMENT_SNAP_CONFIGS_KEYS[this.snapIntensity];
+    int deltaMouse = DELTA_MOVEMENT_SNAP_CONFIGS_KEYS[this.snapIntensity];
 
     if (input.isHoldingShift) {
       if (input.isPressed(UP)) { previewEdit("z", deltaKeys * -1); commitEdit("z"); }
@@ -489,19 +489,12 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  float DELTA_RESIZE_PRECISE_KEYS = 5;
-  float DELTA_RESIZE_SNAP_KEYS = 50;
-  float DELTA_RESIZE_PRECISE_MOUSE = 5;
-  float DELTA_RESIZE_SNAP_MOUSE = 50;
+  float[] DELTA_RESIZE_SNAP_CONFIGS_KEYS  = { 1, 5, 50, 200 };
+  float[] DELTA_RESIZE_SNAP_CONFIGS_MOUSE = { 1, 5, 50, 200 };
 
   private void handleToolResizeInputs() {
-    float deltaKeys = DELTA_RESIZE_PRECISE_KEYS;
-    float deltaMouse = DELTA_RESIZE_PRECISE_MOUSE;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_RESIZE_SNAP_KEYS;
-      deltaMouse = DELTA_RESIZE_SNAP_MOUSE;
-    }
+    float deltaKeys  = DELTA_RESIZE_SNAP_CONFIGS_KEYS[this.snapIntensity];
+    float deltaMouse = DELTA_RESIZE_SNAP_CONFIGS_MOUSE[this.snapIntensity];
 
     if (input.isPressed(UP)) { previewEdit("s", deltaKeys); commitEdit("s"); }
     if (input.isPressed(DOWN)) { previewEdit("s", deltaKeys * -1); commitEdit("s"); }
@@ -520,19 +513,12 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  float DELTA_TRANSFORM_PRECISE_KEYS = 5;
-  float DELTA_TRANSFORM_SNAP_KEYS = 50;
-  float DELTA_TRANSFORM_PRECISE_MOUSE = 5;
-  float DELTA_TRANSFORM_SNAP_MOUSE = 50;
+  float[] DELTA_TRANSFORM_SNAP_CONFIGS_KEYS  = { 1, 5, 50, 200 };
+  float[] DELTA_TRANSFORM_SNAP_CONFIGS_MOUSE = { 1, 5, 50, 200 };
 
   private void handleToolTransformInputs() {
-    float deltaKeys = DELTA_TRANSFORM_PRECISE_KEYS;
-    float deltaMouse = DELTA_TRANSFORM_PRECISE_MOUSE;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_TRANSFORM_SNAP_KEYS;
-      deltaMouse = DELTA_TRANSFORM_SNAP_MOUSE;
-    }
+    float deltaKeys  = DELTA_TRANSFORM_SNAP_CONFIGS_KEYS[this.snapIntensity];
+    float deltaMouse = DELTA_TRANSFORM_SNAP_CONFIGS_MOUSE[this.snapIntensity];
 
     if (input.isHoldingShift) {
       if (input.isPressed(UP)) { previewEdit("l", deltaKeys); commitEdit("l"); }
@@ -559,19 +545,12 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  int DELTA_ROTATE_PRECISE_KEYS = 5;
-  int DELTA_ROTATE_SNAP_KEYS = 15;
-  int DELTA_ROTATE_PRECISE_MOUSE = 5;
-  int DELTA_ROTATE_SNAP_MOUSE = 15;
+  int[] DELTA_ROTATE_SNAP_CONFIGS_KEYS  = { 1, 5, 15, 30 };
+  int[] DELTA_ROTATE_SNAP_CONFIGS_MOUSE = { 1, 5, 15, 30 };
 
   private void handleToolRotateInputs() {
-    int deltaKeys = DELTA_ROTATE_PRECISE_KEYS;
-    int deltaMouse = DELTA_ROTATE_PRECISE_MOUSE;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_ROTATE_SNAP_KEYS;
-      deltaMouse = DELTA_ROTATE_SNAP_MOUSE;
-    }
+    int deltaKeys  = DELTA_ROTATE_SNAP_CONFIGS_KEYS[this.snapIntensity];
+    int deltaMouse = DELTA_ROTATE_SNAP_CONFIGS_MOUSE[this.snapIntensity];
 
     if (input.isHoldingShift) {
       if (input.isPressed(UP)) { previewEdit("xr", deltaKeys); commitEdit("xr"); }
@@ -604,15 +583,18 @@ public class OavpEditor {
     } else if (input.isHoldingShift) {
       if (input.isPressed(ENTER)) { this.assignActiveFillColor(); }
       if (input.isPressed(BACKSPACE)) { this.resetFillColor(); }
+      if (input.isPressed(KEY_BACKSLASH)) { this.randomAssignment(); };
     } else {
       if (input.isPressed(ENTER)) { this.assignActiveStrokeColor(); }
       if (input.isPressed(BACKSPACE)) { this.resetStrokeColor(); }
+      if (input.isPressed(KEY_BACKSLASH)) { this.randomPalette(); };
     }
 
     if (input.isPressed(LEFT)) { this.previousActiveColor(); }
     if (input.isPressed(RIGHT)) { this.nextActiveColor(); }
     if (input.isPressed(DOWN)) { this.nextPalette(); }
     if (input.isPressed(UP)) { this.previousPalette(); }
+
 
     if (input.isShiftReleased()) {}
     if (input.isControlReleased()) {}
@@ -633,19 +615,26 @@ public class OavpEditor {
   }
 
   public void nextPalette() {
-    this.colorPaletteIndex = (this.colorPaletteIndex + 1) % palette.table.length;
+    this.colorPaletteIndex = (this.colorPaletteIndex + 1) % palette.table.size();
     this.activePalette = palette.getPalette(colorPaletteIndex);
     this.colorIndex = this.colorIndex % this.activePalette.length;
   }
 
   public void previousPalette() {
     if (this.colorPaletteIndex == 0) {
-      this.colorPaletteIndex = palette.table.length - 1;
+      this.colorPaletteIndex = palette.table.size() - 1;
     } else {
-      this.colorPaletteIndex = (this.colorPaletteIndex - 1) % palette.table.length;
+      this.colorPaletteIndex = (this.colorPaletteIndex - 1) % palette.table.size();
       this.activePalette = palette.getPalette(colorPaletteIndex);
       this.colorIndex = this.colorIndex % this.activePalette.length;
     }
+  }
+
+  public void randomPalette() {
+    int randomPalette = (int) random(0, palette.table.size());
+    palette.moveToFront(randomPalette);
+    this.activePalette = palette.getPalette(0);
+    this.colorIndex = this.colorIndex % this.activePalette.length;
   }
 
   public void assignActiveFillColor() {
@@ -656,6 +645,19 @@ public class OavpEditor {
     objects.getActiveVariable().strokeColor(this.activePalette[this.colorIndex]);
   }
 
+  public void randomAssignment() {
+    objects.getActiveVariable().fillColor(
+      this.activePalette[
+        (int) random(0, this.activePalette.length)
+      ]
+    );
+    objects.getActiveVariable().strokeColor(
+      this.activePalette[
+        (int) random(0, this.activePalette.length)
+      ]
+    );
+  }
+
   public void resetFillColor() {
     objects.getActiveVariable().fillColor(0);
   }
@@ -664,19 +666,12 @@ public class OavpEditor {
     objects.getActiveVariable().strokeColor(0);
   }
 
-  float DELTA_WEIGHT_PRECISE_KEYS = 0.25;
-  float DELTA_WEIGHT_SNAP_KEYS = 0.50;
-  float DELTA_WEIGHT_PRECISE_MOUSE = 0.25;
-  float DELTA_WEIGHT_SNAP_MOUSE = 0.50;
+  float[] DELTA_WEIGHT_SNAP_CONFIGS_KEYS  = { 0.25, 0.50, 1.0, 2.0 };
+  float[] DELTA_WEIGHT_SNAP_CONFIGS_MOUSE = { 0.25, 0.50, 1.0, 2.0 };
 
   private void handleToolWeightInputs() {
-    float deltaKeys = DELTA_WEIGHT_PRECISE_KEYS;
-    float deltaMouse = DELTA_WEIGHT_PRECISE_MOUSE;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_WEIGHT_SNAP_KEYS;
-      deltaMouse = DELTA_WEIGHT_SNAP_MOUSE;
-    }
+    float deltaKeys  = DELTA_WEIGHT_SNAP_CONFIGS_KEYS[this.snapIntensity];
+    float deltaMouse = DELTA_WEIGHT_SNAP_CONFIGS_MOUSE[this.snapIntensity];
 
     if (input.isPressed(UP)) { previewEdit("strokeWeight", deltaKeys); commitEdit("strokeWeight"); }
     if (input.isPressed(DOWN)) { previewEdit("strokeWeight", deltaKeys * -1); commitEdit("strokeWeight"); }
@@ -713,15 +708,10 @@ public class OavpEditor {
     }
   }
 
-  float DELTA_MODIFIER_PRECISE_KEYS = 5;
-  float DELTA_MODIFIER_SNAP_KEYS = 50;
+  float[] DELTA_MODIFIER_SNAP_CONFIGS_KEYS = { 1, 5, 50, 200 };
 
   private void handleToolModifierInputs() {
-    float deltaKeys = DELTA_MODIFIER_PRECISE_KEYS;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_MODIFIER_SNAP_KEYS;
-    }
+    float deltaKeys = DELTA_MODIFIER_SNAP_CONFIGS_KEYS[this.snapIntensity];
 
     if (this.isSelectModifierTypeMode) {
       if (input.isPressed(UP)) { this.setSelectedModifierTypeIndex(this.selectedModifierTypeIndex - 1); }
@@ -756,15 +746,10 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  float DELTA_PARAMS_PRECISE_KEYS = 5;
-  float DELTA_PARAMS_SNAP_KEYS = 50;
+  float[] DELTA_PARAMS_SNAP_CONFIGS_KEYS = { 1, 5, 50, 200 };
 
   private void handleToolParamsInputs() {
-    float deltaKeys = DELTA_PARAMS_PRECISE_KEYS;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_PARAMS_SNAP_KEYS;
-    }
+    float deltaKeys = DELTA_PARAMS_SNAP_CONFIGS_KEYS[this.snapIntensity];
 
     if (input.isPressed(UP)) { this.setSelectedParamIndex(this.selectedParamIndex - 1); }
     if (input.isPressed(DOWN)) { this.setSelectedParamIndex(this.selectedParamIndex + 1); }
@@ -774,19 +759,12 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  int DELTA_MOD_DELAY_PRECISE_KEYS = 1;
-  int DELTA_MOD_DELAY_SNAP_KEYS = 5;
-  int DELTA_MOD_DELAY_PRECISE_MOUSE = 1;
-  int DELTA_MOD_DELAY_SNAP_MOUSE = 5;
+  int[] DELTA_MOD_DELAY_SNAP_CONFIGS_KEYS  = { 1, 5, 10, 25 };
+  int[] DELTA_MOD_DELAY_SNAP_CONFIGS_MOUSE = { 1, 5, 10, 25 };
 
   private void handleToolModDelayInputs() {
-    int deltaKeys = DELTA_MOD_DELAY_PRECISE_KEYS;
-    int deltaMouse = DELTA_MOD_DELAY_PRECISE_MOUSE;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_MOD_DELAY_SNAP_KEYS;
-      deltaMouse = DELTA_MOD_DELAY_SNAP_MOUSE;
-    }
+    int deltaKeys  = DELTA_MOD_DELAY_SNAP_CONFIGS_KEYS[this.snapIntensity];
+    int deltaMouse = DELTA_MOD_DELAY_SNAP_CONFIGS_MOUSE[this.snapIntensity];
 
     if (input.isPressed(UP)) { previewEdit("modDelay", deltaKeys); commitEdit("modDelay"); }
     if (input.isPressed(DOWN)) { previewEdit("modDelay", deltaKeys * -1); commitEdit("modDelay"); }
@@ -805,19 +783,12 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  int DELTA_ITERATION_COUNT_PRECISE_KEYS = 1;
-  int DELTA_ITERATION_COUNT_SNAP_KEYS = 5;
-  int DELTA_ITERATION_COUNT_PRECISE_MOUSE = 1;
-  int DELTA_ITERATION_COUNT_SNAP_MOUSE = 5;
+  int[] DELTA_ITERATION_COUNT_SNAP_CONFIGS_KEYS  = { 1, 5, 10, 25 };
+  int[] DELTA_ITERATION_COUNT_SNAP_CONFIGS_MOUSE = { 1, 5, 10, 25 };
 
   private void handleToolIterationCountInputs() {
-    int deltaKeys = DELTA_ITERATION_COUNT_PRECISE_KEYS;
-    int deltaMouse = DELTA_ITERATION_COUNT_PRECISE_MOUSE;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_ITERATION_COUNT_SNAP_KEYS;
-      deltaMouse = DELTA_ITERATION_COUNT_SNAP_MOUSE;
-    }
+    int deltaKeys = DELTA_ITERATION_COUNT_SNAP_CONFIGS_KEYS[this.snapIntensity];
+    int deltaMouse = DELTA_ITERATION_COUNT_SNAP_CONFIGS_MOUSE[this.snapIntensity];
 
     if (input.isPressed(UP)) { previewEdit("i", deltaKeys); commitEdit("i"); }
     if (input.isPressed(DOWN)) { previewEdit("i", deltaKeys * -1); commitEdit("i"); }
@@ -836,15 +807,10 @@ public class OavpEditor {
     updateEditorVariableMeta();
   }
 
-  float DELTA_ITERATION_PRECISE_KEYS = 1;
-  float DELTA_ITERATION_SNAP_KEYS = 5;
+  float[] DELTA_ITERATION_SNAP_CONFIGS_KEYS = { 1, 5, 50, 200 };
 
   private void handleToolIterationInputs() {
-    float deltaKeys = DELTA_ITERATION_PRECISE_KEYS;
-
-    if (this.isSnappingEnabled) {
-      deltaKeys = DELTA_ITERATION_SNAP_KEYS;
-    }
+    float deltaKeys = DELTA_ITERATION_SNAP_CONFIGS_KEYS[this.snapIntensity];
 
     if (this.isSelectIterationFuncMode) {
       if (input.isPressed(UP)) { this.setSelectedIterationFuncIndex(this.selectedIterationFuncIndex - 1); }
@@ -950,12 +916,19 @@ public class OavpEditor {
     }
   }
 
-  private void toggleSnappingMode() {
-    this.isSnappingEnabled = !this.isSnappingEnabled;
-    if (this.isSnappingEnabled) {
-      editorToggleSnappingButton.setLabel("[q] disable snapping");
-    } else {
-      editorToggleSnappingButton.setLabel("[q] enable snapping");
+  private void toggleSnapIntensity() {
+    this.snapIntensity = (this.snapIntensity + 1) % 4;
+    if (this.snapIntensity == 0) {
+      editorToggleSnappingButton.setLabel("[q] toggle snap intensity - disabled");
+    }
+    else if (this.snapIntensity == 1) {
+      editorToggleSnappingButton.setLabel("[q] toggle snap intensity - low");
+    }
+    else if (this.snapIntensity == 2) {
+      editorToggleSnappingButton.setLabel("[q] toggle snap intensity - medium");
+    }
+    else if (this.snapIntensity == 3) {
+      editorToggleSnappingButton.setLabel("[q] toggle snap intensity - high");
     }
   }
 
@@ -1757,7 +1730,7 @@ public void editorObjectButtonDuplicate() { objects.duplicate(); }
 public void editorObjectButtonCreate() { editor.toggleCreateMode(); }
 public void editorObjectButtonDelete() { objects.remove(); }
 public void editorObjectsList(int objectIndex) { objects.setActiveVariable(objectIndex); }
-public void editorToggleSnappingButton() { editor.toggleSnappingMode(); }
+public void editorToggleSnappingButton() { editor.toggleSnapIntensity(); }
 
 public String getNewObjectName(String className, int increment) {
   if (!objects.has(className + "-" + increment)) {
