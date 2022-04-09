@@ -1068,13 +1068,16 @@ public class OavpEditor {
     float toolMetaBoxW = width * 1.5;
     float toolMetaBoxH = height * 0.05;
     float toolMetaTextPosition = width * 0.17;
+    color toolColor = palette.flat.white;
+    boolean drawMouseIndicators = true;
 
     switch (activeTool) {
       case 0: // MOVE
+        toolColor = palette.flat.blue;
         visualizers
           .create()
           .center().middle()
-          .strokeColor(palette.flat.blue)
+          .strokeColor(toolColor)
           .noFillStyle()
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
@@ -1085,10 +1088,11 @@ public class OavpEditor {
         break;
 
       case 1: // RESIZE
+        toolColor = palette.flat.orange;
         visualizers
           .create()
           .center().middle()
-          .strokeColor(palette.flat.orange)
+          .strokeColor(toolColor)
           .noFillStyle()
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
@@ -1099,10 +1103,11 @@ public class OavpEditor {
         break;
 
       case 2: // TRANSFORM
+        toolColor = palette.flat.yellow;
         visualizers
           .create()
           .center().middle()
-          .strokeColor(palette.flat.yellow)
+          .strokeColor(toolColor)
           .noFillStyle()
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
@@ -1114,10 +1119,11 @@ public class OavpEditor {
         break;
 
       case 3: // ROTATE
+        toolColor = palette.flat.green;
         visualizers
           .create()
           .center().middle()
-          .strokeColor(palette.flat.green)
+          .strokeColor(toolColor)
           .noFillStyle()
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
@@ -1129,6 +1135,8 @@ public class OavpEditor {
         break;
 
       case 4: // COLOR
+        drawMouseIndicators = false;
+
         visualizers
           .create()
           .center().middle()
@@ -1174,10 +1182,11 @@ public class OavpEditor {
         break;
 
       case 5: // WEIGHT
+        toolColor = palette.flat.darkPrimary;
         visualizers
           .create()
           .center().middle()
-          .strokeColor(palette.flat.darkPrimary)
+          .strokeColor(toolColor)
           .noFillStyle()
           .strokeWeightStyle(activeVariable.strokeWeight)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
@@ -1186,6 +1195,8 @@ public class OavpEditor {
         break;
 
       case 6: // MODIFIER
+        drawMouseIndicators = false;
+
         if (this.isSelectModifierTypeMode) {
           palette.reset(palette.flat.black, palette.flat.white, 2);
 
@@ -1228,6 +1239,8 @@ public class OavpEditor {
         break;
 
       case 7: // VARIATION
+        drawMouseIndicators = false;
+
         visualizers
           .create()
           .center().middle()
@@ -1240,6 +1253,8 @@ public class OavpEditor {
         break;
 
       case 8: // PARAMS
+        drawMouseIndicators = false;
+
         for (int i = 0; i < PARAM_FIELDS.length; i++) {
           boolean isWithinSelectionArea = (this.selectedParamIndex == i);
           if (isWithinSelectionArea && cp5.getGroup("editorParams").isOpen()) {
@@ -1265,10 +1280,11 @@ public class OavpEditor {
         break;
 
       case 9: // MOD_DELAY
+        toolColor = palette.flat.darkGreen;
         visualizers
           .create()
           .center().middle()
-          .strokeColor(palette.flat.darkGreen)
+          .strokeColor(toolColor)
           .noFillStyle()
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
@@ -1279,6 +1295,8 @@ public class OavpEditor {
         break;
 
       case 10: // ITERATION
+        drawMouseIndicators = false;
+
         if (this.isSelectIterationFuncMode) {
           palette.reset(palette.flat.black, palette.flat.white, 2);
 
@@ -1321,10 +1339,11 @@ public class OavpEditor {
         break;
 
       case 11: // ITERATION_COUNT
+        toolColor = palette.flat.darkSecondary;
         visualizers
           .create()
           .center().middle()
-          .strokeColor(palette.flat.darkSecondary)
+          .strokeColor(toolColor)
           .noFillStyle()
           .strokeWeightStyle(0.5)
           .move(activeVariable.x, activeVariable.y, activeVariable.z)
@@ -1333,6 +1352,26 @@ public class OavpEditor {
           .draw.basicCircle(5)
           .done();
         break;
+    }
+
+    if (drawMouseIndicators && input.isMousePressed()) {
+      if (input.isHoldingShift) {
+        visualizers
+          .create()
+          .strokeColor(toolColor)
+          .move(mouseX, mouseY)
+          .rotateClockwise(45)
+          .draw.basicSquare(input.getYGridTicks() * 0.1)
+          .done();
+      } else {
+        visualizers
+          .create()
+          .strokeColor(toolColor)
+          .move(mouseX, mouseY)
+          .draw.basicCircle(input.getXGridTicks() * 0.1)
+          .draw.basicSquare(input.getYGridTicks() * 0.1)
+          .done();
+      }
     }
   }
 
