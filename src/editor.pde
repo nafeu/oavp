@@ -1056,7 +1056,11 @@ public class OavpEditor {
 
   public void drawIfEditMode() {
     if (this.isEditMode) {
+      beginCamera();
+      camera();
       this.draw();
+      cp5.draw();
+      endCamera();
     }
   }
 

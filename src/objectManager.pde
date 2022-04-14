@@ -95,7 +95,10 @@ public class OavpObjectManager {
   public void remove() {
     String activeObjectName = this.getActiveVariable().name;
 
-    if (activeObjectName != "background") {
+    if (
+      activeObjectName != "background"
+      && activeObjectName != "camera"
+    ) {
       activeObjects.remove(this.getActiveObject());
       objectsStorage.remove(activeObjectName);
       lastActiveVariable();

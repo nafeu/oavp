@@ -83,10 +83,6 @@ void setup() {
   }
 }
 
-public void controlP5TestInput(String theText) {
-  println(theText);
-}
-
 boolean firstRender = true;
 
 synchronized void draw() {
@@ -406,6 +402,18 @@ void setupPostSketchDefaults() {
       .strokeColor(palette.flat.white)
       .strokeWeight(2);
   }
+  if (!objects.has("camera")) {
+    objects.add("camera", "blank")
+      .set("x", 0)
+      .set("y", 0)
+      .set("z", 0)
+      .set("w", 0)
+      .set("h", 0)
+      .set("l", 0)
+      .set("paramA", 40000)
+      .set("paramB", 0)
+      .set("paramC", 0);
+  }
 }
 
 void updateSketchDefaults() {
@@ -426,10 +434,49 @@ void updateSketchDefaults() {
 }
 
 void drawSketchDefaults() {
+  drawCamera();
+  drawBackground();
+
+  OavpVariable cameraVariable = objects.get("camera").variable;
+}
+
+void drawBackground() {
   OavpVariable backgroundVariable = objects.get("background").variable;
   palette.reset(
     backgroundVariable.fillColor,
     backgroundVariable.strokeColor,
     backgroundVariable.strokeWeight
   );
+}
+
+void drawCamera() {
+  OavpVariable cameraVariable = objects.get("camera").variable;
+
+  PVector eye = new PVector();
+  PVector center = new PVector();
+  PVector up = new PVector();
+
+  eye.x = width/2.0 + cameraVariable.val("x");
+  eye.y = height/2.0 + cameraVariable.val("y");
+  eye.z = ((height/2.0) / tan(PI*30.0 / 180.0)) + cameraVariable.val("z");
+  center.x = width/2.0 + + cameraVariable.val("x");
+  center.y = height/2.0 + cameraVariable.val("y");
+  center.z = 0 + cameraVariable.val("z");
+  up.x = 0 + + cameraVariable.val("x");
+  up.y = 1 + cameraVariable.val("y");
+  up.z = 0 + cameraVariable.val("z");
+
+  camera(
+    eye.x, eye.y, eye.z,
+    center.x, center.y, center.z,
+    up.x, up.y, up.z
+  );
+
+  float fov = PI/3.0;
+  float cameraZ = (height/2.0) / tan(fov/2.0);
+
+  perspective(
+    fov, float(width)/float(height),
+    cameraZ/10.0, cameraZ * 10.0 + cameraVariable.val("paramA"));
+
 }
