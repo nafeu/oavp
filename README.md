@@ -41,9 +41,31 @@ Alternatively you can also use [`processing-sublime`](https://github.com/b-g/pro
 
 ## Creating & Running Sketches
 
-After launching the editor you can press `e` to activate edit mode.
+Once you run the sketch, give it a few seconds to fully launch, then press `e` to activate edit mode. Refer to the keybindings table below for usage instructions:
 
-TODO: Update these docs and add all keybinds here
+| Key | Description | Usage |
+|-|-|-|
+| `e` | Activate edit mode |  |
+| `n` | Create new object | `↕` then `enter` to select an object to create |
+| `[` | Select previous object in list |  |
+| `]` | Select next object in list |  |
+| `d` | Duplicate selected object |  |
+| `w` | Delete selected object (cannot delete special objects like `Camera` or `Background`) |  |
+| `q` | Toggle snap grid intensity | toggle between *low*, *medium*, *high* or *disabled* |
+| `m` | Select Move Tool: Move object origin in xyz dimensions | `↔` to move in **x** dimension<br />`↕` to move in **y** dimension<br />`↕` + `shift` to move in **z** dimension |
+| `s` | Select Resize Tool: Resize the object (only applies to a few objects, use **transform** option otherwise) | `↕` to change **s** value |
+| `t` | Select Transform Tool: Transform object width, height or length | `↔` to change **w**<br />`↕` to change **h**<br />`↕` + `shift` to change **l** |
+| `r` | Select Rotate Tool: Rotate object around xyz dimensions | `↔` eto change **xr**<br />`↕` to change **yr**<br />`↕` + `shift` to change **zr** |
+| `c` | Select Colour Tool: Change object stroke and fill colours | `↔` to change selected colour<br />`↕` to change selected palette<br />`enter` to apply selection to stroke<br />`shift` + `enter` to apply selection to fill<br />`ctrl` + `enter` to apply selection to stroke and fill<br />`delete/backspace` to remove stroke<br />`shift` + `delete/backspace` to remove fill<br />`ctrl` + `delete/backspace` reset colours<br />`backslash` to select random palette<br />`shift` + `backslash` to apply random stroke and fill combination from selected palette |
+| `b` | Select Weight Tool: Change object's stroke weight | `↕` to change **strokeWeight** |
+| `z` | Select Modifiers Tool: Augment or animate object properties with different modifier types | `↕` to select an object property<br />`↔` to change value<br />`enter` to select modifier type |
+| `v` | Select Variation Tool: Select different object variation | `↕` to change object variation (only applies to some objects) |
+| `p` | Select Params Tool: Change additional object parameters (only applies to some objects) | `↕` to select an object parameter<br />`↔` to change value |
+| `o` | Select Mod Delay Tool: Change frame delay for modifiers (animations or augmentations) | `↕` to change **modDelay** |
+| `a` | Select Iter Count Tool: Change number of object iterations being drawn | `↕` to change **i** |
+| `i` | Select Iterations Tool: Augment object properties based on which iteration is being drawn with an iteration function | `↕` to select an object property<br />`↔` to change value<br />`enter` to select iteration function |
+| `x` | Export sketch to console |  |
+| `y` | Take screenshot | _\*only works if not in edit mode_ |
 
 # Documentation
 
