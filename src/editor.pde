@@ -12,6 +12,15 @@ int TOOL_ITERATION = 10;
 int TOOL_ITERATION_COUNT = 11;
 
 // KEYS
+int KEY_1 = 49;
+int KEY_2 = 50;
+int KEY_3 = 51;
+int KEY_4 = 52;
+int KEY_5 = 53;
+int KEY_6 = 54;
+int KEY_7 = 55;
+int KEY_8 = 56;
+int KEY_9 = 57;
 int KEY_A = 65;
 int KEY_B = 66;
 int KEY_C = 67;
@@ -223,6 +232,16 @@ public class OavpEditor {
         if (input.isPressed(KEY_M)) { this.switchTool(TOOL_MOVE); }
         if (input.isHoldingControl) {
           if (input.isPressed(KEY_S)) { this.lazySave(); println("Sketch saved to " + sketchPath("sketch.pde")); }
+
+          if (input.isPressed(KEY_1)) { presetOne(); }
+          if (input.isPressed(KEY_2)) { presetTwo(); }
+          if (input.isPressed(KEY_3)) { presetThree(); }
+          if (input.isPressed(KEY_4)) { presetFour(); }
+          if (input.isPressed(KEY_5)) { presetFive(); }
+          if (input.isPressed(KEY_6)) { presetSix(); }
+          if (input.isPressed(KEY_7)) { presetSeven(); }
+          if (input.isPressed(KEY_8)) { presetEight(); }
+          if (input.isPressed(KEY_9)) { presetNine(); }
         } else {
           if (input.isPressed(KEY_S)) { this.switchTool(TOOL_RESIZE); }
         }
