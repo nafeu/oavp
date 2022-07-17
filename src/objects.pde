@@ -20,6 +20,7 @@ String[] OBJECT_LIST = {
   "Splash",
   "Terrain",
   "Triangle",
+  "Vegetation",
   "Waveform",
   "ZRectangles"
   // "Image",
@@ -58,6 +59,7 @@ public OavpObject createObject(String className) {
     case "Splash": object = new OavpObjSplash(); break;
     case "Terrain": object = new OavpObjTerrain(); break;
     case "Triangle": object = new OavpObjTriangle(); break;
+    case "Vegetation": object = new OavpObjVegetation(); break;
     case "Waveform": object = new OavpObjWaveform(); break;
     case "ZRectangles": object = new OavpObjZRectangles(); break;
     default: object = new OavpObject();
@@ -1056,6 +1058,56 @@ public class OavpObjGoldenRatio extends OavpObject {
       visualizers.draw.basicPhiGrid(variable.val("s", iteration));
     } else {
       visualizers.draw.basicGoldenRectangle(variable.val("s", iteration));
+    }
+
+    visualizers.done();
+  }
+}
+
+public class OavpObjVegetation extends OavpObject {
+  public void setup() {
+    variable
+      .variations(
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5"
+      )
+      .set("s", 20)
+      .set("strokeColor", palette.flat.white);
+  }
+
+  public void draw(int iteration) {
+    visualizers
+      .create()
+      .center().middle()
+      .use(variable, iteration);
+
+    if (variable.ofVariation("A2")) {
+      visualizers.draw.basicVegetationA2(variable.val("s", iteration));
+    } else if (variable.ofVariation("A3")) {
+      visualizers.draw.basicVegetationA3(variable.val("s", iteration));
+    } else if (variable.ofVariation("A4")) {
+      visualizers.draw.basicVegetationA4(variable.val("s", iteration));
+    } else if (variable.ofVariation("A5")) {
+      visualizers.draw.basicVegetationA5(variable.val("s", iteration));
+    } else if (variable.ofVariation("B1")) {
+      visualizers.draw.basicVegetationB1(variable.val("s", iteration));
+    } else if (variable.ofVariation("B2")) {
+      visualizers.draw.basicVegetationB2(variable.val("s", iteration));
+    } else if (variable.ofVariation("B3")) {
+      visualizers.draw.basicVegetationB3(variable.val("s", iteration));
+    } else if (variable.ofVariation("B4")) {
+      visualizers.draw.basicVegetationB4(variable.val("s", iteration));
+    } else if (variable.ofVariation("B5")) {
+      visualizers.draw.basicVegetationB5(variable.val("s", iteration));
+    } else {
+      visualizers.draw.basicVegetationA1(variable.val("s", iteration));
     }
 
     visualizers.done();
