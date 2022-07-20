@@ -512,131 +512,131 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationA1(float x, float y, float size) {
+  public void vegetationA1(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // Bottom Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Middle Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z);
-    vertex(o.x,              o.y - (4 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (2 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (7 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationA2(float x, float y, float size) {
+  public void vegetationA2(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // Bottom Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Middle Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (4 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (7 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationA3(float x, float y, float size) {
+  public void vegetationA3(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // Bottom Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (4 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z + 1);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z + 1);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z + 1);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z + 1);
     endShape();
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z + 1);
-    vertex(o.x,              o.y - (7 * size), o.z + 1);
-    vertex(o.x + (2 * size), o.y - (2 * size), o.z + 1);
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z + 1);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationA4(float x, float y, float size) {
+  public void vegetationA4(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // First Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x,              o.y - (3 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Third Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (3 * size), o.z);
-    vertex(o.x,              o.y - (4 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (3 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (3 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Fourth Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (7 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationA5(float x, float y, float size) {
+  public void vegetationA5(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // First Trunk
@@ -644,328 +644,655 @@ public class OavpShape {
 
     // Bottom Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (3 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Trunk
-    line(o.x, o.y - (3 * size), o.x, o.y - (4 * size));
+    line(o.x, o.y - (3 * size) - trunkHeight, o.x, o.y - (4 * size) - trunkHeight);
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (7 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationB1(float x, float y, float size) {
+  public void vegetationB1(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // First Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x,              o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Triangle
     beginShape();
-    vertex(o.x,              o.y - (1 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (1 * size), o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Third Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x,              o.y - (3 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Fourth Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (3 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (3 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (3 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Fifth Triangle
     beginShape();
-    vertex(o.x,              o.y - (3 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (3 * size), o.z);
-    vertex(o.x,              o.y - (3 * size), o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Sixth Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (5 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
 
     // Seventh Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (5 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x,              o.y - (5 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (5 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (5 * size) - trunkHeight, o.z);
     endShape();
 
     // Eigth Triangle
     beginShape();
-    vertex(o.x,              o.y - (5 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (5 * size), o.z);
-    vertex(o.x,              o.y - (5 * size), o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
     endShape();
 
     // Ninth Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x,              o.y - (7 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (6 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationB2(float x, float y, float size) {
+  public void vegetationB2(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // First Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x,              o.y - (1 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Triangle
     beginShape();
-    vertex(o.x,              o.y - (1 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (1 * size), o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Third Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Fourth Triangle
     beginShape();
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (2 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Fifth Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (7 * size), o.z);
-    vertex(o.x,              o.y - (4 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
 
     // Sixth Triangle
     beginShape();
-    vertex(o.x,              o.y - (4 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (7 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (4 * size), o.z);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationB3(float x, float y, float size) {
+  public void vegetationB3(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // First Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (1 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (3 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (2 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Third Triangle
     beginShape();
-    vertex(o.x,              o.y - (2 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (3 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (2 * size), o.z);
-    vertex(o.x,              o.y - (2 * size), o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Fourth Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (3 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (3 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (3 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Fifth Triangle
     beginShape();
-    vertex(o.x,              o.y - (3 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (3 * size), o.z);
-    vertex(o.x,              o.y - (3 * size), o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Sixth Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x,              o.y - (5 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
 
     // Seventh Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (5 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x,              o.y - (5 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (5 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (5 * size) - trunkHeight, o.z);
     endShape();
 
     // Eigth Triangle
     beginShape();
-    vertex(o.x,              o.y - (5 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (5 * size), o.z);
-    vertex(o.x,              o.y - (5 * size), o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
     endShape();
 
     // Sixth Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x,              o.y - (7 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (6 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (6 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationB4(float x, float y, float size) {
+  public void vegetationB4(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // First Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (1 * size), o.z);
-    vertex(o.x             , o.y - (2 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Triangle
     beginShape();
-    vertex(o.x             , o.y - (2 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (3 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (2 * size), o.z);
-    vertex(o.x             , o.y - (2 * size), o.z);
+    vertex(o.x             , o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Third Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (3 * size), o.z);
-    vertex(o.x             , o.y - (4 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (3 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (3 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Fourth Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (5 * size), o.z);
-    vertex(o.x             , o.y - (4 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
 
     // Fifth Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (5 * size), o.z);
-    vertex(o.x             , o.y - (6 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (5 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (5 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.z);
     endShape();
 
     // Sixth Triangle
     beginShape();
-    vertex(o.x             , o.y - (6 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (7 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (6 * size), o.z);
-    vertex(o.x             , o.y - (6 * size), o.z);
+    vertex(o.x             , o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (6 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationB5(float x, float y, float size) {
+  public void vegetationB5(float x, float y, float size, float trunkHeight) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
-    line(o.x, o.y, o.x, o.y - size);
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // First Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (1 * size), o.z);
-    vertex(o.x             , o.y - (2 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (1 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (1 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x             , o.y - (3 * size), o.z);
-    vertex(o.x + (1 * size), o.y - (2 * size), o.z);
-    vertex(o.x - (1 * size), o.y - (2 * size), o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
     endShape();
 
     // Third Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (3 * size), o.z);
-    vertex(o.x             , o.y - (4 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (3 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (3 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Fourth Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x             , o.y - (7 * size), o.z);
-    vertex(o.x + (2 * size), o.y - (4 * size), o.z);
-    vertex(o.x - (2 * size), o.y - (4 * size), o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
     endShape();
+  }
+
+  public void vegetationC1(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // First Diamond
+    beginShape();
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Second Diamond
+    beginShape();
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Third Diamond
+    beginShape();
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    endShape();
+  }
+
+  public void vegetationC2(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // First Diamond
+    beginShape();
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Second Diamond
+    beginShape();
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Middle Trunk
+    line(o.x, o.y - (3 * size) - trunkHeight, o.x, o.y - (5 * size) - trunkHeight);
+
+    // Third Diamond
+    beginShape();
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Fourth Diamond
+    beginShape();
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    endShape();
+  }
+
+  public void vegetationC3(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // First Diamond
+    beginShape();
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Second Trunk
+    line(
+      o.x - (1 * size),
+      o.y - (2 * size) - trunkHeight,
+      o.x - (1 * size),
+      o.y - (3 * size) - trunkHeight
+    );
+
+    // Third Trunk
+    line(
+      o.x + (1 * size),
+      o.y - (2 * size) - trunkHeight,
+      o.x + (1 * size),
+      o.y - (3 * size) - trunkHeight
+    );
+
+    // Second Diamond
+    beginShape();
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Third Diamond
+    beginShape();
+    vertex(o.x             , o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (3 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Fourth Diamond
+    beginShape();
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Fifth Diamond
+    beginShape();
+    vertex(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Sixth Diamond
+    beginShape();
+    vertex(o.x + (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x             , o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (5 * size) - trunkHeight, o.z);
+    endShape();
+  }
+
+  public void vegetationC4(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // First Diamond
+    beginShape();
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Second Diamond
+    beginShape();
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
+    endShape();
+  }
+
+  public void vegetationC5(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // First Diamond
+    beginShape();
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (1 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Second Diamond
+    beginShape();
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size), o.y - (6 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (5 * size) - trunkHeight, o.z);
+    endShape();
+  }
+
+  public void vegetationD1(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    rectMode(CORNER);
+    // First Rectangle
+    rect(o.x - (1 * size), o.y - (2 * size) - trunkHeight, 1 * size, 1 * size);
+    // Second Rectangle
+    rect(o.x             , o.y - (3 * size) - trunkHeight, 1 * size, 1 * size);
+    // Third Rectangle
+    rect(o.x + (1 * size), o.y - (4 * size) - trunkHeight, 1 * size, 1 * size);
+    // Fourth Rectangle
+    rect(o.x             , o.y - (5 * size) - trunkHeight, 1 * size, 1 * size);
+    // Fifth Rectangle
+    rect(o.x - (1 * size), o.y - (6 * size) - trunkHeight, 1 * size, 1 * size);
+    // Sixth Rectangle
+    rect(o.x - (2 * size), o.y - (7 * size) - trunkHeight, 1 * size, 1 * size);
+    rectMode(CORNER);
+  }
+
+  public void vegetationD2(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    rectMode(CORNER);
+    // First Rectangle
+    rect(o.x             , o.y - (2 * size) - trunkHeight, 1 * size, 1 * size);
+    // Second Rectangle
+    rect(o.x - (2 * size), o.y - (4 * size) - trunkHeight, 2 * size, 2 * size);
+    // Third Rectangle
+    rect(o.x             , o.y - (7 * size) - trunkHeight, 2 * size, 3 * size);
+    rectMode(CORNER);
+  }
+
+  public void vegetationD3(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // Second Trunk
+    line(o.x, o.y - (2 * size) - trunkHeight, o.x, o.y - (3 * size) - trunkHeight);
+
+    // Third Trunk
+    line(o.x, o.y - (4 * size) - trunkHeight, o.x, o.y - (5 * size) - trunkHeight);
+
+    rectMode(CORNER);
+    // First Rectangle
+    rect(o.x - (2 * size), o.y - (2 * size) - trunkHeight, 4 * size, 1 * size);
+    // Second Rectangle
+    rect(o.x - (1 * size), o.y - (4 * size) - trunkHeight, 2 * size, 1 * size);
+    // Third Rectangle
+    rect(o.x             , o.y - (6 * size) - trunkHeight, 1 * size, 1 * size);
+    // Fourth Rectangle
+    rect(o.x - (1 * size), o.y - (7 * size) - trunkHeight, 1 * size, 1 * size);
+    rectMode(CORNER);
+  }
+
+  public void vegetationD4(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // Second Trunk
+    line(o.x - (1 * size), o.y - (2 * size) - trunkHeight, o.x - (1 * size), o.y - (3 * size) - trunkHeight);
+    // Third Trunk
+    line(o.x             , o.y - (3 * size) - trunkHeight, o.x             , o.y - (4 * size) - trunkHeight);
+    // Fourth Trunk
+    line(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.x + (1 * size), o.y - (4 * size) - trunkHeight);
+    // Fifth Trunk
+    line(o.x - (1 * size), o.y - (5 * size) - trunkHeight, o.x - (1 * size), o.y - (6 * size) - trunkHeight);
+    // Sixth Trunk
+    line(o.x + (1 * size), o.y - (5 * size) - trunkHeight, o.x + (1 * size), o.y - (6 * size) - trunkHeight);
+
+    rectMode(CORNER);
+    // First Rectangle
+    rect(o.x - (1 * size), o.y - (2 * size) - trunkHeight, 1 * size, 1 * size);
+    // Second Rectangle
+    rect(o.x             , o.y - (3 * size) - trunkHeight, 1 * size, 1 * size);
+    // Third Rectangle
+    rect(o.x - (2 * size), o.y - (4 * size) - trunkHeight, 1 * size, 1 * size);
+    // Fourth Rectangle
+    rect(o.x - (1 * size), o.y - (5 * size) - trunkHeight, 1 * size, 1 * size);
+    // Fifth Rectangle
+    rect(o.x + (1 * size), o.y - (5 * size) - trunkHeight, 1 * size, 1 * size);
+    // Six Rectangle
+    rect(o.x - (2 * size), o.y - (7 * size) - trunkHeight, 1 * size, 1 * size);
+    // Seventh Rectangle
+    rect(o.x             , o.y - (7 * size) - trunkHeight, 1 * size, 1 * size);
+    rectMode(CORNER);
+  }
+
+  public void vegetationD5(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // Second Trunk
+    line(o.x, o.y - (3 * size) - trunkHeight, o.x, o.y - (4 * size) - trunkHeight);
+
+    rectMode(CORNER);
+    // First Rectangle
+    rect(o.x             , o.y - (2 * size) - trunkHeight, 2 * size, 1 * size);
+    // Second Rectangle
+    rect(o.x - (2 * size), o.y - (3 * size) - trunkHeight, 2 * size, 1 * size);
+    // Third Rectangle
+    rect(o.x             , o.y - (5 * size) - trunkHeight, 2 * size, 1 * size);
+    // Fourth Rectangle
+    rect(o.x - (2 * size), o.y - (6 * size) - trunkHeight, 2 * size, 1 * size);
+    // Fifth Rectangle
+    rect(o.x             , o.y - (7 * size) - trunkHeight, 1 * size, 1 * size);
+    rectMode(CORNER);
   }
 }

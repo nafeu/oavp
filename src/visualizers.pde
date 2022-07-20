@@ -785,53 +785,103 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationA1(float size) {
-      shapes.vegetationA1(0, 0, size);
+    public OavpVisualizer basicVegetationA1(float size, float trunkHeight) {
+      shapes.vegetationA1(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationA2(float size) {
-      shapes.vegetationA2(0, 0, size);
+    public OavpVisualizer basicVegetationA2(float size, float trunkHeight) {
+      shapes.vegetationA2(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationA3(float size) {
-      shapes.vegetationA3(0, 0, size);
+    public OavpVisualizer basicVegetationA3(float size, float trunkHeight) {
+      shapes.vegetationA3(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationA4(float size) {
-      shapes.vegetationA4(0, 0, size);
+    public OavpVisualizer basicVegetationA4(float size, float trunkHeight) {
+      shapes.vegetationA4(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationA5(float size) {
-      shapes.vegetationA5(0, 0, size);
+    public OavpVisualizer basicVegetationA5(float size, float trunkHeight) {
+      shapes.vegetationA5(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationB1(float size) {
-      shapes.vegetationB1(0, 0, size);
+    public OavpVisualizer basicVegetationB1(float size, float trunkHeight) {
+      shapes.vegetationB1(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationB2(float size) {
-      shapes.vegetationB2(0, 0, size);
+    public OavpVisualizer basicVegetationB2(float size, float trunkHeight) {
+      shapes.vegetationB2(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationB3(float size) {
-      shapes.vegetationB3(0, 0, size);
+    public OavpVisualizer basicVegetationB3(float size, float trunkHeight) {
+      shapes.vegetationB3(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationB4(float size) {
-      shapes.vegetationB4(0, 0, size);
+    public OavpVisualizer basicVegetationB4(float size, float trunkHeight) {
+      shapes.vegetationB4(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
-    public OavpVisualizer basicVegetationB5(float size) {
-      shapes.vegetationB5(0, 0, size);
+    public OavpVisualizer basicVegetationB5(float size, float trunkHeight) {
+      shapes.vegetationB5(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationC1(float size, float trunkHeight) {
+      shapes.vegetationC1(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationC2(float size, float trunkHeight) {
+      shapes.vegetationC2(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationC3(float size, float trunkHeight) {
+      shapes.vegetationC3(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationC4(float size, float trunkHeight) {
+      shapes.vegetationC4(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationC5(float size, float trunkHeight) {
+      shapes.vegetationC5(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationD1(float size, float trunkHeight) {
+      shapes.vegetationD1(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationD2(float size, float trunkHeight) {
+      shapes.vegetationD2(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationD3(float size, float trunkHeight) {
+      shapes.vegetationD3(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationD4(float size, float trunkHeight) {
+      shapes.vegetationD4(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationD5(float size, float trunkHeight) {
+      shapes.vegetationD5(0, 0, size, trunkHeight);
       return OavpVisualizer.this;
     }
 
