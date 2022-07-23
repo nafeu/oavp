@@ -885,6 +885,56 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicVegetationE1(float size, float trunkHeight) {
+      shapes.vegetationE1(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationE2(float size, float trunkHeight) {
+      shapes.vegetationE2(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationE3(float size, float trunkHeight) {
+      shapes.vegetationE3(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationE4(float size, float trunkHeight) {
+      shapes.vegetationE4(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationE5(float size, float trunkHeight) {
+      shapes.vegetationE5(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationF1(float size, float trunkHeight) {
+      shapes.vegetationF1(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationF2(float size, float trunkHeight) {
+      shapes.vegetationF2(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationF3(float size, float trunkHeight) {
+      shapes.vegetationF3(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationF4(float size, float trunkHeight) {
+      shapes.vegetationF4(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationF5(float size, float trunkHeight) {
+      shapes.vegetationF5(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a mesh generated with an interval of incoming spectrum values
      * @param scale the scale of the mesh

@@ -1086,7 +1086,17 @@ public class OavpObjVegetation extends OavpObject {
         "D2",
         "D3",
         "D4",
-        "D5"
+        "D5",
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
       )
       .set("s", 20)
       .set("h", 0)
@@ -1191,6 +1201,56 @@ public class OavpObjVegetation extends OavpObject {
       );
     } else if (variable.ofVariation("D5")) {
       visualizers.draw.basicVegetationD5(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("E1")) {
+      visualizers.draw.basicVegetationE1(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("E2")) {
+      visualizers.draw.basicVegetationE2(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("E3")) {
+      visualizers.draw.basicVegetationE3(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("E4")) {
+      visualizers.draw.basicVegetationE4(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("E5")) {
+      visualizers.draw.basicVegetationE5(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("F1")) {
+      visualizers.draw.basicVegetationF1(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("F2")) {
+      visualizers.draw.basicVegetationF2(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("F3")) {
+      visualizers.draw.basicVegetationF3(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("F4")) {
+      visualizers.draw.basicVegetationF4(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("F5")) {
+      visualizers.draw.basicVegetationF5(
         variable.val("s", iteration),
         variable.val("h", iteration)
       );
