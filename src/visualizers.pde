@@ -935,6 +935,31 @@ class OavpVisualizer {
       return OavpVisualizer.this;
     }
 
+    public OavpVisualizer basicVegetationG1(float size, float trunkHeight) {
+      shapes.vegetationG1(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationG2(float size, float trunkHeight) {
+      shapes.vegetationG2(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationG3(float size, float trunkHeight) {
+      shapes.vegetationG3(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationG4(float size, float trunkHeight) {
+      shapes.vegetationG4(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
+    public OavpVisualizer basicVegetationG5(float size, float trunkHeight) {
+      shapes.vegetationG5(0, 0, size, trunkHeight);
+      return OavpVisualizer.this;
+    }
+
     /**
      * Draw a mesh generated with an interval of incoming spectrum values
      * @param scale the scale of the mesh

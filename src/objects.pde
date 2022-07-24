@@ -1096,7 +1096,12 @@ public class OavpObjVegetation extends OavpObject {
         "F2",
         "F3",
         "F4",
-        "F5"
+        "F5",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5"
       )
       .set("s", 20)
       .set("h", 0)
@@ -1251,6 +1256,31 @@ public class OavpObjVegetation extends OavpObject {
       );
     } else if (variable.ofVariation("F5")) {
       visualizers.draw.basicVegetationF5(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("G1")) {
+      visualizers.draw.basicVegetationG1(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("G2")) {
+      visualizers.draw.basicVegetationG2(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("G3")) {
+      visualizers.draw.basicVegetationG3(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("G4")) {
+      visualizers.draw.basicVegetationG4(
+        variable.val("s", iteration),
+        variable.val("h", iteration)
+      );
+    } else if (variable.ofVariation("G5")) {
+      visualizers.draw.basicVegetationG5(
         variable.val("s", iteration),
         variable.val("h", iteration)
       );

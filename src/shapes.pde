@@ -1526,4 +1526,150 @@ public class OavpShape {
     ellipse(o.x - (1 * size), o.y - (7 * size) - trunkHeight, 2 * size, 2 * size);
     ellipseMode(RADIUS);
   }
+
+  public void vegetationG1(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - (5 * size) - trunkHeight);
+
+    pushMatrix();
+    translate(0, 0, -1);
+    ellipseMode(CORNER);
+    // First Semi-Circle
+    arc(o.x - (2 * size), o.y - (3 * size) - trunkHeight, 2 * size, 2 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Second Semi-Circle
+    arc(o.x             , o.y - (4 * size) - trunkHeight, 2 * size, 2 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Third Semi-Circle
+    arc(o.x - (2 * size), o.y - (5 * size) - trunkHeight, 2 * size, 2 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Fourth Semi-Circle
+    arc(o.x             , o.y - (6 * size) - trunkHeight, 2 * size, 2 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Fifth Semi-Circle
+    arc(o.x - (2 * size), o.y - (7 * size) - trunkHeight, 2 * size, 2 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    ellipseMode(RADIUS);
+    popMatrix();
+
+    // Second Trunk
+    line(o.x, o.y - (1 * size) - trunkHeight, o.x - (1 * size), o.y - (2 * size) - trunkHeight);
+    // Third Trunk
+    line(o.x, o.y - (2 * size) - trunkHeight, o.x + (1 * size), o.y - (3 * size) - trunkHeight);
+    // Fourth Trunk
+    line(o.x, o.y - (3 * size) - trunkHeight, o.x - (1 * size), o.y - (4 * size) - trunkHeight);
+    // Fifth Trunk
+    line(o.x, o.y - (4 * size) - trunkHeight, o.x + (1 * size), o.y - (5 * size) - trunkHeight);
+    // Sixth Trunk
+    line(o.x, o.y - (5 * size) - trunkHeight, o.x - (1 * size), o.y - (6 * size) - trunkHeight);
+  }
+
+  public void vegetationG2(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    ellipseMode(CORNER);
+    // First Semi-Circle
+    arc(o.x - (1 * size), o.y - (3 * size) - trunkHeight, 2 * size, 2 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Second Semi-Circle
+    arc(o.x - (2 * size), o.y - (4 * size) - trunkHeight, 2 * size, 2 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Third Semi-Circle
+    arc(o.x - (1 * size), o.y - (4 * size) - trunkHeight, 2 * size, 2 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Fourth Semi-Circle
+    arc(o.x             , o.y - (5 * size) - trunkHeight, 2 * size, 2 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Fifth Semi-Circle
+    arc(o.x - (1 * size), o.y - (6 * size) - trunkHeight, 2 * size, 2 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Sixth Semi-Circle
+    arc(o.x - (1 * size), o.y - (7 * size) - trunkHeight, 2 * size, 2 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    ellipseMode(RADIUS);
+  }
+
+  public void vegetationG3(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    ellipseMode(CORNER);
+    // First Semi-Circle
+    arc(o.x - (1 * size), o.y - (2 * size) - trunkHeight, 2 * size, 1 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Second Semi-Circle
+    arc(o.x             , o.y - (3 * size) - trunkHeight, 2 * size, 2 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Third Semi-Circle
+    arc(o.x - (1 * size), o.y - (4 * size) - trunkHeight, 2 * size, 2 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Fourth Semi-Circle
+    arc(o.x             , o.y - (6 * size) - trunkHeight, 2 * size, 3 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Fifth Semi-Circle
+    arc(o.x - (1 * size), o.y - (7 * size) - trunkHeight, 2 * size, 3 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    ellipseMode(RADIUS);
+
+    // Second Trunk
+    line(o.x, o.y - (1 * size) - trunkHeight, o.x + (1 * size), o.y - (2 * size) - trunkHeight);
+    // Third Trunk
+    line(o.x, o.y - (3 * size) - trunkHeight, o.x + (1 * size), o.y - (4 * size) - trunkHeight);
+  }
+
+  public void vegetationG4(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - (6 * size) - (size/2) - trunkHeight);
+
+    pushMatrix();
+    translate(0, 0, -1);
+    ellipseMode(CORNER);
+    // First Semi-Circle
+    arc(o.x - (1 * size), o.y - (7 * size) - trunkHeight, 4 * size, 6 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    ellipseMode(RADIUS);
+    popMatrix();
+
+    // Second Trunk
+    line(o.x, o.y - (2 * size) - trunkHeight, o.x + (1 * size), o.y - (3 * size) - trunkHeight);
+    // Third Trunk
+    line(o.x, o.y - (3 * size) - trunkHeight, o.x - (1 * size), o.y - (4 * size) - trunkHeight);
+    // Fourth Trunk
+    line(o.x, o.y - (4 * size) - trunkHeight, o.x + (1 * size), o.y - (5 * size) - trunkHeight);
+  }
+
+  public void vegetationG5(float x, float y, float size, float trunkHeight) {
+    PVector o = new PVector(x, y, 0);
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - (6 * size) - trunkHeight);
+
+    ellipseMode(CORNER);
+    // First Semi-Circle
+    arc(o.x - (1 * size), o.y - (2 * size) - trunkHeight, 2 * size, 1 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Second Semi-Circle
+    arc(o.x - (1 * size), o.y - (3 * size) - trunkHeight, 2 * size, 1 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Third Semi-Circle
+    arc(o.x             , o.y - (3 * size) - trunkHeight, 2 * size, 1 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Fourth Semi-Circle
+    arc(o.x - (2 * size), o.y - (4 * size) - trunkHeight, 2 * size, 1 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Fifth Semi-Circle
+    arc(o.x - (1 * size), o.y - (4 * size) - trunkHeight, 2 * size, 1 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Sixth Semi-Circle
+    arc(o.x - (1 * size), o.y - (5 * size) - trunkHeight, 2 * size, 1 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Seventh Semi-Circle
+    arc(o.x             , o.y - (5 * size) - trunkHeight, 2 * size, 1 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Eigth Semi-Circle
+    arc(o.x - (2 * size), o.y - (6 * size) - trunkHeight, 2 * size, 1 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Ninth Semi-Circle
+    arc(o.x - (1 * size), o.y - (6 * size) - trunkHeight, 2 * size, 1 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    // Tenth Semi-Circle
+    arc(o.x - (1 * size), o.y - (7 * size) - trunkHeight, 2 * size, 1 * size, PI - HALF_PI, TWO_PI - HALF_PI, CHORD);
+    // Eleventh Semi-Circle
+    arc(o.x             , o.y - (7 * size) - trunkHeight, 2 * size, 1 * size, PI + HALF_PI, TWO_PI + HALF_PI, CHORD);
+    ellipseMode(RADIUS);
+
+    // Second Trunk
+    line(o.x, o.y - (2 * size) - trunkHeight, o.x + (1 * size), o.y - (3 * size) - trunkHeight);
+    // Third Trunk
+    line(o.x, o.y - (3 * size) - trunkHeight, o.x - (1 * size), o.y - (4 * size) - trunkHeight);
+    // Fourth Trunk
+    line(o.x, o.y - (4 * size) - trunkHeight, o.x + (1 * size), o.y - (5 * size) - trunkHeight);
+    // Fifth Trunk
+    line(o.x, o.y - (5 * size) - trunkHeight, o.x - (1 * size), o.y - (6 * size) - trunkHeight);
+    // Sixth Trunk
+    line(o.x, o.y - (6 * size) - trunkHeight, o.x + (1 * size), o.y - (7 * size) - trunkHeight);
+  }
 }
