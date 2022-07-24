@@ -512,8 +512,41 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationA1(float x, float y, float size, float trunkHeight) {
+  public void vegetationA1(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
+    float uniqMultiplier = size * uniqueness;
+
+    // Trunk
+    line(o.x, o.y, o.x, o.y - size - trunkHeight);
+
+    // Bottom Triangle
+    beginShape();
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,                               o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Middle Triangle
+    beginShape();
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    endShape();
+
+    // Top Triangle
+    beginShape();
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,                               o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
+    endShape();
+  }
+
+  public void vegetationA2(float x, float y, float size, float trunkHeight, float uniqueness) {
+    PVector o = new PVector(x, y, 0);
+    float uniqMultiplier = size * map(uniqueness, 0, 1, -1, 1);
 
     // Trunk
     line(o.x, o.y, o.x, o.y - size - trunkHeight);
@@ -528,87 +561,58 @@ public class OavpShape {
 
     // Middle Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size)                  - trunkHeight, o.z - 1);
+    vertex(o.x,              o.y - (4 * size) + uniqMultiplier - trunkHeight, o.z - 1);
+    vertex(o.x + (2 * size), o.y - (1 * size)                  - trunkHeight, o.z - 1);
+    vertex(o.x - (2 * size), o.y - (1 * size)                  - trunkHeight, o.z - 1);
     endShape();
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z - 2);
+    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z - 2);
+    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z - 2);
+    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z - 2);
     endShape();
   }
 
-  public void vegetationA2(float x, float y, float size, float trunkHeight) {
+  public void vegetationA3(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
+    float uniqMultiplier = size * abs(map(uniqueness, 0, 1, -1, 1));
 
     // Trunk
     line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // Bottom Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    endShape();
-
-    // Middle Triangle
-    beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,                               o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size), o.y - (2 * size)                  - trunkHeight, o.z + 1);
+    vertex(o.x,              o.y - (7 * size) + uniqMultiplier - trunkHeight, o.z + 1);
+    vertex(o.x + (2 * size), o.y - (2 * size)                  - trunkHeight, o.z + 1);
+    vertex(o.x - (2 * size), o.y - (2 * size)                  - trunkHeight, o.z + 1);
     endShape();
   }
 
-  public void vegetationA3(float x, float y, float size, float trunkHeight) {
+  public void vegetationA4(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
-
-    // Trunk
-    line(o.x, o.y, o.x, o.y - size - trunkHeight);
-
-    // Bottom Triangle
-    beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z + 1);
-    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z + 1);
-    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z + 1);
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z + 1);
-    endShape();
-
-    // Top Triangle
-    beginShape();
-    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
-    endShape();
-  }
-
-  public void vegetationA4(float x, float y, float size, float trunkHeight) {
-    PVector o = new PVector(x, y, 0);
+    float uniqMultiplier = size * abs(map(uniqueness, 0, 1, -1, 1));
 
     // Trunk
     line(o.x, o.y, o.x, o.y - size - trunkHeight);
 
     // First Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,                               o.y - (2 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Triangle
@@ -621,10 +625,10 @@ public class OavpShape {
 
     // Third Triangle
     beginShape();
-    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x + (1 * size), o.y - (3 * size) - trunkHeight, o.z);
-    vertex(o.x - (1 * size), o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size) - uniqMultiplier, o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x,                               o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x + (1 * size) + uniqMultiplier, o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x - (1 * size) - uniqMultiplier, o.y - (3 * size) - trunkHeight, o.z);
     endShape();
 
     // Fourth Triangle
@@ -636,18 +640,19 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationA5(float x, float y, float size, float trunkHeight) {
+  public void vegetationA5(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
+    float uniqMultiplier = size * abs(map(uniqueness, 0, 1, -1, 1));
 
     // First Trunk
     line(o.x, o.y, o.x, o.y - size);
 
     // Bottom Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (3 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x,                               o.y - (3 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
     endShape();
 
     // Second Trunk
@@ -655,14 +660,14 @@ public class OavpShape {
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (7 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x,                               o.y - (7 * size) - trunkHeight, o.z);
+    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
+    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
     endShape();
   }
 
-  public void vegetationB1(float x, float y, float size, float trunkHeight) {
+  public void vegetationB1(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -741,7 +746,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationB2(float x, float y, float size, float trunkHeight) {
+  public void vegetationB2(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -796,7 +801,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationB3(float x, float y, float size, float trunkHeight) {
+  public void vegetationB3(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -875,7 +880,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationB4(float x, float y, float size, float trunkHeight) {
+  public void vegetationB4(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -930,7 +935,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationB5(float x, float y, float size, float trunkHeight) {
+  public void vegetationB5(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -969,7 +974,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationC1(float x, float y, float size, float trunkHeight) {
+  public void vegetationC1(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1003,7 +1008,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationC2(float x, float y, float size, float trunkHeight) {
+  public void vegetationC2(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1049,7 +1054,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationC3(float x, float y, float size, float trunkHeight) {
+  public void vegetationC3(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1126,7 +1131,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationC4(float x, float y, float size, float trunkHeight) {
+  public void vegetationC4(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1151,7 +1156,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationC5(float x, float y, float size, float trunkHeight) {
+  public void vegetationC5(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1176,7 +1181,7 @@ public class OavpShape {
     endShape();
   }
 
-  public void vegetationD1(float x, float y, float size, float trunkHeight) {
+  public void vegetationD1(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1198,7 +1203,7 @@ public class OavpShape {
     rectMode(CORNER);
   }
 
-  public void vegetationD2(float x, float y, float size, float trunkHeight) {
+  public void vegetationD2(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1214,7 +1219,7 @@ public class OavpShape {
     rectMode(CORNER);
   }
 
-  public void vegetationD3(float x, float y, float size, float trunkHeight) {
+  public void vegetationD3(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1238,7 +1243,7 @@ public class OavpShape {
     rectMode(CORNER);
   }
 
-  public void vegetationD4(float x, float y, float size, float trunkHeight) {
+  public void vegetationD4(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1273,7 +1278,7 @@ public class OavpShape {
     rectMode(CORNER);
   }
 
-  public void vegetationD5(float x, float y, float size, float trunkHeight) {
+  public void vegetationD5(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1296,7 +1301,7 @@ public class OavpShape {
     rectMode(CORNER);
   }
 
-  public void vegetationE1(float x, float y, float size, float trunkHeight) {
+  public void vegetationE1(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1318,7 +1323,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationE2(float x, float y, float size, float trunkHeight) {
+  public void vegetationE2(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1334,7 +1339,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationE3(float x, float y, float size, float trunkHeight) {
+  public void vegetationE3(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1379,7 +1384,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationE4(float x, float y, float size, float trunkHeight) {
+  public void vegetationE4(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1401,7 +1406,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationE5(float x, float y, float size, float trunkHeight) {
+  public void vegetationE5(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1423,7 +1428,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationF1(float x, float y, float size, float trunkHeight) {
+  public void vegetationF1(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1437,7 +1442,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationF2(float x, float y, float size, float trunkHeight) {
+  public void vegetationF2(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1463,7 +1468,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationF3(float x, float y, float size, float trunkHeight) {
+  public void vegetationF3(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1477,7 +1482,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationF4(float x, float y, float size, float trunkHeight) {
+  public void vegetationF4(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1511,7 +1516,7 @@ public class OavpShape {
     line(o.x, o.y - (5 * size) - trunkHeight, o.x - (1 * size), o.y - (6 * size) - trunkHeight);
   }
 
-  public void vegetationF5(float x, float y, float size, float trunkHeight) {
+  public void vegetationF5(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1527,7 +1532,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationG1(float x, float y, float size, float trunkHeight) {
+  public void vegetationG1(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1561,7 +1566,7 @@ public class OavpShape {
     line(o.x, o.y - (5 * size) - trunkHeight, o.x - (1 * size), o.y - (6 * size) - trunkHeight);
   }
 
-  public void vegetationG2(float x, float y, float size, float trunkHeight) {
+  public void vegetationG2(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1583,7 +1588,7 @@ public class OavpShape {
     ellipseMode(RADIUS);
   }
 
-  public void vegetationG3(float x, float y, float size, float trunkHeight) {
+  public void vegetationG3(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1608,7 +1613,7 @@ public class OavpShape {
     line(o.x, o.y - (3 * size) - trunkHeight, o.x + (1 * size), o.y - (4 * size) - trunkHeight);
   }
 
-  public void vegetationG4(float x, float y, float size, float trunkHeight) {
+  public void vegetationG4(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
@@ -1630,7 +1635,7 @@ public class OavpShape {
     line(o.x, o.y - (4 * size) - trunkHeight, o.x + (1 * size), o.y - (5 * size) - trunkHeight);
   }
 
-  public void vegetationG5(float x, float y, float size, float trunkHeight) {
+  public void vegetationG5(float x, float y, float size, float trunkHeight, float uniqueness) {
     PVector o = new PVector(x, y, 0);
 
     // Trunk
