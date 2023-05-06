@@ -268,6 +268,8 @@ void loadApplication() {
   // Editor
   editor = new OavpEditor(input, objects, text);
 
+  setupSketchPostEditor();
+
   synchronized(this) {
     delay(loadingDelay);
     loaded = true;

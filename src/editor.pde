@@ -665,12 +665,17 @@ public class OavpEditor {
   }
 
   public void randomAssignment() {
-    objects.getActiveVariable().fillColor(
-      this.activePalette[
-        (int) random(0, this.activePalette.length)
-      ]
-    );
-    objects.getActiveVariable().strokeColor(
+    OavpVariable activeVariable = objects.getActiveVariable();
+
+    if (!activeVariable.name.contains("Arc") && !activeVariable.name.contains("CurvedLine")) {
+      activeVariable.fillColor(
+        this.activePalette[
+          (int) random(0, this.activePalette.length)
+        ]
+      );
+    }
+
+    activeVariable.strokeColor(
       this.activePalette[
         (int) random(0, this.activePalette.length)
       ]

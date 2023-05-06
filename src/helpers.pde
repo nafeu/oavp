@@ -146,3 +146,18 @@ public static boolean inArray(String[] arr, String targetValue) {
   return Arrays.asList(arr).contains(targetValue);
 }
 
+int getRandomInt(int max) {
+  return (int) random(max);
+}
+
+int coinFlip() {
+  if (random(1) > .5) {
+    return -1;
+  }
+
+  return 1;
+}
+
+boolean maybe() {
+  return random(1) > .5;
+}

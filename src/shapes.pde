@@ -1677,4 +1677,9 @@ public class OavpShape {
     // Sixth Trunk
     line(o.x, o.y - (6 * size) - trunkHeight, o.x + (1 * size), o.y - (7 * size) - trunkHeight);
   }
+
+  // TODO: Implement
+  public void cloud(float x, float y, float cloudWidth, float cloudHeight) {
+    // PVector o = new PVector(x, y, 0);
+  }
 }

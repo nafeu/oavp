@@ -1,11 +1,13 @@
 void setupSketch() {
 
-}
+} /*--SETUP--*/
+
+void setupSketchPostEditor() {
+
+} /*--SETUP_AFTER_EDITOR_INIT--*/
 
 void updateSketch() {
-
-}
+} /*--UPDATE--*/
 
 void drawSketch() {
-
-}
+} /*--DRAW--*/
