@@ -58,7 +58,7 @@ void setup() {
   println("[ oavp ]   3. sound output is using set to soundflower included multi-output device");
 
   // DISPLAY_SETTINGS_START
-  fullScreen(P3D, 2);
+  fullScreen(P3D, 1);
   // size(1080, 864, P3D);
   // DISPLAY_SETTINGS_END
 

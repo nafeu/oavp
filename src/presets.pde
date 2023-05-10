@@ -1,6 +1,4 @@
 void addHorizon() {
-  print(objects);
-
   objects.add("Horizon", "Rectangle")
     .set("x",0)
     .set("y",20000)
@@ -76,11 +74,54 @@ void addNHorizonShapes(int n) {
 
 void presetOne() { randomizeAllColors(); }
 void presetTwo() { randomizePalette(); }
-void presetThree() {}
-void presetFour() {}
-void presetFive() {}
-void presetSix() {}
+void presetThree() { addHorizon(); }
+void presetFour() { addNHorizonRectangles(getRandomInt(5)); }
+void presetFive() { addHorizonCurve(); }
+void presetSix() { printObjectInfo(); }
 void presetSeven() {}
 void presetEight() {}
 void presetNine() {}
 
+void queueFauxTimelapse() {
+  objects.add("Square", "Rectangle")
+    .set("x", 0)
+    .set("y", 0)
+    .set("zr", 0)
+    .set("w", 100)
+    .set("h", 100);
+
+  editor.toggleEditMode();
+
+  delay(3000);
+  int DELAY_MS = 100;
+
+  HashMap<String, float[]> finalObjectValues = new HashMap<>();
+
+  finalObjectValues.put("x",  new float[]{0, 200});
+  finalObjectValues.put("y",  new float[]{0, 200});
+  finalObjectValues.put("zr", new float[]{0, 45});
+  finalObjectValues.put("w",  new float[]{100, 300});
+  finalObjectValues.put("h",  new float[]{100, 400});
+
+  for (Map.Entry finalObjectValueEntry : finalObjectValues.entrySet()) {
+    float[] finalObjectValueArray = (float[]) finalObjectValueEntry.getValue();
+
+    float[] progression = generateProgression(
+      finalObjectValueArray[0],
+      finalObjectValueArray[1],
+      getRandomIntInRange(5, 20) // INCREMENT STEPS
+    );
+
+    for (int i = 0; i < progression.length; i++) {
+      float stepValue = progression[i];
+
+      editor.directEdit((String) finalObjectValueEntry.getKey(), stepValue);
+
+      delay(DELAY_MS);
+    }
+  }
+}
+
+void printObjectInfo() {
+
+}

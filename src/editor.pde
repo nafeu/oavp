@@ -454,6 +454,7 @@ public class OavpEditor {
     try {
       OavpVariable activeVariable = objects.getActiveVariable();
       Field field = activeVariable.getClass().getDeclaredField(fieldName);
+
       if (originalValues.get(fieldName).getClass() == Float.class) {
         field.set(activeVariable, (float) value + (float) originalValues.get(fieldName));
       } else if (originalValues.get(fieldName).getClass() == String.class) {
@@ -461,6 +462,29 @@ public class OavpEditor {
       } else if (originalValues.get(fieldName).getClass() == Integer.class) {
         field.set(activeVariable, (int) value + (int) originalValues.get(fieldName));
       }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void directEdit(String fieldName, Object value) {
+    try {
+      OavpVariable activeVariable = objects.getActiveVariable();
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+
+      if (originalValues.get(fieldName).getClass() == Float.class) {
+        field.set(activeVariable, (float) value);
+      } else if (originalValues.get(fieldName).getClass() == String.class) {
+        field.set(activeVariable, (String) value);
+      } else if (originalValues.get(fieldName).getClass() == Integer.class) {
+        if (value instanceof Float) {
+          field.set(activeVariable, int((float) value));
+        } else {
+          field.set(activeVariable, (int) value);
+        }
+      }
+
+      originalValues.replace(fieldName, field.get(activeVariable));
     } catch (Exception e) {
       e.printStackTrace();
     }

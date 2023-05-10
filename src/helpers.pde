@@ -161,3 +161,93 @@ int coinFlip() {
 boolean maybe() {
   return random(1) > .5;
 }
+
+// float[] generateProgression(Object endValueObject, int n) {
+//   float endValue = convertToFloat(endValueObject);
+
+//   float[] progression = new float[n];
+//   float increment = endValue / (n - 1);
+
+//   for (int i = 0; i < n; i++) {
+//     progression[i] = increment * i;
+//     if (progression[i] % 2 != 0) {
+//       progression[i]--; // Ensure the number is even
+//     }
+//   }
+
+//   progression[n - 1] = endValue; // Set the last element to x
+
+//   return progression;
+// }
+
+float[] generateProgression(Object inputStartingValue, Object inputEndingValue, int stepCount) {
+  float startingValue = convertToFloat(inputStartingValue);
+  float endingValue = convertToFloat(inputEndingValue);
+
+  float[] progression = new float[stepCount];
+  float increment = (endingValue - startingValue) / (stepCount - 1);
+
+  for (int i = 0; i < stepCount; i++) {
+    float linearValue = startingValue + (increment * i);
+    float progressionValue;
+
+    if (i < stepCount / 2) {
+      progressionValue = linearValue;
+    } else {
+      float progressRatio = (float) i / (stepCount - 1);
+      float ratioModifier = (float) Math.sin(Math.PI * progressRatio);
+      progressionValue = linearValue + (increment * ratioModifier);
+    }
+
+    progression[i] = progressionValue;
+  }
+
+  return progression;
+}
+
+int[] generateRandomProgression(int x, int n) {
+  int[] progression = new int[n];
+  Random random = new Random();
+  double increment = (double) x / (n - 1);
+
+  for (int i = 0; i < n; i++) {
+    progression[i] = (int)(increment * i);
+    if (progression[i] % 2 != 0) {
+      progression[i]--; // Ensure the number is even
+    }
+  }
+
+  // Randomize the differences in the increments
+  for (int i = 1; i < n - 1; i++) {
+    int diff = random.nextInt(3) * 2; // Random even difference: 0, 2, or 4
+    progression[i] += diff;
+  }
+
+  progression[n - 1] = x; // Set the last element to x
+  return progression;
+}
+
+float convertToFloat(Object obj) {
+  if (obj instanceof Float) {
+    return (Float) obj;
+  } else if (obj instanceof Integer) {
+    return ((Integer) obj).floatValue();
+  } else {
+    throw new IllegalArgumentException("Unsupported type: " + obj.getClass());
+  }
+}
+
+int convertToInt(Object obj) {
+  if (obj instanceof Integer) {
+    return (Integer) obj;
+  } else if (obj instanceof Float) {
+    return Math.round((Float) obj);
+  } else {
+    throw new IllegalArgumentException("Unsupported type: " + obj.getClass());
+  }
+}
+
+int getRandomIntInRange(int min, int max) {
+  Random random = new Random();
+  return random.nextInt((max - min) + 1) + min;
+}
