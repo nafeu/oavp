@@ -95,7 +95,7 @@ void queueFauxTimelapse() {
   delay(3000);
   int DELAY_MS = 100;
 
-  HashMap<String, float[]> finalObjectValues = new HashMap<>();
+  HashMap<String, float[]> finalObjectValues = new HashMap<String, float[]>();
 
   finalObjectValues.put("x",  new float[]{0, 200});
   finalObjectValues.put("y",  new float[]{0, 200});
