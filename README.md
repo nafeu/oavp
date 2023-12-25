@@ -71,7 +71,19 @@ Once you run the sketch, give it a few seconds to fully launch, then press `e` t
 
 Check out the full guide and docs available [at the repo's wiki here](https://github.com/nafeu/oavp/wiki). Documentation is a still a huge work-in-progress and I would greatly appreciate if anyone was interested in helping out. PRs are welcome!
 
-*2022 Update: the oavp wiki docs are very outdated and due for an overhaul.*
+*2023 Update: the oavp wiki docs are very outdated and due for an overhaul.*
+
+## Presets
+
+Presets are triggered from numbers `1-9` on the keyboard outside of edit mode.
+
+To activate editor sequences like the `queueFauxTimelapse` function, add `thread("queueFauxTimelapse");` in the `setupSketchPostEditor` function body in your `sketch.pde` file:
+
+```
+void setupSketchPostEditor() {
+  thread("queueFauxTimelapse");
+}
+```
 
 ## Credits
 
