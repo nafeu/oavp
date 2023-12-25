@@ -1,22 +1,21 @@
 {
-  "name": "oavp-generator",
-  "version": "0.1.0",
-  "description": "generator script for oavp editor",
+  "name": "preset-builder",
+  "version": "1.0.0",
+  "description": "Diff object exports vs defaults to create presets",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "generator",
-    "oavp",
+    "snapshot",
     "art",
-    "3d"
+    "converter",
+    "presets"
   ],
   "author": "nafeu",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.21",
-    "topic-weaver": "^0.1.2"
+    "diff": "^5.1.0"
   },
   "scripts": {
     "start": "node index.js"

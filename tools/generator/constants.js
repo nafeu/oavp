@@ -1,4 +1,4 @@
-export const OAVP_OBJECT_PROPERTIES = [
+const OAVP_OBJECT_PROPERTIES = [
   {
     id: "x",
     defaultValue: 0,
@@ -369,7 +369,7 @@ export const OAVP_OBJECT_PROPERTIES = [
   }
 ];
 
-export const OAVP_AVAILABLE_SHAPES = [
+const OAVP_AVAILABLE_SHAPES = [
   "Arc",
   "Box",
   "Bullseye",
@@ -395,3 +395,5 @@ export const OAVP_AVAILABLE_SHAPES = [
   "Waveform",
   "ZRectangles"
 ];
+
+module.exports = { OAVP_OBJECT_PROPERTIES, OAVP_AVAILABLE_SHAPES }

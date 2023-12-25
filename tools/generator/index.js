@@ -1,7 +1,7 @@
-import _ from 'lodash';
-import { weaveTopics } from 'topic-weaver';
+const _ = require('lodash');
+const { weaveTopics } = require('topic-weaver');
 
-import { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } from './constants.mjs';
+const { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } = require('./constants');
 
 const conceptMap = `
 #root
@@ -11,7 +11,7 @@ const conceptMap = `
 [rectangle]
 
 #rectangle
-Rectangle|w:[dim];h:[dim]
+Rectangle|y:40;yIter:-5.0;zIter:45.0;zrIter:4.0;w:100;wIter:5.0;h:100;hIter:5.0;strokeWeight:2.0;fillColor:0;i:21;
 
 #dim
 100

@@ -20,3 +20,4 @@ devnotes.txt
 project.todo
 screencap-code-exports/
 **/node_modules/
+**/target.txt/
