@@ -169,7 +169,7 @@ public class OavpObjectManager {
 
   public String exportSketchData() {
     Date date = new Date();
-    println("--- [ object data : " + date + " ] ---");
+    println("--- [ sketch data : " + date + " ] ---");
     StringBuilder objectData = new StringBuilder();
     for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
       OavpObject object = entry.getValue();
@@ -225,6 +225,70 @@ public class OavpObjectManager {
     StringSelection stringSelection = new StringSelection(objectData.toString());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     clipboard.setContents(stringSelection, null);
+    return objectData.toString();
+  }
+
+  public String exportObjectData() {
+    Date date = new Date();
+    println("--- [ object data : " + date + " ] ---");
+    StringBuilder objectData = new StringBuilder();
+
+    OavpObject object = objects.getActiveObject();
+    OavpVariable variable = object.getVariable();
+    String objectKey = variable.name;
+    String objectClassName = extractOavpClassName(object.getClass().getName());
+
+    objectData.append("objects\n.add(\"" + objectKey + "\",\"" + objectClassName + "\")\n");
+
+    for (String rawFieldName : MODIFIER_FIELDS) {
+      String fieldName = rawFieldName.split("Mod")[0];
+
+      try {
+        Field field = variable.getClass().getDeclaredField(fieldName);
+        Field fieldMod = variable.getClass().getDeclaredField(fieldName + "Mod");
+        Field fieldModType = variable.getClass().getDeclaredField(fieldName + "ModType");
+        Field fieldIter = variable.getClass().getDeclaredField(fieldName + "Iter");
+        Field fieldIterFunc = variable.getClass().getDeclaredField(fieldName + "IterFunc");
+
+        Object fieldValue = field.get(variable);
+        Object fieldModValue = fieldMod.get(variable);
+        Object fieldModTypeValue = fieldModType.get(variable);
+        Object fieldIterValue = fieldIter.get(variable);
+        Object fieldIterFuncValue = fieldIterFunc.get(variable);
+
+        objectData.append(".set(\"" + fieldName + "\"," + fieldValue + ")\n");
+        objectData.append(".set(\"" + fieldName + "Mod" + "\"," + fieldModValue + ")\n");
+        objectData.append(".set(\"" + fieldName + "ModType" + "\",\"" + fieldModTypeValue + "\")\n");
+        objectData.append(".set(\"" + fieldName + "Iter" + "\"," + fieldIterValue + ")\n");
+        objectData.append(".set(\"" + fieldName + "IterFunc" + "\",\"" + fieldIterFuncValue + "\")\n");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    if (variable.variation != 0) { objectData.append(".set(\"variation\",\"" + variable.getVariation() + "\")\n"); }
+
+    for (HashMap.Entry<String, Object> customAttrEntry : variable.customAttrs.entrySet()) {
+      if (customAttrEntry.getValue().getClass() == Float.class) {
+        objectData.append(".set(\"" + customAttrEntry.getKey() + "\"," + customAttrEntry.getValue() + ")\n");
+      } else if (customAttrEntry.getValue().getClass() == String.class) {
+        objectData.append(".set(\"" + customAttrEntry.getKey() + "\",\"" + customAttrEntry.getValue() + "\")\n");
+      } else if (customAttrEntry.getValue().getClass() == Integer.class) {
+        objectData.append(".set(\"" + customAttrEntry.getKey() + "\"," + customAttrEntry.getValue() + ")\n");
+      }
+    }
+
+    objectData.append(".set(\"modDelay\"," + variable.modDelay + ")\n");
+    objectData.append(".set(\"i\"," + variable.i + ")");
+    objectData.append(";");
+
+    StringSelection stringSelection = new StringSelection(objectData.toString());
+    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    clipboard.setContents(stringSelection, null);
+
+    String[] lines = objectData.toString().split("\n");
+    saveStrings(sketchPath("") + "../tools/preset-builder/target.txt", lines);
+
     return objectData.toString();
   }
 }

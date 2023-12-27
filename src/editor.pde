@@ -48,6 +48,7 @@ int KEY_X = 88;
 int KEY_Y = 89;
 int KEY_Z = 90;
 int KEY_PLUS = 61;
+int KEY_COMMA = 44;
 int KEY_MINUS = 45;
 int KEY_RIGHT_BRACKET = 93;
 int KEY_LEFT_BRACKET = 91;
@@ -261,6 +262,7 @@ public class OavpEditor {
       if (input.isPressed(KEY_N)) { toggleCreateMode(); }
       if (input.isPressed(KEY_Q)) { toggleSnapIntensity(); }
       if (input.isPressed(KEY_X)) { println(objects.exportSketchData()); }
+      if (input.isPressed(KEY_COMMA)) { println(objects.exportObjectData()); }
       if (input.isPressed(KEY_W)) { objects.remove(); }
     }
   }

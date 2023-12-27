@@ -277,6 +277,8 @@ void loadApplication() {
 }
 
 void keyPressed() {
+  println("[ oavp ] Key pressed: " + key + " : " + keyCode);
+
   switch(key) {
     case ESC:
       key = 0;

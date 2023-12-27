@@ -8,10 +8,13 @@ const conceptMap = `
 [object]
 
 #object
-[rectangle]
+[arc]
 
 #rectangle
 Rectangle|y:40;yIter:-5.0;zIter:45.0;zrIter:4.0;w:100;wIter:5.0;h:100;hIter:5.0;strokeWeight:2.0;fillColor:0;i:21;
+
+#arc
+Arc|zMod:-250.0;zModType:"osc-normal";zIter:35.0;zrIter:5.0;w:100.0;h:100.0;s:100.0;paramB:180.0;fillColor:0;i:21;
 
 #dim
 100
@@ -40,10 +43,18 @@ const addRandomObject = () => {
 
   const overrides = [];
 
-  valuesMapping.split(';').forEach(valueMapping => {
-    const [property, value] = valueMapping.split(':');
+  valuesMapping
+    .split(';')
+    .filter(value => value.length > 0)
+    .forEach(valueMapping => {
+      const [property, value] = valueMapping.split(':');
 
-    overrides.push({ id: property, value: value === 'none' ? 'none' : Number(value) });
+      const isString = value.includes('"');
+
+      overrides.push({
+        id: property,
+        value: isString ? value : Number(value)
+      });
   })
 
   OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue }) => {
