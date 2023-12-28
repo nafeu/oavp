@@ -1,45 +1,25 @@
+const fs = require('fs');
 const _ = require('lodash');
+const { v4: uuidv4 } = require('uuid');
+
 const { weaveTopics } = require('topic-weaver');
 
 const { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } = require('./constants');
+const { foregroundFocalPoint } = require('./concept-maps');
 
-const conceptMap = `
-#root
-[object]
+const { topics: allEncodedParameters, issues } = weaveTopics(foregroundFocalPoint, 1);
 
-#object
-[arc]
-
-#rectangle
-Rectangle|y:40;yIter:-5.0;zIter:45.0;zrIter:4.0;w:100;wIter:5.0;h:100;hIter:5.0;strokeWeight:2.0;fillColor:0;i:21;
-
-#arc
-Arc|zMod:-250.0;zModType:"osc-normal";zIter:35.0;zrIter:5.0;w:100.0;h:100.0;s:100.0;paramB:180.0;fillColor:0;i:21;
-
-#dim
-100
-200
-300
-400
-`
-
-const getRandomObject = () => {
-  const { topics, issues } = weaveTopics(conceptMap, 1);
-
-  if (issues.length > 0) {
-    throw new Error(issues[0]);
-  }
-
-  return topics[0];
+if (issues.length > 0) {
+  console.log(issues);
+  process.exit(1);
 }
 
-let sketch = [];
-let counter = 0;
+const buildObjectString = encodedParameters => {
+  const output = [];
 
-const addRandomObject = () => {
-  const [shape, valuesMapping] = getRandomObject().split('|');
+  const [shape, valuesMapping] = encodedParameters.split('|');
 
-  sketch.push(`objects.add("shape_${++counter}", "${shape}")`)
+  output.push(`objects.add("${uuidv4()}", "${shape}")`)
 
   const overrides = [];
 
@@ -61,21 +41,38 @@ const addRandomObject = () => {
     const override = _.find(overrides, { id });
 
     if (override) {
-      sketch.push(`.set("${override.id}", ${override.value})`);
+      output.push(`.set("${override.id}", ${override.value})`);
     } else {
       const isString = typeof defaultValue === 'string';
 
       const value = isString ? `"${defaultValue}"` : defaultValue;
 
-      sketch.push(`.set("${id}", ${value})`);
+      output.push(`.set("${id}", ${value})`);
     }
   });
 
-  sketch.push(';');
+  output.push(';');
+
+  return output.join('');
 }
 
-addRandomObject();
+const buildTemplatedSketch = ({ setupSketch }) => `void setupSketch() {
+  ${setupSketch}
+}
 
-sketch = `${sketch.join('')}`;
+void setupSketchPostEditor() {}
+void updateSketch() {}
+void drawSketch() {}
+`
 
-console.log(sketch);
+const setupSketch = [];
+
+allEncodedParameters.forEach(encodedParameters => {
+  const objectString = buildObjectString(encodedParameters);
+
+  setupSketch.push(objectString);
+});
+
+const sketch = buildTemplatedSketch({ setupSketch: setupSketch.join("\n  ") });
+
+fs.writeFileSync('./export.txt', sketch);

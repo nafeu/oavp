@@ -4,7 +4,7 @@
   "description": "generator script for oavp editor",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [
     "generator",
@@ -16,9 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.21",
-    "topic-weaver": "^0.1.2"
-  },
-  "scripts": {
-    "start": "node index.js"
+    "topic-weaver": "^0.1.2",
+    "uuid": "^9.0.1"
   }
 }
