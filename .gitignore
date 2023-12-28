@@ -22,3 +22,4 @@ screencap-code-exports/
 **/node_modules/
 **/target.txt
 **/export.txt
+**/preset-dump.txt

@@ -32,32 +32,47 @@ const splitString = input => {
   return result.map(item => item.trim());
 }
 
-difference = compareFiles();
+const directoryPath = './';
+const targetFileName = 'target.txt';
+const dumpFilePath = 'preset-dump.txt';
 
-let processedDiff = [];
+console.log(`[ preset-builder ] Watching for changes to ${targetFileName}`);
+console.log(`[ preset-builder ] Dumping generated presets into to ${dumpFilePath}`);
 
-difference.forEach(line => {
-  processedDiff = [...processedDiff, ...splitString(line)];
-});
+const logStream = fs.createWriteStream(dumpFilePath, { flags: 'a' });
 
 let output = '';
+let processedDiff = [];
+let presetCount = 0;
 
-processedDiff.forEach(line => {
-  const isAddition = line.includes('.add(');
+fs.watch(directoryPath, (eventType, filename) => {
+  if (filename !== targetFileName) { return };
 
-  if (isAddition) {
-    const objectName = line.match(/\.add\("[^"]+","([^"]+)"\)/)[1];
+  output = '';
+  processedDiff = [];
 
-    output = `${objectName}|`;
-  } else {
-    const regex = /\.set\("([^"]+)",\s*([^)]+)\)/g;
+  compareFiles().forEach(line => {
+    processedDiff = [...processedDiff, ...splitString(line)];
+  });
 
-    while ((match = regex.exec(line)) !== null) {
-      const property = match[1].trim();
-      const value = match[2].trim();
-      output += `${property}:${value};`;
+  processedDiff.forEach(line => {
+    const isAddition = line.includes('.add(');
+
+    if (isAddition) {
+      const objectName = line.match(/\.add\("[^"]+","([^"]+)"\)/)[1];
+
+      output = `${objectName}|`;
+    } else {
+      const regex = /\.set\("([^"]+)",\s*([^)]+)\)/g;
+
+      while ((match = regex.exec(line)) !== null) {
+        const property = match[1].trim();
+        const value = match[2].trim();
+        output += `${property}:${value};`;
+      }
     }
-  }
-});
+  });
 
-console.log(output);
+  console.log(`[ preset-builder ] Added preset (${++presetCount})`);
+  logStream.write(`\n${output}`);
+});

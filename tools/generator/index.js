@@ -1,6 +1,6 @@
 const fs = require('fs');
 const _ = require('lodash');
-const { v4: uuidv4 } = require('uuid');
+const shortid = require('shortid');
 
 const { weaveTopics } = require('topic-weaver');
 
@@ -17,41 +17,45 @@ if (issues.length > 0) {
 const buildObjectString = encodedParameters => {
   const output = [];
 
-  const [shape, valuesMapping] = encodedParameters.split('|');
+  const singleLineParameterSets = encodedParameters.split('+');
 
-  output.push(`objects.add("${uuidv4()}", "${shape}")`)
+  singleLineParameterSets.forEach((singleLineParameterSet, index) => {
+    const [shape, valuesMapping] = singleLineParameterSet.split('|');
 
-  const overrides = [];
+    output.push(`objects.add("${shape}_${shortid.generate()}", "${shape}")`)
 
-  valuesMapping
-    .split(';')
-    .filter(value => value.length > 0)
-    .forEach(valueMapping => {
-      const [property, value] = valueMapping.split(':');
+    const overrides = [];
 
-      const isString = value.includes('"');
+    valuesMapping
+      .split(';')
+      .filter(value => value.length > 0)
+      .forEach(valueMapping => {
+        const [property, value] = valueMapping.split(':');
 
-      overrides.push({
-        id: property,
-        value: isString ? value : Number(value)
-      });
-  })
+        const isString = value.includes('"');
 
-  OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue }) => {
-    const override = _.find(overrides, { id });
+        overrides.push({
+          id: property,
+          value: isString ? value : Number(value)
+        });
+    })
 
-    if (override) {
-      output.push(`.set("${override.id}", ${override.value})`);
-    } else {
-      const isString = typeof defaultValue === 'string';
+    OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue }) => {
+      const override = _.find(overrides, { id });
 
-      const value = isString ? `"${defaultValue}"` : defaultValue;
+      if (override) {
+        output.push(`.set("${override.id}", ${override.value})`);
+      } else {
+        const isString = typeof defaultValue === 'string';
 
-      output.push(`.set("${id}", ${value})`);
-    }
+        const value = isString ? `"${defaultValue}"` : defaultValue;
+
+        output.push(`.set("${id}", ${value})`);
+      }
+    });
+
+    output.push(`;${index === singleLineParameterSets.length - 1 ? '' : '\n  '}`);
   });
-
-  output.push(';');
 
   return output.join('');
 }
@@ -75,4 +79,6 @@ allEncodedParameters.forEach(encodedParameters => {
 
 const sketch = buildTemplatedSketch({ setupSketch: setupSketch.join("\n  ") });
 
-fs.writeFileSync('./export.txt', sketch);
+console.log(`[ generator ] Exporting sketch.pde file at ../../src/sketch.pde`);
+
+fs.writeFileSync('../../src/sketch.pde', sketch);
