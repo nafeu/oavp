@@ -2,15 +2,28 @@ const fs = require('fs');
 const _ = require('lodash');
 const shortid = require('shortid');
 const WebSocket = require('ws');
+const yargs = require('yargs');
 
 const { weaveTopics } = require('topic-weaver');
 
 const { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } = require('./constants');
-const { foregroundFocalPoint } = require('./concept-maps');
+const {
+  foregroundObjects,
+  surroundingObjects
+} = require('./concept-maps');
 
 const WEBSOCKET_SERVER_URL = 'ws://localhost:3000/commands';
 
-const ws = new WebSocket(WEBSOCKET_SERVER_URL);
+let ws;
+
+const argv = yargs
+  .option('export', {
+    alias: 'e',
+    description: 'Execute code for export',
+    type: 'boolean',
+  })
+  .help()
+  .alias('help', 'h').argv;
 
 const getOverridesFromParameterSet = singleLineParameterSet => {
   const [shape, valuesMapping] = singleLineParameterSet.split('|');
@@ -74,10 +87,29 @@ void updateSketch() {}
 void drawSketch() {}
 `
 
-const writeGeneratedSketchToFile = () => {
-  const { topics: allEncodedParameters, issues } = weaveTopics(foregroundFocalPoint, 1);
+const getAllEncodedParameters = () => {
+  let allEncodedParameters, allIssues;
 
-  if (issues.length > 0) { console.log(issues); process.exit(1); }
+  const randomForegroundObjects = weaveTopics(foregroundObjects, 1);
+  const randomSurroundingObjects = weaveTopics(surroundingObjects, 1);
+
+  allEncodedParameters = [
+    ...randomForegroundObjects.topics,
+    ...randomSurroundingObjects.topics
+  ];
+
+  allIssues = [
+    ...randomForegroundObjects.issues,
+    ...randomSurroundingObjects.issues
+  ];
+
+  if (allIssues.length > 0) { console.log(issues); process.exit(1); }
+
+  return allEncodedParameters;
+}
+
+const writeGeneratedSketchToFile = () => {
+  const allEncodedParameters = getAllEncodedParameters();
 
   const setupSketch = [];
 
@@ -97,9 +129,7 @@ const writeGeneratedSketchToFile = () => {
 const emitGeneratedSketchToServer = () => {
   console.log(`[ generator ] Emitting generated sketch to ${WEBSOCKET_SERVER_URL}`);
 
-  const { topics: allEncodedParameters, issues } = weaveTopics(foregroundFocalPoint, 1);
-
-  if (issues.length > 0) { console.log(issues); process.exit(1); }
+  const allEncodedParameters = getAllEncodedParameters();
 
   const objects = [];
 
@@ -118,23 +148,25 @@ const emitGeneratedSketchToServer = () => {
   console.log(`[ generator ] WebSocket message sent: ${message}`);
 }
 
-/*
-  Enable this to write sketch to file.
-*/
-// writeGeneratedSketchToFile();
+if (argv.export) {
+  writeGeneratedSketchToFile();
+} else {
+  ws = new WebSocket(WEBSOCKET_SERVER_URL);
 
-ws.on('open', () => {
-  console.log('[ generator ] WebSocket connection opened.');
+  ws.on('open', () => {
+    console.log('[ generator ] WebSocket connection opened.');
 
-  emitGeneratedSketchToServer();
+    emitGeneratedSketchToServer();
 
-  ws.close();
-});
+    ws.close();
+  });
 
-ws.on('close', () => {
-  console.log('[ generator ] WebSocket connection closed');
-});
+  ws.on('close', () => {
+    console.log('[ generator ] WebSocket connection closed');
+  });
 
-ws.on('error', (error) => {
-  console.error(`[ generator ] WebSocket error: ${error}`);
-});
+  ws.on('error', (error) => {
+    console.error(`[ generator ] WebSocket error: ${error}`);
+  });
+}
+
