@@ -1,17 +1,38 @@
 const fs = require('fs');
 const _ = require('lodash');
 const shortid = require('shortid');
+const WebSocket = require('ws');
 
 const { weaveTopics } = require('topic-weaver');
 
 const { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } = require('./constants');
 const { foregroundFocalPoint } = require('./concept-maps');
 
-const { topics: allEncodedParameters, issues } = weaveTopics(foregroundFocalPoint, 1);
+const WEBSOCKET_SERVER_URL = 'ws://localhost:3000/commands';
 
-if (issues.length > 0) {
-  console.log(issues);
-  process.exit(1);
+const ws = new WebSocket(WEBSOCKET_SERVER_URL);
+
+const getOverridesFromParameterSet = singleLineParameterSet => {
+  const [shape, valuesMapping] = singleLineParameterSet.split('|');
+
+  const overrides = [];
+
+  valuesMapping
+    .split(';')
+    .filter(value => value.length > 0)
+    .forEach(valueMapping => {
+      const [property, value] = valueMapping.split(':');
+
+      const isString = value.includes('"');
+
+      overrides.push({
+        id: property,
+        value: isString ? value : Number(value),
+        type: _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type || 'String'
+      });
+  })
+
+  return { overrides, shape };
 }
 
 const buildObjectString = encodedParameters => {
@@ -20,25 +41,9 @@ const buildObjectString = encodedParameters => {
   const singleLineParameterSets = encodedParameters.split('+');
 
   singleLineParameterSets.forEach((singleLineParameterSet, index) => {
-    const [shape, valuesMapping] = singleLineParameterSet.split('|');
+    const { overrides, shape } = getOverridesFromParameterSet(singleLineParameterSet);
 
     output.push(`objects.add("${shape}_${shortid.generate()}", "${shape}")`)
-
-    const overrides = [];
-
-    valuesMapping
-      .split(';')
-      .filter(value => value.length > 0)
-      .forEach(valueMapping => {
-        const [property, value] = valueMapping.split(':');
-
-        const isString = value.includes('"');
-
-        overrides.push({
-          id: property,
-          value: isString ? value : Number(value)
-        });
-    })
 
     OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue }) => {
       const override = _.find(overrides, { id });
@@ -69,16 +74,67 @@ void updateSketch() {}
 void drawSketch() {}
 `
 
-const setupSketch = [];
+const writeGeneratedSketchToFile = () => {
+  const { topics: allEncodedParameters, issues } = weaveTopics(foregroundFocalPoint, 1);
 
-allEncodedParameters.forEach(encodedParameters => {
-  const objectString = buildObjectString(encodedParameters);
+  if (issues.length > 0) { console.log(issues); process.exit(1); }
 
-  setupSketch.push(objectString);
+  const setupSketch = [];
+
+  allEncodedParameters.forEach(encodedParameters => {
+    const objectString = buildObjectString(encodedParameters);
+
+    setupSketch.push(objectString);
+  });
+
+  const sketch = buildTemplatedSketch({ setupSketch: setupSketch.join("\n  ") });
+
+  console.log(`[ generator ] Exporting sketch.pde file at ../../src/sketch.pde`);
+
+  fs.writeFileSync('../../src/sketch.pde', sketch);
+}
+
+const emitGeneratedSketchToServer = () => {
+  console.log(`[ generator ] Emitting generated sketch to ${WEBSOCKET_SERVER_URL}`);
+
+  const { topics: allEncodedParameters, issues } = weaveTopics(foregroundFocalPoint, 1);
+
+  if (issues.length > 0) { console.log(issues); process.exit(1); }
+
+  const objects = [];
+
+  allEncodedParameters.forEach(encodedParameters => {
+    const singleLineParameterSets = encodedParameters.split('+');
+
+    singleLineParameterSets.forEach((singleLineParameterSet, index) => {
+      const { overrides, shape } = getOverridesFromParameterSet(singleLineParameterSet);
+
+      objects.push({ oavpObject: shape, params: overrides, id: `${shape}_${shortid.generate()}` });
+    });
+  });
+
+  const message = JSON.stringify(objects);
+  ws.send(message);
+  console.log(`[ generator ] WebSocket message sent: ${message}`);
+}
+
+/*
+  Enable this to write sketch to file.
+*/
+// writeGeneratedSketchToFile();
+
+ws.on('open', () => {
+  console.log('[ generator ] WebSocket connection opened.');
+
+  emitGeneratedSketchToServer();
+
+  ws.close();
 });
 
-const sketch = buildTemplatedSketch({ setupSketch: setupSketch.join("\n  ") });
+ws.on('close', () => {
+  console.log('[ generator ] WebSocket connection closed');
+});
 
-console.log(`[ generator ] Exporting sketch.pde file at ../../src/sketch.pde`);
-
-fs.writeFileSync('../../src/sketch.pde', sketch);
+ws.on('error', (error) => {
+  console.error(`[ generator ] WebSocket error: ${error}`);
+});
