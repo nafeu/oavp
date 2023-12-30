@@ -25,9 +25,40 @@ const sharedValues = `
 const foregroundObjects = `
 #prefabs
 [walkway]
+[walkway]+[poles]
 
 #walkway
 Flatbox|x:[dist];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:"random 100";w:150.0;h:150.0;l:110.0;s:100.0;fillColor:0;i:30;
+Flatbox|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:""random 100"";w:150.0;h:150.0;l:110.0;s:100.0;i:30;
+Flatbox|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:""random 100"";w:150.0;h:[walkway_h].0;l:110.0;s:100.0;i:30;
+
+#poles
+[base_pole]+[pole_tip]
+
+#base_pole
+Flatbox|x:[pole_x];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:""random 100"";w:-50.0;h:[pole_h].0;l:1110.0;s:100.0;i:105;fillColor:0;
+
+#pole_tip
+Flatbox|x:[pole_x];xr:90;y:-415;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:""random 100"";w:-50.0;h:[pole_h].0;l:110.0;s:100.0;i:105;fillColor:0;
+
+#pole_h
+50
+100
+150
+200
+250
+300
+
+#pole_x
+-400
+150
+-200
+500
+
+#walkway_h
+150
+100
+50
 
 `+sharedValues;
 
@@ -37,16 +68,65 @@ const surroundingObjects = `
 
 #water_waves
 [water]+[waves]
+[waves]
 
 #water
 Rectangle|xr:90;y:215;yMod:80.0;yModType:"sine";w:15500.0;h:17100.0;fillColor:0;
 
 #waves
 Arc|xr:90;y:191;z:500;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;zMod:200;zModType:"sawtooth";fillColor:0;
+Arc|xr:90;y:191;yIter:-2.0;z:900;zMod:200.0;zModType:""sawtooth"";zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
 
 `+sharedValues;
 
-module.exports = {
+const backgroundObjects = `
+#prefabs
+[background]
+
+#background
+[horizon]+[mountain_split]
+
+#horizon
+Rectangle|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:-16777216;
+
+#mountain_split
+[left_mountain]+[right_mountain]
+
+#left_mountain
+Rectangle|y:20000;z:-40991;zr:[left_mountain_rotation];w:200000.0;h:40000.0;fillColor:-16777216;
+
+#right_mountain
+Rectangle|y:20000;z:-39967;zr:[right_mountain_rotation];w:200000.0;h:40000.0;fillColor:-16777216;
+
+#left_mountain_rotation
+8
+12
+16
+22
+26
+30
+34
+38
+42
+
+#right_mountain_rotation
+-50
+-45
+-40
+-35
+-30
+-25
+-20
+-15
+-10
+-5
+
+`+sharedValues;
+
+const conceptMaps = [
   foregroundObjects,
-  surroundingObjects
-}
+  surroundingObjects,
+  backgroundObjects
+]
+
+module.exports = { conceptMaps };

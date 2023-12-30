@@ -7,10 +7,7 @@ const yargs = require('yargs');
 const { weaveTopics } = require('topic-weaver');
 
 const { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } = require('./constants');
-const {
-  foregroundObjects,
-  surroundingObjects
-} = require('./concept-maps');
+const { conceptMaps } = require('./concept-maps');
 
 const WEBSOCKET_SERVER_URL = 'ws://localhost:3000/commands';
 
@@ -88,20 +85,17 @@ void drawSketch() {}
 `
 
 const getAllEncodedParameters = () => {
-  let allEncodedParameters, allIssues;
+  let allEncodedParameters = [];
+  let allIssues = [];
 
-  const randomForegroundObjects = weaveTopics(foregroundObjects, 1);
-  const randomSurroundingObjects = weaveTopics(surroundingObjects, 1);
+  conceptMaps.forEach(conceptMap => {
+    const { topics: encodedParameters, issues } = weaveTopics(conceptMap, 1, {
+      generatorOptions: { strictMode: true }
+    });
 
-  allEncodedParameters = [
-    ...randomForegroundObjects.topics,
-    ...randomSurroundingObjects.topics
-  ];
-
-  allIssues = [
-    ...randomForegroundObjects.issues,
-    ...randomSurroundingObjects.issues
-  ];
+    allEncodedParameters = [...allEncodedParameters, ...encodedParameters];
+    allIssues = [...allIssues, ...issues];
+  });
 
   if (allIssues.length > 0) { console.log(issues); process.exit(1); }
 
