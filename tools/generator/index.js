@@ -33,7 +33,7 @@ const getOverridesFromParameterSet = singleLineParameterSet => {
     .forEach(valueMapping => {
       const [property, value] = valueMapping.split(':');
 
-      const isString = value.includes('"');
+      const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type === 'String';
 
       overrides.push({
         id: property,
@@ -55,17 +55,15 @@ const buildObjectString = encodedParameters => {
 
     output.push(`objects.add("${shape}_${shortid.generate()}", "${shape}")`)
 
-    OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue }) => {
+    OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue, type }) => {
       const override = _.find(overrides, { id });
 
+      const isString = type === 'String';
+
       if (override) {
-        output.push(`.set("${override.id}", ${override.value})`);
+        output.push(`.set("${override.id}", ${isString ? `"${override.value}"` : override.value})`);
       } else {
-        const isString = typeof defaultValue === 'string';
-
-        const value = isString ? `"${defaultValue}"` : defaultValue;
-
-        output.push(`.set("${id}", ${value})`);
+        output.push(`.set("${id}", ${isString ? `"${defaultValue}"` : defaultValue})`);
       }
     });
 

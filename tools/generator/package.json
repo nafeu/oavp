@@ -17,7 +17,7 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "shortid": "^2.2.16",
-    "topic-weaver": "^0.2.3",
+    "topic-weaver": "^0.3.1",
     "ws": "^8.16.0",
     "yargs": "^17.7.2"
   }

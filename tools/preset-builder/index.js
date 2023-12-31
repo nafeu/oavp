@@ -67,7 +67,7 @@ fs.watch(directoryPath, (eventType, filename) => {
 
       while ((match = regex.exec(line)) !== null) {
         const property = match[1].trim();
-        const value = match[2].trim();
+        const value = match[2].trim().replace(/["']/g, '');
         output += `${property}:${value};`;
       }
     }

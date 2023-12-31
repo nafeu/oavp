@@ -78,7 +78,9 @@ void presetThree() { addHorizon(); }
 void presetFour() { addNHorizonRectangles(getRandomInt(5)); }
 void presetFive() { addHorizonCurve(); }
 void presetSix() { printObjectInfo(); }
-void presetSeven() {}
+void presetSeven() {
+  editor.directEdit("z", -30000);
+}
 void presetEight() {}
 void presetNine() {}
 
