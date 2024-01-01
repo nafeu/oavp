@@ -287,7 +287,7 @@ public class OavpObjectManager {
     clipboard.setContents(stringSelection, null);
 
     String[] lines = objectData.toString().split("\n");
-    saveStrings(sketchPath("") + "../tools/preset-builder/target.txt", lines);
+    saveStrings(sketchPath("") + "../tools/commander/target.txt", lines);
 
     return objectData.toString();
   }

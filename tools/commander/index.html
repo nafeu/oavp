@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oavp-commander</title>
+  <style>
+    body {}
+
+    #buttons {
+      display: flex;
+      gap: 5px;
+
+      button {
+        font-size: 1.25rem;
+      }
+    }
+
+    #data {
+      width: 500px;
+      overflow: auto; /* Optional: Add scrollbars for overflow */
+      white-space: pre-wrap; /* Optional: Preserve line breaks and wrap long lines */
+    }
+  </style>
+</head>
+<body>
+
+<div id="buttons">
+  <button id="buttonE" onclick="sendCommand({ command: 'export' })">Export</button>
+  <button id="buttonG" onclick="sendCommand({ command: 'generate' })">Generate</button>
+</div>
+<pre id="response"></pre>
+<pre id="data"></pre>
+
+<script>
+  function sendCommand({ command, ...params }) {
+    fetch('/api/command', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ command, ...params }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      const responseElement = document.getElementById('response');
+      const dataElement = document.getElementById('data');
+      if (data.status === 'success') {
+        responseElement.style.color = 'green';
+      } else if (data.status === 'warning') {
+        responseElement.style.color = 'yellow';
+      } else {
+        responseElement.style.color = 'red';
+      }
+      responseElement.textContent = `${new Date().toLocaleString()} : ${data.message}`;
+
+      if (data.data) {
+        if (command === 'generate') {
+          let dataElementText = '';
+
+          data.data.forEach(item => {
+            dataElementText += `${item.id}\n${item.params.map((param, index) => `[${param.id} : ${param.value}]`).join(' ').trim()}\n\n`;
+            dataElementText += `Total Objects: ${data.data.length}`;
+          })
+
+          dataElement.textContent = dataElementText;
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      const responseElement = document.getElementById('response');
+      responseElement.style.color = 'red';
+      responseElement.textContent = 'Error occurred during API request.';
+    });
+  }
+
+  document.addEventListener('keydown', function(event) {
+    const key = event.key.toLowerCase(); // Convert to lowercase for case-insensitivity
+    if (key === 'e' || key === 'g') {
+      const buttonId = `button${key.toUpperCase()}`;
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.click();
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
