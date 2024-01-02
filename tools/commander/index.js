@@ -11,8 +11,9 @@ const { weaveTopics } = require('topic-weaver');
 const { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } = require('./constants');
 const { conceptMaps } = require('./concept-maps');
 
-const WEBSOCKET_SERVER_URL = 'ws://localhost:3000/commands';
+const SKETCH_WEBSOCKET_SERVER_URL = 'ws://localhost:3000/commands';
 const WEBSERVER_PORT = 3001;
+const COMMANDER_WEBSOCKET_SERVER_PORT = 3002;
 const DIRECTORY_PATH = './';
 const TARGET_FILE_NAME = 'target.txt';
 const DUMP_FILE_PATH = 'preset-dump.txt';
@@ -20,9 +21,12 @@ const DUMP_FILE_PATH = 'preset-dump.txt';
 const app = express();
 
 let ws;
+let wsServer;
 let presetOutput = '';
 let processedDiff = [];
 let presetCount = 0;
+
+const wsClients = new Set();
 
 const getOverridesFromParameterSet = singleLineParameterSet => {
   const [shape, valuesMapping] = singleLineParameterSet.split('|');
@@ -121,7 +125,7 @@ const writeGeneratedSketchToFile = () => {
 }
 
 const emitGeneratedSketchToServer = () => {
-  console.log(`[ oavp-commander ] Emitting generated sketch to ${WEBSOCKET_SERVER_URL}`);
+  console.log(`[ oavp-commander ] Emitting generated sketch to ${SKETCH_WEBSOCKET_SERVER_URL}`);
 
   const allEncodedParameters = getAllEncodedParameters();
 
@@ -174,7 +178,18 @@ const splitString = input => {
   return result.map(item => item.trim());
 }
 
+const wsServerBroadcast = (message, sender) => {
+  wsClients.forEach((client) => {
+    if (client !== sender && client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
+}
+
 const main = () => {
+  /*
+    Express Web Server (GUI & API)
+  */
   app.use(express.json());
 
   app.use((req, res, next) => {
@@ -214,26 +229,51 @@ const main = () => {
   });
 
   app.listen(WEBSERVER_PORT, () => {
-    console.log(`[ oavp-commander ] Webserver is running at http://localhost:${WEBSERVER_PORT}`);
+    console.log(`[ oavp-commander:webserver ] Webserver is running at http://localhost:${WEBSERVER_PORT}`);
   });
 
-  ws = new WebSocket(WEBSOCKET_SERVER_URL);
+  /*
+    Sketch Socket Connection
+  */
+  ws = new WebSocket(SKETCH_WEBSOCKET_SERVER_URL);
 
   ws.on('open', () => {
-    console.log('[ oavp-commander ] WebSocket connection opened.');
+    console.log('[ oavp-commander:sketch-socket-connection ] WebSocket connection opened.');
   });
 
   ws.on('close', () => {
-    console.log('[ oavp-commander ] WebSocket connection closed');
+    console.log('[ oavp-commander:sketch-socket-connection ] WebSocket connection closed');
   });
 
   ws.on('error', (error) => {
-    console.error(`[ oavp-commander ] WebSocket error (make sure oavp is running): ${error}`);
+    console.error(`[ oavp-commander:sketch-socket-connection ] WebSocket error (make sure oavp is running): ${error}`);
   });
 
-  console.log(`[ oavp-commander ] Watching for changes to ${TARGET_FILE_NAME}`);
-  console.log(`[ oavp-commander ] Dumping generated presets into to ${DUMP_FILE_PATH}`);
+  /*
+    Commander WebSocket Server
+  */
+  const wsServer = new WebSocket.Server({ port: COMMANDER_WEBSOCKET_SERVER_PORT });
 
+  console.log(`[ oavp-commander:websocket-server ] WebSocket server is running at ws://localhost:${COMMANDER_WEBSOCKET_SERVER_PORT}`);
+
+  wsServer.on('connection', (socket) => {
+    console.log('[ oavp-commander:websocket-server ] Client connected');
+    wsClients.add(socket);
+
+    socket.on('message', (message) => {
+      console.log(`[ oavp-commander:websocket-server ] Received: ${message}`);
+    });
+
+    socket.on('close', () => {
+      console.log('[ oavp-commander:websocket-server ] Client disconnected');
+    });
+  });
+
+  /*
+    Preset Builder
+  */
+  console.log(`[ oavp-commander:preset-builder ] Watching for changes to ${TARGET_FILE_NAME}`);
+  console.log(`[ oavp-commander:preset-builder ] Dumping generated presets into to ${DUMP_FILE_PATH}`);
   const logStream = fs.createWriteStream(DUMP_FILE_PATH, { flags: 'a' });
 
   fs.watch(DIRECTORY_PATH, (eventType, filename) => {
@@ -265,6 +305,7 @@ const main = () => {
     });
 
     console.log(`[ oavp-commander ] Added preset: ${presetOutput}`);
+    wsServerBroadcast(JSON.stringify({ command: 'preset-builder-result', data: presetOutput }));
     logStream.write(`\n${presetOutput}`);
   });
 }

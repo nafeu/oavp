@@ -16,6 +16,16 @@ void webSocketServerEvent(String msg) {
     objects.removeAll();
     loop();
   }
+  else if (command.equals("save-preset")) {
+    objects.exportObjectData();
+  }
+  else if (command.equals("randomize-palette")){
+    randomizePalette();
+    randomizeAllColors();
+  }
+  else if (command.equals("randomize-colors")) {
+    randomizeAllColors();
+  }
   else {
     println("[ oavp ] Command not recognized");
   }
