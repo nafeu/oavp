@@ -1,13 +1,32 @@
-void webSocketServerEvent(String msg){
+void webSocketServerEvent(String msg) {
   println("[ oavp ] SOCKET EVENT RECEIVED");
 
-  JSONArray receivedOavpObjects = parseJSONArray(msg);
+  JSONObject message = parseJSONObject(msg);
+  String command = message.getString("command");
 
-  if (receivedOavpObjects == null) {
-    println("[ oavp ] receivedOavpObjects JSONArray could not be parsed");
+  if (command.equals("write-objects")) {
+    JSONArray receivedOavpObjects = message.getJSONArray("objects");
+
+    noLoop();
+    handleReceivedOavpObjects(receivedOavpObjects);
+    loop();
+  }
+  else if (command.equals("reset")) {
+    noLoop();
+    objects.removeAll();
+    loop();
+  }
+  else {
+    println("[ oavp ] Command not recognized");
+  }
+}
+
+void handleReceivedOavpObjects(JSONArray oavpObjects) {
+  if (oavpObjects == null) {
+    println("[ oavp ] oavpObjects JSONArray could not be parsed");
   } else {
-    for (int i = 0; i < receivedOavpObjects.size(); i++) {
-      JSONObject receivedOavpObject = receivedOavpObjects.getJSONObject(i);
+    for (int i = 0; i < oavpObjects.size(); i++) {
+      JSONObject receivedOavpObject = oavpObjects.getJSONObject(i);
 
       String objectClassName = receivedOavpObject.getString("oavpObject");
       String objectId = receivedOavpObject.getString("id");

@@ -137,7 +137,7 @@ const emitGeneratedSketchToServer = () => {
     });
   });
 
-  const message = JSON.stringify(objects);
+  const message = JSON.stringify({ command: 'write-objects', objects });
   ws.send(message);
   return objects;
   console.log(`[ oavp-commander ] WebSocket message sent: ${message}`);
@@ -201,6 +201,11 @@ const main = () => {
     else if (command === 'generate') {
       const objects = emitGeneratedSketchToServer();
       res.json({ status: 'success', message: `Emitted generated sketch to server.`, data: objects });
+    }
+
+    else if (command === 'reset') {
+      ws.send(JSON.stringify({ command: 'reset' }));
+      res.json({ status: 'success', message: `Removed all objects from sketch.` });
     }
 
     else {

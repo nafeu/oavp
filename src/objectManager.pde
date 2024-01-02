@@ -99,9 +99,22 @@ public class OavpObjectManager {
       activeObjectName != "background"
       && activeObjectName != "camera"
     ) {
+      println("[" + (selectionCounter++) + "] - Removing variable: " + activeObjectName);
       activeObjects.remove(this.getActiveObject());
       objectsStorage.remove(activeObjectName);
       lastActiveVariable();
+    }
+  }
+
+  public void removeAll() {
+    while (activeObjects.size() > 2 && objectsStorage.size() > 2) {
+      String activeObjectName = this.getActiveVariable().name;
+
+      while(activeObjectName == "background" || activeObjectName == "camera") {
+        nextActiveVariable();
+        activeObjectName = this.getActiveVariable().name;
+      }
+      this.remove();
     }
   }
 
