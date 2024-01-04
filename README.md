@@ -32,6 +32,7 @@ cp sample-sketch.txt src/sketch.pde
     - [`ControlP5`](https://sojamo.de/libraries/controlP5/)
     - [`Video Export`](https://funprogramming.org/VideoExport-for-Processing/)
     - [`Processing Video`](https://processing.org/reference/libraries/video/index.html)
+    - [`webSockets`](https://github.com/alexandrainst/processing_websockets)
 
   <img src="https://nafeu.github.io/oavp/oavp-add-library.png"/>
 
