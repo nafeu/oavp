@@ -1,5 +1,5 @@
 void webSocketServerEvent(String msg) {
-  println("[ oavp ] SOCKET EVENT RECEIVED");
+  println("[ oavp ] Socket Event Received: " + msg);
 
   JSONObject message = parseJSONObject(msg);
   String command = message.getString("command");
@@ -25,6 +25,39 @@ void webSocketServerEvent(String msg) {
   }
   else if (command.equals("randomize-colors")) {
     randomizeAllColors();
+  }
+  else if (command.equals("direct-edit")) {
+    String propertyName = message.getString("name");
+    String propertyType = message.getString("type");
+
+    if (propertyType.equals("String")) {
+      String propertyValue = message.getString("value");
+
+      editor.directEdit(propertyName, propertyValue);
+    } else if (propertyType.equals("int")) {
+      int propertyValue = message.getInt("value");
+
+      editor.directEdit(propertyName, propertyValue);
+    } else if (propertyType.equals("float")) {
+      float propertyValue = message.getFloat("value");
+
+      editor.directEdit(propertyName, propertyValue);
+    } else if (propertyType.equals("color")) {
+      color propertyValue = message.getInt("value");
+
+      editor.directEdit(propertyName, propertyValue);
+    }
+  }
+  else if (command.equals("toggle-edit")) {
+    editor.toggleEditMode();
+  }
+  else if (command.equals("next-object")) {
+    objects.nextActiveVariable();
+    updateEditorVariableMeta();
+  }
+  else if (command.equals("prev-object")) {
+    objects.prevActiveVariable();
+    updateEditorVariableMeta();
   }
   else {
     println("[ oavp ] Command not recognized");

@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "diff": "^5.1.0",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
     "shortid": "^2.2.16",

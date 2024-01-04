@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oavp-commander</title>
+  <style>
+    body {}
+
+    #command-buttons {
+      display: flex;
+      gap: 5px;
+
+      button {
+        font-size: 1.25rem;
+      }
+
+      margin-bottom: 10px;
+    }
+
+    #direct-edit {
+      display: flex;
+      gap: 5px;
+
+      button {
+        font-size: 1.25rem;
+      }
+    }
+
+    #data {
+      width: 75vw;
+      overflow: auto; /* Optional: Add scrollbars for overflow */
+      white-space: pre-wrap; /* Optional: Preserve line breaks and wrap long lines */
+      cursor: pointer;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="command-buttons">
+  <button id="buttonE" onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
+  <button id="buttonX" onclick="sendApiCommand({ command: 'export' })">Export</button>
+  <button id="buttonG" onclick="sendApiCommand({ command: 'generate' })">Generate</button>
+  <button id="buttonR" onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
+  <button id="buttonP" onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
+  <button id="buttonN" onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
+  <button id="buttonM" onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
+</div>
+<div id="direct-edit">
+  <select name="property-name" id="property-name">
+    <option value="x">x</option>
+    <option value="xMod">xMod</option>
+    <option value="xModType">xModType</option>
+    <option value="xIter">xIter</option>
+    <option value="xIterFunc">xIterFunc</option>
+    <option value="xr">xr</option>
+    <option value="xrMod">xrMod</option>
+    <option value="xrModType">xrModType</option>
+    <option value="xrIter">xrIter</option>
+    <option value="xrIterFunc">xrIterFunc</option>
+    <option value="y">y</option>
+    <option value="yMod">yMod</option>
+    <option value="yModType">yModType</option>
+    <option value="yIter">yIter</option>
+    <option value="yIterFunc">yIterFunc</option>
+    <option value="yr">yr</option>
+    <option value="yrMod">yrMod</option>
+    <option value="yrModType">yrModType</option>
+    <option value="yrIter">yrIter</option>
+    <option value="yrIterFunc">yrIterFunc</option>
+    <option value="z">z</option>
+    <option value="zMod">zMod</option>
+    <option value="zModType">zModType</option>
+    <option value="zIter">zIter</option>
+    <option value="zIterFunc">zIterFunc</option>
+    <option value="zr">zr</option>
+    <option value="zrMod">zrMod</option>
+    <option value="zrModType">zrModType</option>
+    <option value="zrIter">zrIter</option>
+    <option value="zrIterFunc">zrIterFunc</option>
+    <option value="w">w</option>
+    <option value="wMod">wMod</option>
+    <option value="wModType">wModType</option>
+    <option value="wIter">wIter</option>
+    <option value="wIterFunc">wIterFunc</option>
+    <option value="h">h</option>
+    <option value="hMod">hMod</option>
+    <option value="hModType">hModType</option>
+    <option value="hIter">hIter</option>
+    <option value="hIterFunc">hIterFunc</option>
+    <option value="l">l</option>
+    <option value="lMod">lMod</option>
+    <option value="lModType">lModType</option>
+    <option value="lIter">lIter</option>
+    <option value="lIterFunc">lIterFunc</option>
+    <option value="s">s</option>
+    <option value="sMod">sMod</option>
+    <option value="sModType">sModType</option>
+    <option value="sIter">sIter</option>
+    <option value="sIterFunc">sIterFunc</option>
+    <option value="strokeColor">strokeColor</option>
+    <option value="strokeColorMod">strokeColorMod</option>
+    <option value="strokeColorModType">strokeColorModType</option>
+    <option value="strokeColorIter">strokeColorIter</option>
+    <option value="strokeColorIterFunc">strokeColorIterFunc</option>
+    <option value="strokeWeight">strokeWeight</option>
+    <option value="strokeWeightMod">strokeWeightMod</option>
+    <option value="strokeWeightModType">strokeWeightModType</option>
+    <option value="strokeWeightIter">strokeWeightIter</option>
+    <option value="strokeWeightIterFunc">strokeWeightIterFunc</option>
+    <option value="fillColor">fillColor</option>
+    <option value="fillColorMod">fillColorMod</option>
+    <option value="fillColorModType">fillColorModType</option>
+    <option value="fillColorIter">fillColorIter</option>
+    <option value="fillColorIterFunc">fillColorIterFunc</option>
+    <option value="paramA">paramA</option>
+    <option value="paramAMod">paramAMod</option>
+    <option value="paramAModType">paramAModType</option>
+    <option value="paramAIter">paramAIter</option>
+    <option value="paramAIterFunc">paramAIterFunc</option>
+    <option value="paramB">paramB</option>
+    <option value="paramBMod">paramBMod</option>
+    <option value="paramBModType">paramBModType</option>
+    <option value="paramBIter">paramBIter</option>
+    <option value="paramBIterFunc">paramBIterFunc</option>
+    <option value="paramC">paramC</option>
+    <option value="paramCMod">paramCMod</option>
+    <option value="paramCModType">paramCModType</option>
+    <option value="paramCIter">paramCIter</option>
+    <option value="paramCIterFunc">paramCIterFunc</option>
+    <option value="paramD">paramD</option>
+    <option value="paramDMod">paramDMod</option>
+    <option value="paramDModType">paramDModType</option>
+    <option value="paramDIter">paramDIter</option>
+    <option value="paramDIterFunc">paramDIterFunc</option>
+    <option value="paramE">paramE</option>
+    <option value="paramEMod">paramEMod</option>
+    <option value="paramEModType">paramEModType</option>
+    <option value="paramEIter">paramEIter</option>
+    <option value="paramEIterFunc">paramEIterFunc</option>
+    <option value="modDelay">modDelay</option>
+    <option value="i">i</option>
+  </select>
+  <input id="property-value" type="text" placeholder="Enter value"/>
+  <button
+    onclick="sendSocketCommand({
+      command: 'direct-edit',
+      name: getPropertyName(),
+      type: getPropertyType(),
+      value: getPropertyValue()
+    })">
+      Direct Edit
+  </button>
+  <button onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
+  <button onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
+</div>
+<pre style="color: purple;" id="sketch-socket"></pre>
+<pre style="color: blue;" id="commander-socket"></pre>
+<pre id="response"></pre>
+<pre id="data"></pre>
+
+<script>
+  const oavpObjectProperties = JSON.parse('<%- OAVP_OBJECT_PROPERTIES %>');
+
+  const oavpObjectPropertiesTypeMapping = {};
+
+  oavpObjectProperties.forEach(({ id, type }) => {
+    oavpObjectPropertiesTypeMapping[id] = type;
+  });
+
+  const sketchSocket = new WebSocket('ws://localhost:3000/commands');
+
+  sketchSocket.addEventListener('open', (event) => {
+    document.getElementById('sketch-socket').textContent = "[ socket ] WebSocket connection opened.";
+    console.log('WebSocket connection opened:', event);
+  });
+
+  sketchSocket.addEventListener('message', (event) => {
+    const receivedData = JSON.parse(event.data);
+    console.log('Received:', receivedData);
+  });
+
+  sketchSocket.addEventListener('error', (event) => {
+    document.getElementById('sketch-socket').textContent = "[ socket ] WebSocket error.";
+    console.error('WebSocket error:', event);
+  });
+
+  sketchSocket.addEventListener('close', (event) => {
+    document.getElementById('sketch-socket').textContent = "[ socket ] WebSocket connection closed.";
+    console.log('WebSocket connection closed:', event);
+  });
+
+  const commanderSocket = new WebSocket('ws://localhost:3002');
+
+  commanderSocket.addEventListener('open', (event) => {
+    document.getElementById('commander-socket').textContent = "[ commander ] WebSocket connection opened.";
+    console.log('WebSocket connection opened:', event);
+  });
+
+  commanderSocket.addEventListener('message', (event) => {
+    const dataElement = document.getElementById('data');
+    const receivedData = JSON.parse(event.data);
+
+    if (receivedData.command === 'preset-builder-result') {
+      dataElement.textContent = receivedData.data;
+    }
+  });
+
+  commanderSocket.addEventListener('error', (event) => {
+    document.getElementById('commander-socket').textContent = "[ commander ] WebSocket error.";
+    console.error('WebSocket error:', event);
+  });
+
+  commanderSocket.addEventListener('close', (event) => {
+    document.getElementById('commander-socket').textContent = "[ commander ] WebSocket connection closed.";
+    console.log('WebSocket connection closed:', event);
+  });
+
+  function sendSocketCommand({ command, ...params }) {
+    const responseElement = document.getElementById('response');
+    responseElement.style.color = 'purple';
+    responseElement.textContent = `SOCKET @ ${new Date().toLocaleString()} : ${command}`;
+    sketchSocket.send(JSON.stringify({ command, ...params }));
+  }
+
+  function sendApiCommand({ command, ...params }) {
+    fetch('/api/command', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ command, ...params }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      const responseElement = document.getElementById('response');
+      const dataElement = document.getElementById('data');
+      if (data.status === 'success') {
+        responseElement.style.color = 'green';
+      } else if (data.status === 'warning') {
+        responseElement.style.color = 'yellow';
+      } else {
+        responseElement.style.color = 'red';
+      }
+      responseElement.textContent = `API @ ${new Date().toLocaleString()} : ${data.message}`;
+
+      if (data.data) {
+        if (command === 'generate') {
+          let dataElementText = '';
+
+          data.data.forEach(item => {
+            dataElementText += `${item.id}\n${item.params.map((param, index) => `[${param.id} : ${param.value}]`).join(' ').trim()}\n\n`;
+          })
+
+          dataElementText += `Total Objects: ${data.data.length}`;
+          dataElement.textContent = dataElementText;
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      const responseElement = document.getElementById('response');
+      responseElement.style.color = 'red';
+      responseElement.textContent = 'Error occurred during API request.';
+    });
+  }
+
+  function sendDebug({ command, ...params }) {
+    console.log({ command, params });
+  }
+
+  function getPropertyName() {
+    const propertyNameElement = document.getElementById('property-name')
+
+    return propertyNameElement.value;
+  }
+
+  function getPropertyType() {
+    const propertyNameElement = document.getElementById('property-name')
+
+    return oavpObjectPropertiesTypeMapping[propertyNameElement.value];
+  }
+
+  function getPropertyValue() {
+    const propertyValueElement = document.getElementById('property-value');
+
+    if (getPropertyType() !== 'String') {
+      return Number(propertyValueElement.value);
+    }
+
+    return propertyValueElement.value;
+  }
+
+  document.addEventListener('keydown', function(event) {
+    const key = event.key.toLowerCase(); // Convert to lowercase for case-insensitivity
+    if (key === 'e' || key === 'g') {
+      const buttonId = `button${key.toUpperCase()}`;
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.click();
+      }
+    }
+  });
+
+  document.getElementById('data').addEventListener('click', function () {
+    const originalText = document.getElementById('data').textContent;
+    const textarea = document.createElement('textarea');
+    textarea.value = this.textContent;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    this.textContent = 'Copied to Clipboard!';
+    setTimeout(() => {
+      this.textContent = originalText;
+    }, 1000);
+  });
+</script>
+
+</body>
+</html>

@@ -190,6 +190,7 @@ const main = () => {
   /*
     Express Web Server (GUI & API)
   */
+  app.set('view engine', 'ejs');
   app.use(express.json());
 
   app.use((req, res, next) => {
@@ -198,7 +199,7 @@ const main = () => {
   });
 
   app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.render('index', { OAVP_OBJECT_PROPERTIES: JSON.stringify(OAVP_OBJECT_PROPERTIES) });
   });
 
   app.get('/api', (req, res) => {

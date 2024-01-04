@@ -47,11 +47,12 @@ OavpEditor editor;
 boolean loaded = false;
 boolean isInitializing = true;
 ControlP5 cp5;
-int loadingDelay = 2000;
+int loadingDelay = 500;
 WebsocketServer server;
 
 void setup() {
   context = this;
+  noLoop();
 
   println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
   println("[ oavp ] For recording on MAC make sure:");
@@ -78,6 +79,7 @@ void setup() {
 
   try {
     thread("loadApplication");
+    loop();
   } catch (Exception e) {
     System.err.println("[ oavp ] Error during setup");
     debugError(e);
