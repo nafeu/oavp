@@ -48,6 +48,28 @@ void webSocketServerEvent(String msg) {
       editor.directEdit(propertyName, propertyValue);
     }
   }
+  else if (command.equals("preview-edit")) {
+    String propertyName = message.getString("name");
+    String propertyType = message.getString("type");
+
+    if (propertyType.equals("String")) {
+      String propertyValue = message.getString("value");
+
+      println("[ oavp ] Error: cannot preview-edit String");
+    } else if (propertyType.equals("int")) {
+      int propertyValue = message.getInt("value");
+
+      editor.previewEdit(propertyName, propertyValue); editor.commitEdit(propertyName);
+    } else if (propertyType.equals("float")) {
+      float propertyValue = message.getFloat("value");
+
+      editor.previewEdit(propertyName, propertyValue); editor.commitEdit(propertyName);
+    } else if (propertyType.equals("color")) {
+      color propertyValue = message.getInt("value");
+
+      editor.previewEdit(propertyName, propertyValue); editor.commitEdit(propertyName);
+    }
+  }
   else if (command.equals("toggle-edit")) {
     editor.toggleEditMode();
   }

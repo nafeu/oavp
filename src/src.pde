@@ -415,6 +415,8 @@ void setupPostSketchDefaults() {
       .strokeWeight(2);
   }
   if (!objects.has("camera")) {
+    int perspectiveDistance = 100000;
+
     objects.add("camera", "blank")
       .set("x", 0)
       .set("y", 0)
@@ -422,7 +424,7 @@ void setupPostSketchDefaults() {
       .set("w", 0)
       .set("h", 0)
       .set("l", 0)
-      .set("paramA", 40000)
+      .set("paramA", perspectiveDistance)
       .set("paramB", 0)
       .set("paramC", 0);
   }

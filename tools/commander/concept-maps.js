@@ -133,10 +133,31 @@ Rectangle|y:20000;z:-39967;zr:[right_mountain_rotation];w:200000.0;h:40000.0;fil
 
 `+sharedValues;
 
+const celestialObjects = `
+#prefabs
+[planet]
+
+#planet
+[body]+[shadow]
+
+#body
+Circle|x:[planet_x*f1];y:[planet_y*f2];z:-50000;w:100.0;h:100.0;s:10100.0;
+
+#shadow
+Circle|x:[planet_x*f1];y:[planet_y*f2];z:-49000;w:100.0;h:100.0;s:9100.0;
+
+#planet_x
+rand(-25000, 25000, 'f1')
+
+#planet_y
+rand(-20000, -14000, 'f2')
+`+sharedValues;
+
 const conceptMaps = [
-  foregroundObjects,
-  surroundingObjects,
-  backgroundObjects
+  // foregroundObjects,
+  // surroundingObjects,
+  // backgroundObjects,
+  celestialObjects
 ]
 
 module.exports = { conceptMaps };

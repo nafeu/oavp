@@ -7,24 +7,19 @@
   <style>
     body {}
 
-    #command-buttons {
+    #direct-edit,
+    #property-selections,
+    #command-buttons,
+    #preview-edit-intervals {
       display: flex;
       gap: 5px;
+      flex-wrap: wrap;
 
       button {
         font-size: 1.25rem;
       }
 
       margin-bottom: 10px;
-    }
-
-    #direct-edit {
-      display: flex;
-      gap: 5px;
-
-      button {
-        font-size: 1.25rem;
-      }
     }
 
     #data {
@@ -47,6 +42,15 @@
   <button id="buttonP" onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
   <button id="buttonN" onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
   <button id="buttonM" onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
+</div>
+<div id="property-selections">
+  <button onclick="setSelectedProperty('x')">Select X</button>
+  <button onclick="setSelectedProperty('y')">Select Y</button>
+  <button onclick="setSelectedProperty('z')">Select Z</button>
+  <button onclick="setSelectedProperty('h')">Select H</button>
+  <button onclick="setSelectedProperty('w')">Select W</button>
+  <button onclick="setSelectedProperty('l')">Select L</button>
+  <button onclick="setSelectedProperty('s')">Select S</button>
 </div>
 <div id="direct-edit">
   <select name="property-name" id="property-name">
@@ -155,6 +159,14 @@
   </button>
   <button onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
   <button onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
+</div>
+<div id="preview-edit-intervals">
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 5000 })">+5000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -5000 })">-5000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
 </div>
 <pre style="color: purple;" id="sketch-socket"></pre>
 <pre style="color: blue;" id="commander-socket"></pre>
@@ -291,6 +303,12 @@
     }
 
     return propertyValueElement.value;
+  }
+
+  function setSelectedProperty(property) {
+    const propertyNameElement = document.getElementById('property-name');
+
+    propertyNameElement.value = property;
   }
 
   document.addEventListener('keydown', function(event) {

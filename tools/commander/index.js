@@ -28,6 +28,32 @@ let presetCount = 0;
 
 const wsClients = new Set();
 
+function rand(start, end, cacheId) {
+  if (!rand.cache) {
+    rand.cache = {};
+  }
+
+  const generateRandomInteger = () => Math.floor(Math.random() * (end - start + 1)) + start;
+
+  if (cacheId !== undefined) {
+    if (rand.cache[cacheId] !== undefined) {
+      console.log(`Using cached value for ${cacheId}: ${rand.cache[cacheId]}`);
+      return rand.cache[cacheId];
+    } else {
+      const randomValue = generateRandomInteger();
+
+      rand.cache[cacheId] = randomValue;
+
+      console.log(`Generated new random value for ${cacheId}: ${randomValue}`);
+      return randomValue;
+    }
+  } else {
+    const randomValue = generateRandomInteger();
+    console.log(`Generated new random value: ${randomValue}`);
+    return randomValue;
+  }
+}
+
 const getOverridesFromParameterSet = singleLineParameterSet => {
   const [shape, valuesMapping] = singleLineParameterSet.split('|');
 
@@ -40,10 +66,11 @@ const getOverridesFromParameterSet = singleLineParameterSet => {
       const [property, value] = valueMapping.split(':');
 
       const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type === 'String';
+      const overrideValue = isString ? value : eval(value);
 
       overrides.push({
         id: property,
-        value: isString ? value : Number(value),
+        value: overrideValue,
         type: _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type || 'String'
       });
   })
@@ -140,6 +167,8 @@ const emitGeneratedSketchToServer = () => {
       objects.push({ oavpObject: shape, params: overrides, id: `${shape}_${shortid.generate()}` });
     });
   });
+
+  rand.cache = {};
 
   const message = JSON.stringify({ command: 'write-objects', objects });
   ws.send(message);
