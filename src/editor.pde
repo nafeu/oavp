@@ -85,6 +85,7 @@ public class OavpEditor {
   private HashMap<String, Object> modalValues;
   private String modalHeader;
   private int queuedObjectToCreate = 0;
+  private color backgroundColor = 0;
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
@@ -691,9 +692,26 @@ public class OavpEditor {
   }
 
   public void randomAssignment() {
+    // Background is always at 0th index, ie. it is selected first
     OavpVariable activeVariable = objects.getActiveVariable();
 
-    if (!activeVariable.name.contains("Arc") && !activeVariable.name.contains("CurvedLine")) {
+    if (activeVariable.name.equals("background")) {
+      backgroundColor = this.activePalette[
+        (int) random(0, this.activePalette.length)
+      ];
+
+      activeVariable.fillColor(backgroundColor);
+    }
+    else if (activeVariable.name.contains("backgroundfill")) {
+      activeVariable.fillColor(backgroundColor);
+    }
+    else if (activeVariable.name.contains("nofill")) {
+      activeVariable.fillColor(0);
+    }
+    else if (
+      !activeVariable.name.contains("Arc")
+        && !activeVariable.name.contains("CurvedLine")
+    ) {
       activeVariable.fillColor(
         this.activePalette[
           (int) random(0, this.activePalette.length)
@@ -701,11 +719,15 @@ public class OavpEditor {
       );
     }
 
-    activeVariable.strokeColor(
-      this.activePalette[
-        (int) random(0, this.activePalette.length)
-      ]
-    );
+    if (activeVariable.name.contains("nostroke")) {
+      activeVariable.strokeColor(0);
+    } else {
+      activeVariable.strokeColor(
+        this.activePalette[
+          (int) random(0, this.activePalette.length)
+        ]
+      );
+    }
   }
 
   public void resetFillColor() {

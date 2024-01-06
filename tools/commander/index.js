@@ -12,6 +12,8 @@ const {
   OAVP_OBJECT_PROPERTIES,
   OAVP_AVAILABLE_SHAPES,
   SINGLE_LINE_PARAMETER_SET_DELIMITER,
+  OBJECT_NAME_AND_PROPERTIES_DELIMITER,
+  OBJECT_NAME_AND_TAGS_DELIMITER,
   SKETCH_WEBSOCKET_SERVER_URL,
   WEBSERVER_PORT,
   COMMANDER_WEBSOCKET_SERVER_PORT,
@@ -40,25 +42,24 @@ function rand(start, end, cacheId) {
 
   if (cacheId !== undefined) {
     if (rand.cache[cacheId] !== undefined) {
-      console.log(`Using cached value for ${cacheId}: ${rand.cache[cacheId]}`);
       return rand.cache[cacheId];
     } else {
       const randomValue = generateRandomInteger();
 
       rand.cache[cacheId] = randomValue;
 
-      console.log(`Generated new random value for ${cacheId}: ${randomValue}`);
       return randomValue;
     }
   } else {
     const randomValue = generateRandomInteger();
-    console.log(`Generated new random value: ${randomValue}`);
     return randomValue;
   }
 }
 
 const getOverridesFromParameterSet = singleLineParameterSet => {
-  const [shape, valuesMapping] = singleLineParameterSet.split('|');
+  const [objectNameAndTags, valuesMapping] = singleLineParameterSet.split(OBJECT_NAME_AND_PROPERTIES_DELIMITER);
+
+  const [objectName, ...objectTags] = objectNameAndTags.split(OBJECT_NAME_AND_TAGS_DELIMITER)
 
   const overrides = [];
 
@@ -71,7 +72,6 @@ const getOverridesFromParameterSet = singleLineParameterSet => {
       const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type === 'String';
       const overrideValue = isString ? value : eval(value);
 
-
       overrides.push({
         id: property,
         value: overrideValue,
@@ -79,7 +79,7 @@ const getOverridesFromParameterSet = singleLineParameterSet => {
       });
   })
 
-  return { overrides, shape };
+  return { overrides, objectName, objectTags };
 }
 
 const buildObjectString = encodedParameters => {
@@ -88,9 +88,9 @@ const buildObjectString = encodedParameters => {
   const singleLineParameterSets = encodedParameters.split(SINGLE_LINE_PARAMETER_SET_DELIMITER);
 
   singleLineParameterSets.forEach((singleLineParameterSet, index) => {
-    const { overrides, shape } = getOverridesFromParameterSet(singleLineParameterSet);
+    const { overrides, objectName, objectTags } = getOverridesFromParameterSet(singleLineParameterSet);
 
-    output.push(`objects.add("${shape}_${shortid.generate()}", "${shape}")`)
+    output.push(`objects.add("${objectName}${objectTags.length > 0 ? `_${objectTags.join('_')}` : ''}_${shortid.generate()}", "${objectName}")`)
 
     OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue, type }) => {
       const override = _.find(overrides, { id });
@@ -166,9 +166,13 @@ const emitGeneratedSketchToServer = () => {
     const singleLineParameterSets = encodedParameters.split(SINGLE_LINE_PARAMETER_SET_DELIMITER);
 
     singleLineParameterSets.forEach((singleLineParameterSet, index) => {
-      const { overrides, shape } = getOverridesFromParameterSet(singleLineParameterSet);
+      const { overrides, objectName, objectTags } = getOverridesFromParameterSet(singleLineParameterSet);
 
-      objects.push({ oavpObject: shape, params: overrides, id: `${shape}_${shortid.generate()}` });
+      objects.push({
+        oavpObject: objectName,
+        params: overrides,
+        id: `${objectName}${objectTags.length > 0 ? `_${objectTags.join('_')}` : ''}_${shortid.generate()}`
+      });
     });
   });
 
@@ -199,7 +203,7 @@ const compareFiles = () => {
     .map(part => (part.added ? '+ ' : part.removed ? '- ' : '  ') + part.value)
 
   differentLines = differentLines
-    .filter(part => part[0] === SINGLE_LINE_PARAMETER_SET_DELIMITER)
+    .filter(part => part[0] === '+')
     .map(part => part.substring(1).trim());
 
   return differentLines;
