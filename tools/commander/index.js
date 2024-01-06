@@ -8,15 +8,18 @@ const diff = require('diff');
 
 const { weaveTopics } = require('topic-weaver');
 
-const { OAVP_AVAILABLE_SHAPES, OAVP_OBJECT_PROPERTIES } = require('./constants');
+const {
+  OAVP_OBJECT_PROPERTIES,
+  OAVP_AVAILABLE_SHAPES,
+  SINGLE_LINE_PARAMETER_SET_DELIMITER,
+  SKETCH_WEBSOCKET_SERVER_URL,
+  WEBSERVER_PORT,
+  COMMANDER_WEBSOCKET_SERVER_PORT,
+  DIRECTORY_PATH,
+  TARGET_FILE_NAME,
+  DUMP_FILE_PATH
+} = require('./constants');
 const { conceptMaps } = require('./concept-maps');
-
-const SKETCH_WEBSOCKET_SERVER_URL = 'ws://localhost:3000/commands';
-const WEBSERVER_PORT = 3001;
-const COMMANDER_WEBSOCKET_SERVER_PORT = 3002;
-const DIRECTORY_PATH = './';
-const TARGET_FILE_NAME = 'target.txt';
-const DUMP_FILE_PATH = 'preset-dump.txt';
 
 const app = express();
 
@@ -68,6 +71,7 @@ const getOverridesFromParameterSet = singleLineParameterSet => {
       const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type === 'String';
       const overrideValue = isString ? value : eval(value);
 
+
       overrides.push({
         id: property,
         value: overrideValue,
@@ -81,7 +85,7 @@ const getOverridesFromParameterSet = singleLineParameterSet => {
 const buildObjectString = encodedParameters => {
   const output = [];
 
-  const singleLineParameterSets = encodedParameters.split('+');
+  const singleLineParameterSets = encodedParameters.split(SINGLE_LINE_PARAMETER_SET_DELIMITER);
 
   singleLineParameterSets.forEach((singleLineParameterSet, index) => {
     const { overrides, shape } = getOverridesFromParameterSet(singleLineParameterSet);
@@ -159,7 +163,7 @@ const emitGeneratedSketchToServer = () => {
   const objects = [];
 
   allEncodedParameters.forEach(encodedParameters => {
-    const singleLineParameterSets = encodedParameters.split('+');
+    const singleLineParameterSets = encodedParameters.split(SINGLE_LINE_PARAMETER_SET_DELIMITER);
 
     singleLineParameterSets.forEach((singleLineParameterSet, index) => {
       const { overrides, shape } = getOverridesFromParameterSet(singleLineParameterSet);
@@ -195,7 +199,7 @@ const compareFiles = () => {
     .map(part => (part.added ? '+ ' : part.removed ? '- ' : '  ') + part.value)
 
   differentLines = differentLines
-    .filter(part => part[0] === '+')
+    .filter(part => part[0] === SINGLE_LINE_PARAMETER_SET_DELIMITER)
     .map(part => part.substring(1).trim());
 
   return differentLines;

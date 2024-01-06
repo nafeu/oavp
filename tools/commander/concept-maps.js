@@ -13,53 +13,40 @@
 
 const sharedValues = `
 #dist
--300
--200
--100
-0
-100
-200
-300
+rand(-300, 300)
+
+#black
+-16777216
 `
 
 const foregroundObjects = `
 #prefabs
 [walkway]
-[walkway]+[poles]
+[walkway]&[poles]
 [poles]
 
 #walkway
 Flatbox|x:[dist];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;fillColor:0;i:30;
 Flatbox|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;i:30;
-Flatbox|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:[walkway_h].0;l:110.0;s:100.0;i:30;
+Flatbox|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:[walkway_h];l:110.0;s:100.0;i:30;
 
 #poles
-[base_pole]+[pole_tip]
+[base_pole]&[pole_tip]
 
 #base_pole
-Flatbox|x:[pole_x*pole_a];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h].0;l:1110.0;s:100.0;i:105;fillColor:0;
+Flatbox|x:[pole_x*foreground1];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h];l:1110.0;s:100.0;i:105;fillColor:0;
 
 #pole_tip
-Flatbox|x:[pole_x*pole_a];xr:90;y:-415;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h].0;l:110.0;s:100.0;i:105;fillColor:0;
+Flatbox|x:[pole_x*foreground1];xr:90;y:-415;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h];l:110.0;s:100.0;i:105;fillColor:0;
 
 #pole_h
-50
-100
-150
-200
-250
-300
+rand(50, 300)
 
 #pole_x
--400
-150
--200
-500
+rand(-500, 500, 'foreground1')
 
 #walkway_h
-150
-100
-50
+rand(50, 150)
 
 `+sharedValues;
 
@@ -69,7 +56,7 @@ const surroundingObjects = `
 [water]
 
 #water_waves
-[water]+[waves]
+[water]&[waves]
 [waves]
 
 #water
@@ -86,50 +73,33 @@ const backgroundObjects = `
 [background]
 
 #background
-[horizon]+[city]
-[horizon]+[mountain_split]+[pillars]
-[horizon]+[mountain_split]+[city]
+[horizon]&[city]
+[horizon]&[mountain_split]&[pillars]
+[horizon]&[mountain_split]&[city]
 
 #city
 Flatbox|xIter:12600.0;xIterFunc:sin(x);xr:90;y:-5000;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:200.0;zr:45;w:600.0;h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;fillColor:-16777216;i:51;zrIter:10;
 
 #pillars
-Flatbox|xr:90;y:-2000;z:-30000;zr:45;w:1000.0;h:1000.0;l:4000.0;s:100.0;fillColor:-16777216;
+Flatbox|xr:90;y:-2000;z:-30000;zr:45;w:1000.0;h:1000.0;l:4000.0;s:100.0;fillColor:[black];
 
 #horizon
-Rectangle|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:-16777216;
+Rectangle|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:[black];
 
 #mountain_split
-[left_mountain]+[right_mountain]
+[left_mountain]&[right_mountain]
 
 #left_mountain
-Rectangle|y:20000;z:-40991;zr:[left_mountain_rotation];w:200000.0;h:40000.0;fillColor:-16777216;
+Rectangle|y:20000;z:-40991;zr:[left_mountain_rotation];w:200000.0;h:40000.0;fillColor:[black];
 
 #right_mountain
-Rectangle|y:20000;z:-39967;zr:[right_mountain_rotation];w:200000.0;h:40000.0;fillColor:-16777216;
+Rectangle|y:20000;z:-39967;zr:[right_mountain_rotation];w:200000.0;h:40000.0;fillColor:[black];
 
 #left_mountain_rotation
-8
-12
-16
-22
-26
-30
-34
-38
-42
+rand(8, 42)
 
 #right_mountain_rotation
--50
--45
--40
--35
--30
--25
--20
--15
--10
--5
+rand(-50, -5)
 
 `+sharedValues;
 
@@ -138,25 +108,58 @@ const celestialObjects = `
 [planet]
 
 #planet
-[body]+[shadow]
+[body]&[rings]
+[body]&[shadow]&[rings]
+
 
 #body
-Circle|x:[planet_x*f1];y:[planet_y*f2];z:-50000;w:100.0;h:100.0;s:10100.0;
+Circle|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-50000;w:100.0;h:100.0;s:[planet_s*celestial3];fillColor:[black];
 
 #shadow
-Circle|x:[planet_x*f1];y:[planet_y*f2];z:-49000;w:100.0;h:100.0;s:9100.0;
+Circle|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-50000+[shadow_z_offset];w:100.0;h:100.0;s:[planet_s*celestial3]-[shadow_s_offset];
+
+#rings
+[ring]
+[ring]&[ring]
+[ring]&[ring]&[ring]
+[ring]&[ring]&[ring]&[ring]
+[ring]&[ring]&[ring]&[ring]&[ring]
+
+#ring
+Circle|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-50000;w:100.0;h:100.0;s:[planet_s*f3]+[ring_s_offset];xr:[ring_xr*celestial4];yr:[ring_xr*celestial5];zr:[ring_xr*celestial6];
 
 #planet_x
-rand(-25000, 25000, 'f1')
+rand(-25000, 25000, 'celestial1')
 
 #planet_y
-rand(-20000, -14000, 'f2')
+rand(-20000, -7000, 'celestial2')
+
+#planet_s
+rand(5000, 20000, 'celestial3')
+
+#shadow_z_offset
+rand(500, 1000)
+
+#shadow_s_offset
+rand(500, 1000)
+
+#ring_s_offset
+rand(1000, 5000)
+
+#ring_xr
+rand(0, 180, 'celestial4')
+
+#ring_yr
+rand(0, 180, 'celestial5')
+
+#ring_zr
+rand(0, 180, 'celestial6')
 `+sharedValues;
 
 const conceptMaps = [
-  // foregroundObjects,
-  // surroundingObjects,
-  // backgroundObjects,
+  foregroundObjects,
+  surroundingObjects,
+  backgroundObjects,
   celestialObjects
 ]
 
