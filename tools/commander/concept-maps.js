@@ -19,11 +19,16 @@ rand(-300, 300)
 -16777216
 `
 
+const sandbox = `
+#prefabs
+`+sharedValues;
+
 const foregroundObjects = `
 #prefabs
 [walkway]
 [walkway]&[poles]
 [poles]
+[square_arch]
 
 #walkway
 Flatbox_walkway|x:[dist];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;fillColor:0;i:30;
@@ -49,6 +54,29 @@ rand(200, 500, 'foreground1')
 #walkway_h
 rand(50, 150)
 
+#square_arch
+[square_arch_a]&[square_arch_b]&[square_arch_c]&[square_arch_d]&[square_arch_e]&[square_arch_f]&[square_arch_g]
+
+#square_arch_a
+Flatbox_squarearch|x:-195;xr:90;y:100;zIter:-300.0;w:50.0;h:50.0;l:170.0;s:100.0;fillColor:[black];i:100;
+
+#square_arch_b
+Flatbox_squarearch|x:195;xr:90;y:100;zIter:-300.0;w:50.0;h:50.0;l:170.0;s:100.0;fillColor:[black];i:100;
+
+#square_arch_c
+Flatbox_squarearch|x:-195;xr:90;y:-55;zIter:-300.0;zr:-45;w:25.0;h:35.0;l:145.0;s:100.0;fillColor:[black];i:100;
+
+#square_arch_d
+Flatbox_squarearch|x:195;xr:90;y:-55;zIter:-300.0;zr:45;w:25.0;h:35.0;l:145.0;s:100.0;fillColor:[black];i:100;
+
+#square_arch_e
+Flatbox_squarearch|y:-340;yr:90;zIter:-300.0;w:25.0;h:25.0;l:425.0;s:100.0;fillColor:[black];i:100;
+
+#square_arch_f
+Flatbox_squarearch|x:195;xr:90;y:-225;zIter:-300.0;w:25.0;h:10.0;l:195.0;s:100.0;fillColor:[black];i:100;
+
+#square_arch_g
+Flatbox_squarearch|x:-195;xr:90;y:-225;zIter:-300.0;w:25.0;h:10.0;l:195.0;s:100.0;fillColor:[black];i:100;
 `+sharedValues;
 
 const surroundingObjects = `
@@ -168,5 +196,9 @@ const conceptMaps = [
   backgroundObjects,
   celestialObjects
 ]
+
+// const conceptMaps = [
+//   sandbox
+// ]
 
 module.exports = { conceptMaps };
