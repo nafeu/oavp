@@ -64,8 +64,8 @@ const surroundingObjects = `
 Rectangle_water|xr:90;y:215;yMod:80.0;yModType:sine;w:15500.0;h:17100.0;fillColor:0;
 
 #waves
-Arc_waves|xr:90;y:191;z:500;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;zMod:200;zModType:sawtooth;fillColor:0;
-Arc_waves|xr:90;y:191;yIter:-2.0;z:900;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:191;z:500;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;zMod:200;zModType:sawtooth;fillColor:0;
+Arc_waves_nofill|xr:90;y:191;yIter:-2.0;z:900;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
 
 `+sharedValues;
 
@@ -86,7 +86,8 @@ Flatbox_city|xIter:12600.0;xIterFunc:sin(x);xr:90;y:-5000;yIter:400.0;yIterFunc:
 Flatbox_pillars|xr:90;y:-2000;z:-30000;zr:45;w:1000.0;h:1000.0;l:4000.0;s:100.0;fillColor:[black];
 
 #horizon
-Rectangle_horizon|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:[black];
+Rectangle_horizon_accentafill|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:[black];
+Rectangle_horizon_nostroke_accentafill|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:[black];
 
 #mountain_split
 [left_mountain]&[right_mountain]

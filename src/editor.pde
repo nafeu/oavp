@@ -86,6 +86,11 @@ public class OavpEditor {
   private String modalHeader;
   private int queuedObjectToCreate = 0;
   private color backgroundColor = 0;
+  private color accentA = 0;
+  private color accentB = 0;
+  private color accentC = 0;
+  private color accentD = 0;
+  private color[] shuffledPalette = new color[5];
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
     this.input = input;
@@ -233,7 +238,7 @@ public class OavpEditor {
       if (isToolSwitchable()) {
         if (input.isPressed(KEY_M)) { this.switchTool(TOOL_MOVE); }
         if (input.isHoldingControl) {
-          if (input.isPressed(KEY_S)) { this.lazySave(); println("Sketch saved to " + sketchPath("sketch.pde")); }
+          if (input.isPressed(KEY_S)) { this.exportSketchToFile(); }
 
           if (input.isPressed(KEY_1)) { presetOne(); }
           if (input.isPressed(KEY_2)) { presetTwo(); }
@@ -262,8 +267,16 @@ public class OavpEditor {
       if (input.isPressed(KEY_D)) { objects.duplicate(); }
       if (input.isPressed(KEY_N)) { toggleCreateMode(); }
       if (input.isPressed(KEY_Q)) { toggleSnapIntensity(); }
-      if (input.isPressed(KEY_X)) { println(objects.exportSketchData()); }
-      if (input.isPressed(KEY_COMMA)) { println(objects.exportObjectData()); }
+      if (input.isPressed(KEY_X)) {
+        Date date = new Date();
+        println("--- [ sketch data : " + date + " ] ---");
+        println(objects.exportAllObjectData());
+      }
+      if (input.isPressed(KEY_COMMA)) {
+        Date date = new Date();
+        println("--- [ object data : " + date + " ] ---");
+        println(objects.exportObjectData());
+      }
       if (input.isPressed(KEY_W)) { objects.remove(); }
     }
   }
@@ -278,35 +291,33 @@ public class OavpEditor {
     }
   }
 
-  public void lazySave() {
+  public void exportSketchToFile() {
+    println("[ oavp ] Exporting sketch to file...");
+
+    Date date = new Date();
+
+    String paletteArrayString = palette.getFormattedPaletteString(colorPaletteIndex);
+
     saveStrings(
-      sketchPath("sketch.pde"),
+      sketchPath("../tools/commander/export.txt"),
       new String[] {
+        "// DATE: " + date,
+        "// PALETTE: " + paletteArrayString,
         "void setupSketch() {",
-        objects.exportSketchData(),
-        "} /*--SETUP--*/",
-        "",
-        "void updateSketch() {",
-        "} /*--UPDATE--*/",
-        "",
-        "void drawSketch() {",
-        "} /*--DRAW--*/",
-        ""
+        objects.exportAllObjectData() + "}",
+        "void setupSketchPostEditor() {",
+        "editor.setPaletteByArrayString(\"" + paletteArrayString + "\");",
+        "editor.setBackgroundColor(" + str(this.backgroundColor) + ");",
+        "editor.setAccentA(" + str(this.accentA) + ");",
+        "editor.setAccentB(" + str(this.accentB) + ");",
+        "editor.setAccentC(" + str(this.accentC) + ");",
+        "editor.setAccentD(" + str(this.accentD) + ");",
+        "}",
+        "void updateSketch() {}",
+        "void drawSketch() {}",
       }
     );
   }
-
-  // public void saveSketch() {
-  //   if (this.openedPath != "") {
-  //     println("Saving file...");
-  //   } else {
-  //     promptFileSave();
-  //   }
-  // }
-
-  // public void promptFileSave() {
-  //   this.fileSaveModalOpen = true;
-  // }
 
   public void switchTool(int toolId) {
     updateOriginalValues();
@@ -676,10 +687,26 @@ public class OavpEditor {
     }
   }
 
+  public void shuffleAccents() {
+    arrayCopy(this.activePalette, this.shuffledPalette);
+    shuffleArray(this.shuffledPalette);
+    this.backgroundColor = this.shuffledPalette[0];
+    this.accentA = this.shuffledPalette[1];
+    this.accentB = this.shuffledPalette[2];
+    this.accentC = this.shuffledPalette[3];
+    this.accentD = this.shuffledPalette[4];
+  }
+
   public void randomPalette() {
     int randomPalette = (int) random(0, palette.table.size());
     palette.moveToFront(randomPalette);
     this.activePalette = palette.getPalette(0);
+    this.colorIndex = this.colorIndex % this.activePalette.length;
+    shuffleAccents();
+  }
+
+  public void setPaletteByArrayString(String colorsArrayString) {
+    this.activePalette = palette.getPalette(palette.getPaletteIndexByColorValuesList(colorsArrayString));
     this.colorIndex = this.colorIndex % this.activePalette.length;
   }
 
@@ -695,18 +722,23 @@ public class OavpEditor {
     // Background is always at 0th index, ie. it is selected first
     OavpVariable activeVariable = objects.getActiveVariable();
 
-    if (activeVariable.name.equals("background")) {
-      backgroundColor = this.activePalette[
-        (int) random(0, this.activePalette.length)
-      ];
-
-      activeVariable.fillColor(backgroundColor);
-    }
-    else if (activeVariable.name.contains("backgroundfill")) {
-      activeVariable.fillColor(backgroundColor);
+    if (activeVariable.name.equals("background") || activeVariable.name.contains("backgroundfill")) {
+      activeVariable.fillColor(this.backgroundColor);
     }
     else if (activeVariable.name.contains("nofill")) {
       activeVariable.fillColor(0);
+    }
+    else if (activeVariable.name.contains("accentafill")) {
+      activeVariable.fillColor(this.accentA);
+    }
+    else if (activeVariable.name.contains("accentbfill")) {
+      activeVariable.fillColor(this.accentB);
+    }
+    else if (activeVariable.name.contains("accentcfill")) {
+      activeVariable.fillColor(this.accentC);
+    }
+    else if (activeVariable.name.contains("accentdfill")) {
+      activeVariable.fillColor(this.accentD);
     }
     else if (
       !activeVariable.name.contains("Arc")
@@ -721,7 +753,23 @@ public class OavpEditor {
 
     if (activeVariable.name.contains("nostroke")) {
       activeVariable.strokeColor(0);
-    } else {
+    }
+    else if (activeVariable.name.contains("backgroundstroke")) {
+      activeVariable.strokeColor(this.backgroundColor);
+    }
+    else if (activeVariable.name.contains("accentastroke")) {
+      activeVariable.strokeColor(this.accentA);
+    }
+    else if (activeVariable.name.contains("accentbstroke")) {
+      activeVariable.strokeColor(this.accentB);
+    }
+    else if (activeVariable.name.contains("accentcstroke")) {
+      activeVariable.strokeColor(this.accentC);
+    }
+    else if (activeVariable.name.contains("accentdstroke")) {
+      activeVariable.strokeColor(this.accentD);
+    }
+    else {
       activeVariable.strokeColor(
         this.activePalette[
           (int) random(0, this.activePalette.length)
@@ -1688,6 +1736,26 @@ public class OavpEditor {
 
   public String getModalHeader() {
     return this.modalHeader;
+  }
+
+  public void setBackgroundColor(color updatedColor) {
+    this.backgroundColor = updatedColor;
+  }
+
+  public void setAccentA(color updatedColor) {
+    this.accentA = updatedColor;
+  }
+
+  public void setAccentB(color updatedColor) {
+    this.accentB = updatedColor;
+  }
+
+  public void setAccentC(color updatedColor) {
+    this.accentC = updatedColor;
+  }
+
+  public void setAccentD(color updatedColor) {
+    this.accentD = updatedColor;
   }
 }
 

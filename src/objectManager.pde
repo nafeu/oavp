@@ -180,10 +180,9 @@ public class OavpObjectManager {
     editor.updateOriginalValues();
   }
 
-  public String exportSketchData() {
-    Date date = new Date();
-    println("--- [ sketch data : " + date + " ] ---");
+  public String exportAllObjectData() {
     StringBuilder objectData = new StringBuilder();
+
     for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
       OavpObject object = entry.getValue();
       String objectKey = entry.getKey();
@@ -242,8 +241,6 @@ public class OavpObjectManager {
   }
 
   public String exportObjectData() {
-    Date date = new Date();
-    println("--- [ object data : " + date + " ] ---");
     StringBuilder objectData = new StringBuilder();
 
     OavpObject object = objects.getActiveObject();

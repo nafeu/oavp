@@ -1,3 +1,5 @@
+int MIN_COLOR_PALETTE_LENGTH = 5;
+
 public class OavpPalette {
 
   private HashMap<String, color[]> storage;
@@ -120,35 +122,68 @@ public class OavpPalette {
     table.add(0, selectedPalette);
   }
 
+  public String getFormattedPaletteString(int paletteIndex) {
+    int[] selectedPalette = table.get(paletteIndex);
+
+    StringBuilder result = new StringBuilder("");
+
+    for (int i = 0; i < selectedPalette.length; i++) {
+      String hexValue = hex(selectedPalette[i], 6);
+
+      result.append("#").append(hexValue);
+
+      if (i < selectedPalette.length - 1) {
+        result.append(",");
+      }
+    }
+
+    return result.toString();
+  }
+
+  public int getPaletteIndexByColorValuesList(String colorValuesList) {
+    String[] colorValues = splitTokens(colorValuesList, ",");
+
+    for (int i = 0; i < table.size(); i++) {
+      if (isColorsArrayEqual(colorValues, colorsToHexStrings(table.get(i)))) {
+        return i;
+      }
+    }
+
+    println("[ oavp ] Could not find palette: " + colorValuesList + ", loading default...");
+
+    return 0;
+  }
+
   public class FlatUIColors {
-    int teal = #1abc9c;
-    int darkTeal = #16a085;
-    int green = #2ecc71;
-    int darkGreen = #27ae60;
-    int blue = #3498db;
-    int darkBlue = #2980b9;
-    int purple = #9b59b6;
-    int darkPurple = #8e44ad;
-    int red = #e74c3c;
-    int darkRed = #c0392b;
-    int orange = #e67e22;
-    int darkOrange = #d35400;
-    int yellow = #f1c40f;
-    int darkYellow = #f39c12;
-    int grey = #95a5a6;
-    int darkGrey = #7f8c8d;
-    int primary = #ecf0f1;
-    int darkPrimary = #bdc3c7;
-    int secondary = #34495e;
-    int darkSecondary = #2c3e50;
+    int teal = #1ABC9C;
+    int darkTeal = #16A085;
+    int green = #2ECC71;
+    int darkGreen = #27AE60;
+    int blue = #3498DB;
+    int darkBlue = #2980B9;
+    int purple = #9B59B6;
+    int darkPurple = #8E44AD;
+    int red = #E74C3C;
+    int darkRed = #C0392B;
+    int orange = #E67E22;
+    int darkOrange = #D35400;
+    int yellow = #F1C40F;
+    int darkYellow = #F39C12;
+    int grey = #95A5A6;
+    int darkGrey = #7F8C8D;
+    int primary = #ECF0F1;
+    int darkPrimary = #BDC3C7;
+    int secondary = #34495E;
+    int darkSecondary = #2C3E50;
     int white = #FFFFFF;
     int black = #000000;
     FlatUIColors() {}
   }
 }
 
+// Each palette must be a minimum of 5 colors
 int[][] COLOR_PALETTES = {
-  {#FFFFFF, #000000},
+  {#FFFFFF, #000000, #E74C3C, #2ECC71, #3498DB},
   {#69D2E7, #A7DBD8, #E0E4CC, #F38630, #FA6900},
   {#FE4365, #FC9D9A, #F9CDAD, #C8C8A9, #83AF9B},
   {#ECD078, #D95B43, #C02942, #542437, #53777A},

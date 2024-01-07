@@ -251,3 +251,44 @@ int getRandomIntInRange(int min, int max) {
   Random random = new Random();
   return random.nextInt((max - min) + 1) + min;
 }
+
+void shuffleArray(int[] array) {
+  for (int i = array.length - 1; i > 0; i--) {
+    int index = floor(random(i + 1));
+    int temp = array[i];
+    array[i] = array[index];
+    array[index] = temp;
+  }
+}
+
+String[] colorsToHexStrings(color[] colorArray) {
+  String[] hexStrings = new String[colorArray.length];
+
+  for (int i = 0; i < colorArray.length; i++) {
+    hexStrings[i] = "#" + hex(colorArray[i], 6);
+  }
+
+  return hexStrings;
+}
+
+boolean isColorsArrayEqual(String[] arrayA, String[] arrayB) {
+  String[] sortedArrayA = new String[arrayA.length];
+  String[] sortedArrayB = new String[arrayB.length];
+
+  arrayCopy(arrayA, sortedArrayA);
+  arrayCopy(arrayB, sortedArrayB);
+  sort(sortedArrayA);
+  sort(sortedArrayB);
+
+  if (sortedArrayA.length != sortedArrayB.length) {
+    return false;
+  }
+
+  for (int i = 0; i < sortedArrayA.length; i++) {
+    if (!sortedArrayA[i].equals(sortedArrayB[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}

@@ -81,6 +81,9 @@ void webSocketServerEvent(String msg) {
     objects.prevActiveVariable();
     updateEditorVariableMeta();
   }
+  else if (command.equals("export-sketch")) {
+    editor.exportSketchToFile();
+  }
   else {
     println("[ oavp ] Command not recognized");
   }

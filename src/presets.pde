@@ -11,6 +11,7 @@ void addHorizon() {
 }
 
 void randomizeAllColors() {
+  editor.shuffleAccents();
   for (int i = 0; i < objects.getCount(); i++) {
     editorObjectButtonNext();
     editor.randomAssignment();
