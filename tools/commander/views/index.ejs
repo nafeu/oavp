@@ -38,10 +38,11 @@
   <button id="buttonE" onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
   <button id="buttonX" onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
   <button id="buttonG" onclick="sendApiCommand({ command: 'generate' })">Generate</button>
-  <button id="buttonR" onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
+  <button id="button|" onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
   <button id="buttonP" onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
   <button id="buttonN" onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
   <button id="buttonM" onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
+  <button onclick="sendApiCommand({ command: 'feeling-lucky' })">Feeling Lucky</button>
 </div>
 <div id="property-selections">
   <button onclick="setSelectedProperty('x')">Select X</button>
@@ -157,21 +158,22 @@
     })">
       Direct Edit
   </button>
-  <button onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
-  <button onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
+  <button id="button]" onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
+  <button id="button[" onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
 </div>
 <div id="preview-edit-intervals">
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 5000 })">+5000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -5000 })">-5000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
+  <button id="button1" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
+  <button id="button2" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
+  <button id="button4" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 5000 })">+5000</button>
+  <button id="button5" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -5000 })">-5000</button>
+  <button id="button7" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
+  <button id="button8" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
 </div>
 <pre style="color: purple;" id="sketch-socket"></pre>
 <pre style="color: blue;" id="commander-socket"></pre>
 <pre id="response"></pre>
 <pre id="data"></pre>
+<pre id="last-button">Last button pressed: ...</pre>
 
 <script>
   const oavpObjectProperties = JSON.parse('<%- OAVP_OBJECT_PROPERTIES %>');
@@ -313,10 +315,35 @@
 
   document.addEventListener('keydown', function(event) {
     const key = event.key.toLowerCase(); // Convert to lowercase for case-insensitivity
-    if (key === 'e' || key === 'g') {
+    if (
+      key === 'e'
+      || key === 'g'
+      || key === 'x'
+      || key === '|'
+      || key === 'p'
+      || key === 'n'
+      || key === 'm'
+      || key === ']'
+      || key === '['
+      || key === '1'
+      || key === '2'
+      || key === '4'
+      || key === '5'
+      || key === '7'
+      || key === '8'
+    ) {
       const buttonId = `button${key.toUpperCase()}`;
       const button = document.getElementById(buttonId);
-      if (button) {
+
+      if (
+        button
+        && (document.activeElement !== document.getElementById('property-value'))
+        && (document.activeElement !== document.getElementById('property-name'))
+      ) {
+        const lastButtonElement = document.getElementById('last-button');
+
+        lastButtonElement.textContent = `Last button pressed: ${key} -> ${button.textContent}`;
+
         button.click();
       }
     }

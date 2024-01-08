@@ -90,6 +90,7 @@ const OAVP_OBJECT_PROPERTIES = [
   { id: 'paramEIter', defaultValue: 0.0, type: 'float' },
   { id: 'paramEIterFunc', defaultValue: 'none', type: 'String' },
   { id: 'modDelay', defaultValue: 0, type: 'int' },
+  { id: 'variation', defaultValue: 'none', type: 'String' },
   { id: 'i', defaultValue: 1, type: 'int' }
 ];
 
@@ -129,6 +130,8 @@ const COMMANDER_WEBSOCKET_SERVER_PORT = 3002;
 const DIRECTORY_PATH = './';
 const TARGET_FILE_NAME = 'target.txt';
 const DUMP_FILE_PATH = 'preset-dump.txt';
+const EXPORT_FILE_NAME = 'export.txt';
+const EXPORT_FILE_DIR = '../../exports';
 
 module.exports = {
   OAVP_OBJECT_PROPERTIES,
@@ -141,5 +144,7 @@ module.exports = {
   COMMANDER_WEBSOCKET_SERVER_PORT,
   DIRECTORY_PATH,
   TARGET_FILE_NAME,
-  DUMP_FILE_PATH
+  DUMP_FILE_PATH,
+  EXPORT_FILE_NAME,
+  EXPORT_FILE_DIR
 }

@@ -26,6 +26,16 @@ void webSocketServerEvent(String msg) {
   else if (command.equals("randomize-colors")) {
     randomizeAllColors();
   }
+  else if (command.equals("feeling-lucky")) {
+    JSONArray receivedOavpObjects = message.getJSONArray("objects");
+
+    noLoop();
+    objects.removeAll();
+    handleReceivedOavpObjects(receivedOavpObjects);
+    randomizePalette();
+    randomizeAllColors();
+    loop();
+  }
   else if (command.equals("direct-edit")) {
     String propertyName = message.getString("name");
     String propertyType = message.getString("type");
@@ -33,19 +43,19 @@ void webSocketServerEvent(String msg) {
     if (propertyType.equals("String")) {
       String propertyValue = message.getString("value");
 
-      editor.directEdit(propertyName, propertyValue);
+      editor.externalDirectEdit(propertyName, propertyValue);
     } else if (propertyType.equals("int")) {
       int propertyValue = message.getInt("value");
 
-      editor.directEdit(propertyName, propertyValue);
+      editor.externalDirectEdit(propertyName, propertyValue);
     } else if (propertyType.equals("float")) {
       float propertyValue = message.getFloat("value");
 
-      editor.directEdit(propertyName, propertyValue);
+      editor.externalDirectEdit(propertyName, propertyValue);
     } else if (propertyType.equals("color")) {
       color propertyValue = message.getInt("value");
 
-      editor.directEdit(propertyName, propertyValue);
+      editor.externalDirectEdit(propertyName, propertyValue);
     }
   }
   else if (command.equals("preview-edit")) {
@@ -114,7 +124,12 @@ void handleReceivedOavpObjects(JSONArray oavpObjects) {
           if (paramType.equals("String")) {
             String paramValue = objectParam.getString("value");
 
-            activeEditorVariable.set(paramId, paramValue);
+            if (paramId.contains("variation")) {
+              activeEditorVariable.set(paramId, activeEditorVariable.getVariationIndex(paramValue));
+            } else {
+              activeEditorVariable.set(paramId, paramValue);
+            }
+
           } else if (paramType.equals("int")) {
             int paramValue = objectParam.getInt("value");
 

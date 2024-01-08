@@ -24,6 +24,21 @@ const foregroundObjects = `
 [walkway]
 [square_arch]
 [poles]
+[turnway]
+
+#turnway
+[turnway_left]&[turnway_right]
+[turnway_stretched_left]&[turnway_stretched_right]
+#turnway_left
+Flatbox_turnway_left_accentafill_accentbstroke|xIter:-200.0;xr:90;y:250;yIter:-25.0;yIterFunc:random 100;zIter:-200.0;zr:45;w:100.0;h:100.0;l:300.0;s:100.0;i:80;lIter:50.0;lIterFunc:random 100;
+#turnway_right
+Flatbox_turnway_right_accentafill_accentbstroke|xIter:200.0;xr:90;y:250;yIter:-25.0;yIterFunc:random 100;zIter:-200.0;zr:45;w:100.0;h:100.0;l:300.0;s:100.0;i:80;lIter:50.0;lIterFunc:random 100;
+#turnway_stretched_left
+Flatbox_turnway_left_accentafill_accentbstroke|xIter:-200.0;xr:90;y:250;zIter:-200.0;zr:45;w:100.0;h:100.0;hIter:[turnway_stretch*a];l:300.0;s:100.0;i:80
+#turnway_stretched_right
+Flatbox_turnway_right_accentafill_accentbstroke|xIter:200.0;xr:90;y:250;zIter:-200.0;zr:45;w:100.0;wIter:[turnway_stretch*a];h:100.0;l:300.0;s:100.0;i:80
+#turnway_stretch
+rand(0, 3, 'stretch')*50
 
 #walkway
 Flatbox_walkway|x:[dist];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;fillColor:0;i:30;
@@ -81,38 +96,45 @@ rand(300, 600, 'ziter')
 
 const surroundingObjects = `
 #prefabs
-[water_waves]
-[water]
-
-#water_waves
 [water]&[waves]
 [waves]
+[water]
+[floor]
+
 #water
-Rectangle_water|xr:90;y:215;yMod:80.0;yModType:sine;w:15500.0;h:17100.0;fillColor:0;
+Rectangle_water|xr:90;y:[water_level];yMod:[tide];yModType:sine;z:-20000;w:100000.0;h:60000.0;fillColor:0;
+#water_level
+rand(150, 220)
+#tide
+rand(80, 200)
 #waves
-Arc_waves_nofill|xr:90;y:191;z:500;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;zMod:200;zModType:sawtooth;fillColor:0;
-Arc_waves_nofill|xr:90;y:191;yIter:-2.0;z:900;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:190;z:500;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;zMod:200;zModType:sawtooth;fillColor:0;
+Arc_waves_nofill|xr:90;y:190;z:500;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;fillColor:0;
+Arc_waves_nofill|xr:90;y:190;yIter:-2.0;z:900;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:190;yIter:-2.0;z:900;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:91;z:1000;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:400.0;h:100.0;hIter:400.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:400;yIter:-4.0;z:1001;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:400.0;h:100.0;hIter:400.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+
+#floor
+Rectangle_floor_accentcfill|xr:90;y:[floor_y];z:-20000;w:100000.0;h:60000.0;fillColor:0;
+#floor_y
+rand(50, 500)
 `+sharedValues;
 
 const backgroundObjects = `
 #prefabs
-[background]
-
-#background
+[horizon]
 [horizon]&[city]
-[horizon]&[mountain_split]&[pillars]
 [horizon]&[mountain_split]&[city]
 [horizon]&[trees]
+[trees]
 
 #city
 Flatbox_city|xIter:12600.0;xIterFunc:sin(x);xr:90;y:-5000;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:200.0;zr:45;w:600.0;h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;fillColor:-16777216;i:51;zrIter:10;
 
-#pillars
-Flatbox_pillars|xr:90;y:-2000;z:-30000;zr:45;w:1000.0;h:1000.0;l:4000.0;s:100.0;fillColor:[black];
-
 #horizon
-Rectangle_horizon_accentafill|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:[black];
-Rectangle_horizon_nostroke_accentafill|y:20000;z:-30000;w:200000.0;h:40000.0;fillColor:[black];
+Rectangle_horizon_accentafill|y:40000;z:-95000;w:200000.0;h:80000.0;fillColor:[black];
+Rectangle_horizon_nostroke_accentafill|y:40000;z:-95000;w:200000.0;h:80000.0;fillColor:[black];
 
 #mountain_split
 [left_mountain]&[right_mountain]
@@ -126,8 +148,8 @@ rand(8, 42)
 rand(-50, -5)
 
 #trees
-Terrain_trees|z:-6000;zIter:930.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;strokeColor:-12318166;fillColor:-12318166;paramA:50.0;paramB:350.0;paramC:50.0;paramCIter:-30.0;paramD:50.0;variation:trees;i:3;
-Terrain_trees|y:15;z:-6000;zIter:970.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;strokeColor:-12318166;fillColor:-12318166;paramB:610.0;paramCIter:140.0;paramD:135.0;variation:trees;i:3;
+Terrain_trees|z:-6000;zIter:930.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramA:50.0;paramB:350.0;paramC:50.0;paramCIter:-30.0;paramD:50.0;variation:trees;i:3;
+Terrain_trees|y:15;z:-6000;zIter:970.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramB:610.0;paramCIter:140.0;paramD:135.0;variation:trees;i:3;
 `+sharedValues;
 
 const celestialObjects = `

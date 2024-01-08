@@ -504,6 +504,27 @@ public class OavpEditor {
     }
   }
 
+  private void externalDirectEdit(String fieldName, Object value) {
+    try {
+      OavpVariable activeVariable = objects.getActiveVariable();
+      Field field = activeVariable.getClass().getDeclaredField(fieldName);
+
+      if (activeVariable.get(fieldName).getClass() == Float.class) {
+        field.set(activeVariable, (float) value);
+      } else if (activeVariable.get(fieldName).getClass() == String.class) {
+        field.set(activeVariable, (String) value);
+      } else if (activeVariable.get(fieldName).getClass() == Integer.class) {
+        if (value instanceof Float) {
+          field.set(activeVariable, int((float) value));
+        } else {
+          field.set(activeVariable, (int) value);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
   private void commitEdit(String fieldName) {
     try {
       OavpVariable activeVariable = objects.getActiveVariable();

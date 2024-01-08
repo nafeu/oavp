@@ -19,7 +19,9 @@ const {
   COMMANDER_WEBSOCKET_SERVER_PORT,
   DIRECTORY_PATH,
   TARGET_FILE_NAME,
-  DUMP_FILE_PATH
+  DUMP_FILE_PATH,
+  EXPORT_FILE_NAME,
+  EXPORT_FILE_DIR
 } = require('./constants');
 const { conceptMaps } = require('./concept-maps');
 
@@ -69,14 +71,20 @@ const getOverridesFromParameterSet = singleLineParameterSet => {
     .forEach(valueMapping => {
       const [property, value] = valueMapping.split(':');
 
-      const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type === 'String';
-      const overrideValue = isString ? value : eval(value);
+      const objectProperty = _.find(OAVP_OBJECT_PROPERTIES, { id: property });
 
-      overrides.push({
-        id: property,
-        value: overrideValue,
-        type: _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type || 'String'
-      });
+      if (objectProperty === null || objectProperty === undefined) {
+        console.log(`[ oavp-commander:error ] Cannot match property: ${property}`);
+      } else {
+        const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type === 'String';
+        const overrideValue = isString ? value : eval(value);
+
+        overrides.push({
+          id: property,
+          value: overrideValue,
+          type: _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type || 'String'
+        });
+      }
   })
 
   return { overrides, objectName, objectTags };
@@ -155,7 +163,7 @@ const writeGeneratedSketchToFile = () => {
   fs.writeFileSync('../../src/sketch.pde', sketch);
 }
 
-const emitGeneratedSketchToServer = () => {
+const emitGeneratedSketchToServer = (options = {}) => {
   console.log(`[ oavp-commander ] Emitting generated sketch to ${SKETCH_WEBSOCKET_SERVER_URL}`);
 
   const allEncodedParameters = getAllEncodedParameters();
@@ -178,7 +186,7 @@ const emitGeneratedSketchToServer = () => {
 
   rand.cache = {};
 
-  const message = JSON.stringify({ command: 'write-objects', objects });
+  const message = JSON.stringify({ command: options.isFeelingLucky ? 'feeling-lucky' : 'write-objects', objects });
   ws.send(message);
   return objects;
   console.log(`[ oavp-commander ] WebSocket message sent: ${message}`);
@@ -256,6 +264,11 @@ const main = () => {
       res.json({ status: 'success', message: `Emitted generated sketch to server.`, data: objects });
     }
 
+    else if (command === 'feeling-lucky') {
+      const objects = emitGeneratedSketchToServer({ isFeelingLucky: true });
+      res.json({ status: 'success', message: `Resetting previous sketch, generating a new sketch, randomize colors.`, data: objects });
+    }
+
     else if (command === 'reset') {
       ws.send(JSON.stringify({ command: 'reset' }));
       res.json({ status: 'success', message: `Removed all objects from sketch.` });
@@ -311,40 +324,64 @@ const main = () => {
     Preset Builder
   */
   console.log(`[ oavp-commander:preset-builder ] Watching for changes to ${TARGET_FILE_NAME}`);
+  console.log(`[ oavp-commander:preset-builder ] Watching for changes to ${EXPORT_FILE_NAME}`);
   console.log(`[ oavp-commander:preset-builder ] Dumping generated presets into to ${DUMP_FILE_PATH}`);
+  console.log(`[ oavp-commander:preset-builder ] Saving exported sketches to ${EXPORT_FILE_DIR}`);
   const logStream = fs.createWriteStream(DUMP_FILE_PATH, { flags: 'a' });
 
   fs.watch(DIRECTORY_PATH, (eventType, filename) => {
-    if (filename !== TARGET_FILE_NAME) { return };
+    if (filename === TARGET_FILE_NAME) {
+      presetOutput = '';
+      processedDiff = [];
 
-    presetOutput = '';
-    processedDiff = [];
+      compareFiles().forEach(line => {
+        processedDiff = [...processedDiff, ...splitString(line)];
+      });
 
-    compareFiles().forEach(line => {
-      processedDiff = [...processedDiff, ...splitString(line)];
-    });
+      processedDiff.forEach(line => {
+        const isAddition = line.includes('.add(');
 
-    processedDiff.forEach(line => {
-      const isAddition = line.includes('.add(');
+        if (isAddition) {
+          const objectName = line.match(/\.add\("[^"]+","([^"]+)"\)/)[1];
 
-      if (isAddition) {
-        const objectName = line.match(/\.add\("[^"]+","([^"]+)"\)/)[1];
+          presetOutput = `${objectName}|`;
+        } else {
+          const regex = /\.set\("([^"]+)",\s*([^)]+)\)/g;
 
-        presetOutput = `${objectName}|`;
-      } else {
-        const regex = /\.set\("([^"]+)",\s*([^)]+)\)/g;
-
-        while ((match = regex.exec(line)) !== null) {
-          const property = match[1].trim();
-          const value = match[2].trim().replace(/["']/g, '');
-          presetOutput += `${property}:${value};`;
+          while ((match = regex.exec(line)) !== null) {
+            const property = match[1].trim();
+            const value = match[2].trim().replace(/["']/g, '');
+            presetOutput += `${property}:${value};`;
+          }
         }
-      }
-    });
+      });
 
-    console.log(`[ oavp-commander ] Added preset: ${presetOutput}`);
-    wsServerBroadcast(JSON.stringify({ command: 'preset-builder-result', data: presetOutput }));
-    logStream.write(`\n${presetOutput}`);
+      console.log(`[ oavp-commander ] Added preset: ${presetOutput}`);
+      wsServerBroadcast(JSON.stringify({ command: 'preset-builder-result', data: presetOutput }));
+      logStream.write(`\n${presetOutput}`);
+    }
+
+    if (filename === EXPORT_FILE_NAME) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const newFileName = `${timestamp}_sketch.txt`;
+      const destinationFilePath = path.join(EXPORT_FILE_DIR, newFileName);
+
+      fs.readFile(EXPORT_FILE_NAME, 'utf8', (err, data) => {
+        if (err) {
+          console.error(`Error reading the source file: ${err}`);
+          return;
+        }
+
+        fs.writeFile(destinationFilePath, data, 'utf8', (err) => {
+          if (err) {
+            console.error(`Error writing to the destination file: ${err}`);
+            return;
+          }
+
+          console.log(`File copied successfully to ${destinationFilePath}`);
+        });
+      });
+    }
   });
 }
 
