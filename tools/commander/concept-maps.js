@@ -24,12 +24,14 @@ Rectangle_skip|z:10000;
 
 const backgroundObjects = `
 #prefabs
-[horizon]
-[horizon]&[mountain_split]
+[horizon]&[mountains]
+[horizon]&[mountains]&[city]
+[horizon]&[valley]
 [horizon]&[city]
-[horizon]&[mountain_split]&[city]
+[horizon]&[valley]&[city]
 [horizon]&[trees]
 [horizon]&[trees]&[city]
+[horizon]&[trees]&[mountains]
 
 #city
 Flatbox_city|xIter:12600.0;xIterFunc:sin(x);xr:90;y:-5000;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:200.0;zr:45;w:600.0;h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;fillColor:-16777216;i:51;zrIter:10;
@@ -38,37 +40,57 @@ Flatbox_city|xIter:12600.0;xIterFunc:sin(x);xr:90;y:-5000;yIter:400.0;yIterFunc:
 Rectangle_horizon_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;fillColor:[black];
 Rectangle_horizon_nostroke_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;fillColor:[black];
 
-#mountain_split
-[left_mountain_f]&[right_mountain_b]
-[left_mountain_b]&[right_mountain_f]
-[left_mountain_f]
-[right_mountain_f]
-#left_mountain_f
-Triangle_leftmountain_accentbfill|x:-[left_mountain_growth*a];z:-70000;w:150000.0+[left_mountain_growth*a]+[mountain_w];h:25000.0+[left_mountain_growth];s:100.0;variation:left-right;
-Triangle_leftmountain_accentbfill|x:[left_mountain_growth*a];z:-70000;w:150000.0+[left_mountain_growth*a]*2+[mountain_w];h:25000.0+[left_mountain_growth];s:100.0;variation:left-right;
-#right_mountain_b
-Triangle_rightmountain_accentcfill|x:-[right_mountain_growth*b];z:-72000;w:-150000.0-[right_mountain_growth*b]*2-[mountain_w];h:25000.0+[right_mountain_growth*b];s:100.0;variation:left-right;
-Triangle_rightmountain_accentcfill|x:[right_mountain_growth*b];z:-72000;w:-150000.0-[right_mountain_growth*b]-[mountain_w];h:25000.0+[right_mountain_growth*b];s:100.0;variation:left-right;
-#left_mountain_b
-Triangle_leftmountain_accentbfill|x:-[left_mountain_growth*a];z:-72000;w:150000.0+[left_mountain_growth*a]+[mountain_w];h:25000.0+[left_mountain_growth];s:100.0;variation:left-right;
-Triangle_leftmountain_accentbfill|x:[left_mountain_growth*a];z:-72000;w:150000.0+[left_mountain_growth*a]*2+[mountain_w];h:25000.0+[left_mountain_growth];s:100.0;variation:left-right;
-#right_mountain_f
-Triangle_rightmountain_accentcfill|x:-[right_mountain_growth*b];z:-70000;w:-150000.0-[right_mountain_growth*b]*2-[mountain_w];h:25000.0+[right_mountain_growth*b];s:100.0;variation:left-right;
-Triangle_rightmountain_accentcfill|x:[right_mountain_growth*b];z:-70000;w:-150000.0-[right_mountain_growth*b]-[mountain_w];h:25000.0+[right_mountain_growth*b];s:100.0;variation:left-right;
-#left_mountain_rotation
+#valley
+[left_valley_f]&[right_valley_b]
+[left_valley_b]&[right_valley_f]
+[left_valley_f]
+[right_valley_f]
+#left_valley_f
+Triangle_leftvalley_accentbfill|x:-[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill|x:[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+#right_valley_b
+Triangle_rightvalley_accentcfill|x:-[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill|x:[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+#left_valley_b
+Triangle_leftvalley_accentbfill|x:-[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill|x:[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+#right_valley_f
+Triangle_rightvalley_accentcfill|x:-[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill|x:[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+#left_valley_rotation
 rand(8, 42)
-#right_mountain_rotation
+#right_valley_rotation
 rand(-50, -5)
-#left_mountain_growth
+#left_valley_growth
 rand(100, 100000, 'offset_a')
-#right_mountain_growth
+#right_valley_growth
 rand(100, 100000, 'offset_b')
-#mountain_w
+#valley_w
 rand(100, 100000)
 
 #trees
 Terrain_trees|z:-6000;zIter:930.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramA:50.0;paramB:350.0;paramC:50.0;paramCIter:-30.0;paramD:50.0;variation:trees;i:3;
 Terrain_trees|y:15;z:-6000;zIter:970.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramB:610.0;paramCIter:140.0;paramD:135.0;variation:trees;i:3;
+
+#mountains
+[mountains_a]
+[mountains_a]&[mountains_b]
+[mountains_a]&[mountains_b]&[mountains_c]
+
+#mountains_a
+Terrain_mountains_accentastroke|y:-300;z:-70000;w:150000.0;h:20000.0;s:10760.0;paramA:[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+#mountains_b
+Terrain_mountains_accentbfill_accentcstroke|y:-300;z:-75000;w:200000.0;h:20000.0;s:10760.0;paramA:2000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+#mountains_c
+Terrain_mountains_accentdfill|y:-300;z:-77000;w:250000.0;h:20000.0;s:10760.0;paramA:4000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+#mountains_height
+rand(-5000, 3000)
+#mountains_density
+rand(850, 2050)
+rand(300, 500)
+#mountains_phase
+rand(0, 4000)
+
 `+sharedValues;
 
 const celestialObjects = `
@@ -117,7 +139,11 @@ rand(0, 180, 'celestial6')
 
 const skyObjects = `
 #prefabs
-[lightbeams]
+[lightbeams]&[trail]
+[trail]
+[trail]&[trail]
+[bigsmoke]
+[bigsmoke]&[lightbeams]
 
 #lightbeams
 [lightbeam]
@@ -126,15 +152,27 @@ const skyObjects = `
 
 #lightbeam
 Line_lightbeam_nofill_accentdstroke|x:[lightbeam_x];y:-[lightbeam_y];z:-99999;w:300000.0;h:100.0;zr:[lightbeam_r];
-
 #lightbeam_r
 rand(-10, 10)
-
 #lightbeam_x
 rand(-20000, 20000)
-
 #lightbeam_y
 rand(8000, 30000)
+
+#trail
+Arc_trail_nofill_accenta|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;
+#trail_size
+rand(25, 100, 'size')
+#trail_x
+rand(-3600, 3600)
+#trail_y
+rand(1750, 3000)
+
+#bigsmoke
+Arc_bigsmoke_nofill_accenta|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;yIter:[bigsmoke_y];yIterFunc:random 100;
+#bigsmoke_y
+rand(500, 1200)
+
 `+sharedValues;
 
 const surroundingObjects = `
