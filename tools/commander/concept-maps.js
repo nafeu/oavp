@@ -137,6 +137,7 @@ rand(0, 180, 'celestial5')
 rand(0, 180, 'celestial6')
 `+sharedValues;
 
+// [ship]
 const skyObjects = `
 #prefabs
 [lightbeams]&[trail]
@@ -144,6 +145,16 @@ const skyObjects = `
 [trail]&[trail]
 [bigsmoke]
 [bigsmoke]&[lightbeams]
+[birds]
+
+#ship
+[cockpit]&[thruster]&[wings]
+#cockpit
+Pyramid_ship_cockpit|xr:90;z:-150;w:150.0;h:350.0;l:50.0;s:100.0;
+#thruster
+Pyramid_ship_thruster|xr:90;w:130.0;h:150.0;l:30.0;s:100.0;
+#wings
+Flatbox_ship_wings|xr:90;z:20;w:350.0;h:100.0;l:10.0;s:100.0;
 
 #lightbeams
 [lightbeam]
@@ -169,10 +180,22 @@ rand(-3600, 3600)
 rand(1750, 3000)
 
 #bigsmoke
-Arc_bigsmoke_nofill_accenta|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;yIter:[bigsmoke_y];yIterFunc:random 100;
+Arc_bigsmoke_nofill_accentastroke|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;yIter:[bigsmoke_y];yIterFunc:random 100;
 #bigsmoke_y
 rand(500, 1200)
 
+#birds
+CurvedLine_birds_accentastroke|x:[birds_x];xIter:-[birds_xiter];xIterFunc:random 100;xr:90;y:-[birds_y];z:-[birds_z];zIter:-[birds_ziter];w:30.0;h:100.0;paramB:-15.0;paramD:50.0;i:31;
+#birds_x
+rand(-600, 600)
+#birds_y
+rand(400, 900)
+#birds_z
+rand(0, 2000)
+#birds_xiter
+rand(200, 500)
+#birds_ziter
+rand(30, 100)
 `+sharedValues;
 
 const surroundingObjects = `
@@ -210,6 +233,7 @@ const foregroundObjects = `
 [poles]
 [turnway]
 [skip]
+[travelling_platforms]
 
 #turnway
 [turnway_left]&[turnway_right]
@@ -229,8 +253,20 @@ rand(0, 3, 'stretch')*50
 Flatbox_walkway|x:[dist];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;fillColor:0;i:30;
 Flatbox_walkway|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;i:30;
 Flatbox_walkway|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:[walkway_h];l:110.0;s:100.0;i:30;
+Flatbox_walkway|xr:90;y:350;yIter:-20.0;yIterFunc:mod 3;zIter:-500.0;w:500.0;h:500.0;l:50.0;s:100.0;i:100;
+Flatbox_walkway|xr:90;y:350;yIter:-20.0;yIterFunc:mod 3;z:800;zIter:-500.0;w:500.0;h:500.0;l:50.0;s:100.0;i:100;
 #walkway_h
 rand(50, 150)
+
+#travelling_platforms
+[travelling_platform_base]&[travelling_platform_beams]&[travelling_platform_wall]
+
+#travelling_platform_base
+Flatbox_travellingplatforms_accentcfill_accentbstroke|x:1000;xIter:-1000.0;xr:90;y:150;yIterFunc:mod 3;z:1200;zIter:-500.0;w:300.0;h:400.0;l:25.0;s:100.0;i:100;xIterFunc:sqrt(x);
+#travelling_platform_beams
+Flatbox_travellingplatforms_accentbfill_accentcstroke|x:1000;xIter:-1000.0;xr:90;y:575;yIterFunc:mod 3;z:1200;zIter:-500.0;w:50.0;h:50.0;l:825.0;s:100.0;i:100;xIterFunc:sqrt(x);
+#travelling_platform_wall
+Flatbox_travellingplatforms_accentcfill_accentdstroke|x:650;xIter:-1000.0;xr:90;y:550;yIterFunc:mod 3;z:1200;zIter:-500.0;w:50.0;h:400.0;l:4225.0;s:100.0;i:100;xIterFunc:sqrt(x);
 
 #poles
 [base_pole]&[pole_tip]
