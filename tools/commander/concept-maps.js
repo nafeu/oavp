@@ -22,19 +22,43 @@ rand(-300, 300)
 Rectangle_skip|z:10000;
 `
 
+// [horizon]&[mountains]
+// [horizon]&[mountains]&[city]
+// [horizon]&[valley]
+// [horizon]&[city]
+// [horizon]&[valley]&[city]
+// [horizon]&[trees]
+// [horizon]&[trees]&[city]
+// [horizon]&[trees]&[mountains]
 const backgroundObjects = `
 #prefabs
-[horizon]&[mountains]
-[horizon]&[mountains]&[city]
-[horizon]&[valley]
 [horizon]&[city]
-[horizon]&[valley]&[city]
-[horizon]&[trees]
-[horizon]&[trees]&[city]
-[horizon]&[trees]&[mountains]
 
 #city
-Flatbox_city|xIter:12600.0;xIterFunc:sin(x);xr:90;y:-5000;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:200.0;zr:45;w:600.0;h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;fillColor:-16777216;i:51;zrIter:10;
+[city_main]&[city_flair]
+
+#city_main
+Flatbox_city_main_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4950;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+#city_flair
+Flatbox_city_flair_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-5350;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_flair_accentcstroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-5350;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a]-[city_flair_w_offset];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+[skip]
+#city_i
+rand(20, 51, 'ci')
+#city_x
+0
+rand(-20000, 20000, 'cx')
+#city_w
+rand(500, 2000, 'cw')
+#city_ziter
+rand(600, 200, 'cziter')
+#city_l_offset
+rand(1200, 4000, 'clo')
+#city_flair_w_offset
+rand(200, 600)
+#city_xiter
+12600
+rand(12600, 60000, 'cxiter')
 
 #horizon
 Rectangle_horizon_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;fillColor:[black];
@@ -212,7 +236,6 @@ Arc_artifact|y:-30000;z:-90000;w:30100.0;wIter:-1000.0;h:30100.0;hIter:-1000.0;s
 
 `+sharedValues;
 
-// [ship]
 const skyObjects = `
 #prefabs
 [lightbeams]&[trail]
@@ -221,15 +244,43 @@ const skyObjects = `
 [bigsmoke]
 [bigsmoke]&[lightbeams]
 [birds]
+[shootingbeam]
+[ship]
+[ship]&[shootingbeam]
+[ship]&[lightbeams]
+[shootingbeam]&[bigsmoke]
+[birds]&[ship]
+
+#shootingbeam
+Triangle_shootingbeam_nofill_accentdstroke|x:[shootingbeam_x];y:[shootingbeam_y];xIter:[shootingbeam_xiter];xIterFunc:random 100;yIter:-30.0;z:-4400;zIter:-265.0;zrIter:9.0;w:100.0;h:100.0;s:100.0;sIter:-5.0;variation:equilateral;i:51;
+#shootingbeam_xiter
+rand(-200, -400)
+#shootingbeam_x
+rand(-7000, 7000)
+#shootingbeam_y
+rand(-3000, -5000)
 
 #ship
-[cockpit]&[thruster]&[wings]
-#cockpit
-Pyramid_ship_cockpit|xr:90;z:-150;w:150.0;h:350.0;l:50.0;s:100.0;
-#thruster
-Pyramid_ship_thruster|xr:90;w:130.0;h:150.0;l:30.0;s:100.0;
-#wings
-Flatbox_ship_wings|xr:90;z:20;w:350.0;h:100.0;l:10.0;s:100.0;
+[ship_cockpit]&[ship_thruster]&[ship_wings]&[ship_contrail]
+#ship_cockpit
+Pyramid_ship_cockpit_accentbfill_accentcstroke|x:[ship_x*a];y:[ship_y*a];z:-150+[ship_z*a];xr:90;w:150.0;h:350.0;l:50.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+#ship_thruster
+Pyramid_ship_thruster_accentdstroke|x:[ship_x*a];y:[ship_y*a];z:[ship_z*a];xr:90;w:130.0;h:150.0;l:30.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+#ship_wings
+Flatbox_ship_wings_accentbfill_accentcstroke|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a];xr:90;w:650.0;h:100.0;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+[skip]
+#ship_contrail
+Box_ship_contrail_accentafill_nostroke|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a]+50000;xr:90;w:40.0;h:100000;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+#ship_x
+rand(-20000, 20000, 'sx')
+#ship_y
+rand(-10000, -13000, 'sy')
+#ship_z
+rand(-30000, -60000, 'sz')
+#ship_i
+rand(1, 5, 'si')
+#ship_ziter
+rand(400, 2000, 'sziter')
 
 #lightbeams
 [lightbeam]
@@ -363,6 +414,7 @@ rand(300, 800, 'ziter')
 rand(1, 10, 'xiter')*20
 
 #square_arch
+[square_arch_a1]&[square_arch_a2]&[square_arch_b1]&[square_arch_b2]
 [square_arch_a1]&[square_arch_a2]&[square_arch_b1]&[square_arch_b2]&[square_arch_c1]&[square_arch_c2]&[square_arch_top]
 #square_arch_a1
 Flatbox_squarearch_a1_accentdfill_accentastroke|x:-[square_arch_x_offset*a];xr:90;y:100;zIter:-[square_arch_ziter*a];w:50.0;h:[square_arch_a_h*a];l:170.0;s:100.0;fillColor:[black];i:50;z:600;zr:[square_arch_a_zr*a];
