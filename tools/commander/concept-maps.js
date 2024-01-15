@@ -97,6 +97,9 @@ const celestialObjects = `
 #prefabs
 [station]
 [planet]
+[fleet]
+[tesseract]
+[nebula]
 
 #planet
 [body]
@@ -155,6 +158,57 @@ rand(1000, 2000, 'sdi')
 rand(0, 180, 'szr')
 #station_ring_yr
 rand(-75, 45)
+
+#fleet
+[fleet_main]&[fleet_shields]&[fleet_lights]
+#fleet_main
+Box_fleet_main_accentafill_backgroundstroke|x:0+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-30000+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+#fleet_shields
+Box_fleet_shields_nofill_accentbstroke|x:-200+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-29400+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+#fleet_lights
+Rectangle_fleet_lights_nostroke_accentcfill|x:1600+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-27000+[fleet_y*a];yIter:[fleet_yiter*a];z:-86000;zIter:-[fleet_ziter*a];w:[fleet_w*a]*0.5;wIter:-4010.0;h:500.0;hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+#fleet_i
+rand(3, 5, 'i')
+#fleet_x
+rand(-50000, 50000, 'fx')
+#fleet_y
+rand(-10000, 2500, 'fy')
+#fleet_w
+rand(15000, 35500, 'fw')
+#fleet_h
+rand(1000, 4000, 'fh')
+#fleet_l
+rand(3000, 7345, 'fyiter')
+#fleet_ziter
+rand(650, 4000, 'fziter')
+#fleet_yiter
+[fleet_h*a]
+#fleet_xiter
+rand(0, 8000, 'fxiter')
+#fleet_yr
+rand(45, -45, 'fyr')
+#fleet_xr
+rand(-45, 30, 'fxr')
+
+#tesseract
+Box_tesseract_accentdstroke_nofill|x:[tesseract_x];xr:[tesseract_r];y:[tesseract_y];yr:[tesseract_r];z:-90000;zr:[tesseract_r];w:[tesseract_dimensions*a];wIter:-1000.0;wIterFunc:x^2;h:[tesseract_dimensions*a];hIter:-1000.0;hIterFunc:x^2;l:[tesseract_dimensions*a];lIter:-1000.0;lIterFunc:x^2;s:100.0;i:6;
+#tesseract_x
+rand(-50600, 50600, 'tx')
+#tesseract_y
+rand(-19800, -30000, 'ty')
+#tesseract_dimensions
+rand(5000, 20100, 'tdim')
+#tesseract_r
+rand(-180, 180)
+
+#nebula
+CurvedLine_nebula_accentastroke|x:40000;xIter:-607.0;y:-20000;z:-90000;zr:60;w:130100.0;wIter:-350.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-185.0;paramCIter:-200.0;paramD:7050.0;i:100;
+CurvedLine_nebula_accentbstroke|x:40000;xIter:-807.0;y:-20000;z:-90000;zr:150;w:130100.0;wIter:50.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-185.0;paramCIter:-200.0;paramD:7050.0;i:100;
+CurvedLine_nebula_accentcstroke|x:40000;xIter:-807.0;y:-20000;z:-90000;zr:60;zrIter:-1.0;w:390100.0;wIter:-755.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-1385.0;paramCIter:-200.0;paramD:7050.0;variation:two-point;i:100;
+CurvedLine_nebula_accentdstroke|x:-40200;xIter:-607.0;y:-20000;z:-90000;zr:60;zrIter:-1.0;w:390100.0;wIter:1045.0;h:100.0;strokeWeight:5.0;paramB:-1250.0;paramBIter:-2185.0;paramD:7050.0;variation:two-point;i:100;
+
+#artifact
+Arc_artifact|y:-30000;z:-90000;w:30100.0;wIter:-1000.0;h:30100.0;hIter:-1000.0;s:100.0;paramAIter:-25.0;paramB:180.0;paramBIter:-25.0;i:5;
 
 `+sharedValues;
 
