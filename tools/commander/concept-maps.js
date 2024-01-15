@@ -95,6 +95,7 @@ rand(0, 4000)
 
 const celestialObjects = `
 #prefabs
+[station]
 [planet]
 
 #planet
@@ -135,6 +136,26 @@ rand(0, 180, 'celestial4')
 rand(0, 180, 'celestial5')
 #ring_zr
 rand(0, 180, 'celestial6')
+
+#station
+[station_base]&[station_ring]&[station_square]
+#station_base
+Pyramid_station_base_accentbstroke_accentdfill|x:[station_x*a];y:-40000;yIter:[station_dimensions*a]+1000;yr:45+[station_zr*a];z:-85000;zrIter:180.0;w:[station_dimensions*a];h:[station_dimensions*a];l:[station_dimensions*a];s:100.0;i:2;wIter:-[station_dimensions_iter*a];lIter:-[station_dimensions_iter*a];
+#station_square
+Box_station_square_nofill_accentcstroke|x:[station_x*a];y:-25000;yIter:1600.0;yr:45+[station_zr*a];z:-85000;w:[station_dimensions*a];wIter:-2000.0;h:1100.0;l:[station_dimensions*a];lIter:-2000.0;s:100.0;i:3;
+#station_ring
+Circle_station_ring_nofill_accentastroke|x:[station_x*a];xIter:200.0;xr:60;y:-31000;yIter:-200.0;yr:[station_ring_yr];z:-85000;w:100.0;h:100.0;s:[station_dimensions*a]*2;sIter:2000;i:3;
+#station_x
+rand(-45000, 45000, 'x')
+#station_dimensions
+rand(10000, 20000, 'sd')
+#station_dimensions_iter
+rand(1000, 2000, 'sdi')
+#station_zr
+rand(0, 180, 'szr')
+#station_ring_yr
+rand(-75, 45)
+
 `+sharedValues;
 
 // [ship]
@@ -231,9 +252,10 @@ const foregroundObjects = `
 [walkway]
 [square_arch]
 [poles]
-[turnway]
 [skip]
 [travelling_platforms]
+[posts]
+[turnway]
 
 #turnway
 [turnway_left]&[turnway_right]
@@ -313,6 +335,41 @@ rand(15, 25)
 rand(195, 400, 'x_offset')
 #square_arch_ziter
 rand(300, 600, 'ziter')
+
+#posts
+[posts_left]&[posts_right]
+#posts_left
+[post_base_left]&[post_middle_left]&[post_extra_a_left]&[post_extra_b_left]
+#posts_right
+[post_base_right]&[post_middle_right]&[post_extra_a_right]&[post_extra_b_right]
+#post_base_left
+Flatbox_post_base_accentcfill_accentdstroke|x:-[post_x*a];xr:90;y:100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:[post_w*a];h:50.0;l:[post_l*a];s:100.0;fillColor:-16777216;i:30;
+#post_middle_left
+Flatbox_post_middle_accentbfill_accentcstroke|x:-[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:25.0;h:25.0;l:150.0;s:100.0;fillColor:-16777216;i:30;
+#post_extra_a_left
+Box_post_extra_a_nofill_accentastroke|x:-[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:[post_box_dimensions_a*a];h:[post_box_dimensions_a*a];l:100.0+([post_l*a]/2);s:100.0;i:30;
+#post_extra_b_left
+Box_post_extra_b_nofill_backgroundstroke|x:-[post_x*a];xr:90;y:-75-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:[post_box_dimensions_b*a];h:[post_box_dimensions_b*a];l:35.0;s:100.0;i:30;
+#post_base_right
+Flatbox_post_base_accentcfill_accentdstroke|x:[post_x*a];xr:90;y:100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:[post_w*a];h:50.0;l:[post_l];s:100.0;fillColor:-16777216;i:30;
+#post_middle_right
+Flatbox_post_middle_accentbfill_accentcstroke|x:[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:25.0;h:25.0;l:150.0;s:100.0;fillColor:-16777216;i:30;
+#post_extra_a_right
+Box_post_extra_a_nofill_accentastroke|x:[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:[post_box_dimensions_a*a];h:[post_box_dimensions_a*a];l:100.0+([post_l*a]/2);s:100.0;i:30;
+#post_extra_b_right
+Box_post_extra_b_nofill_backgroundstroke|x:[post_x*a];xr:90;y:-75-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:[post_box_dimensions_b*a];h:[post_box_dimensions_b*a];l:35.0;s:100.0;i:30;
+#post_ziter
+rand(500, 2000, 'ziter')
+#post_box_dimensions_a
+rand(75, 80, 'dima')
+#post_box_dimensions_b
+rand(55, 65, 'dimb')
+#post_w
+rand(50, 200, 'pw')
+#post_l
+rand(5, 4000, 'pl')
+#post_x
+rand(300, 4000, 'px')
 `+sharedValues;
 
 const conceptMaps = [
