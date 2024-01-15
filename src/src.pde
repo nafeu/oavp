@@ -50,26 +50,24 @@ ControlP5 cp5;
 int loadingDelay = 500;
 WebsocketServer server;
 
+int SCALE_FACTOR = 1;
+
 void setup() {
   context = this;
   noLoop();
 
-  println("[ oavp ] Version 0.1 - github.com/nafeu/oavp");
-  println("[ oavp ] For recording on MAC make sure:");
-  println("[ oavp ]   1. soundflower is set up properly");
-  println("[ oavp ]   2. microphone is currently set to soundflower aggregated device");
-  println("[ oavp ]   3. sound output is using set to soundflower included multi-output device");
+  println("[ oavp ] github.com/nafeu/oavp");
 
   // DISPLAY_SETTINGS_START
   fullScreen(P3D, 2);
-  // size(1080, 864, P3D);
+  // size(3840, 2160, P3D); // 4K
   // DISPLAY_SETTINGS_END
 
   // Anti-aliasing
   smooth(8);
 
   // Frame Setup
-  frameRate(60);
+  frameRate(30);
   surface.setTitle("oavp");
 
   cp5 = new ControlP5(this);
@@ -95,7 +93,7 @@ synchronized void draw() {
     textSize(20);
     fill(255);
     textAlign(CENTER, CENTER);
-    text("oavp - v0.1.0 : github.com/nafeu/oavp\n\npress 'e' to enter edit mode", width * 0.5, height * 0.5);
+    text("[ oavp ] : github.com/nafeu/oavp\n\npress 'e' to enter edit mode", width * 0.5, height * 0.5);
   } else {
     try {
       if (oavp.ENABLE_VIDEO_RENDER) {
@@ -398,12 +396,14 @@ void handleEvents(int code) {
   if (code == 52 /* 4 */) { setGlobalDurations(5);   globalSpeed = 0.001; }
 
   if (code == KEY_Y) {
+    println("[ oavp ] Exporting screenshot...");
     String screenshotName = str(day())
       + "-" + str(month())
       + "-" + str(year())
       + "-" + str(hour()) + str(minute()) + str(second());
 
-    saveFrame("screenshots/" + screenshotName + ".png");
+    saveFrame("screenshots/" + screenshotName + "-" + width + "x" + height + ".png");
+    println("[ oavp ] Screenshot exported.");
   }
 }
 
@@ -415,7 +415,7 @@ void setupPostSketchDefaults() {
       .strokeWeight(2);
   }
   if (!objects.has("camera")) {
-    int perspectiveDistance = 100000;
+    int perspectiveDistance = 100000 * SCALE_FACTOR;
 
     objects.add("camera", "blank")
       .set("x", 0)
@@ -481,9 +481,9 @@ void drawCamera() {
   up.z = 0 + cameraVariable.val("z");
 
   camera(
-    eye.x, eye.y, eye.z,
-    center.x, center.y, center.z,
-    up.x, up.y, up.z
+    eye.x * SCALE_FACTOR, eye.y * SCALE_FACTOR, eye.z * SCALE_FACTOR,
+    center.x * SCALE_FACTOR, center.y * SCALE_FACTOR, center.z * SCALE_FACTOR,
+    up.x * SCALE_FACTOR, up.y * SCALE_FACTOR, up.z * SCALE_FACTOR
   );
 
   float fov = PI/3.0;
@@ -491,5 +491,5 @@ void drawCamera() {
 
   perspective(
     fov, float(width)/float(height),
-    cameraZ/10.0, cameraZ * 10.0 + cameraVariable.val("paramA"));
+    cameraZ/10.0 * SCALE_FACTOR, (cameraZ * 10.0 + cameraVariable.val("paramA")) * SCALE_FACTOR);
 }

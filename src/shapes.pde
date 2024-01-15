@@ -18,18 +18,18 @@ public class OavpShape {
 
     // Face 1
     beginShape();
-    vertex(a[0], a[1], a[2]);
-    vertex(b[0], b[1], b[2]);
-    vertex(c[0], c[1], c[2]);
-    vertex(d[0], d[1], d[2]);
+    vertex(a[0] * SCALE_FACTOR, a[1] * SCALE_FACTOR, a[2] * SCALE_FACTOR);
+    vertex(b[0] * SCALE_FACTOR, b[1] * SCALE_FACTOR, b[2] * SCALE_FACTOR);
+    vertex(c[0] * SCALE_FACTOR, c[1] * SCALE_FACTOR, c[2] * SCALE_FACTOR);
+    vertex(d[0] * SCALE_FACTOR, d[1] * SCALE_FACTOR, d[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 2
     beginShape();
-    vertex(e[0], e[1], e[2]);
-    vertex(f[0], f[1], f[2]);
-    vertex(g[0], g[1], g[2]);
-    vertex(h[0], h[1], h[2]);
+    vertex(e[0] * SCALE_FACTOR, e[1] * SCALE_FACTOR, e[2] * SCALE_FACTOR);
+    vertex(f[0] * SCALE_FACTOR, f[1] * SCALE_FACTOR, f[2] * SCALE_FACTOR);
+    vertex(g[0] * SCALE_FACTOR, g[1] * SCALE_FACTOR, g[2] * SCALE_FACTOR);
+    vertex(h[0] * SCALE_FACTOR, h[1] * SCALE_FACTOR, h[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     pushStyle();
@@ -37,36 +37,36 @@ public class OavpShape {
 
     // Face 3
     beginShape();
-    vertex(h[0], h[1], h[2]);
-    vertex(g[0], g[1], g[2]);
-    vertex(c[0], c[1], c[2]);
-    vertex(d[0], d[1], d[2]);
+    vertex(h[0] * SCALE_FACTOR, h[1] * SCALE_FACTOR, h[2] * SCALE_FACTOR);
+    vertex(g[0] * SCALE_FACTOR, g[1] * SCALE_FACTOR, g[2] * SCALE_FACTOR);
+    vertex(c[0] * SCALE_FACTOR, c[1] * SCALE_FACTOR, c[2] * SCALE_FACTOR);
+    vertex(d[0] * SCALE_FACTOR, d[1] * SCALE_FACTOR, d[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 4
     beginShape();
-    vertex(h[0], h[1], h[2]);
-    vertex(e[0], e[1], e[2]);
-    vertex(a[0], a[1], a[2]);
-    vertex(d[0], d[1], d[2]);
+    vertex(h[0] * SCALE_FACTOR, h[1] * SCALE_FACTOR, h[2] * SCALE_FACTOR);
+    vertex(e[0] * SCALE_FACTOR, e[1] * SCALE_FACTOR, e[2] * SCALE_FACTOR);
+    vertex(a[0] * SCALE_FACTOR, a[1] * SCALE_FACTOR, a[2] * SCALE_FACTOR);
+    vertex(d[0] * SCALE_FACTOR, d[1] * SCALE_FACTOR, d[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     fill(shadeColor);
 
     // Face 5
     beginShape();
-    vertex(e[0], e[1], e[2]);
-    vertex(f[0], f[1], f[2]);
-    vertex(b[0], b[1], b[2]);
-    vertex(a[0], a[1], a[2]);
+    vertex(e[0] * SCALE_FACTOR, e[1] * SCALE_FACTOR, e[2] * SCALE_FACTOR);
+    vertex(f[0] * SCALE_FACTOR, f[1] * SCALE_FACTOR, f[2] * SCALE_FACTOR);
+    vertex(b[0] * SCALE_FACTOR, b[1] * SCALE_FACTOR, b[2] * SCALE_FACTOR);
+    vertex(a[0] * SCALE_FACTOR, a[1] * SCALE_FACTOR, a[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 6
     beginShape();
-    vertex(g[0], g[1], g[2]);
-    vertex(f[0], f[1], f[2]);
-    vertex(b[0], b[1], b[2]);
-    vertex(c[0], c[1], c[2]);
+    vertex(g[0] * SCALE_FACTOR, g[1] * SCALE_FACTOR, g[2] * SCALE_FACTOR);
+    vertex(f[0] * SCALE_FACTOR, f[1] * SCALE_FACTOR, f[2] * SCALE_FACTOR);
+    vertex(b[0] * SCALE_FACTOR, b[1] * SCALE_FACTOR, b[2] * SCALE_FACTOR);
+    vertex(c[0] * SCALE_FACTOR, c[1] * SCALE_FACTOR, c[2] * SCALE_FACTOR);
     endShape(CLOSE);
     popStyle();
   }
@@ -96,10 +96,10 @@ public class OavpShape {
 
     // Face 3
     beginShape();
-    vertex(e[0], e[1], e[2]);
-    vertex(f[0], f[1], f[2]);
-    vertex(h[0], h[1], h[2]);
-    vertex(g[0], g[1], g[2]);
+    vertex(e[0] * SCALE_FACTOR, e[1] * SCALE_FACTOR, e[2] * SCALE_FACTOR);
+    vertex(f[0] * SCALE_FACTOR, f[1] * SCALE_FACTOR, f[2] * SCALE_FACTOR);
+    vertex(h[0] * SCALE_FACTOR, h[1] * SCALE_FACTOR, h[2] * SCALE_FACTOR);
+    vertex(g[0] * SCALE_FACTOR, g[1] * SCALE_FACTOR, g[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     fill(shadeColor);
@@ -107,43 +107,43 @@ public class OavpShape {
 
     // Face 1
     beginShape();
-    vertex(a[0], a[1], a[2]);
-    vertex(b[0], b[1], b[2]);
-    vertex(f[0], f[1], f[2]);
-    vertex(e[0], e[1], e[2]);
+    vertex(a[0] * SCALE_FACTOR, a[1] * SCALE_FACTOR, a[2] * SCALE_FACTOR);
+    vertex(b[0] * SCALE_FACTOR, b[1] * SCALE_FACTOR, b[2] * SCALE_FACTOR);
+    vertex(f[0] * SCALE_FACTOR, f[1] * SCALE_FACTOR, f[2] * SCALE_FACTOR);
+    vertex(e[0] * SCALE_FACTOR, e[1] * SCALE_FACTOR, e[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 2
     beginShape();
-    vertex(c[0], c[1], c[2]);
-    vertex(d[0], d[1], d[2]);
-    vertex(h[0], h[1], h[2]);
-    vertex(g[0], g[1], g[2]);
+    vertex(c[0] * SCALE_FACTOR, c[1] * SCALE_FACTOR, c[2] * SCALE_FACTOR);
+    vertex(d[0] * SCALE_FACTOR, d[1] * SCALE_FACTOR, d[2] * SCALE_FACTOR);
+    vertex(h[0] * SCALE_FACTOR, h[1] * SCALE_FACTOR, h[2] * SCALE_FACTOR);
+    vertex(g[0] * SCALE_FACTOR, g[1] * SCALE_FACTOR, g[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 4
     beginShape();
-    vertex(a[0], a[1], a[2]);
-    vertex(e[0], e[1], e[2]);
-    vertex(g[0], g[1], g[2]);
-    vertex(c[0], c[1], c[2]);
+    vertex(a[0] * SCALE_FACTOR, a[1] * SCALE_FACTOR, a[2] * SCALE_FACTOR);
+    vertex(e[0] * SCALE_FACTOR, e[1] * SCALE_FACTOR, e[2] * SCALE_FACTOR);
+    vertex(g[0] * SCALE_FACTOR, g[1] * SCALE_FACTOR, g[2] * SCALE_FACTOR);
+    vertex(c[0] * SCALE_FACTOR, c[1] * SCALE_FACTOR, c[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
 
     // Face 5
     beginShape();
-    vertex(a[0], a[1], a[2]);
-    vertex(b[0], b[1], b[2]);
-    vertex(d[0], d[1], d[2]);
-    vertex(c[0], c[1], c[2]);
+    vertex(a[0] * SCALE_FACTOR, a[1] * SCALE_FACTOR, a[2] * SCALE_FACTOR);
+    vertex(b[0] * SCALE_FACTOR, b[1] * SCALE_FACTOR, b[2] * SCALE_FACTOR);
+    vertex(d[0] * SCALE_FACTOR, d[1] * SCALE_FACTOR, d[2] * SCALE_FACTOR);
+    vertex(c[0] * SCALE_FACTOR, c[1] * SCALE_FACTOR, c[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 6
     beginShape();
-    vertex(b[0], b[1], b[2]);
-    vertex(f[0], f[1], f[2]);
-    vertex(h[0], h[1], h[2]);
-    vertex(d[0], d[1], d[2]);
+    vertex(b[0] * SCALE_FACTOR, b[1] * SCALE_FACTOR, b[2] * SCALE_FACTOR);
+    vertex(f[0] * SCALE_FACTOR, f[1] * SCALE_FACTOR, f[2] * SCALE_FACTOR);
+    vertex(h[0] * SCALE_FACTOR, h[1] * SCALE_FACTOR, h[2] * SCALE_FACTOR);
+    vertex(d[0] * SCALE_FACTOR, d[1] * SCALE_FACTOR, d[2] * SCALE_FACTOR);
     endShape(CLOSE);
 
     popStyle();
@@ -162,38 +162,38 @@ public class OavpShape {
 
     // Face 1
     beginShape();
-    vertex(a.x, a.y, a.z);
-    vertex(b.x, b.y, b.z);
-    vertex(e.x, e.y, e.z);
+    vertex(a.x * SCALE_FACTOR, a.y * SCALE_FACTOR, a.z * SCALE_FACTOR);
+    vertex(b.x * SCALE_FACTOR, b.y * SCALE_FACTOR, b.z * SCALE_FACTOR);
+    vertex(e.x * SCALE_FACTOR, e.y * SCALE_FACTOR, e.z * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 2
     beginShape();
-    vertex(b.x, b.y, b.z);
-    vertex(c.x, c.y, c.z);
-    vertex(e.x, e.y, e.z);
+    vertex(b.x * SCALE_FACTOR, b.y * SCALE_FACTOR, b.z * SCALE_FACTOR);
+    vertex(c.x * SCALE_FACTOR, c.y * SCALE_FACTOR, c.z * SCALE_FACTOR);
+    vertex(e.x * SCALE_FACTOR, e.y * SCALE_FACTOR, e.z * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 3
     beginShape();
-    vertex(c.x, c.y, c.z);
-    vertex(d.x, d.y, d.z);
-    vertex(e.x, e.y, e.z);
+    vertex(c.x * SCALE_FACTOR, c.y * SCALE_FACTOR, c.z * SCALE_FACTOR);
+    vertex(d.x * SCALE_FACTOR, d.y * SCALE_FACTOR, d.z * SCALE_FACTOR);
+    vertex(e.x * SCALE_FACTOR, e.y * SCALE_FACTOR, e.z * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 4
     beginShape();
-    vertex(d.x, d.y, d.z);
-    vertex(a.x, a.y, a.z);
-    vertex(e.x, e.y, e.z);
+    vertex(d.x * SCALE_FACTOR, d.y * SCALE_FACTOR, d.z * SCALE_FACTOR);
+    vertex(a.x * SCALE_FACTOR, a.y * SCALE_FACTOR, a.z * SCALE_FACTOR);
+    vertex(e.x * SCALE_FACTOR, e.y * SCALE_FACTOR, e.z * SCALE_FACTOR);
     endShape(CLOSE);
 
     // Face 5
     beginShape();
-    vertex(a.x, a.y, a.z);
-    vertex(b.x, b.y, b.z);
-    vertex(c.x, c.y, c.z);
-    vertex(d.x, d.y, d.z);
+    vertex(a.x * SCALE_FACTOR, a.y * SCALE_FACTOR, a.z * SCALE_FACTOR);
+    vertex(b.x * SCALE_FACTOR, b.y * SCALE_FACTOR, b.z * SCALE_FACTOR);
+    vertex(c.x * SCALE_FACTOR, c.y * SCALE_FACTOR, c.z * SCALE_FACTOR);
+    vertex(d.x * SCALE_FACTOR, d.y * SCALE_FACTOR, d.z * SCALE_FACTOR);
     endShape(CLOSE);
 
     popStyle();
@@ -204,9 +204,9 @@ public class OavpShape {
     noFill();
     beginShape();
 
-    vertex(x - w/2, y + h/2);
-    vertex(x, y - h/2);
-    vertex(x + w/2, y + h/2);
+    vertex((x - w/2) * SCALE_FACTOR, (y + h/2) * SCALE_FACTOR);
+    vertex(x * SCALE_FACTOR, (y - h/2) * SCALE_FACTOR);
+    vertex((x + w/2) * SCALE_FACTOR, (y + h/2) * SCALE_FACTOR);
 
     endShape();
     popStyle();
@@ -215,29 +215,29 @@ public class OavpShape {
   public void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain) {
     float distance = w / terrain.length;
     beginShape();
-    vertex(x, terrain[terrain.length - 1] * scale + displacement);
-    vertex(x, h);
-    vertex(w, h);
+    vertex(x * SCALE_FACTOR, terrain[terrain.length - 1] * scale + displacement * SCALE_FACTOR);
+    vertex(x * SCALE_FACTOR, h * SCALE_FACTOR);
+    vertex(w * SCALE_FACTOR, h * SCALE_FACTOR);
     for (int i = 0; i < terrain.length; i++) {
-      vertex(w - (i * distance), terrain[i] * scale + displacement);
+      vertex((w - (i * distance) * SCALE_FACTOR), (terrain[i] * scale + displacement) * SCALE_FACTOR);
     }
-    vertex(x, terrain[terrain.length - 1] * scale + displacement);
+    vertex(x * SCALE_FACTOR, (terrain[terrain.length - 1] * scale + displacement) * SCALE_FACTOR);
     endShape();
   }
 
   public void hill(float x, float y, float w, float h, float scale, float displacement, float[] terrain, float position) {
     float distance = w / terrain.length;
     beginShape();
-    vertex(x, terrain[0] * scale + displacement);
+    vertex(x * SCALE_FACTOR, (terrain[0] * scale + displacement) * SCALE_FACTOR);
     for (int i = 0; i < terrain.length; i++) {
       float xPos = (1 + i - floorPosDiff(position)) * distance;
       float yPos = terrain[i] * scale + displacement;
-      vertex(xPos, yPos);
+      vertex(xPos * SCALE_FACTOR, yPos * SCALE_FACTOR);
     }
-    vertex(w, terrain[terrain.length - 1] * scale + displacement);
-    vertex(w, h);
-    vertex(x, h);
-    vertex(x, terrain[0] * scale + displacement);
+    vertex(w * SCALE_FACTOR, (terrain[terrain.length - 1] * scale + displacement) * SCALE_FACTOR);
+    vertex(w * SCALE_FACTOR, h * SCALE_FACTOR);
+    vertex(x * SCALE_FACTOR, h * SCALE_FACTOR);
+    vertex(x * SCALE_FACTOR, (terrain[0] * scale + displacement) * SCALE_FACTOR);
     endShape();
   }
 
@@ -248,24 +248,24 @@ public class OavpShape {
       float yPos = values[0][i] * scale + displacement;
       switch(int(values[1][i])) {
         case 1:
-          line(xPos, yPos, xPos, yPos - 20);
+          line(xPos * SCALE_FACTOR, yPos * SCALE_FACTOR, xPos * SCALE_FACTOR, (yPos - 20) * SCALE_FACTOR);
           pushMatrix();
-          translate(0, 0, 2);
-          ellipse(xPos, yPos - 20, 10, 10);
+          translate(0, 0, 2 * SCALE_FACTOR);
+          ellipse(xPos * SCALE_FACTOR, (yPos - 20) * SCALE_FACTOR, 10 * SCALE_FACTOR, 10 * SCALE_FACTOR);
           popMatrix();
           break;
         case 2:
-          line(xPos, yPos, xPos, yPos - 40);
+          line(xPos * SCALE_FACTOR, yPos * SCALE_FACTOR, xPos * SCALE_FACTOR, (yPos - 40) * SCALE_FACTOR);
           pushMatrix();
           translate(0, 0, 2);
-          ellipse(xPos, yPos - 40, 20, 20);
+          ellipse(xPos * SCALE_FACTOR, (yPos - 40) * SCALE_FACTOR, 20 * SCALE_FACTOR, 20 * SCALE_FACTOR);
           popMatrix();
           break;
         case 3:
-          line(xPos, yPos, xPos, yPos - 60);
+          line(xPos * SCALE_FACTOR, yPos * SCALE_FACTOR, xPos * SCALE_FACTOR, (yPos - 60) * SCALE_FACTOR);
           pushMatrix();
-          translate(0, 0, 2);
-          ellipse(xPos, yPos - 60, 30, 30);
+          translate(0, 0, 2 * SCALE_FACTOR);
+          ellipse(xPos * SCALE_FACTOR, (yPos - 60) * SCALE_FACTOR, 30 * SCALE_FACTOR, 30 * SCALE_FACTOR);
           popMatrix();
           break;
         default:
@@ -279,7 +279,7 @@ public class OavpShape {
     float distance = w / terrain.length;
     beginShape(POINTS);
     for (int i = 0; i < terrain.length; i++) {
-      vertex(w - (i * distance), terrain[i] * scale + displacement);
+      vertex((w - (i * distance) * SCALE_FACTOR), (terrain[i] * scale + displacement) * SCALE_FACTOR);
     }
     endShape();
   }
@@ -288,11 +288,11 @@ public class OavpShape {
     pushStyle();
     fill(palette.flat.black);
     beginShape();
-    vertex(x, y + displacementA);
-    vertex(x, y + h);
-    vertex(x + w, y + h);
-    vertex(x + w, y + displacementB);
-    vertex(x, y + displacementA);
+    vertex(x * SCALE_FACTOR, (y + displacementA) * SCALE_FACTOR);
+    vertex(x * SCALE_FACTOR, (y + h) * SCALE_FACTOR);
+    vertex((x + w) * SCALE_FACTOR, (y + h) * SCALE_FACTOR);
+    vertex((x + w) * SCALE_FACTOR, (y + displacementB) * SCALE_FACTOR);
+    vertex(x * SCALE_FACTOR, (y + displacementA) * SCALE_FACTOR);
     endShape(CLOSE);
     popStyle();
   }
@@ -301,7 +301,7 @@ public class OavpShape {
     float distance = h / numCircles;
     for (int i = 0; i < numCircles; i++) {
       float mult = cos(radians(map(i, 0, numCircles, 0, 360)));
-      ellipse(x, y + (i * distance), (radius / 2) + (radius / 2) * mult, distance * 1.25);
+      ellipse(x * SCALE_FACTOR, (y + (i * distance) * SCALE_FACTOR), ((radius / 2) + (radius / 2) * mult) * SCALE_FACTOR, (distance * 1.25) * SCALE_FACTOR);
     }
   }
 
@@ -313,11 +313,11 @@ public class OavpShape {
   ) {
     curveTightness(tightness);
     beginShape();
-    curveVertex(xStart, yStart);
-    curveVertex(xStart, yStart);
-    curveVertex(x1, y1);
-    curveVertex(xEnd, yEnd);
-    curveVertex(xEnd, yEnd);
+    curveVertex(xStart * SCALE_FACTOR, yStart * SCALE_FACTOR);
+    curveVertex(xStart * SCALE_FACTOR, yStart * SCALE_FACTOR);
+    curveVertex(x1 * SCALE_FACTOR, y1 * SCALE_FACTOR);
+    curveVertex(xEnd * SCALE_FACTOR, yEnd * SCALE_FACTOR);
+    curveVertex(xEnd * SCALE_FACTOR, yEnd * SCALE_FACTOR);
     endShape();
   }
 
@@ -330,12 +330,12 @@ public class OavpShape {
   ) {
     curveTightness(tightness);
     beginShape();
-    curveVertex(xStart, yStart);
-    curveVertex(xStart, yStart);
-    curveVertex(x1, y1);
-    curveVertex(x2, y2);
-    curveVertex(xEnd, yEnd);
-    curveVertex(xEnd, yEnd);
+    curveVertex(xStart * SCALE_FACTOR, yStart * SCALE_FACTOR);
+    curveVertex(xStart * SCALE_FACTOR, yStart * SCALE_FACTOR);
+    curveVertex(x1 * SCALE_FACTOR, y1 * SCALE_FACTOR);
+    curveVertex(x2 * SCALE_FACTOR, y2 * SCALE_FACTOR);
+    curveVertex(xEnd * SCALE_FACTOR, yEnd * SCALE_FACTOR);
+    curveVertex(xEnd * SCALE_FACTOR, yEnd * SCALE_FACTOR);
     endShape();
   }
 
@@ -344,7 +344,7 @@ public class OavpShape {
     float w = size * PHI;
 
     rectMode(CENTER);
-    rect(x, y, w, h);
+    rect(x * SCALE_FACTOR, y * SCALE_FACTOR, w * SCALE_FACTOR, h * SCALE_FACTOR);
     rectMode(CORNER);
   }
 
@@ -357,19 +357,19 @@ public class OavpShape {
 
     rectMode(CORNER);
 
-    rect(currentX, currentY, unitSize, unitSize); // A
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // A
     currentX -= unitSize;
-    rect(currentX, currentY, unitSize, unitSize); // B
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // B
     currentY += unitSize;
-    rect(currentX, currentY, unitSize * 2, unitSize * 2); // C
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR); // C
     currentX += unitSize * 2;
     currentY -= unitSize;
-    rect(currentX, currentY, unitSize * 3, unitSize * 3); // D
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR); // D
     currentX -= unitSize * 2;
     currentY -= unitSize * 5;
-    rect(currentX, currentY, unitSize * 5, unitSize * 5); // E
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR); // E
     currentX -= unitSize * 8;
-    rect(currentX, currentY, unitSize * 8, unitSize * 8); // F
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR); // F
 
     rectMode(CORNER);
   }
@@ -384,25 +384,25 @@ public class OavpShape {
     rectMode(CORNER);
     ellipseMode(CORNER);
 
-    rect(currentX, currentY, unitSize, unitSize); // A
-    ellipse(currentX, currentY, unitSize, unitSize); // A
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // A
+    ellipse(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // A
     currentX -= unitSize;
-    rect(currentX, currentY, unitSize, unitSize); // B
-    ellipse(currentX, currentY, unitSize, unitSize); // B
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // B
+    ellipse(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // B
     currentY += unitSize;
-    rect(currentX, currentY, unitSize * 2, unitSize * 2); // C
-    ellipse(currentX, currentY, unitSize * 2, unitSize * 2); // C
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR); // C
+    ellipse(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR); // C
     currentX += unitSize * 2;
     currentY -= unitSize;
-    rect(currentX, currentY, unitSize * 3, unitSize * 3); // D
-    ellipse(currentX, currentY, unitSize * 3, unitSize * 3); // D
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR); // D
+    ellipse(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR); // D
     currentX -= unitSize * 2;
     currentY -= unitSize * 5;
-    rect(currentX, currentY, unitSize * 5, unitSize * 5); // E
-    ellipse(currentX, currentY, unitSize * 5, unitSize * 5); // E
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR); // E
+    ellipse(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR); // E
     currentX -= unitSize * 8;
-    rect(currentX, currentY, unitSize * 8, unitSize * 8); // F
-    ellipse(currentX, currentY, unitSize * 8, unitSize * 8); // F
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR); // F
+    ellipse(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR); // F
 
     rectMode(CORNER);
     ellipseMode(RADIUS);
@@ -418,25 +418,25 @@ public class OavpShape {
     rectMode(CORNER);
     ellipseMode(CENTER);
 
-    rect(currentX, currentY, unitSize, unitSize); // A
-    arc(currentX, currentY + unitSize, unitSize * 2, unitSize * 2, PI * 1.5, PI * 2);
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // A
+    arc(currentX * SCALE_FACTOR, (currentY + unitSize) * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR, PI * 1.5 * SCALE_FACTOR, PI * 2 * SCALE_FACTOR);
     currentX -= unitSize;
-    rect(currentX, currentY, unitSize, unitSize); // B
-    arc(currentX + unitSize, currentY + unitSize, unitSize * 2, unitSize * 2, PI, PI * 1.5);
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * SCALE_FACTOR, unitSize * SCALE_FACTOR); // B
+    arc((currentX + unitSize) * SCALE_FACTOR, (currentY + unitSize) * SCALE_FACTOR, (unitSize * 2) * SCALE_FACTOR, (unitSize * 2) * SCALE_FACTOR, PI * SCALE_FACTOR, PI * 1.5 * SCALE_FACTOR);
     currentY += unitSize;
-    rect(currentX, currentY, unitSize * 2, unitSize * 2); // C
-    arc(currentX + unitSize * 2, currentY, unitSize * 4, unitSize * 4, PI * 0.5, PI);
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR, unitSize * 2 * SCALE_FACTOR); // C
+    arc((currentX + unitSize * 2) * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 4 * SCALE_FACTOR, unitSize * 4 * SCALE_FACTOR, PI * 0.5 * SCALE_FACTOR, PI * SCALE_FACTOR);
     currentX += unitSize * 2;
     currentY -= unitSize;
-    rect(currentX, currentY, unitSize * 3, unitSize * 3); // D
-    arc(currentX, currentY, unitSize * 6, unitSize * 6, 0, PI * 0.5);
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR, unitSize * 3 * SCALE_FACTOR); // D
+    arc(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 6 * SCALE_FACTOR, unitSize * 6 * SCALE_FACTOR, 0, PI * 0.5 * SCALE_FACTOR);
     currentX -= unitSize * 2;
     currentY -= unitSize * 5;
-    rect(currentX, currentY, unitSize * 5, unitSize * 5); // E
-    arc(currentX, currentY + unitSize * 5, unitSize * 10, unitSize * 10, PI * 1.5, PI * 2);
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR, unitSize * 5 * SCALE_FACTOR); // E
+    arc(currentX * SCALE_FACTOR, (currentY + unitSize * 5) * SCALE_FACTOR, unitSize * 10 * SCALE_FACTOR, unitSize * 10 * SCALE_FACTOR, PI * 1.5 * SCALE_FACTOR, PI * 2 * SCALE_FACTOR);
     currentX -= unitSize * 8;
-    rect(currentX, currentY, unitSize * 8, unitSize * 8); // F
-    arc(currentX + unitSize * 8, currentY + unitSize * 8, unitSize * 16, unitSize * 16, PI, PI * 1.5);
+    rect(currentX * SCALE_FACTOR, currentY * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR, unitSize * 8 * SCALE_FACTOR); // F
+    arc((currentX + unitSize * 8) * SCALE_FACTOR, (currentY + unitSize * 8) * SCALE_FACTOR, unitSize * 16 * SCALE_FACTOR, unitSize * 16 * SCALE_FACTOR, PI * SCALE_FACTOR, PI * 1.5 * SCALE_FACTOR);
 
     rectMode(CORNER);
     ellipseMode(RADIUS);
@@ -459,15 +459,15 @@ public class OavpShape {
 
     rect(x, y, w, h);
 
-    line(offsetX, offsetY + thirdH, offsetX + w, offsetY + thirdH);
-    line(offsetX, offsetY + thirdH * 2, offsetX + w, offsetY + thirdH * 2);
-    line(offsetX + thirdW, offsetY, offsetX + thirdW, offsetY + h);
-    line(offsetX + thirdW * 2, offsetY, offsetX + thirdW * 2, offsetY + h);
+    line(offsetX * SCALE_FACTOR, (offsetY + thirdH) * SCALE_FACTOR, (offsetX + w) * SCALE_FACTOR, (offsetY + thirdH) * SCALE_FACTOR);
+    line(offsetX * SCALE_FACTOR, (offsetY + thirdH * 2) * SCALE_FACTOR, (offsetX + w) * SCALE_FACTOR, (offsetY + thirdH * 2) * SCALE_FACTOR);
+    line((offsetX + thirdW) * SCALE_FACTOR, offsetY * SCALE_FACTOR, (offsetX + thirdW) * SCALE_FACTOR, (offsetY + h) * SCALE_FACTOR);
+    line((offsetX + thirdW * 2) * SCALE_FACTOR, offsetY * SCALE_FACTOR, (offsetX + thirdW * 2) * SCALE_FACTOR, (offsetY + h) * SCALE_FACTOR);
 
-    ellipse(offsetX + thirdW, offsetY + thirdH, unitSize * 0.41, unitSize * 0.41);
-    ellipse(offsetX + thirdW * 2, offsetY + thirdH, unitSize * 0.20, unitSize * 0.20);
-    ellipse(offsetX + thirdW, offsetY + thirdH * 2, unitSize * 0.25, unitSize * 0.25);
-    ellipse(offsetX + thirdW * 2, offsetY + thirdH * 2, unitSize * 0.14, unitSize * 0.14);
+    ellipse((offsetX + thirdW) * SCALE_FACTOR, (offsetY + thirdH) * SCALE_FACTOR, unitSize * 0.41 * SCALE_FACTOR, unitSize * 0.41 * SCALE_FACTOR);
+    ellipse((offsetX + thirdW * 2) * SCALE_FACTOR, (offsetY + thirdH) * SCALE_FACTOR, unitSize * 0.20 * SCALE_FACTOR, unitSize * 0.20 * SCALE_FACTOR);
+    ellipse((offsetX + thirdW) * SCALE_FACTOR, (offsetY + thirdH * 2) * SCALE_FACTOR, unitSize * 0.25 * SCALE_FACTOR, unitSize * 0.25 * SCALE_FACTOR);
+    ellipse((offsetX + thirdW * 2) * SCALE_FACTOR, (offsetY + thirdH * 2) * SCALE_FACTOR, unitSize * 0.14 * SCALE_FACTOR, unitSize * 0.14 * SCALE_FACTOR);
 
     rectMode(CORNER);
     ellipseMode(RADIUS);
@@ -488,10 +488,10 @@ public class OavpShape {
 
     rect(x, y, w, h);
 
-    line(offsetX, offsetY + unitSizeH * 3, offsetX + w, offsetY + unitSizeH * 3);
-    line(offsetX, offsetY + unitSizeH * 5, offsetX + w, offsetY + unitSizeH * 5);
-    line(offsetX + unitSizeW * 5, offsetY, offsetX + unitSizeW * 5, offsetY + h);
-    line(offsetX + unitSizeW * 8, offsetY, offsetX + unitSizeW * 8, offsetY + h);
+    line(offsetX * SCALE_FACTOR, (offsetY + unitSizeH * 3) * SCALE_FACTOR, (offsetX + w) * SCALE_FACTOR, (offsetY + unitSizeH * 3) * SCALE_FACTOR);
+    line(offsetX * SCALE_FACTOR, (offsetY + unitSizeH * 5) * SCALE_FACTOR, (offsetX + w) * SCALE_FACTOR, (offsetY + unitSizeH * 5) * SCALE_FACTOR);
+    line((offsetX + unitSizeW * 5) * SCALE_FACTOR, offsetY * SCALE_FACTOR, (offsetX + unitSizeW * 5) * SCALE_FACTOR, (offsetY + h) * SCALE_FACTOR);
+    line((offsetX + unitSizeW * 8) * SCALE_FACTOR, offsetY * SCALE_FACTOR, (offsetX + unitSizeW * 8) * SCALE_FACTOR, (offsetY + h) * SCALE_FACTOR);
 
     rectMode(CORNER);
     ellipseMode(RADIUS);
@@ -508,7 +508,7 @@ public class OavpShape {
     float satelliteY = y + sin(orbitalPosition) * orbitalPlaneY;
 
     ellipseMode(CENTER);
-    ellipse(satelliteX, satelliteY, circleRadius, circleRadius);
+    ellipse(satelliteX * SCALE_FACTOR, satelliteY * SCALE_FACTOR, circleRadius * SCALE_FACTOR, circleRadius * SCALE_FACTOR);
     ellipseMode(RADIUS);
   }
 
@@ -521,26 +521,26 @@ public class OavpShape {
 
     // Bottom Triangle
     beginShape();
-    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x,                               o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (1 * size) - trunkHeight, o.z);
+    vertex((o.x - (2 * size) + uniqMultiplier) * SCALE_FACTOR, (o.y - (1 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex(o.x * SCALE_FACTOR, (o.y - (2 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex((o.x + (2 * size) - uniqMultiplier) * SCALE_FACTOR, (o.y - (1 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex((o.x - (2 * size) + uniqMultiplier) * SCALE_FACTOR, (o.y - (1 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
     endShape();
 
     // Middle Triangle
     beginShape();
-    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x,              o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size), o.y - (2 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size), o.y - (2 * size) - trunkHeight, o.z);
+    vertex((o.x - (2 * size)) * SCALE_FACTOR, (o.y - (2 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex(o.x * SCALE_FACTOR, (o.y - (4 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex((o.x + (2 * size)) * SCALE_FACTOR, (o.y - (2 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex((o.x - (2 * size)) * SCALE_FACTOR, (o.y - (2 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
     endShape();
 
     // Top Triangle
     beginShape();
-    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x,                               o.y - (7 * size) - trunkHeight, o.z);
-    vertex(o.x + (2 * size) - uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
-    vertex(o.x - (2 * size) + uniqMultiplier, o.y - (4 * size) - trunkHeight, o.z);
+    vertex((o.x - (2 * size) + uniqMultiplier) * SCALE_FACTOR, (o.y - (4 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex(o.x * SCALE_FACTOR, (o.y - (7 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex((o.x + (2 * size) - uniqMultiplier) * SCALE_FACTOR, (o.y - (4 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
+    vertex((o.x - (2 * size) + uniqMultiplier) * SCALE_FACTOR, (o.y - (4 * size) - trunkHeight) * SCALE_FACTOR, o.z * SCALE_FACTOR);
     endShape();
   }
 

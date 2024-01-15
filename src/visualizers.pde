@@ -21,7 +21,7 @@ class OavpVisualizer {
    * Center the drawing origin horizontally
    */
   public OavpVisualizer center() {
-    translate(cursor.getCenteredX(), 0);
+    translate(cursor.getCenteredX() * SCALE_FACTOR, 0);
     return this;
   }
 
@@ -29,7 +29,7 @@ class OavpVisualizer {
    * Center the drawing origin vertically
    */
   public OavpVisualizer middle() {
-    translate(0, cursor.getCenteredY());
+    translate(0, cursor.getCenteredY() * SCALE_FACTOR);
     return this;
   }
 
@@ -37,7 +37,7 @@ class OavpVisualizer {
    * Set horizontal drawing origin to left of screen
    */
   public OavpVisualizer left() {
-    translate(cursor.getScaledX(), 0);
+    translate(cursor.getScaledX() * SCALE_FACTOR, 0);
     return this;
   }
 
@@ -45,7 +45,7 @@ class OavpVisualizer {
    * Set horizontal drawing origin to right of screen
    */
   public OavpVisualizer right() {
-    translate(cursor.getScaledX() + cursor.xScale, 0);
+    translate((cursor.getScaledX() + cursor.xScale) * SCALE_FACTOR, 0);
     return this;
   }
 
@@ -53,7 +53,7 @@ class OavpVisualizer {
    * Set vertical drawing origin to top of screen
    */
   public OavpVisualizer top() {
-    translate(0, cursor.getScaledY());
+    translate(0, cursor.getScaledY() * SCALE_FACTOR);
     return this;
   }
 
@@ -61,7 +61,7 @@ class OavpVisualizer {
    * Set vertical drawing origin to bottom of screen
    */
   public OavpVisualizer bottom() {
-    translate(0, cursor.getScaledY() + cursor.yScale);
+    translate(0, (cursor.getScaledY() + cursor.yScale) * SCALE_FACTOR);
     return this;
   }
 
@@ -123,7 +123,7 @@ class OavpVisualizer {
    * @param y the y translation
    */
   public OavpVisualizer move(float x, float y) {
-    translate(x, y);
+    translate(x * SCALE_FACTOR, y * SCALE_FACTOR);
     return this;
   }
 
@@ -134,7 +134,7 @@ class OavpVisualizer {
    * @param z the z translation
    */
   public OavpVisualizer move(float x, float y, float z) {
-    translate(x, y, z);
+    translate(x * SCALE_FACTOR, y * SCALE_FACTOR, z * SCALE_FACTOR);
     return this;
   }
 
@@ -143,7 +143,7 @@ class OavpVisualizer {
    * @param distance the displacement
    */
   public OavpVisualizer moveUp(float distance) {
-    translate(0, -distance);
+    translate(0, -distance * SCALE_FACTOR);
     return this;
   }
 
@@ -153,7 +153,7 @@ class OavpVisualizer {
    */
 
   public OavpVisualizer moveDown(float distance) {
-    translate(0, distance);
+    translate(0, distance * SCALE_FACTOR);
     return this;
   }
 
@@ -162,7 +162,7 @@ class OavpVisualizer {
    * @param distance the displacement
    */
   public OavpVisualizer moveLeft(float distance) {
-    translate(-distance, 0);
+    translate(-distance * SCALE_FACTOR, 0);
     return this;
   }
 
@@ -171,7 +171,7 @@ class OavpVisualizer {
    * @param distance the displacement
    */
   public OavpVisualizer moveRight(float distance) {
-    translate(distance, 0);
+    translate(distance * SCALE_FACTOR, 0);
     return this;
   }
 
@@ -180,7 +180,7 @@ class OavpVisualizer {
    * @param distance the displacement
    */
   public OavpVisualizer moveBackward(float distance) {
-    translate(0, 0, -distance);
+    translate(0, 0, -distance * SCALE_FACTOR);
     return this;
   }
 
@@ -189,7 +189,7 @@ class OavpVisualizer {
    * @param distance the displacement
    */
   public OavpVisualizer moveForward(float distance) {
-    translate(0, 0, distance);
+    translate(0, 0, distance * SCALE_FACTOR);
     return this;
   }
 
@@ -209,7 +209,7 @@ class OavpVisualizer {
    */
   public OavpVisualizer create(float x, float y) {
     pushMatrix();
-    translate(x, y);
+    translate(x * SCALE_FACTOR, y * SCALE_FACTOR);
     return this;
   }
 
@@ -222,7 +222,7 @@ class OavpVisualizer {
    */
   public OavpVisualizer create(float x, float y, float rotationX, float rotationY) {
     pushMatrix();
-    translate(x, y);
+    translate(x * SCALE_FACTOR, y * SCALE_FACTOR);
     rotateX(radians(rotationX));
     rotateY(radians(rotationY));
     return this;
@@ -236,7 +236,7 @@ class OavpVisualizer {
    */
   public OavpVisualizer create(float x, float y, float z) {
     pushMatrix();
-    translate(x, y, z);
+    translate(x * SCALE_FACTOR, y * SCALE_FACTOR, z * SCALE_FACTOR);
     return this;
   }
 
@@ -251,7 +251,7 @@ class OavpVisualizer {
    */
   public OavpVisualizer create(float x, float y, float z, float rotationX, float rotationY, float rotationZ) {
     pushMatrix();
-    translate(x, y, z);
+    translate(x * SCALE_FACTOR, y * SCALE_FACTOR, z * SCALE_FACTOR);
     rotateX(radians(rotationX));
     rotateY(radians(rotationY));
     rotateZ(radians(rotationZ));
@@ -482,8 +482,8 @@ class OavpVisualizer {
    * @param h the height
    */
   public OavpVisualizer dimensions(float w, float h) {
-    currWidth = w;
-    currHeight = h;
+    currWidth = w * SCALE_FACTOR;
+    currHeight = h * SCALE_FACTOR;
     return this;
   }
 
@@ -516,18 +516,18 @@ class OavpVisualizer {
       .fillColor(variable.fillColor())
       .strokeWeightStyle(variable.val("strokeWeight", iteration))
       .move(
-        variable.val("x", iteration),
-        variable.val("y", iteration),
-        variable.val("z", iteration)
+        variable.val("x", iteration * SCALE_FACTOR),
+        variable.val("y", iteration * SCALE_FACTOR),
+        variable.val("z", iteration * SCALE_FACTOR)
       )
       .rotate(
-        variable.val("xr", iteration),
-        variable.val("yr", iteration),
-        variable.val("zr", iteration)
+        variable.val("xr", iteration * SCALE_FACTOR),
+        variable.val("yr", iteration * SCALE_FACTOR),
+        variable.val("zr", iteration * SCALE_FACTOR)
       )
       .dimensions(
-        variable.val("w", iteration),
-        variable.val("h", iteration)
+        variable.val("w", iteration * SCALE_FACTOR),
+        variable.val("h", iteration * SCALE_FACTOR)
       );
     return this;
   }
@@ -547,7 +547,7 @@ class OavpVisualizer {
      */
     public OavpVisualizer basicSquare(float size) {
       rectMode(CENTER);
-      rect(0, 0, size, size);
+      rect(0, 0, size * SCALE_FACTOR, size * SCALE_FACTOR);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
@@ -560,28 +560,28 @@ class OavpVisualizer {
      */
     public OavpVisualizer basicSquare(float size, int mode) {
       rectMode(mode);
-      rect(0, 0, size, size);
+      rect(0, 0, size * SCALE_FACTOR, size * SCALE_FACTOR);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicRectangle(float w, float h) {
       rectMode(CENTER);
-      rect(0, 0, w, h);
+      rect(0, 0, w * SCALE_FACTOR, h * SCALE_FACTOR);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicRectangle(float w, float h, float r, int mode) {
       rectMode(mode);
-      rect(0, 0, w, h, r);
+      rect(0, 0, w * SCALE_FACTOR, h * SCALE_FACTOR, r * SCALE_FACTOR);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicRectangle(float w, float h, float r) {
       rectMode(CENTER);
-      rect(0, 0, w, h, r);
+      rect(0, 0, w * SCALE_FACTOR, h * SCALE_FACTOR, r * SCALE_FACTOR);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
@@ -592,7 +592,7 @@ class OavpVisualizer {
         color lineColor = lerpColor(colorA, colorB, float(i) / float(numLines));
         pushStyle();
         stroke(lineColor);
-        line(-w/2, -h/2 + i, w/2, -h/2 + i);
+        line(-w/2 * SCALE_FACTOR, (-h/2 + i) * SCALE_FACTOR, w/2 * SCALE_FACTOR, (-h/2 + i) * SCALE_FACTOR);
         popStyle();
       }
       return OavpVisualizer.this;
@@ -600,52 +600,52 @@ class OavpVisualizer {
 
     public OavpVisualizer basicEquilateralTriangle(float size) {
       triangle(
-        0, -size,
-        0 + cos(radians(30)) * size, 0 + sin(radians(30)) * size,
-        0 - cos(radians(30)) * size, 0 + sin(radians(30)) * size
+        0, -size * SCALE_FACTOR,
+        0 + cos(radians(30)) * size * SCALE_FACTOR, 0 + sin(radians(30)) * size * SCALE_FACTOR,
+        0 - cos(radians(30)) * size * SCALE_FACTOR, 0 + sin(radians(30)) * size * SCALE_FACTOR
       );
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicTriangle(float w, float h) {
       triangle(
-        0, -h/2,
-        w/2, h/2,
-        -w/2, h/2
+        0 * SCALE_FACTOR, -h/2 * SCALE_FACTOR,
+        w/2 * SCALE_FACTOR, h/2 * SCALE_FACTOR,
+        -w/2 * SCALE_FACTOR, h/2 * SCALE_FACTOR
       );
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicLeftRightTriangle(float w, float h) {
       triangle(
-        -w/2, -h/2,
-        w/2, h/2,
-        -w/2, h/2
+        -w/2 * SCALE_FACTOR, -h/2 * SCALE_FACTOR,
+        w/2 * SCALE_FACTOR, h/2 * SCALE_FACTOR,
+        -w/2 * SCALE_FACTOR, h/2 * SCALE_FACTOR
       );
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicRightRightTriangle(float w, float h) {
       triangle(
-        w/2, -h/2,
-        w/2, h/2,
-        -w/2, h/2
+        w/2 * SCALE_FACTOR, -h/2 * SCALE_FACTOR,
+        w/2 * SCALE_FACTOR, h/2 * SCALE_FACTOR,
+        -w/2 * SCALE_FACTOR, h/2
       );
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicVerticalLine(float w, float h, float l) {
-      line(0, -h/2, 0, 0, h/2, l);
+      line(0, -h/2 * SCALE_FACTOR, 0, 0, h/2 * SCALE_FACTOR, l * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicHorizontalLine(float w, float h, float l, float displacement) {
-      line(-w/2 + displacement, 0, 0, w/2 + displacement, 0, l);
+      line((-w/2 + displacement) * SCALE_FACTOR, 0, 0, (w/2 + displacement) * SCALE_FACTOR, 0, l * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicDiagonalLine(float w, float h, float l) {
-      line(-w/2, -h/2, 0, w/2, h/2, l);
+      line(-w/2 * SCALE_FACTOR, -h/2 * SCALE_FACTOR, 0, w/2 * SCALE_FACTOR, h/2 * SCALE_FACTOR, l * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
@@ -669,9 +669,9 @@ class OavpVisualizer {
     }
 
     public OavpVisualizer positionalLines(float distance) {
-      line(0 - distance, 0, 0, 0 + distance, 0, 0);
-      line(0, 0 - distance, 0, 0, 0 + distance, 0);
-      line(0, 0, 0 - distance, 0, 0, 0 + distance);
+      line(0 - distance * SCALE_FACTOR, 0, 0, 0 + distance * SCALE_FACTOR, 0, 0);
+      line(0, 0 - distance * SCALE_FACTOR, 0, 0, 0 + distance * SCALE_FACTOR, 0);
+      line(0, 0, 0 - distance * SCALE_FACTOR, 0, 0, 0 + distance * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
@@ -682,10 +682,10 @@ class OavpVisualizer {
      */
     public OavpVisualizer basicDiamond(float size) {
       beginShape();
-      vertex(-(size * 0.5), 0);
-      vertex(0, -(size * 0.5));
-      vertex((size * 0.5), 0);
-      vertex(0, (size * 0.5));
+      vertex(-(size * 0.5) * SCALE_FACTOR, 0);
+      vertex(0, -(size * 0.5) * SCALE_FACTOR);
+      vertex((size * 0.5) * SCALE_FACTOR, 0);
+      vertex(0, (size * 0.5) * SCALE_FACTOR);
       endShape(CLOSE);
       return OavpVisualizer.this;
     }
@@ -697,19 +697,19 @@ class OavpVisualizer {
      */
     public OavpVisualizer basicCircle(float radius) {
       ellipseMode(CENTER);
-      ellipse(0, 0, radius, radius);
+      ellipse(0, 0, radius * SCALE_FACTOR, radius * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicArc(float w, float h, float start, float stop) {
       ellipseMode(CENTER);
-      arc(0, 0, w, h, radians(start), radians(stop));
+      arc(0, 0, w * SCALE_FACTOR, h * SCALE_FACTOR, radians(start), radians(stop));
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicSphere(float radius) {
       lights();
-      sphere(radius);
+      sphere(radius * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
@@ -727,8 +727,8 @@ class OavpVisualizer {
     public OavpVisualizer basicZSquare(float size, float distance) {
       rectMode(CENTER);
       pushMatrix();
-      translate(0, 0, distance);
-      rect(0, 0, size, size);
+      translate(0, 0, distance * SCALE_FACTOR);
+      rect(0, 0, size * SCALE_FACTOR, size * SCALE_FACTOR);
       popMatrix();
       rectMode(CORNER);
 
@@ -738,8 +738,8 @@ class OavpVisualizer {
     public OavpVisualizer basicZRectangle(float w, float h, float distance) {
       rectMode(CENTER);
       pushMatrix();
-      translate(0, 0, distance);
-      rect(0, 0, w, h);
+      translate(0, 0, distance * SCALE_FACTOR);
+      rect(0, 0, w * SCALE_FACTOR, h * SCALE_FACTOR);
       popMatrix();
       rectMode(CORNER);
       return OavpVisualizer.this;
@@ -748,8 +748,8 @@ class OavpVisualizer {
     public OavpVisualizer basicZRectangle(float w, float h, float distance, float r) {
       rectMode(CENTER);
       pushMatrix();
-      translate(0, 0, distance);
-      rect(0, 0, w, h, r);
+      translate(0, 0, distance * SCALE_FACTOR);
+      rect(0, 0, w * SCALE_FACTOR, h * SCALE_FACTOR, r * SCALE_FACTOR);
       popMatrix();
       rectMode(CORNER);
       return OavpVisualizer.this;
@@ -979,8 +979,8 @@ class OavpVisualizer {
         for (int j = 0; j < cols; j += specSample) {
           float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
           float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
-          vertex(j * colScale, i * rowScale, specValA * scale);
-          vertex(j * colScale, (i + 1) * rowScale, specValB * scale);
+          vertex(j * colScale * SCALE_FACTOR, i * rowScale * SCALE_FACTOR, specValA * scale * SCALE_FACTOR);
+          vertex(j * colScale * SCALE_FACTOR, ((i + 1) * rowScale) * SCALE_FACTOR, specValB * scale * SCALE_FACTOR);
         }
         endShape();
       }
@@ -1000,8 +1000,8 @@ class OavpVisualizer {
         for (int j = 0; j < cols; j += specSample) {
           float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
           float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
-          point(j * colScale, i * rowScale, specValA * scale);
-          point(j * colScale, (i + 1) * rowScale, specValB * scale);
+          point(j * colScale * SCALE_FACTOR, i * rowScale * SCALE_FACTOR, specValA * scale * SCALE_FACTOR);
+          point(j * colScale * SCALE_FACTOR, (i + 1) * rowScale * SCALE_FACTOR, specValB * scale * SCALE_FACTOR);
         }
       }
 
@@ -1021,12 +1021,12 @@ class OavpVisualizer {
           float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
           float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
           line(
-            j * colScale, i * rowScale, 0,
-            j * colScale, i * rowScale, specValA * scale
+            j * colScale * SCALE_FACTOR, i * rowScale * SCALE_FACTOR, 0,
+            j * colScale * SCALE_FACTOR, i * rowScale * SCALE_FACTOR, specValA * scale * SCALE_FACTOR
           );
           line(
-            j * colScale, (i + 1) * rowScale, 0,
-            j * colScale, (i + 1) * rowScale, specValB * scale
+            j * colScale * SCALE_FACTOR, (i + 1) * rowScale * SCALE_FACTOR, 0,
+            j * colScale * SCALE_FACTOR, (i + 1) * rowScale * SCALE_FACTOR, specValB * scale * SCALE_FACTOR
           );
         }
       }
@@ -1048,10 +1048,10 @@ class OavpVisualizer {
           float specValA = analysis.scaleSpectrumVal(interval.getIntervalData(i)[j]);
           float specValB = analysis.scaleSpectrumVal(interval.getIntervalData(i + 1)[j]);
           vertex(
-            j * colScale, i * rowScale, specValA * scale
+            j * colScale * SCALE_FACTOR, i * rowScale * SCALE_FACTOR, specValA * scale * SCALE_FACTOR
           );
           vertex(
-            j * colScale, (i + 1) * rowScale, specValB * scale
+            j * colScale * SCALE_FACTOR, (i + 1) * rowScale * SCALE_FACTOR, specValB * scale * SCALE_FACTOR
           );
         }
         endShape();
@@ -1069,7 +1069,7 @@ class OavpVisualizer {
       for (int i = 0; i < avgSize; i++) {
         float rawPulser = analysis.getSpectrumVal(i);
         float displayPulser = analysis.scaleSpectrumVal(rawPulser);
-        rect(i * (currWidth / avgSize), currHeight, (currWidth / avgSize), -currHeight * displayPulser);
+        rect(i * (currWidth / avgSize) * SCALE_FACTOR, currHeight, (currWidth / avgSize) * SCALE_FACTOR, -currHeight * displayPulser * SCALE_FACTOR);
       }
       return OavpVisualizer.this;
     }
@@ -1085,10 +1085,10 @@ class OavpVisualizer {
         float displayPulser = analysis.scaleSpectrumVal(rawPulser);
         float xPos = (i * (currWidth / avgSize)) + ((currWidth / avgSize) / 2);
         line(
-          xPos,
-          currHeight,
-          xPos,
-          currHeight - (currHeight * displayPulser)
+          xPos * SCALE_FACTOR,
+          currHeight * SCALE_FACTOR,
+          xPos * SCALE_FACTOR,
+          (currHeight - (currHeight * displayPulser)) * SCALE_FACTOR
         );
       }
       return OavpVisualizer.this;
@@ -1104,8 +1104,8 @@ class OavpVisualizer {
       for (int i = 0; i < avgSize - 1; i++) {
         float rawSpectrumValA = analysis.getSpectrumVal(i);
         float rawSpectrumValB = analysis.getSpectrumVal(i + 1);
-        vertex(i * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValA) + currHeight);
-        vertex((i + 1) * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValB) + currHeight);
+        vertex(i * (currWidth / avgSize) * SCALE_FACTOR, (-currHeight * analysis.scaleSpectrumVal(rawSpectrumValA) + currHeight) * SCALE_FACTOR);
+        vertex((i + 1) * (currWidth / avgSize) * SCALE_FACTOR, (-currHeight * analysis.scaleSpectrumVal(rawSpectrumValB) + currHeight) * SCALE_FACTOR);
       }
       endShape();
       return OavpVisualizer.this;
@@ -1116,8 +1116,8 @@ class OavpVisualizer {
       for (int i = 0; i < avgSize - 1; i++) {
         float rawSpectrumValA = analysis.getSpectrumVal(i);
         float rawSpectrumValB = analysis.getSpectrumVal(i + 1);
-        point(i * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValA) + currHeight);
-        point((i + 1) * (currWidth / avgSize), -currHeight * analysis.scaleSpectrumVal(rawSpectrumValB) + currHeight);
+        point(i * (currWidth / avgSize) * SCALE_FACTOR, (-currHeight * analysis.scaleSpectrumVal(rawSpectrumValA) + currHeight) * SCALE_FACTOR);
+        point((i + 1) * (currWidth / avgSize), (-currHeight * analysis.scaleSpectrumVal(rawSpectrumValB) + currHeight) * SCALE_FACTOR);
       }
       return OavpVisualizer.this;
     }
@@ -1140,7 +1140,7 @@ class OavpVisualizer {
         float y1 = scale * sin(radians(angle));
         float x2 = r * cos(radians(angle));
         float y2 = r * sin(radians(angle));
-        line(x1, y1, x2, y2);
+        line(x1 * SCALE_FACTOR, y1 * SCALE_FACTOR, x2 * SCALE_FACTOR, y2 * SCALE_FACTOR);
       }
       endShape();
       return OavpVisualizer.this;
@@ -1165,8 +1165,8 @@ class OavpVisualizer {
         float rB = map(analysis.getSpectrumVal(i + 1), 0, 256, rangeStart, rangeEnd);
         float xB = rB * cos(radians(angleB));
         float yB = rB * sin(radians(angleB));
-        vertex(xA, yA);
-        vertex(xB, yB);
+        vertex(xA * SCALE_FACTOR, yA * SCALE_FACTOR);
+        vertex(xB * SCALE_FACTOR, yB * SCALE_FACTOR);
       }
       endShape();
       return OavpVisualizer.this;
@@ -1184,10 +1184,10 @@ class OavpVisualizer {
         float x2 = map( i + 1, 0, audioBufferSize, 0, currWidth);
         float waveformScale = currHeight * (scale / 5);
         line(
-          x1,
-          ((analysis.getLeftBuffer(i) + analysis.getRightBuffer(i)) / 2) * waveformScale,
-          x2,
-          ((analysis.getLeftBuffer(i) + analysis.getRightBuffer(i)) / 2) * waveformScale
+          x1 * SCALE_FACTOR,
+          ((analysis.getLeftBuffer(i) + analysis.getRightBuffer(i)) / 2) * waveformScale * SCALE_FACTOR,
+          x2 * SCALE_FACTOR,
+          ((analysis.getLeftBuffer(i) + analysis.getRightBuffer(i)) / 2) * waveformScale * SCALE_FACTOR
         );
       }
       endShape();
@@ -1201,7 +1201,12 @@ class OavpVisualizer {
         float x1 = map( i, 0, audioBufferSize, 0, currWidth);
         float x2 = map( i + 1, 0, audioBufferSize, 0, currWidth);
         float waveformScale = currHeight * (scale / 5);
-        line(x1, analysis.getLeftBuffer(i) * waveformScale, x2, analysis.getLeftBuffer(i + 1) * waveformScale);
+        line(
+          x1 * SCALE_FACTOR,
+          analysis.getLeftBuffer(i) * waveformScale * SCALE_FACTOR,
+          x2 * SCALE_FACTOR,
+          analysis.getLeftBuffer(i + 1) * waveformScale * SCALE_FACTOR
+        );
       }
       endShape();
       return OavpVisualizer.this;
@@ -1214,7 +1219,12 @@ class OavpVisualizer {
         float x1 = map( i, 0, audioBufferSize, 0, currWidth);
         float x2 = map( i + 1, 0, audioBufferSize, 0, currWidth);
         float waveformScale = currHeight * (scale / 5);
-        line(x1, analysis.getRightBuffer(i) * waveformScale, x2, analysis.getRightBuffer(i + 1) * waveformScale);
+        line(
+          x1 * SCALE_FACTOR,
+          analysis.getRightBuffer(i) * waveformScale * SCALE_FACTOR,
+          x2 * SCALE_FACTOR,
+          analysis.getRightBuffer(i + 1) * waveformScale * SCALE_FACTOR
+        );
       }
       endShape();
       return OavpVisualizer.this;
@@ -1241,8 +1251,8 @@ class OavpVisualizer {
         float rB = scale + map(analysis.getLeftBuffer(i + 1), -1, 1, rangeStart, rangeEnd);
         float xB = rB * cos(radians(angleB));
         float yB = rB * sin(radians(angleB));
-        vertex(xA, yA);
-        vertex(xB, yB);
+        vertex(xA * SCALE_FACTOR, yA * SCALE_FACTOR);
+        vertex(xB * SCALE_FACTOR, yB * SCALE_FACTOR);
       }
       endShape();
       return OavpVisualizer.this;
@@ -1284,8 +1294,8 @@ class OavpVisualizer {
     public OavpVisualizer basicLevelBars() {
       float rawLeftLevel = analysis.getLeftLevel();
       float rawRightLevel = analysis.getRightLevel();
-      rect(0, 0, analysis.scaleLeftLevel(rawLeftLevel) * currWidth, currHeight / 2);
-      rect(0, currHeight / 2, analysis.scaleRightLevel(rawRightLevel) * currWidth, currHeight / 2);
+      rect(0, 0, analysis.scaleLeftLevel(rawLeftLevel) * currWidth * SCALE_FACTOR, currHeight / 2 * SCALE_FACTOR);
+      rect(0, currHeight / 2 * SCALE_FACTOR, analysis.scaleRightLevel(rawRightLevel) * currWidth * SCALE_FACTOR, currHeight / 2 * SCALE_FACTOR);
       endShape();
       return OavpVisualizer.this;
     }
@@ -1299,7 +1309,12 @@ class OavpVisualizer {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       int intervalSize = interval.getIntervalSize();
       for (int i = 0; i < intervalSize; i++) {
-        rect(i * (currWidth / intervalSize), currHeight, (currWidth / intervalSize), -analysis.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale);
+        rect(
+          i * (currWidth / intervalSize) * SCALE_FACTOR,
+          currHeight * SCALE_FACTOR,
+          (currWidth / intervalSize) * SCALE_FACTOR,
+          -analysis.scaleLeftLevel(interval.getIntervalData(i)[0]) * scale * SCALE_FACTOR
+        );
       }
       return OavpVisualizer.this;
     }
@@ -1313,12 +1328,12 @@ class OavpVisualizer {
       float rawLeftLevel = analysis.getLeftLevel();
       float rawRightLevel = analysis.getRightLevel();
       float boxLevel = ((analysis.scaleLeftLevel(rawLeftLevel) + analysis.scaleRightLevel(rawRightLevel)) / 2) * scale;
-      box(boxLevel, boxLevel, boxLevel);
+      box(boxLevel * SCALE_FACTOR, boxLevel * SCALE_FACTOR, boxLevel * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
     public OavpVisualizer basicBox(float w, float h, float l) {
-      box(w, h, l);
+      box(w * SCALE_FACTOR, h * SCALE_FACTOR, l * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
@@ -1346,7 +1361,12 @@ class OavpVisualizer {
         for (int j = 0; j < gridInterval.getNumCols(); j++) {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
-          rect(x, y, gridInterval.getData(i, j) * colScale, gridInterval.getData(i, j) * rowScale);
+          rect(
+            x * SCALE_FACTOR,
+            y * SCALE_FACTOR,
+            gridInterval.getData(i, j) * colScale * SCALE_FACTOR,
+            gridInterval.getData(i, j) * rowScale * SCALE_FACTOR
+          );
         }
       }
       rectMode(CORNER);
@@ -1366,7 +1386,12 @@ class OavpVisualizer {
         for (int j = 0; j < gridInterval.getNumCols(); j++) {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
-          rect(x, y, constrain(gridInterval.getData(i, j), 0, colScale), constrain(gridInterval.getData(i, j), 0, rowScale));
+          rect(
+            x * SCALE_FACTOR,
+            y * SCALE_FACTOR,
+            constrain(gridInterval.getData(i, j), 0, colScale) * SCALE_FACTOR,
+            constrain(gridInterval.getData(i, j), 0, rowScale) * SCALE_FACTOR
+          );
         }
       }
       rectMode(CORNER);
@@ -1381,7 +1406,12 @@ class OavpVisualizer {
         for (int j = 0; j < gridInterval.getNumCols(); j++) {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
-          ellipse(x, y, constrain(gridInterval.getData(i, j), 0, colScale), constrain(gridInterval.getData(i, j), 0, rowScale));
+          ellipse(
+            x * SCALE_FACTOR,
+            y * SCALE_FACTOR,
+            constrain(gridInterval.getData(i, j), 0, colScale) * SCALE_FACTOR,
+            constrain(gridInterval.getData(i, j), 0, rowScale) * SCALE_FACTOR
+          );
         }
       }
       return OavpVisualizer.this;
@@ -1400,10 +1430,10 @@ class OavpVisualizer {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
           beginShape();
-          vertex(x - (gridInterval.getData(i, j) * colScale * 0.5), y);
-          vertex(x, y - (gridInterval.getData(i, j) * rowScale * 0.5));
-          vertex(x + (gridInterval.getData(i, j) * colScale * 0.5), y);
-          vertex(x, y + (gridInterval.getData(i, j) * rowScale * 0.5));
+          vertex((x - (gridInterval.getData(i, j) * colScale * 0.5)) * SCALE_FACTOR, y * SCALE_FACTOR);
+          vertex(x * SCALE_FACTOR, (y - (gridInterval.getData(i, j) * rowScale * 0.5)) * SCALE_FACTOR);
+          vertex((x + (gridInterval.getData(i, j) * colScale * 0.5) * SCALE_FACTOR), y * SCALE_FACTOR);
+          vertex(x * SCALE_FACTOR, (y + (gridInterval.getData(i, j) * rowScale * 0.5)) * SCALE_FACTOR);
           endShape(CLOSE);
         }
       }
@@ -1420,7 +1450,7 @@ class OavpVisualizer {
       OavpPulser pulser = OavpVisualizer.this.currPulser;
       ellipseMode(RADIUS);
       float scale = maxRadius - minRadius;
-      ellipse(0, 0, pulser.getValue() * scale, pulser.getValue() * scale);
+      ellipse(0, 0, pulser.getValue() * scale * SCALE_FACTOR, pulser.getValue() * scale * SCALE_FACTOR);
       return OavpVisualizer.this;
     }
 
@@ -1432,7 +1462,7 @@ class OavpVisualizer {
     public OavpVisualizer pulserSquare(float scale) {
       OavpPulser pulser = OavpVisualizer.this.currPulser;
       rectMode(CENTER);
-      rect(0, 0, pulser.getValue() * scale, pulser.getValue() * scale);
+      rect(0, 0, pulser.getValue() * scale * SCALE_FACTOR, pulser.getValue() * scale * SCALE_FACTOR);
       rectMode(CORNER);
       return OavpVisualizer.this;
     }
@@ -1451,7 +1481,7 @@ class OavpVisualizer {
       pushStyle();
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
         strokeWeight(i);
-        ellipse(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
+        ellipse(0, 0, interval.getIntervalData(i)[0] * scale * SCALE_FACTOR, interval.getIntervalData(i)[0] * scale * SCALE_FACTOR);
       }
       popStyle();
       return OavpVisualizer.this;
@@ -1469,7 +1499,7 @@ class OavpVisualizer {
       rectMode(CENTER);
       float scale = maxSize - minSize;
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
-        rect(0, 0, interval.getIntervalData(i)[0] * scale, interval.getIntervalData(i)[0] * scale);
+        rect(0, 0, interval.getIntervalData(i)[0] * scale * SCALE_FACTOR, interval.getIntervalData(i)[0] * scale * SCALE_FACTOR);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
@@ -1481,7 +1511,7 @@ class OavpVisualizer {
       pushStyle();
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
         strokeWeight(i);
-        ellipse(0, 0, interval.getIntervalData(i)[0] * radius, interval.getIntervalData(i)[0] * radius);
+        ellipse(0, 0, interval.getIntervalData(i)[0] * radius * SCALE_FACTOR, interval.getIntervalData(i)[0] * radius * SCALE_FACTOR);
       }
       popStyle();
       return OavpVisualizer.this;
@@ -1491,7 +1521,7 @@ class OavpVisualizer {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       rectMode(CENTER);
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
-        rect(0, 0, interval.getIntervalData(i)[0] * w, interval.getIntervalData(i)[0] * h);
+        rect(0, 0, interval.getIntervalData(i)[0] * w * SCALE_FACTOR, interval.getIntervalData(i)[0] * h * SCALE_FACTOR);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
@@ -1500,7 +1530,11 @@ class OavpVisualizer {
     public OavpVisualizer intervalBullseyeBox(float w, float h, float l, int trailSize) {
       OavpInterval interval = OavpVisualizer.this.currInterval;
       for (int i = 0; i < min(trailSize, interval.getIntervalSize()); i++) {
-        box(interval.getIntervalData(i)[0] * w, interval.getIntervalData(i)[0] * h, interval.getIntervalData(i)[0] * l);
+        box(
+          interval.getIntervalData(i)[0] * w * SCALE_FACTOR,
+          interval.getIntervalData(i)[0] * h * SCALE_FACTOR,
+          interval.getIntervalData(i)[0] * l * SCALE_FACTOR
+        );
       }
       return OavpVisualizer.this;
     }
@@ -1557,7 +1591,7 @@ class OavpVisualizer {
           float x = (j * colScale) + (colScale * 0.5);
           float y = (i * rowScale) + (rowScale * 0.5);
           float finalLevel = gridInterval.getData(i, j);
-          rect(x, y, finalLevel * colScale, finalLevel * rowScale);
+          rect(x * SCALE_FACTOR, y * SCALE_FACTOR, finalLevel * colScale * SCALE_FACTOR, finalLevel * rowScale * SCALE_FACTOR);
         }
       }
       rectMode(CORNER);
@@ -1578,10 +1612,10 @@ class OavpVisualizer {
         beginShape();
         float offset = currWidth / emission.payload.length;
         for (int i = 0; i < emission.payload.length; i++) {
-          vertex(i * offset, (currHeight / 2) - analysis.scaleSpectrumVal(emission.payload[i]) * (currHeight / 2));
+          vertex(i * offset * SCALE_FACTOR, ((currHeight / 2) - analysis.scaleSpectrumVal(emission.payload[i]) * (currHeight / 2)) * SCALE_FACTOR);
         }
         endShape();
-        rect(0, 0, currWidth, currHeight);
+        rect(0, 0, currWidth * SCALE_FACTOR, currHeight * SCALE_FACTOR);
         popMatrix();
       }
       return OavpVisualizer.this;
@@ -1598,7 +1632,7 @@ class OavpVisualizer {
       rectMode(CENTER);
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
         OavpEmission emission = iter.next();
-        rect(0, -emission.value * scale, size, size);
+        rect(0, -emission.value * scale * SCALE_FACTOR, size * SCALE_FACTOR, size * SCALE_FACTOR);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
@@ -1617,7 +1651,7 @@ class OavpVisualizer {
         OavpEmission emission = iter.next();
         pushStyle();
         fill((color) emission.payload[0]);
-        rect(0, -emission.value * scale, size, size);
+        rect(0, -emission.value * scale * SCALE_FACTOR, size * SCALE_FACTOR, size * SCALE_FACTOR);
         popStyle();
       }
       rectMode(CORNER);
@@ -1638,10 +1672,10 @@ class OavpVisualizer {
         pushStyle();
         fill((color) emission.payload[0]);
         beginShape();
-        vertex(0, -size + emission.value * scale);
-        vertex(size, emission.value * scale);
-        vertex(0, size + emission.value * scale);
-        vertex(-size, emission.value * scale);
+        vertex(0, (-size + emission.value * scale) * SCALE_FACTOR);
+        vertex(size * SCALE_FACTOR, emission.value * scale * SCALE_FACTOR);
+        vertex(0, (size + emission.value * scale) * SCALE_FACTOR);
+        vertex(-size * SCALE_FACTOR, (emission.value * scale) * SCALE_FACTOR);
         endShape();
         popStyle();
       }
@@ -1659,7 +1693,7 @@ class OavpVisualizer {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
         OavpEmission emission = iter.next();
-        ellipse(0, -emission.value * scale, radius, radius);
+        ellipse(0, -emission.value * scale * SCALE_FACTOR, radius * SCALE_FACTOR, radius * SCALE_FACTOR);
       }
       return OavpVisualizer.this;
     }
@@ -1681,19 +1715,19 @@ class OavpVisualizer {
         for (int i = 0; i < emission.payload.length; ++i) {
           float x = (emission.value * scale) * cos(radians(emission.payload[i]));
           float y = (emission.value * scale) * sin(radians(emission.payload[i]));
-          vertex(x, y);
+          vertex(x * SCALE_FACTOR, y * SCALE_FACTOR);
           if (i == 0) {
             xInit = x;
             yInit = y;
           }
         }
-        vertex(xInit, yInit);
+        vertex(xInit * SCALE_FACTOR, yInit * SCALE_FACTOR);
         endShape();
 
         for (int i = 0; i < emission.payload.length; ++i) {
           float x = (emission.value * scale) * cos(radians(emission.payload[i]));
           float y = (emission.value * scale) * sin(radians(emission.payload[i]));
-          ellipse(x, y, radius, radius);
+          ellipse(x * SCALE_FACTOR, y * SCALE_FACTOR, radius * SCALE_FACTOR, radius * SCALE_FACTOR);
         }
       }
       return OavpVisualizer.this;
@@ -1718,19 +1752,19 @@ class OavpVisualizer {
         for (int i = 0; i < emission.payload.length - 1; ++i) {
           float x = (emission.value * scale) * cos(radians(emission.payload[i]));
           float y = (emission.value * scale) * sin(radians(emission.payload[i]));
-          vertex(x, y);
+          vertex(x * SCALE_FACTOR, y * SCALE_FACTOR);
           if (i == 0) {
             xInit = x;
             yInit = y;
           }
         }
-        vertex(xInit, yInit);
+        vertex(xInit * SCALE_FACTOR, yInit * SCALE_FACTOR);
         endShape();
 
         for (int i = 0; i < emission.payload.length - 1; ++i) {
           float x = (emission.value * scale) * cos(radians(emission.payload[i]));
           float y = (emission.value * scale) * sin(radians(emission.payload[i]));
-          ellipse(x, y, radius, radius);
+          ellipse(x * SCALE_FACTOR, y * SCALE_FACTOR, radius * SCALE_FACTOR, radius * SCALE_FACTOR);
         }
         popStyle();
       }
@@ -1747,7 +1781,7 @@ class OavpVisualizer {
       rectMode(CENTER);
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
         OavpEmission emission = iter.next();
-        rect(0, 0, emission.value * scale, emission.value * scale);
+        rect(0, 0, emission.value * scale * SCALE_FACTOR, emission.value * scale * SCALE_FACTOR);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
@@ -1758,7 +1792,7 @@ class OavpVisualizer {
       rectMode(CENTER);
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
         OavpEmission emission = iter.next();
-        rect(0, 0, emission.value * w, emission.value * h);
+        rect(0, 0, emission.value * w * SCALE_FACTOR, emission.value * h * SCALE_FACTOR);
       }
       rectMode(CORNER);
       return OavpVisualizer.this;
@@ -1768,7 +1802,11 @@ class OavpVisualizer {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
         OavpEmission emission = iter.next();
-        box(emission.value * w, emission.value * h, emission.value * l);
+        box(
+          emission.value * w * SCALE_FACTOR,
+          emission.value * h * SCALE_FACTOR,
+          emission.value * l * SCALE_FACTOR
+        );
       }
       return OavpVisualizer.this;
     }
@@ -1782,7 +1820,7 @@ class OavpVisualizer {
       List emissions = OavpVisualizer.this.currEmissions;
       for (ListIterator<OavpEmission> iter = emissions.listIterator(); iter.hasNext();) {
         OavpEmission emission = iter.next();
-        ellipse(0, 0, emission.value * scale, emission.value * scale);
+        ellipse(0, 0, emission.value * scale * SCALE_FACTOR, emission.value * scale * SCALE_FACTOR);
       }
       return OavpVisualizer.this;
     }
@@ -1853,7 +1891,7 @@ class OavpVisualizer {
       shape.disableStyle();
       noStroke();
       scale(scaleFactor);
-      shape(shape, -(shape.width / 2), -(shape.height / 2));
+      shape(shape, -(shape.width / 2) * SCALE_FACTOR, -(shape.height / 2) * SCALE_FACTOR);
       popStyle();
       return OavpVisualizer.this;
     }
@@ -1869,7 +1907,7 @@ class OavpVisualizer {
       pushMatrix();
       scale(scaleFactor);
       tint(255, opacity * 255);
-      image(image, -(image.width / 2), -(image.height / 2));
+      image(image, -(image.width / 2) * SCALE_FACTOR, -(image.height / 2) * SCALE_FACTOR);
       popMatrix();
       return OavpVisualizer.this;
     }
