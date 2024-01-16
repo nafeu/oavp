@@ -22,26 +22,25 @@ rand(-300, 300)
 Rectangle_skip|z:10000;
 `
 
-// [horizon]&[mountains]
-// [horizon]&[mountains]&[city]
-// [horizon]&[valley]
-// [horizon]&[city]
-// [horizon]&[valley]&[city]
-// [horizon]&[trees]
-// [horizon]&[trees]&[city]
-// [horizon]&[trees]&[mountains]
 const backgroundObjects = `
 #prefabs
+[horizon]&[mountains]
+[horizon]&[mountains]&[city]
+[horizon]&[valley]
 [horizon]&[city]
+[horizon]&[valley]&[city]
+[horizon]&[trees]
+[horizon]&[trees]&[city]
+[horizon]&[trees]&[mountains]
 
 #city
 [city_main]&[city_flair]
 
 #city_main
-Flatbox_city_main_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4950;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_main_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4450;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
 #city_flair
-Flatbox_city_flair_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-5350;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
-Flatbox_city_flair_accentcstroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-5350;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a]-[city_flair_w_offset];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_flair_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_flair_accentcstroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a]-[city_flair_w_offset];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
 [skip]
 #city_i
 rand(20, 51, 'ci')
@@ -326,11 +325,43 @@ rand(30, 100)
 
 const surroundingObjects = `
 #prefabs
-[water]&[waves]
-[waves]
 [water]
+[waves]
 [floor]
+[rolling_hills]
+[fields]
+[vortex]
 [skip]
+
+#vortex
+Circle_vortex_nofill_accentbstroke|xr:90;y:1800;yIter:-24.0;z:-10000;w:100.0;h:100.0;s:100.0;sIter:1000.0;i:51;
+Circle_vortex_nofill_accentbstroke|xr:90;y:4900;yIter:-84.0;z:-10000;w:100.0;h:100.0;s:100.0;sIter:1000.0;strokeColor:-8554647;strokeWeight:1.0;i:51;
+
+
+#fields
+Line_fields_nofill_accentbstroke|y:200;yr:[fields_yr*a];zIter:-600.0;w:40400.0;h:100.0;strokeWeight:0.75;i:51;
+#fields_yr
+rand(-40, 40, 'fyr')
+
+#rolling_hills
+[rolling_hills_main]
+[rolling_hills_main]&[rolling_hills_trees]
+#rolling_hills_main
+Terrain_rolling_hills_main|y:[rolling_hills_y*a];yIter:-[rolling_hills_yiter*a];zIter:-[rolling_hills_ziter*a];w:50000;wIter:8200.0;h:9800.0;s:[rolling_hills_s*a];paramA:50.0;paramB:[rolling_hills_window*a];paramBIter:200.0;paramC:100.0;paramCIter:[rolling_hills_phase*a];paramD:50.0;paramDIter:40.0;i:15;
+#rolling_hills_trees
+Terrain_rolling_hills_trees_accentbfill_accentbstroke|y:[rolling_hills_y*a];yIter:-[rolling_hills_yiter*a];zIter:-[rolling_hills_ziter*a];w:50000.0;wIter:8200.0;h:9800.0;s:[rolling_hills_s*a];paramA:50.0;paramB:[rolling_hills_window*a];paramBIter:200.0;paramC:100.0;paramCIter:[rolling_hills_phase*a];paramD:50.0;paramDIter:40.0;i:15;variation:trees;
+#rolling_hills_s
+rand(100, 3000, 'rhs')
+#rolling_hills_y
+rand(4700, 7000, 'rhy')
+#rolling_hills_ziter
+rand(2600, 5000, 'rhziter')
+#rolling_hills_window
+rand(100, 500, 'rhwindow')
+#rolling_hills_phase
+rand(100, 300, 'rhphase')
+#rolling_hills_yiter
+rand(0, 300, 'rhyiter')
 
 #water
 Rectangle_water|xr:90;y:[water_level];yMod:[tide];yModType:sine;z:-20000;w:100000.0;h:60000.0;fillColor:0;
@@ -357,10 +388,10 @@ const foregroundObjects = `
 [walkway]
 [square_arch]
 [poles]
-[skip]
-[travelling_platforms]
 [posts]
 [turnway]
+[travelling_platforms]
+[skip]
 
 #turnway
 [turnway_left]&[turnway_right]
@@ -389,11 +420,19 @@ rand(50, 150)
 [travelling_platform_base]&[travelling_platform_beams]&[travelling_platform_wall]
 
 #travelling_platform_base
-Flatbox_travellingplatforms_accentcfill_accentbstroke|x:1000;xIter:-1000.0;xr:90;y:150;yIterFunc:mod 3;z:1200;zIter:-500.0;w:300.0;h:400.0;l:25.0;s:100.0;i:100;xIterFunc:sqrt(x);
+Flatbox_travellingplatforms_base_accentcfill_accentbstroke|x:[travelling_platforms_x*a];xIter:-1000.0;xr:90;y:150;yIterFunc:mod 3;z:1200;zIter:-500.0;w:300.0;h:400.0;l:25.0;s:100.0;i:100;xIterFunc:sqrt(x);
 #travelling_platform_beams
-Flatbox_travellingplatforms_accentbfill_accentcstroke|x:1000;xIter:-1000.0;xr:90;y:575;yIterFunc:mod 3;z:1200;zIter:-500.0;w:50.0;h:50.0;l:825.0;s:100.0;i:100;xIterFunc:sqrt(x);
+Flatbox_travellingplatforms_beams_accentbfill_accentcstroke|x:[travelling_platforms_x*a];xIter:-1000.0;xr:90;y:575;yIterFunc:mod 3;z:1200;zIter:-500.0;w:50.0;h:50.0;l:825.0;s:100.0;i:100;xIterFunc:sqrt(x);
 #travelling_platform_wall
-Flatbox_travellingplatforms_accentcfill_accentdstroke|x:650;xIter:-1000.0;xr:90;y:550;yIterFunc:mod 3;z:1200;zIter:-500.0;w:50.0;h:400.0;l:4225.0;s:100.0;i:100;xIterFunc:sqrt(x);
+Flatbox_travellingplatforms_wall_accentcfill_accentdstroke|x:[travelling_platforms_wall_x*a];xIter:-1000.0;xr:90;y:550;yIterFunc:mod 3;z:1200;zIter:-500.0;w:50.0;h:400.0;l:[travelling_platforms_wall_l];s:100.0;i:100;xIterFunc:sqrt(x);
+#travelling_platforms_x
+rand(1000, 6800, 'tpx')
+#travelling_platforms_wall_x
+rand(-1000, 650, 'tpwx')
+#travelling_platforms_wall_l
+rand(3000, 4225)
+rand(15000, 20000)
+
 
 #poles
 [base_pole]&[pole_tip]
