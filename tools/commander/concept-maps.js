@@ -12,26 +12,45 @@
 */
 
 const sharedValues = `
-#dist
-rand(-300, 300)
-
-#black
--16777216
-
 #skip
 Rectangle_skip|z:10000;
 `
 
+const defaultObjects = `
+#prefabs
+[horizon]
+
+#horizon
+Rectangle_horizon_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;
+Rectangle_horizon_nostroke_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;
+`+sharedValues;
+
 const backgroundObjects = `
 #prefabs
-[horizon]&[mountains]
-[horizon]&[mountains]&[city]
-[horizon]&[valley]
-[horizon]&[city]
-[horizon]&[valley]&[city]
-[horizon]&[trees]
-[horizon]&[trees]&[city]
-[horizon]&[trees]&[mountains]
+[pyramids]
+[mountains]
+[mountains]&[city]
+[valley]
+[city]
+[valley]&[city]
+[trees]
+[trees]&[city]
+[trees]&[mountains]
+[trees]&[pyramids]
+
+#pyramids
+Pyramid_pyramids_accentbfill_accentastroke|x:[pyramids_x];xIter:[pyramids_xIter];y:-[pyramids_dimensions*a]/2;yIter:-[pyramids_dimensions_iter*a]/2;yrIter:95.0;yrIterFunc:random 100;z:-60000;zIter:-[pyramids_dimensions_iter*a]*3;w:[pyramids_dimensions*a];wIter:[pyramids_dimensions_iter*a];h:[pyramids_dimensions*a];hIter:[pyramids_dimensions_iter*a];l:[pyramids_dimensions*a];lIter:[pyramids_dimensions_iter*a];s:100.0;i:[pyramids_i];
+#pyramids_x
+rand(-30000, 30000)
+#pyramids_xIter
+rand(-7000, -10000)
+rand(7000, 10000)
+#pyramids_dimensions_iter
+rand(2000, 5000, 'pditer')
+#pyramids_dimensions
+rand(5000, 12000, 'pdd')
+#pyramids_i
+rand(1, 3)
 
 #city
 [city_main]&[city_flair]
@@ -58,10 +77,6 @@ rand(200, 600)
 #city_xiter
 12600
 rand(12600, 60000, 'cxiter')
-
-#horizon
-Rectangle_horizon_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;fillColor:[black];
-Rectangle_horizon_nostroke_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;fillColor:[black];
 
 #valley
 [left_valley_f]&[right_valley_b]
@@ -148,7 +163,7 @@ rand(8000, 30000, 'y')
 [skip]
 
 #body
-Circle_planetbody|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*celestial3];fillColor:[black];
+Circle_planetbody|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*celestial3];
 #planet_x
 rand(-25000, 25000, 'celestial1')
 #planet_y
@@ -399,6 +414,7 @@ Rectangle_floor_accentcfill|xr:90;y:[floor_y];z:-20000;w:100000.0;h:60000.0;fill
 rand(50, 500)
 `+sharedValues;
 
+// [huge_pillars]
 const foregroundObjects = `
 #prefabs
 [walkway]
@@ -408,6 +424,9 @@ const foregroundObjects = `
 [turnway]
 [travelling_platforms]
 [skip]
+
+#huge_pillars
+Box_huge_pillars|x:-5000;y:-24700;z:-14000;zIter:-15000.0;w:5100.0;h:55100.0;l:5100.0;s:100.0;fillColor:-14409446;i:6;
 
 #turnway
 [turnway_left]&[turnway_right]
@@ -424,13 +443,15 @@ Flatbox_turnway_right_accentafill_accentbstroke|xIter:200.0;xr:90;y:250;zIter:-2
 rand(0, 3, 'stretch')*50
 
 #walkway
-Flatbox_walkway|x:[dist];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;fillColor:0;i:30;
+Flatbox_walkway|x:[walkway_x];xr:90;y:200;z:345;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;fillColor:0;i:30;
 Flatbox_walkway|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:150.0;l:110.0;s:100.0;i:30;
 Flatbox_walkway|xr:90;y:150;z:645;zIter:-295.0;zrIter:65.0;zrIterFunc:random 100;w:150.0;h:[walkway_h];l:110.0;s:100.0;i:30;
 Flatbox_walkway|xr:90;y:350;yIter:-20.0;yIterFunc:mod 3;zIter:-500.0;w:500.0;h:500.0;l:50.0;s:100.0;i:100;
 Flatbox_walkway|xr:90;y:350;yIter:-20.0;yIterFunc:mod 3;z:800;zIter:-500.0;w:500.0;h:500.0;l:50.0;s:100.0;i:100;
 #walkway_h
 rand(50, 150)
+#walkway_x
+rand(-300, 300)
 
 #travelling_platforms
 [travelling_platform_base]&[travelling_platform_beams]&[travelling_platform_wall]
@@ -471,23 +492,23 @@ rand(1, 10, 'xiter')*20
 [square_arch_a1]&[square_arch_a2]&[square_arch_b1]&[square_arch_b2]
 [square_arch_a1]&[square_arch_a2]&[square_arch_b1]&[square_arch_b2]&[square_arch_c1]&[square_arch_c2]&[square_arch_top]
 #square_arch_a1
-Flatbox_squarearch_a1_accentdfill_accentastroke|x:-[square_arch_x_offset*a];xr:90;y:100;zIter:-[square_arch_ziter*a];w:50.0;h:[square_arch_a_h*a];l:170.0;s:100.0;fillColor:[black];i:50;z:600;zr:[square_arch_a_zr*a];
+Flatbox_squarearch_a1_accentdfill_accentastroke|x:-[square_arch_x_offset*a];xr:90;y:100;zIter:-[square_arch_ziter*a];w:50.0;h:[square_arch_a_h*a];l:170.0;s:100.0;i:50;z:600;zr:[square_arch_a_zr*a];
 #square_arch_a2
-Flatbox_squarearch_a2_accentdfill_accentastroke|x:[square_arch_x_offset*a];xr:90;y:100;zIter:-[square_arch_ziter*a];w:50.0;h:[square_arch_a_h*a];l:170.0;s:100.0;fillColor:[black];i:50;z:600;zr:-[square_arch_a_zr*a];
+Flatbox_squarearch_a2_accentdfill_accentastroke|x:[square_arch_x_offset*a];xr:90;y:100;zIter:-[square_arch_ziter*a];w:50.0;h:[square_arch_a_h*a];l:170.0;s:100.0;i:50;z:600;zr:-[square_arch_a_zr*a];
 #square_arch_a_h
 rand(50, 245, 'a_h')
 #square_arch_a_zr
 rand(1, 3, 'a_zr')*15
 #square_arch_b1
-Flatbox_squarearch_b1_accentafill_accentbstroke|x:-[square_arch_x_offset*a];xr:90;y:-55;zIter:-[square_arch_ziter*a];zr:-45;w:25.0;h:35.0;l:145.0;s:100.0;fillColor:[black];i:50;z:600;
+Flatbox_squarearch_b1_accentafill_accentbstroke|x:-[square_arch_x_offset*a];xr:90;y:-55;zIter:-[square_arch_ziter*a];zr:-45;w:25.0;h:35.0;l:145.0;s:100.0;i:50;z:600;
 #square_arch_b2
-Flatbox_squarearch_b2_accentafill_accentbstroke|x:[square_arch_x_offset*a];xr:90;y:-55;zIter:-[square_arch_ziter*a];zr:45;w:25.0;h:35.0;l:145.0;s:100.0;fillColor:[black];i:50;z:600;
+Flatbox_squarearch_b2_accentafill_accentbstroke|x:[square_arch_x_offset*a];xr:90;y:-55;zIter:-[square_arch_ziter*a];zr:45;w:25.0;h:35.0;l:145.0;s:100.0;i:50;z:600;
 #square_arch_c1
-Flatbox_squarearch_c1_accentbfill_accentcstroke|x:[square_arch_x_offset*a];xr:90;y:-225;zIter:-[square_arch_ziter*a];w:25.0;h:10.0;l:195.0;s:100.0;fillColor:[black];i:50;z:600;
+Flatbox_squarearch_c1_accentbfill_accentcstroke|x:[square_arch_x_offset*a];xr:90;y:-225;zIter:-[square_arch_ziter*a];w:25.0;h:10.0;l:195.0;s:100.0;i:50;z:600;
 #square_arch_c2
-Flatbox_squarearch_c2_accentbfill_accentcstroke|x:-[square_arch_x_offset*a];xr:90;y:-225;zIter:-[square_arch_ziter*a];w:25.0;h:10.0;l:195.0;s:100.0;fillColor:[black];i:50;z:600;
+Flatbox_squarearch_c2_accentbfill_accentcstroke|x:-[square_arch_x_offset*a];xr:90;y:-225;zIter:-[square_arch_ziter*a];w:25.0;h:10.0;l:195.0;s:100.0;i:50;z:600;
 #square_arch_top
-Flatbox_squarearch_top_accentcfill_accentdstroke|y:-340;yr:90;zIter:-[square_arch_ziter*a];w:[square_arch_top_w];h:25.0;l:425.0+[square_arch_x_offset*a];s:100.0;fillColor:[black];i:50;z:600;
+Flatbox_squarearch_top_accentcfill_accentdstroke|y:-340;yr:90;zIter:-[square_arch_ziter*a];w:[square_arch_top_w];h:25.0;l:425.0+[square_arch_x_offset*a];s:100.0;i:50;z:600;
 #square_arch_top_w
 rand(40, 240)
 rand(15, 25)
@@ -533,6 +554,7 @@ rand(300, 4000, 'px')
 `+sharedValues;
 
 const conceptMaps = [
+  defaultObjects,
   backgroundObjects,
   celestialObjects,
   skyObjects,
