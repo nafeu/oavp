@@ -743,11 +743,26 @@ public class OavpEditor {
     // Background is always at 0th index, ie. it is selected first
     OavpVariable activeVariable = objects.getActiveVariable();
 
-    if (activeVariable.name.equals("background") || activeVariable.name.contains("backgroundfill")) {
-      activeVariable.fillColor(this.backgroundColor);
-    }
-    else if (activeVariable.name.contains("nofill")) {
+    if (activeVariable.name.contains("nofill")) {
       activeVariable.fillColor(0);
+    }
+    else if (activeVariable.name.contains("notbackgroundfill")) {
+      activeVariable.fillColor(getRandomPaletteColorWithExclusion("backgroundColor"));
+    }
+    else if (activeVariable.name.contains("notaccentafill")) {
+      activeVariable.fillColor(getRandomPaletteColorWithExclusion("accentA"));
+    }
+    else if (activeVariable.name.contains("notaccentbfill")) {
+      activeVariable.fillColor(getRandomPaletteColorWithExclusion("accentB"));
+    }
+    else if (activeVariable.name.contains("notaccentcfill")) {
+      activeVariable.fillColor(getRandomPaletteColorWithExclusion("accentC"));
+    }
+    else if (activeVariable.name.contains("notaccentdfill")) {
+      activeVariable.fillColor(getRandomPaletteColorWithExclusion("accentD"));
+    }
+    else if (activeVariable.name.equals("background") || activeVariable.name.contains("backgroundfill")) {
+      activeVariable.fillColor(this.backgroundColor);
     }
     else if (activeVariable.name.contains("accentafill")) {
       activeVariable.fillColor(this.accentA);
@@ -775,6 +790,21 @@ public class OavpEditor {
     if (activeVariable.name.contains("nostroke")) {
       activeVariable.strokeColor(0);
     }
+    else if (activeVariable.name.contains("notbackgroundstroke")) {
+      activeVariable.strokeColor(getRandomPaletteColorWithExclusion("backgroundColor"));
+    }
+    else if (activeVariable.name.contains("notaccentastroke")) {
+      activeVariable.strokeColor(getRandomPaletteColorWithExclusion("accentA"));
+    }
+    else if (activeVariable.name.contains("notaccentbstroke")) {
+      activeVariable.strokeColor(getRandomPaletteColorWithExclusion("accentB"));
+    }
+    else if (activeVariable.name.contains("notaccentcstroke")) {
+      activeVariable.strokeColor(getRandomPaletteColorWithExclusion("accentC"));
+    }
+    else if (activeVariable.name.contains("notaccentdstroke")) {
+      activeVariable.strokeColor(getRandomPaletteColorWithExclusion("accentD"));
+    }
     else if (activeVariable.name.contains("backgroundstroke")) {
       activeVariable.strokeColor(this.backgroundColor);
     }
@@ -797,6 +827,22 @@ public class OavpEditor {
         ]
       );
     }
+  }
+
+  public color getRandomPaletteColorWithExclusion(String excludedColor) {
+    color[] notBackground = { this.accentA, this.accentB, this.accentC, this.accentD };
+    color[] notAccentA = { this.backgroundColor, this.accentB, this.accentC, this.accentD };
+    color[] notAccentB = { this.backgroundColor, this.accentC, this.accentD, this.accentA };
+    color[] notAccentC = { this.backgroundColor, this.accentD, this.accentA, this.accentB };
+    color[] notAccentD = { this.backgroundColor, this.accentA, this.accentB, this.accentC };
+
+    if (excludedColor.equals("backgroundColor")) { return getRandomColor(notBackground); }
+    if (excludedColor.equals("accentA")) { return getRandomColor(notAccentA); }
+    if (excludedColor.equals("accentB")) { return getRandomColor(notAccentB); }
+    if (excludedColor.equals("accentC")) { return getRandomColor(notAccentC); }
+    if (excludedColor.equals("accentD")) { return getRandomColor(notAccentD); }
+
+    return this.backgroundColor;
   }
 
   public void resetFillColor() {

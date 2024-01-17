@@ -292,3 +292,12 @@ boolean isColorsArrayEqual(String[] arrayA, String[] arrayB) {
 
   return true;
 }
+
+color getRandomColor(color[] colorArray) {
+  if (colorArray.length > 0) {
+    int randomIndex = int(random(colorArray.length));
+    return colorArray[randomIndex];
+  } else {
+    return color(0);
+  }
+}

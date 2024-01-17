@@ -10,16 +10,43 @@
     #direct-edit,
     #property-selections,
     #command-buttons,
+    #property-quick-setters,
     #preview-edit-intervals {
       display: flex;
       gap: 5px;
       flex-wrap: wrap;
 
       button {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
       }
 
       margin-bottom: 10px;
+    }
+
+    #direct-edit {
+      button {
+        color: purple;
+      }
+    }
+    #property-selections {
+      button {
+        color: teal;
+      }
+    }
+    #command-buttons {
+      button {
+        color: blue;
+      }
+    }
+    #property-quick-setters {
+      button {
+        color: red;
+      }
+    }
+    #preview-edit-intervals {
+      button {
+        color: orange;
+      }
     }
 
     #data {
@@ -52,6 +79,21 @@
   <button onclick="setSelectedProperty('w')">Select W</button>
   <button onclick="setSelectedProperty('l')">Select L</button>
   <button onclick="setSelectedProperty('s')">Select S</button>
+  <button onclick="setSelectedProperty('zIter')">Select zIter</button>
+</div>
+<div id="property-quick-setters">
+  <button onclick="setAndSendDirectEdit('xr', 90)">xr=90</button>
+  <button onclick="setAndSendDirectEdit('y', 300)">y=300</button>
+  <button onclick="setAndSendDirectEdit('i', 25)">i=25</button>
+  <button onclick="setAndSendDirectEdit('zIter', -200)">zIter=-200</button>
+  <button onclick="setAndSendDirectEdit('zr', 45)">zr=45</button>
+  <button onclick="setAndSendDirectEdit('xr', 45)">xr=45</button>
+  <button onclick="setAndSendDirectEdit('yr', 45)">yr=45</button>
+  <button onclick="setAndSendDirectEdit('z', -90000)">z=-90000</button>
+  <button onclick="setAndSendDirectEdit('z', -40000)">z=-40000</button>
+  <button onclick="setAndSendDirectEdit('w', 10000);setAndSendDirectEdit('h', 10000)">w&h=10000</button>
+  <button onclick="setAndSendDirectEdit('w', 10000);setAndSendDirectEdit('h', 10000);setAndSendDirectEdit('l', 10000);">w&h&l=10000</button>
+  <button onclick="setAndSendDirectEdit('s', 10000);">s=10000</button>
 </div>
 <div id="direct-edit">
   <select name="property-name" id="property-name">
@@ -310,7 +352,16 @@
   function setSelectedProperty(property) {
     const propertyNameElement = document.getElementById('property-name');
 
+    const lastButtonElement = document.getElementById('last-button');
+
+    lastButtonElement.textContent = `Last button pressed: Select ${property}`;
+
     propertyNameElement.value = property;
+  }
+
+  function setAndSendDirectEdit(property, value) {
+    setSelectedProperty(property);
+    sendSocketCommand({ command: 'direct-edit', name: getPropertyName(), type: getPropertyType(), value })
   }
 
   document.addEventListener('keydown', function(event) {
@@ -344,7 +395,8 @@
 
         lastButtonElement.textContent = `Last button pressed: ${key} -> ${button.textContent}`;
 
-        button.click();
+        // TODO: Re-enable once ready
+        // button.click();
       }
     }
   });

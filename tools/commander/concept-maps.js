@@ -123,6 +123,22 @@ const celestialObjects = `
 [fleet]
 [tesseract]
 [nebula]
+[skypyramid]
+
+#skypyramid
+[skypyramid_main]&[skypyramid_rings]
+
+#skypyramid_main
+Pyramid_skypyramid_main_accentdstroke_notaccentdfill|x:[skypyramid_x*a];xr:180;y:-[skypyramid_y*a];yIter:-7000.0;yr:[skypyramid_yr];z:-80000;w:10000.0;wIter:10000.0;h:10000.0;hIter:10000.0;l:10000.0;lIter:10000.0;i:5;
+#skypyramid_rings
+Circle_skypyramid_circle_nofill_accentcstroke|x:[skypyramid_x*a];y:-[skypyramid_y*a]+6000;yIter:600.0;xr:90;z:-80000;w:100.0;h:100.0;s:1000.0;sIter:1600.0;;i:6;
+
+#skypyramid_x
+rand(-50000, 50000, 'x')
+#skypyramid_yr
+rand(-180, 180)
+#skypyramid_y
+rand(8000, 30000, 'y')
 
 #planet
 [body]
@@ -432,7 +448,6 @@ rand(-1000, 650, 'tpwx')
 #travelling_platforms_wall_l
 rand(3000, 4225)
 rand(15000, 20000)
-
 
 #poles
 [base_pole]&[pole_tip]
