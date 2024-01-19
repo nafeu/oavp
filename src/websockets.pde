@@ -28,9 +28,11 @@ void webSocketServerEvent(String msg) {
   }
   else if (command.equals("feeling-lucky")) {
     JSONArray receivedOavpObjects = message.getJSONArray("objects");
+    int seed = message.getInt("seed");
 
     noLoop();
     objects.removeAll();
+    setSketchSeed(seed);
     handleReceivedOavpObjects(receivedOavpObjects);
     randomizePalette();
     randomizeAllColors();
@@ -92,7 +94,7 @@ void webSocketServerEvent(String msg) {
     updateEditorVariableMeta();
   }
   else if (command.equals("export-sketch")) {
-    editor.exportSketchToFile();
+    editor.queueExportSketchToFile();
   }
   else {
     println("[ oavp ] Command not recognized");

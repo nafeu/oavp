@@ -143,6 +143,10 @@ synchronized void draw() {
           objects.draw();
         }
         editor.drawIfEditMode();
+        if (EXPORT_SKETCH) {
+          editor.exportSketchToFile();
+          EXPORT_SKETCH = false;
+        }
       }
     } catch (Exception e) {
       println("[ oavp ] Error during draw loop");
@@ -339,6 +343,8 @@ void setupPreSketchDefaults() {
   entities.addInterval("spacebar-pulser-interval", 10, 1);
 
   setupPreSketchIntervals();
+
+  setSketchSeed(0);
 }
 
 void setGlobalDurations(float duration) {
@@ -402,7 +408,7 @@ void handleEvents(int code) {
       + "-" + str(year())
       + "-" + str(hour()) + str(minute()) + str(second());
 
-    saveFrame("screenshots/" + screenshotName + "-" + width + "x" + height + ".png");
+    saveFrame("../screenshots/" + screenshotName + "-" + width + "x" + height + ".png");
     println("[ oavp ] Screenshot exported.");
   }
 }

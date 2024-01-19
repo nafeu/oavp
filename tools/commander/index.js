@@ -5,6 +5,7 @@ const WebSocket = require('ws');
 const express = require('express');
 const path = require('path');
 const diff = require('diff');
+const ncp = require('ncp').ncp;
 
 const { weaveTopics } = require('topic-weaver');
 
@@ -21,7 +22,10 @@ const {
   TARGET_FILE_NAME,
   DUMP_FILE_PATH,
   EXPORT_FILE_NAME,
-  EXPORT_FILE_DIR
+  EXPORT_IMAGE_NAME,
+  EXPORT_FILE_DIR,
+  IMAGE_COPY_TIMEOUT_DURATION,
+  FILE_COPY_TIMEOUT_DURATION,
 } = require('./constants');
 const { conceptMaps } = require('./concept-maps');
 
@@ -32,6 +36,8 @@ let wsServer;
 let presetOutput = '';
 let processedDiff = [];
 let presetCount = 0;
+let imageCopyTimeout;
+let fileCopyTimeout;
 
 const wsClients = new Set();
 
@@ -186,7 +192,11 @@ const emitGeneratedSketchToServer = (options = {}) => {
 
   rand.cache = {};
 
-  const message = JSON.stringify({ command: options.isFeelingLucky ? 'feeling-lucky' : 'write-objects', objects });
+  const message = JSON.stringify({
+    command: options.isFeelingLucky ? 'feeling-lucky' : 'write-objects',
+    objects,
+    seed: rand(0, 100)
+  });
   ws.send(message);
   return objects;
   console.log(`[ oavp-commander ] WebSocket message sent: ${message}`);
@@ -229,6 +239,21 @@ const wsServerBroadcast = (message, sender) => {
       client.send(message);
     }
   });
+}
+
+const countFiles = (directoryPath, filePattern) => {
+  try {
+    const files = fs.readdirSync(directoryPath);
+
+    const sketchFiles = files.filter((file) => {
+      return file.endsWith(filePattern);
+    });
+
+    return sketchFiles.length;
+  } catch (err) {
+    console.error(`Error counting files: ${err}`);
+    return -1;
+  }
 }
 
 const main = () => {
@@ -330,6 +355,8 @@ const main = () => {
   const logStream = fs.createWriteStream(DUMP_FILE_PATH, { flags: 'a' });
 
   fs.watch(DIRECTORY_PATH, (eventType, filename) => {
+    console.log(`[ oavp-commander:watch-dir ] ${eventType} : ${filename}`);
+
     if (filename === TARGET_FILE_NAME) {
       presetOutput = '';
       processedDiff = [];
@@ -361,26 +388,46 @@ const main = () => {
       logStream.write(`\n${presetOutput}`);
     }
 
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+
     if (filename === EXPORT_FILE_NAME) {
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const newFileName = `${timestamp}_sketch.txt`;
-      const destinationFilePath = path.join(EXPORT_FILE_DIR, newFileName);
+      if (fileCopyTimeout) {
+        clearTimeout(fileCopyTimeout);
+      }
 
-      fs.readFile(EXPORT_FILE_NAME, 'utf8', (err, data) => {
-        if (err) {
-          console.error(`Error reading the source file: ${err}`);
-          return;
-        }
+      fileCopyTimeout = setTimeout(() => {
+        const newFileName = `${countFiles(path.resolve(EXPORT_FILE_DIR), '_sketch.txt') + 1}_sketch.txt`;
+        const destinationFilePath = path.join(EXPORT_FILE_DIR, newFileName);
 
-        fs.writeFile(destinationFilePath, data, 'utf8', (err) => {
+        ncp(EXPORT_FILE_NAME, destinationFilePath, function (err) {
           if (err) {
-            console.error(`Error writing to the destination file: ${err}`);
-            return;
+            console.error(`[ oavp-commander:file-copy ] Error writing to the destination file: ${err}`);
           }
-
-          console.log(`File copied successfully to ${destinationFilePath}`);
+          console.log(`[ oavp-commander:file-copy ] File copied successfully to ${destinationFilePath}`);
         });
-      });
+
+        fileCopyTimeout = null;
+      }, 500);
+    }
+
+    if (filename === EXPORT_IMAGE_NAME) {
+      if (imageCopyTimeout) {
+        clearTimeout(imageCopyTimeout);
+      }
+
+      imageCopyTimeout = setTimeout(() => {
+        const newFileName = `${countFiles(path.resolve(EXPORT_FILE_DIR), '_sketch.png') + 1}_sketch.png`;
+        const destinationFilePath = path.join(EXPORT_FILE_DIR, newFileName);
+
+        ncp(EXPORT_IMAGE_NAME, destinationFilePath, function (err) {
+          if (err) {
+            console.error(`[ oavp-commander:image-copy ] Error writing to the destination file: ${err}`);
+          }
+          console.log(`[ oavp-commander:image-copy ] Image copied successfully to ${destinationFilePath}`);
+        });
+
+        imageCopyTimeout = null;
+      }, 500);
     }
   });
 }

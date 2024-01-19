@@ -131,7 +131,10 @@ const DIRECTORY_PATH = './';
 const TARGET_FILE_NAME = 'target.txt';
 const DUMP_FILE_PATH = 'preset-dump.txt';
 const EXPORT_FILE_NAME = 'export.txt';
+const EXPORT_IMAGE_NAME = 'export.png';
 const EXPORT_FILE_DIR = '../../exports';
+const IMAGE_COPY_TIMEOUT_DURATION = 500;
+const FILE_COPY_TIMEOUT_DURATION = 500;
 
 module.exports = {
   OAVP_OBJECT_PROPERTIES,
@@ -146,5 +149,8 @@ module.exports = {
   TARGET_FILE_NAME,
   DUMP_FILE_PATH,
   EXPORT_FILE_NAME,
-  EXPORT_FILE_DIR
+  EXPORT_IMAGE_NAME,
+  EXPORT_FILE_DIR,
+  IMAGE_COPY_TIMEOUT_DURATION,
+  FILE_COPY_TIMEOUT_DURATION
 }

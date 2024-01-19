@@ -16,11 +16,12 @@ ffmpeg-audio.txt
 configure-build.sh
 oavp.app
 devnotes.txt
-**/screenshots
+screenshots/
 project.todo
 screencap-code-exports/
 **/node_modules/
 **/target.txt
 **/export.txt
+**/export.png
 **/preset-dump.txt
 exports/

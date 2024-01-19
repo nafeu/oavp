@@ -291,6 +291,10 @@ public class OavpEditor {
     }
   }
 
+  public void queueExportSketchToFile() {
+    EXPORT_SKETCH = true;
+  }
+
   public void exportSketchToFile() {
     println("[ oavp ] Exporting sketch to file...");
 
@@ -301,9 +305,11 @@ public class OavpEditor {
     saveStrings(
       sketchPath("../tools/commander/export.txt"),
       new String[] {
-        "// DATE: " + date,
-        "// PALETTE: " + paletteArrayString,
+        "//DATE:" + date,
+        "//PALETTE:" + paletteArrayString,
+        "//SEED:" + SEED,
         "void setupSketch() {",
+        "setSketchSeed(" + SEED + ");",
         objects.exportAllObjectData() + "}",
         "void setupSketchPostEditor() {",
         "editor.setPaletteByArrayString(\"" + paletteArrayString + "\");",
@@ -317,6 +323,7 @@ public class OavpEditor {
         "void drawSketch() {}",
       }
     );
+    save(sketchPath("../tools/commander/export.png"));
   }
 
   public void switchTool(int toolId) {

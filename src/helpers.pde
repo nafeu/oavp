@@ -301,3 +301,10 @@ color getRandomColor(color[] colorArray) {
     return color(0);
   }
 }
+
+void setSketchSeed(int seedValue) {
+  SEED = seedValue;
+  randomSeed(seedValue);
+  noiseSeed(seedValue);
+  RANDOM_HUNDRED = getRandomNumbers(100);
+}
