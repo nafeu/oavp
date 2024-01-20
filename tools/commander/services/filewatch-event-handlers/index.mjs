@@ -16,35 +16,19 @@ import {
 } from './helpers.mjs'
 
 const setupFilewatchEventHandlers = wsClients => {
-  console.log(
+  console.log([
     `[ oavp-commander:filewatch ] Watching for changes to ${TARGET_FILE_NAME}`,
-  );
-  console.log(
     `[ oavp-commander:filewatch ] Watching for changes to ${EXPORT_FILE_NAME}`,
-  );
-  console.log(
     `[ oavp-commander:filewatch ] Dumping generated presets into to ${DUMP_FILE_PATH}`,
-  );
-  console.log(
-    `[ oavp-commander:filewatch ] Saving exported sketches to ${EXPORT_FILE_DIR}`,
-  );
+    `[ oavp-commander:filewatch ] Saving exported sketches to ${EXPORT_FILE_DIR}`
+  ].join('\n'));
 
   const logStream = fs.createWriteStream(DUMP_FILE_PATH, { flags: "a" });
 
   fs.watch(DIRECTORY_PATH, (eventType, filename) => {
-    console.log(`[ oavp-commander:watch-dir ] ${eventType} : ${filename}`);
-
-    if (filename === TARGET_FILE_NAME) {
-      handlePresetEvent({ wsClients, logStream });
-    }
-
-    if (filename === EXPORT_FILE_NAME) {
-      handleExportFileEvent();
-    }
-
-    if (filename === EXPORT_IMAGE_NAME) {
-      handleExportImageEvent();
-    }
+    if (filename === TARGET_FILE_NAME) handlePresetEvent({ wsClients, logStream });
+    if (filename === EXPORT_FILE_NAME) handleExportFileEvent();
+    if (filename === EXPORT_IMAGE_NAME) handleExportImageEvent();
   });
 }
 

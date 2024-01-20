@@ -3,9 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>oavp-commander</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎛️</text></svg>">
+  <title>OAVP Commander</title>
   <style>
-    body {}
+    :root {
+      --color-black: #1e272e;
+      --color-grey: #485460;
+      --color-white: white;
+      --color-a: #ff3f34;
+      --color-b: #ffa801;
+      --color-c: #3c40c6;
+      --color-d: #05c46b;
+      --color-e: #00d8d6;
+    }
+
+    body {
+      background-color: var(--color-black);
+      color: var(--color-white);
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      padding: 10px;
+    }
+
+    html, body, button, input {
+      font-family: "Roboto Mono", monospace;
+    }
+
+    button {
+      background-color: var(--color-black);
+      border: none;
+      color: var(--color-white);
+      border-radius: 5px;
+      font-size: 1.15rem;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.5;
+    }
+
+    button:active {
+      opacity: 0.25;
+    }
+
+    button, input, select {}
+
+    input, select {
+      border-radius: 5px;
+      border: none;
+      padding: 0;
+    }
+
+    pre {
+      border-radius: 5px;
+      background-color: var(--color-grey);
+      border: none;
+      color: var(--color-black);
+      padding: 10px;
+    }
+
+    .container {
+
+    }
 
     #direct-edit,
     #property-selections,
@@ -15,47 +79,39 @@
       display: flex;
       gap: 5px;
       flex-wrap: wrap;
-
-      button {
-        font-size: 1.5rem;
-      }
-
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     #direct-edit {
       button {
-        color: purple;
+        background-color: var(--color-a);
       }
     }
     #property-selections {
       button {
-        color: teal;
+        background-color: var(--color-b);
       }
     }
     #command-buttons {
       button {
-        color: blue;
+        background-color: var(--color-c);
       }
     }
     #property-quick-setters {
       button {
-        color: red;
+        background-color: var(--color-d);
       }
     }
     #preview-edit-intervals {
       button {
-        color: orange;
+        background-color: var(--color-e);
       }
     }
 
     #data {
-      width: 75vw;
       overflow: auto; /* Optional: Add scrollbars for overflow */
       white-space: pre-wrap; /* Optional: Preserve line breaks and wrap long lines */
       cursor: pointer;
-      border: 1px solid #ccc;
-      padding: 10px;
     }
   </style>
 </head>
@@ -211,11 +267,13 @@
   <button id="button7" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
   <button id="button8" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
 </div>
-<pre style="color: purple;" id="sketch-socket"></pre>
-<pre style="color: blue;" id="commander-socket"></pre>
-<pre id="response"></pre>
-<pre id="data"></pre>
-<pre id="last-button">Last button pressed: ...</pre>
+<div class="container">
+  <pre id="sketch-socket"></pre>
+  <pre id="commander-socket"></pre>
+  <pre id="response"></pre>
+  <pre id="data"></pre>
+  <pre id="last-button">Last button pressed: ...</pre>
+</div>
 
 <script>
   const oavpObjectProperties = JSON.parse('<%- OAVP_OBJECT_PROPERTIES %>');
@@ -276,7 +334,6 @@
 
   function sendSocketCommand({ command, ...params }) {
     const responseElement = document.getElementById('response');
-    responseElement.style.color = 'purple';
     responseElement.textContent = `SOCKET @ ${new Date().toLocaleString()} : ${command}`;
     sketchSocket.send(JSON.stringify({ command, ...params }));
   }
@@ -293,13 +350,6 @@
     .then(data => {
       const responseElement = document.getElementById('response');
       const dataElement = document.getElementById('data');
-      if (data.status === 'success') {
-        responseElement.style.color = 'green';
-      } else if (data.status === 'warning') {
-        responseElement.style.color = 'yellow';
-      } else {
-        responseElement.style.color = 'red';
-      }
       responseElement.textContent = `API @ ${new Date().toLocaleString()} : ${data.message}`;
 
       if (data.data) {
@@ -318,7 +368,6 @@
     .catch(error => {
       console.error('Error:', error);
       const responseElement = document.getElementById('response');
-      responseElement.style.color = 'red';
       responseElement.textContent = 'Error occurred during API request.';
     });
   }
