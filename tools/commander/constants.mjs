@@ -135,3 +135,5 @@ export const EXPORT_IMAGE_NAME = "export.png";
 export const EXPORT_FILE_DIR = "../../exports";
 export const IMAGE_COPY_TIMEOUT_DURATION = 500;
 export const FILE_COPY_TIMEOUT_DURATION = 500;
+export const OVERRIDE_VALUES_DELIMITER = ";";
+export const PROPERTY_VALUE_DELIMITER = ":";

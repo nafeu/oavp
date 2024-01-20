@@ -6,11 +6,13 @@ import fs from "fs";
 import WebSocket from "ws";
 
 import {
+  OAVP_OBJECT_PROPERTIES,
   OBJECT_NAME_AND_PROPERTIES_DELIMITER,
   OBJECT_NAME_AND_TAGS_DELIMITER,
-  OAVP_OBJECT_PROPERTIES,
+  OVERRIDE_VALUES_DELIMITER,
+  PROPERTY_VALUE_DELIMITER,
   SINGLE_LINE_PARAMETER_SET_DELIMITER,
-  SKETCH_WEBSOCKET_SERVER_URL,
+  SKETCH_WEBSOCKET_SERVER_URL
 } from "./constants.mjs";
 
 import { conceptMaps } from "./concept-maps.mjs";
@@ -51,10 +53,10 @@ export const getOverridesFromParameterSet = (singleLineParameterSet) => {
   const overrides = [];
 
   valuesMapping
-    .split(";")
+    .split(OVERRIDE_VALUES_DELIMITER)
     .filter((value) => value.length > 0)
     .forEach((valueMapping) => {
-      const [property, value] = valueMapping.split(":");
+      const [property, value] = valueMapping.split(PROPERTY_VALUE_DELIMITER);
 
       const objectProperty = _.find(OAVP_OBJECT_PROPERTIES, { id: property });
 
@@ -211,13 +213,16 @@ export const emitGeneratedSketchToServer = ({ ws, options = {} }) => {
 
   rand.cache = {};
 
-  const message = JSON.stringify({
+  const message = {
     command: options.isFeelingLucky ? "feeling-lucky" : "write-objects",
     objects,
     seed: rand(0, 100),
-  });
-  ws.send(message);
-  console.log(`[ oavp-commander ] WebSocket message sent: ${message}`);
+  };
+
+  const stringifiedMessage = JSON.stringify(message);
+
+  ws.send(stringifiedMessage);
+  console.log(`[ oavp-commander ] WebSocket command sent: ${message.command}`);
   return objects;
 };
 
