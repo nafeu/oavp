@@ -1,4 +1,9 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 import {
   OAVP_OBJECT_PROPERTIES,
@@ -15,6 +20,11 @@ const app = express();
 const setupExpressServer = ws => {
   app.set("view engine", "ejs");
   app.use(express.json());
+  app.use(express.static(path.join(__dirname, '../../public')));
+  app.use(express.static(path.join(__dirname, '../../../../exports')));
+  app.set('views', path.join(__dirname, '../../views'));
+
+  app.locals.OAVP_OBJECT_PROPERTIES = JSON.stringify(OAVP_OBJECT_PROPERTIES);
 
   app.use((req, res, next) => {
     console.log(
@@ -25,11 +35,8 @@ const setupExpressServer = ws => {
     next();
   });
 
-  app.get("/", (req, res) => {
-    res.render("index", {
-      OAVP_OBJECT_PROPERTIES: JSON.stringify(OAVP_OBJECT_PROPERTIES),
-    });
-  });
+  app.get("/", (req, res) => res.render("controls"));
+  app.get("/viewer", (req, res) => res.render("viewer"));
 
   app.get("/api", (req, res) => {
     res.sendStatus(200);

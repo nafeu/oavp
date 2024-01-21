@@ -9,5 +9,10 @@
         "sourceType": "module"
     },
     "rules": {
+    },
+    "globals": {
+        "document": "readonly",
+        "WebSocket": "readonly",
+        "window": "readonly"
     }
 }
