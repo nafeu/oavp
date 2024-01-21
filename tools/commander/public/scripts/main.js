@@ -187,3 +187,13 @@ document.getElementById('data').addEventListener('click', function () {
     this.textContent = originalText;
   }, 1000);
 });
+
+// eslint-disable-next-line no-unused-vars
+function handleClickMatrixImage(filename) {
+  console.log({ event: 'click', filename });
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleHoverMatrixImage(filename) {
+  document.getElementById("sketch-preview-image").style.backgroundImage = `url(${filename}.png)`;
+}

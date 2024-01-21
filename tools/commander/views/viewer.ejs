@@ -1,7 +1,28 @@
 <%- include('partials/head') %>
 <%- include('partials/navigation') %>
 
-<h1>VIEWER</h1>
+<style>
+  html, body {
+    background-color: black !important;
+  }
+</style>
+
+<div class="container">
+  <div id="sketch-matrix">
+    <% exportFilenames.forEach((filename) => { %>
+      <div
+        class="matrix-image"
+        style="background-image: url('<%= filename %>.png');"
+        onclick="handleClickMatrixImage('<%= filename %>');"
+        onmouseenter="handleHoverMatrixImage('<%= filename %>');"
+      >
+      </div>
+    <% }); %>
+  </div>
+  <div id="sketch-preview">
+    <div id="sketch-preview-image"></div>
+  </div>
+</div>
 
 <%- include('partials/console') %>
 <%- include('partials/footer') %>

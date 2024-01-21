@@ -10,6 +10,28 @@
   --spacing: 10px;
   --border-radius: 5px;
   --spacing-divider: 15px;
+  --color-grey-dark: rgba(72, 84, 96, 0.25);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-white) var(--color-grey);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-grey);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-white);
+  border-radius: 10px;
+  border: 3px solid var(--color-grey);
 }
 
 a, a:visited, a:hover, a:active {
@@ -66,9 +88,8 @@ input, select {
 
 pre {
   border-radius: var(--border-radius);
-  background-color: var(--color-grey);
-  border: none;
-  color: var(--color-black);
+  border: 2px solid var(--color-white);
+  color: var(--color-white);
   padding: var(--spacing);
 }
 
@@ -132,14 +153,55 @@ pre {
   gap: var(--spacing);
 }
 
-#clipboard-area {
+#clipboard-area {}
 
-}
+#event-log {}
 
-#event-log {
-
-}
-
-#response:empty, #data:empty, #clipboard-area:empty, #event-log:empty {
+#response:empty,
+#data:empty,
+#clipboard-area:empty,
+#event-log:empty,
+#sketch-socket:empty,
+#commander-socket:empty {
   display: none;
+}
+
+.container {
+  display: flex;
+  gap: var(--spacing);
+}
+
+#sketch-matrix {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--spacing);
+  flex: 2;
+  height: 80vh;
+  overflow-y: hidden;
+  border-radius: var(--border-radius);
+}
+
+#sketch-preview {
+  flex: 5;
+}
+
+.matrix-image {
+  flex: 1 0 calc(50% - 10px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: var(--border-radius);
+  background-color: var(--color-grey-dark);
+  cursor: pointer;
+}
+
+#sketch-preview-image {
+  height: 80vh;
+  width: 100%;
+  border-radius: var(--border-radius);
+  background-color: var(--color-grey-dark);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }

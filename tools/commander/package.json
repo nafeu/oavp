@@ -4,7 +4,10 @@
   "description": "generator script for oavp editor",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.mjs",
+    "start:dev": "nodemon index.mjs",
+    "browser-sync": "browser-sync start --proxy http://localhost:3001 --files 'views/**/*.ejs' 'public/**/*.css' 'public/**/*.js'",
+    "dev": "npm run start:dev & npm run browser-sync"
   },
   "keywords": [
     "generator",
@@ -26,7 +29,9 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
+    "browser-sync": "^3.0.2",
     "eslint": "^8.56.0",
-    "eslint-plugin-import": "^2.29.1"
+    "eslint-plugin-import": "^2.29.1",
+    "nodemon": "^3.0.3"
   }
 }

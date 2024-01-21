@@ -35,7 +35,7 @@ public boolean ENABLE_VIDEO_RENDER = false;
 public boolean ANALYZE_AUDIO = false;
 public int FRAME_OFFSET_MULTIPLIER = 0;
 public String FRAME_TITLE = "oavp";
-public int WEBSOCKET_PORT = 3000;
+public int WEBSOCKET_PORT = 6287;
 
 public DefaultEvents DEFAULT_EVENTS;
 

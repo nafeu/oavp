@@ -1,28 +1,27 @@
 import express from "express";
 import path from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
+
+import { getExportFilenames } from "./helpers.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import {
-  OAVP_OBJECT_PROPERTIES,
-  WEBSERVER_PORT,
-} from '../../constants.mjs';
+import { OAVP_OBJECT_PROPERTIES, WEBSERVER_PORT } from "../../constants.mjs";
 
 import {
   emitGeneratedSketchToServer,
-  writeGeneratedSketchToFile
-} from '../../helpers.mjs';
+  writeGeneratedSketchToFile,
+} from "../../helpers.mjs";
 
 const app = express();
 
-const setupExpressServer = ws => {
+const setupExpressServer = (ws) => {
   app.set("view engine", "ejs");
   app.use(express.json());
-  app.use(express.static(path.join(__dirname, '../../public')));
-  app.use(express.static(path.join(__dirname, '../../../../exports')));
-  app.set('views', path.join(__dirname, '../../views'));
+  app.use(express.static(path.join(__dirname, "../../public")));
+  app.use(express.static(path.join(__dirname, "../../../../exports")));
+  app.set("views", path.join(__dirname, "../../views"));
 
   app.locals.OAVP_OBJECT_PROPERTIES = JSON.stringify(OAVP_OBJECT_PROPERTIES);
 
@@ -36,7 +35,21 @@ const setupExpressServer = ws => {
   });
 
   app.get("/", (req, res) => res.render("controls"));
-  app.get("/viewer", (req, res) => res.render("viewer"));
+  app.get("/viewer", async (req, res) => {
+    let exportFilenames = [];
+
+    try {
+      exportFilenames = await getExportFilenames();
+
+      console.log({ exportFilenames });
+    } catch (err) {
+      console.log(
+        `[ oavp-commander:express-server ] Error getting export filenames...`,
+      );
+    }
+
+    res.render("viewer", { exportFilenames });
+  });
 
   app.get("/api", (req, res) => {
     res.sendStatus(200);
@@ -90,6 +103,6 @@ const setupExpressServer = ws => {
       `[ oavp-commander:webserver ] Webserver is running at http://localhost:${WEBSERVER_PORT}`,
     );
   });
-}
+};
 
 export default setupExpressServer;
