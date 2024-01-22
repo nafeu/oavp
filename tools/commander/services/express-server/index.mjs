@@ -40,8 +40,6 @@ const setupExpressServer = (ws) => {
 
     try {
       exportFilenames = await getExportFilenames();
-
-      console.log({ exportFilenames });
     } catch (err) {
       console.log(
         `[ oavp-commander:express-server ] Error getting export filenames...`,

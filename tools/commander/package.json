@@ -7,7 +7,9 @@
     "start": "nodemon index.mjs",
     "start:dev": "nodemon index.mjs",
     "browser-sync": "browser-sync start --proxy http://localhost:3001 --files 'views/**/*.ejs' 'public/**/*.css' 'public/**/*.js'",
-    "dev": "npm run start:dev & npm run browser-sync"
+    "dev": "npm run start:dev & npm run browser-sync",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [
     "generator",
@@ -29,9 +31,13 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
+    "@babel/preset-env": "^7.23.8",
+    "babel-jest": "^29.7.0",
     "browser-sync": "^3.0.2",
     "eslint": "^8.56.0",
     "eslint-plugin-import": "^2.29.1",
+    "esm": "^3.2.25",
+    "jest": "^29.7.0",
     "nodemon": "^3.0.3"
   }
 }

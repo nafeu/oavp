@@ -1,15 +1,25 @@
 import path from "path";
 import ncpPackage from "ncp";
+import _ from "lodash";
 
 const { ncp } = ncpPackage;
 
 import {
+  COLOR_EXTRACTION_REGEX,
   EXPORT_FILE_DIR,
   EXPORT_FILE_NAME,
   EXPORT_IMAGE_NAME,
   FILE_COPY_TIMEOUT_DURATION,
   IMAGE_COPY_TIMEOUT_DURATION,
+  INVALID_TAGS,
+  OAVP_OBJECT_PROPERTIES,
+  OBJECT_NAME_AND_SHAPE_REGEX,
+  OBJECT_NAME_REGEX,
+  OBJECT_PROPERTIES_REGEX,
+  OBJECT_PROPERTY_KEY_AND_VALUE_REGEX
 } from '../../constants.mjs';
+
+import { conceptMaps } from '../../concept-maps.mjs';
 
 import {
   wsServerBroadcast,
@@ -35,11 +45,11 @@ export const handlePresetEvent = ({ wsClients, logStream }) => {
     const isAddition = line.includes(".add(");
 
     if (isAddition) {
-      const objectName = line.match(/\.add\("[^"]+","([^"]+)"\)/)[1];
+      const objectName = line.match(OBJECT_NAME_REGEX)[1];
 
       presetOutput = `${objectName}|`;
     } else {
-      const regex = /\.set\("([^"]+)",\s*([^)]+)\)/g;
+      const regex = OBJECT_PROPERTIES_REGEX;
 
       let match;
 
@@ -113,3 +123,145 @@ export const handleExportImageEvent = () => {
     imageCopyTimeout = null;
   }, IMAGE_COPY_TIMEOUT_DURATION);
 };
+
+export const getValidTags = () => {
+  let output = [];
+
+  conceptMaps.forEach(conceptMap => {
+    conceptMap.split('\n').forEach(line => {
+      if (line.includes('|')) {
+        output.push(line);
+      }
+    });
+  });
+
+  output = _.chain(output.map(line => line.split('|')[0].split('_')))
+    .flatten()
+    .map(line => _.lowerCase(line))
+    .uniq()
+    .difference(INVALID_TAGS)
+    .value()
+
+  return output;
+}
+
+const getHexAlphaColorByInt = integerColor => {
+  const alpha = (integerColor >> 24) & 0xFF;
+  const red = (integerColor >> 16) & 0xFF;
+  const green = (integerColor >> 8) & 0xFF;
+  const blue = integerColor & 0xFF;
+
+  const alphaHex = alpha.toString(16).padStart(2, '0');
+  const redHex = red.toString(16).padStart(2, '0');
+  const greenHex = green.toString(16).padStart(2, '0');
+  const blueHex = blue.toString(16).padStart(2, '0');
+
+  const hexColor = `#${redHex}${greenHex}${blueHex}${alphaHex}`;
+
+  return hexColor;
+}
+
+const getHexColorByInt = integerColor => {
+  return getHexAlphaColorByInt(integerColor).substring(0, 7).toUpperCase();
+}
+
+export const generateSketchName = () => {}
+export const getColorNameByHex = () => {}
+export const getSketchId = () => {}
+
+export const buildSketchDataObject = ({
+  sketchFileContent,
+  _generateSketchName = generateSketchName,
+  _getColorNameByHex = getColorNameByHex,
+  _getSketchId = getSketchId
+}) => {
+  const output = {}
+
+  const allSketchFileLines = sketchFileContent
+    .split('\n')
+    .filter(line => line !== '')
+
+  allSketchFileLines.forEach(line => {
+    const isMetaData = _.includes(line, '//');
+    const isObjectDeclaration = _.includes(line, 'objects.add');
+    const isEditorColorAction = _.includes(
+      [
+        'editor.setBackgroundColor',
+        'editor.setAccentA',
+        'editor.setAccentB',
+        'editor.setAccentC',
+        'editor.setAccentD'
+      ],
+      line.split('(')[0],
+    );
+
+    if (isMetaData) {
+      const regex = /\/\/([^:]+):(.*)/;
+
+      const match = line.match(regex);
+
+      if (match) {
+        const [, key, value] = match;
+
+        const formattedKey = _.lowerCase(key);
+
+        output[formattedKey] = formattedKey === 'seed' ? Number(value) : value
+      }
+    }
+
+    if (isObjectDeclaration) {
+      const [nameAndShape, ...allProperties] = line.split('.set')
+
+      const [, objectName, objectShape] = nameAndShape.match(OBJECT_NAME_AND_SHAPE_REGEX);
+
+      const properties = allProperties.map(keyValuePair => {
+        const [, propertyKey, propertyValue] = keyValuePair.match(OBJECT_PROPERTY_KEY_AND_VALUE_REGEX);
+
+        const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: propertyKey }).type === "String";
+
+        return {
+          property: propertyKey,
+          value: isString ? propertyValue : Number(propertyValue)
+        }
+      });
+
+      output.objects = [
+        ...(output.objects || []),
+        {
+          name: objectName,
+          shape: objectShape,
+          properties
+        }
+      ]
+
+      const allTags = objectName.split('_');
+
+      output.tags = _.sortBy(_.uniq([
+        ...(output.tags || []),
+        ...allTags.filter(tag => _.includes(getValidTags(), tag))
+      ]))
+    }
+
+    if (isEditorColorAction) {
+      let colorObjectKey;
+
+      if (line.includes('AccentA')) { colorObjectKey = 'accentA' }
+      else if (line.includes('AccentB')) { colorObjectKey = 'accentB' }
+      else if (line.includes('AccentC')) { colorObjectKey = 'accentC' }
+      else if (line.includes('AccentD')) { colorObjectKey = 'accentD' }
+      else { colorObjectKey = 'background' }
+
+      const colorInt = Number(line.match(COLOR_EXTRACTION_REGEX)[1]);
+      const colorHex = getHexColorByInt(colorInt);
+      const colorName = _getColorNameByHex(colorHex);
+      const colorObjectValue = { int: colorInt, value: colorHex, name: colorName }
+
+      output.colors = { ...output.colors, [colorObjectKey]: colorObjectValue }
+    }
+  });
+
+  output.name = _generateSketchName();
+  output.id = _getSketchId();
+
+  return output
+}

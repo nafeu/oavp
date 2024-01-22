@@ -137,3 +137,50 @@ export const IMAGE_COPY_TIMEOUT_DURATION = 500;
 export const FILE_COPY_TIMEOUT_DURATION = 500;
 export const OVERRIDE_VALUES_DELIMITER = ";";
 export const PROPERTY_VALUE_DELIMITER = ":";
+export const OPJECT_NAME_REGEX = /\.add\("[^"]+","([^"]+)"\)/;
+export const OBJECT_NAME_AND_SHAPE_REGEX = /objects\.add\("([^"]+)",\s*"([^"]+)"\)/;
+export const OBJECT_PROPERTIES_REGEX = /\.set\("([^"]+)",\s*([^)]+)\)/g;
+export const OBJECT_PROPERTY_KEY_AND_VALUE_REGEX = /\("([^"]+)","?([^"]+)"?\)/;
+export const COLOR_EXTRACTION_REGEX = /\((-?\d+)\)/;
+
+export const INVALID_TAGS = [
+  'nofill',
+  'nostroke',
+  'backgroundstroke',
+  'notbackgroundstroke',
+  'accentastroke',
+  'notaccentastroke',
+  'accentbstroke',
+  'notaccentbstroke',
+  'accentcstroke',
+  'notaccentcstroke',
+  'accentdstroke',
+  'notaccentdstroke',
+  'backgroundfill',
+  'notbackgroundfill',
+  'accentafill',
+  'notaccentafill',
+  'accentbfill',
+  'notaccentbfill',
+  'accentcfill',
+  'notaccentcfill',
+  'accentdfill',
+  'notaccentdfill',
+  'main',
+  'background',
+  'camera',
+  'left',
+  'right',
+  'middle',
+  'a 1',
+  'a 2',
+  'a 3',
+  'b 1',
+  'b 2',
+  'b 3',
+  'c 1',
+  'c 2',
+  'c 3',
+  'a',
+  'b'
+]

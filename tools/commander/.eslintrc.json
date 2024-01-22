@@ -14,5 +14,15 @@
         "document": "readonly",
         "WebSocket": "readonly",
         "window": "readonly"
-    }
+    },
+    "overrides": [
+        {
+            "files": [
+                "**/*.spec.mjs"
+            ],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
 }
