@@ -133,11 +133,12 @@ export const DUMP_FILE_PATH = "preset-dump.txt";
 export const EXPORT_FILE_NAME = "export.txt";
 export const EXPORT_IMAGE_NAME = "export.png";
 export const EXPORT_FILE_DIR = "../../exports";
+export const GENOBJ_FILE_NAME = "genobj.json";
 export const IMAGE_COPY_TIMEOUT_DURATION = 500;
 export const FILE_COPY_TIMEOUT_DURATION = 500;
 export const OVERRIDE_VALUES_DELIMITER = ";";
 export const PROPERTY_VALUE_DELIMITER = ":";
-export const OPJECT_NAME_REGEX = /\.add\("[^"]+","([^"]+)"\)/;
+export const OBJECT_NAME_REGEX = /\.add\("[^"]+","([^"]+)"\)/;
 export const OBJECT_NAME_AND_SHAPE_REGEX = /objects\.add\("([^"]+)",\s*"([^"]+)"\)/;
 export const OBJECT_PROPERTIES_REGEX = /\.set\("([^"]+)",\s*([^)]+)\)/g;
 export const OBJECT_PROPERTY_KEY_AND_VALUE_REGEX = /\("([^"]+)","?([^"]+)"?\)/;
@@ -166,6 +167,11 @@ export const INVALID_TAGS = [
   'notaccentcfill',
   'accentdfill',
   'notaccentdfill',
+  'accenta',
+  'accentb',
+  'accentc',
+  'accentd',
+  'accente',
   'main',
   'background',
   'camera',

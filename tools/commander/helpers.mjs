@@ -12,7 +12,8 @@ import {
   OVERRIDE_VALUES_DELIMITER,
   PROPERTY_VALUE_DELIMITER,
   SINGLE_LINE_PARAMETER_SET_DELIMITER,
-  SKETCH_WEBSOCKET_SERVER_URL
+  SKETCH_WEBSOCKET_SERVER_URL,
+  GENOBJ_FILE_NAME
 } from "./constants.mjs";
 
 import { conceptMaps } from "./concept-maps.mjs";
@@ -72,6 +73,7 @@ export const getOverridesFromParameterSet = (singleLineParameterSet) => {
         overrides.push({
           id: property,
           value: overrideValue,
+          eval: value,
           type:
             _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type || "String",
         });
@@ -210,6 +212,8 @@ export const emitGeneratedSketchToServer = ({ ws, options = {} }) => {
       });
     });
   });
+
+  fs.writeFileSync(GENOBJ_FILE_NAME, JSON.stringify(objects));
 
   rand.cache = {};
 

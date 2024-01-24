@@ -4,7 +4,7 @@ window.oavpObjectProperties.forEach(({ id, type }) => {
   oavpObjectPropertiesTypeMapping[id] = type;
 });
 
-const sketchSocket = new WebSocket('ws://localhost:3000/commands');
+const sketchSocket = new WebSocket('ws://localhost:6287/commands');
 
 sketchSocket.addEventListener('open', (event) => {
   document.getElementById('sketch-socket').textContent = "[ socket ] WebSocket connection opened.";

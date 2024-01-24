@@ -23,5 +23,6 @@ screencap-code-exports/
 **/target.txt
 **/export.txt
 **/export.png
+**/genobj.json
 **/preset-dump.txt
 exports/

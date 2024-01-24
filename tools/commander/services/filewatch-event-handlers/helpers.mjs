@@ -1,6 +1,7 @@
 import path from "path";
 import ncpPackage from "ncp";
 import _ from "lodash";
+import fs from "fs";
 
 const { ncp } = ncpPackage;
 
@@ -9,6 +10,7 @@ import {
   EXPORT_FILE_DIR,
   EXPORT_FILE_NAME,
   EXPORT_IMAGE_NAME,
+  GENOBJ_FILE_NAME,
   FILE_COPY_TIMEOUT_DURATION,
   IMAGE_COPY_TIMEOUT_DURATION,
   INVALID_TAGS,
@@ -83,16 +85,22 @@ export const handleExportFileEvent = () => {
     }_sketch.txt`;
     const destinationFilePath = path.join(EXPORT_FILE_DIR, newFileName);
 
-    ncp(EXPORT_FILE_NAME, destinationFilePath, function (err) {
-      if (err) {
-        console.error(
-          `[ oavp-commander:file-copy ] Error writing to the destination file: ${err}`,
-        );
-      }
+    const genObjContent = fs.readFileSync(GENOBJ_FILE_NAME, 'utf8');
+    const exportedSketchContent = fs.readFileSync(EXPORT_FILE_NAME, 'utf8');
+
+    const finalContent = `//GENOBJ:${genObjContent}\n${exportedSketchContent}`;
+
+    try {
+      fs.writeFileSync(destinationFilePath, finalContent);
+
       console.log(
-        `[ oavp-commander:file-copy ] File copied successfully to ${destinationFilePath}`,
+        `[ oavp-commander:file-copy ] File copied with genObj successfully to ${destinationFilePath}`,
       );
-    });
+    } catch (err) {
+      console.error(
+        `[ oavp-commander:file-copy ] Error writing to the destination file: ${err}`,
+      );
+    }
 
     fileCopyTimeout = null;
   }, FILE_COPY_TIMEOUT_DURATION);
@@ -205,7 +213,11 @@ export const buildSketchDataObject = ({
 
         const formattedKey = _.lowerCase(key);
 
-        output[formattedKey] = formattedKey === 'seed' ? Number(value) : value
+        if (formattedKey === 'genobj') {
+          output.generatorObject = JSON.parse(value);
+        } else {
+          output[formattedKey] = formattedKey === 'seed' ? Number(value) : value
+        }
       }
     }
 
