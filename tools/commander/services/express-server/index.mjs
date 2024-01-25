@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { getExportFilenames } from "./helpers.mjs";
+import { getSketchDataObjects } from "./helpers.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,16 +37,25 @@ const setupExpressServer = (ws) => {
   app.get("/", (req, res) => res.render("controls"));
   app.get("/viewer", async (req, res) => {
     let exportFilenames = [];
+    let sketchDataObjects = {};
 
     try {
-      exportFilenames = await getExportFilenames();
+      const {
+        exportFilenames: fetchedExportFilenames,
+        sketchDataObjects: fetchedSketchDataObjects
+      } = await getSketchDataObjects();
+
+      exportFilenames = fetchedExportFilenames;
+      sketchDataObjects = fetchedSketchDataObjects;
     } catch (err) {
+      console.error(err);
+
       console.log(
         `[ oavp-commander:express-server ] Error getting export filenames...`,
       );
     }
 
-    res.render("viewer", { exportFilenames });
+    res.render("viewer", { exportFilenames, sketchDataObjects: JSON.stringify(sketchDataObjects) });
   });
 
   app.get("/api", (req, res) => {
