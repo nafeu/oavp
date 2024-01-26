@@ -230,6 +230,62 @@ export const emitGeneratedSketchToServer = ({ ws, options = {} }) => {
   return objects;
 };
 
+export const loadSketchDataObjectToServer = ({ ws, sketchDataObject }) => {
+  console.log(
+    `[ oavp-commander ] Loading sketchDataObject to ${SKETCH_WEBSOCKET_SERVER_URL}`,
+  );
+
+  const objects = sketchDataObject.objects.map(({ shape, name, properties }) => {
+    const overrides = properties.map(({ property, value }) => {
+      const id = property;
+      const type = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type;
+
+      return { id, type, value }
+    }).filter(({ id, value }) => {
+      const { defaultValue } = _.find(OAVP_OBJECT_PROPERTIES, { id });
+
+      return value !== defaultValue;
+    });
+
+    return {
+      oavpObject: shape,
+      id: name,
+      params: overrides
+    }
+  });
+
+  const colors = Object.keys(sketchDataObject.colors).reduce((mapping, key) => {
+    const { int } = sketchDataObject.colors[key];
+
+    mapping[key] = int;
+
+    return mapping;
+  }, {});
+
+  const paletteArrayString = Object.keys(sketchDataObject.colors).map(
+    key => sketchDataObject.colors[key].value
+  ).sort().join(',');
+
+  const seed = sketchDataObject.seed;
+
+  // TODO: Enable if using re-seed functionality
+  // rand.cache = {};
+
+  const message = {
+    command: "load",
+    seed,
+    objects,
+    colors,
+    paletteArrayString
+  };
+
+  const stringifiedMessage = JSON.stringify(message);
+
+  ws.send(stringifiedMessage);
+  console.log(`[ oavp-commander ] WebSocket command sent: ${message.command}`);
+  return objects;
+};
+
 export const compareFiles = () => {
   if (!fs.existsSync("default.txt")) {
     console.log('Missing "default.txt" file');

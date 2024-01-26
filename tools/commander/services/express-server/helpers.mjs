@@ -22,7 +22,7 @@ export const getSketchDataObjects = async () => {
         const data = await fs.readFile(filepath, 'utf8');
         sketchDataObjects[filename] = buildSketchDataObject({ sketchFileContent: data });
       } catch (err) {
-        console.error(`Error reading ${filepath}:`, err);
+        console.error(`[ oavp-commander:express-server ] Error reading ${filepath}:`, err);
       }
     }
 
@@ -41,8 +41,10 @@ export const getSketchDataObjects = async () => {
   try {
     const sketchDataObjects = await readFilesToObject(exportFilenames);
 
-    return { exportFilenames, sketchDataObjects };
+    return sketchDataObjects;
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[ oavp-commander:express-server ] Error:', error);
   }
+
+  return {}
 };

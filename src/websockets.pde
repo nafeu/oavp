@@ -1,8 +1,8 @@
 void webSocketServerEvent(String msg) {
-  println("[ oavp ] Socket Event Received: " + msg);
-
   JSONObject message = parseJSONObject(msg);
   String command = message.getString("command");
+
+  println("[ oavp ] Socket command received: " + command);
 
   if (command.equals("write-objects")) {
     JSONArray receivedOavpObjects = message.getJSONArray("objects");
@@ -11,21 +11,26 @@ void webSocketServerEvent(String msg) {
     handleReceivedOavpObjects(receivedOavpObjects);
     loop();
   }
+
   else if (command.equals("reset")) {
     noLoop();
     objects.removeAll();
     loop();
   }
+
   else if (command.equals("save-preset")) {
     objects.exportObjectData();
   }
+
   else if (command.equals("randomize-palette")){
     randomizePalette();
     randomizeAllColors();
   }
+
   else if (command.equals("randomize-colors")) {
     randomizeAllColors();
   }
+
   else if (command.equals("feeling-lucky")) {
     JSONArray receivedOavpObjects = message.getJSONArray("objects");
     int seed = message.getInt("seed");
@@ -38,6 +43,30 @@ void webSocketServerEvent(String msg) {
     randomizeAllColors();
     loop();
   }
+
+  else if (command.equals("load")) {
+    JSONArray receivedOavpObjects = message.getJSONArray("objects");
+    int seed = message.getInt("seed");
+    JSONObject colors = message.getJSONObject("colors");
+    String paletteArrayString = message.getString("paletteArrayString");
+
+    noLoop();
+    println("[ oavp ] Removing all objects...");
+    objects.removeAll();
+    println("[ oavp ] Setting seed value...");
+    setSketchSeed(seed);
+    println("[ oavp ] Setting color palette values...");
+    editor.setPaletteByArrayString(paletteArrayString);
+    editor.setBackgroundColor(colors.getInt("background"));
+    editor.setAccentA(colors.getInt("accentA"));
+    editor.setAccentB(colors.getInt("accentB"));
+    editor.setAccentC(colors.getInt("accentC"));
+    editor.setAccentD(colors.getInt("accentD"));
+    println("[ oavp ] Inserting new objects...");
+    handleReceivedOavpObjects(receivedOavpObjects);
+    loop();
+  }
+
   else if (command.equals("direct-edit")) {
     String propertyName = message.getString("name");
     String propertyType = message.getString("type");
@@ -60,6 +89,7 @@ void webSocketServerEvent(String msg) {
       editor.externalDirectEdit(propertyName, propertyValue);
     }
   }
+
   else if (command.equals("preview-edit")) {
     String propertyName = message.getString("name");
     String propertyType = message.getString("type");
@@ -82,20 +112,25 @@ void webSocketServerEvent(String msg) {
       editor.previewEdit(propertyName, propertyValue); editor.commitEdit(propertyName);
     }
   }
+
   else if (command.equals("toggle-edit")) {
     editor.toggleEditMode();
   }
+
   else if (command.equals("next-object")) {
     objects.nextActiveVariable();
     updateEditorVariableMeta();
   }
+
   else if (command.equals("prev-object")) {
     objects.prevActiveVariable();
     updateEditorVariableMeta();
   }
+
   else if (command.equals("export-sketch")) {
     editor.queueExportSketchToFile();
   }
+
   else {
     println("[ oavp ] Command not recognized");
   }

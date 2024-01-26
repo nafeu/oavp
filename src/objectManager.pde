@@ -96,8 +96,8 @@ public class OavpObjectManager {
     String activeObjectName = this.getActiveVariable().name;
 
     if (
-      activeObjectName != "background"
-      && activeObjectName != "camera"
+      !activeObjectName.equals("background")
+      && !activeObjectName.equals("camera")
     ) {
       println("[" + (selectionCounter++) + "] - Removing variable: " + activeObjectName);
       activeObjects.remove(this.getActiveObject());
@@ -110,7 +110,7 @@ public class OavpObjectManager {
     while (activeObjects.size() > 2 && objectsStorage.size() > 2) {
       String activeObjectName = this.getActiveVariable().name;
 
-      while(activeObjectName == "background" || activeObjectName == "camera") {
+      while(activeObjectName.equals("background") || activeObjectName.equals("camera")) {
         nextActiveVariable();
         activeObjectName = this.getActiveVariable().name;
       }

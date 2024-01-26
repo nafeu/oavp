@@ -190,7 +190,7 @@ document.getElementById('data').addEventListener('click', function () {
 
 // eslint-disable-next-line no-unused-vars
 function handleClickMatrixImage(filename) {
-  console.log({ event: 'click', filename });
+  sendApiCommand({ command: 'load', sketchDataObject: window.sketchDataObjects[filename] })
 }
 
 // eslint-disable-next-line no-unused-vars

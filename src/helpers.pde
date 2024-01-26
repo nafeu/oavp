@@ -277,8 +277,8 @@ boolean isColorsArrayEqual(String[] arrayA, String[] arrayB) {
 
   arrayCopy(arrayA, sortedArrayA);
   arrayCopy(arrayB, sortedArrayB);
-  sort(sortedArrayA);
-  sort(sortedArrayB);
+  sortedArrayA = sort(sortedArrayA);
+  sortedArrayB = sort(sortedArrayB);
 
   if (sortedArrayA.length != sortedArrayB.length) {
     return false;

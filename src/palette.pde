@@ -141,15 +141,18 @@ public class OavpPalette {
   }
 
   public int getPaletteIndexByColorValuesList(String colorValuesList) {
+    println("[ oavp ] Given paletteArrayString: " + colorValuesList);
+
     String[] colorValues = splitTokens(colorValuesList, ",");
 
     for (int i = 0; i < table.size(); i++) {
       if (isColorsArrayEqual(colorValues, colorsToHexStrings(table.get(i)))) {
+        println("[ oavp ] Matched paletteArrayString at index: " + i);
         return i;
       }
     }
 
-    println("[ oavp ] Could not find palette: " + colorValuesList + ", loading default...");
+    println("[ oavp ] Could not match palette, loading default...");
 
     return 0;
   }
@@ -180,6 +183,14 @@ public class OavpPalette {
     FlatUIColors() {}
   }
 }
+
+// Use this to debug palette matching algo
+int[][] COLOR_PALETTES_DEBUG = {
+  {#B7CBBF, #8C886F, #F9A799, #F4BFAD, #F5DABD},
+  {#FFFFFF, #000000, #E74C3C, #2ECC71, #3498DB},
+  {#69D2E7, #A7DBD8, #E0E4CC, #F38630, #FA6900},
+  {#FE4365, #FC9D9A, #F9CDAD, #C8C8A9, #83AF9B}
+};
 
 // Each palette must be a minimum of 5 colors
 int[][] COLOR_PALETTES = {
