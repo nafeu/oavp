@@ -268,9 +268,6 @@ export const loadSketchDataObjectToServer = ({ ws, sketchDataObject }) => {
 
   const seed = sketchDataObject.seed;
 
-  // TODO: Enable if using re-seed functionality
-  // rand.cache = {};
-
   const message = {
     command: "load",
     seed,
@@ -285,6 +282,44 @@ export const loadSketchDataObjectToServer = ({ ws, sketchDataObject }) => {
   console.log(`[ oavp-commander ] WebSocket command sent: ${message.command}`);
   return objects;
 };
+
+export const reseedSketchOnServer = ({ ws, sketchDataObject }) => {
+  console.log(
+    `[ oavp-commander ] Re-seeding sketchDataObject to ${SKETCH_WEBSOCKET_SERVER_URL}`,
+  );
+
+  const reseedObjects = sketchDataObject.generatorObject.map(({ oavpObject, params, id }) => {
+    const evaluatedParams = params
+      .filter(
+        ({ type, ...attributes }) => (type === 'int' || type === 'float') && attributes.eval.includes("rand")
+      )
+      .map(({ id, type, ...attributes }) => {
+        const value = eval(attributes.eval);
+
+        return { id, type, value }
+      });
+
+    return {
+      oavpObject,
+      id,
+      params: evaluatedParams
+    }
+  });
+
+  rand.cache = {};
+
+  const message = {
+    command: "reseed",
+    seed: rand(0, 100),
+    reseedObjects
+  };
+
+  const stringifiedMessage = JSON.stringify(message);
+
+  ws.send(stringifiedMessage);
+  console.log(`[ oavp-commander ] WebSocket command sent: ${message.command}`);
+  return reseedObjects;
+}
 
 export const compareFiles = () => {
   if (!fs.existsSync("default.txt")) {
@@ -327,11 +362,11 @@ export const countFiles = (directoryPath, filePattern) => {
   try {
     const files = fs.readdirSync(directoryPath);
 
-    const sketchFiles = files.filter((file) => {
+    const sketchFileNumbers = files.filter((file) => {
       return file.endsWith(filePattern);
-    });
+    }).map(file => Number(file.split('_')[0]));
 
-    return sketchFiles.length;
+    return Math.max(...sketchFileNumbers);
   } catch (err) {
     console.error(`Error counting files: ${err}`);
     return -1;

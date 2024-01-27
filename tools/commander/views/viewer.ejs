@@ -13,9 +13,10 @@
       <div
         class="matrix-image"
         style="background-image: url('<%= filename %>.png');"
-        onclick="handleClickMatrixImage('<%= filename %>');"
         onmouseenter="handleHoverMatrixImage('<%= filename %>');"
       >
+        <button onclick="handleClickLoadSketch('<%= filename %>');">Load</button>
+        <button onclick="handleClickReseedSketch('<%= filename %>');">Reseed</button>
       </div>
     <% }); %>
   </div>

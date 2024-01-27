@@ -4,7 +4,7 @@
   "description": "generator script for oavp editor",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.mjs",
+    "start": "node index.mjs",
     "start:dev": "nodemon index.mjs",
     "browser-sync": "browser-sync start --proxy http://localhost:3001 --files 'views/**/*.ejs' 'public/**/*.css' 'public/**/*.js'",
     "dev": "npm run start:dev & npm run browser-sync",

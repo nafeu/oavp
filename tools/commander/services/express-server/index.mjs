@@ -13,6 +13,7 @@ import {
   emitGeneratedSketchToServer,
   writeGeneratedSketchToFile,
   loadSketchDataObjectToServer,
+  reseedSketchOnServer,
 } from "../../helpers.mjs";
 
 const app = express();
@@ -96,6 +97,15 @@ const setupExpressServer = ws => {
         status: "success",
         message: `Resetting previous sketch, loading sketchDataObject.`,
         data: loadedSketch,
+      });
+    }
+
+    else if (command === "reseed") {
+      const reseedObjects = reseedSketchOnServer({ ws, sketchDataObject: params.sketchDataObject });
+      res.json({
+        status: "success",
+        message: `Re-seeded generated objects in active sketch.`,
+        data: reseedObjects,
       });
     }
 

@@ -8,6 +8,7 @@
   --color-d: #05c46b;
   --color-e: #00d8d6;
   --spacing: 10px;
+  --spacing-sm: 5px;
   --border-radius: 5px;
   --spacing-divider: 15px;
   --color-grey-dark: rgba(72, 84, 96, 0.25);
@@ -194,6 +195,15 @@ pre {
   border-radius: var(--border-radius);
   background-color: var(--color-grey-dark);
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  button {
+    font-size: 0.75em;
+    margin-bottom: var(--spacing-sm);
+    margin-left: var(--spacing-sm);
+  }
 }
 
 #sketch-preview-image {

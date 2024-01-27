@@ -67,6 +67,18 @@ void webSocketServerEvent(String msg) {
     loop();
   }
 
+  else if (command.equals("reseed")) {
+    JSONArray receivedReseedObjects = message.getJSONArray("reseedObjects");
+    int seed = message.getInt("seed");
+
+    noLoop();
+    println("[ oavp ] Setting seed value...");
+    setSketchSeed(seed);
+    println("[ oavp ] Updating existing objects with reseed values...");
+    handleReceivedReseedObjects(receivedReseedObjects);
+    loop();
+  }
+
   else if (command.equals("direct-edit")) {
     String propertyName = message.getString("name");
     String propertyType = message.getString("type");
@@ -177,6 +189,43 @@ void handleReceivedOavpObjects(JSONArray oavpObjects) {
             activeEditorVariable.set(paramId, paramValue);
           } else if (paramType.equals("color")) {
             color paramValue = objectParam.getInt("value");
+
+            activeEditorVariable.set(paramId, paramValue);
+          }
+        }
+      }
+    }
+  }
+}
+
+void handleReceivedReseedObjects(JSONArray reseedObjects) {
+  if (reseedObjects == null) {
+    println("[ oavp ] reseedObjects JSONArray could not be parsed");
+  } else {
+    for (int i = 0; i < reseedObjects.size(); i++) {
+      JSONObject receivedReseedObject = reseedObjects.getJSONObject(i);
+
+      String objectId = receivedReseedObject.getString("id");
+      JSONArray objectParams = receivedReseedObject.getJSONArray("params");
+
+      OavpVariable activeEditorVariable = objects.get(objectId).getVariable();
+
+      if (objectParams == null) {
+        println("[ oavp ] objectParams JSONArray could not be parsed");
+      } else {
+        for (int j = 0; j < objectParams.size(); j++) {
+          JSONObject objectParam = objectParams.getJSONObject(j);
+
+          String paramId = objectParam.getString("id");
+          String paramType = objectParam.getString("type");
+
+          // Note: Potentially add support for reseeding strings?
+          if (paramType.equals("int")) {
+            int paramValue = objectParam.getInt("value");
+
+            activeEditorVariable.set(paramId, paramValue);
+          } else if (paramType.equals("float")) {
+            float paramValue = objectParam.getFloat("value");
 
             activeEditorVariable.set(paramId, paramValue);
           }

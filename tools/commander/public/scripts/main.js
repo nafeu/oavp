@@ -189,8 +189,13 @@ document.getElementById('data').addEventListener('click', function () {
 });
 
 // eslint-disable-next-line no-unused-vars
-function handleClickMatrixImage(filename) {
+function handleClickLoadSketch(filename) {
   sendApiCommand({ command: 'load', sketchDataObject: window.sketchDataObjects[filename] })
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleClickReseedSketch(filename) {
+  sendApiCommand({ command: 'reseed', sketchDataObject: window.sketchDataObjects[filename] })
 }
 
 // eslint-disable-next-line no-unused-vars
