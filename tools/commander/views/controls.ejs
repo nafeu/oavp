@@ -2,13 +2,13 @@
 <%- include('partials/navigation') %>
 
 <div id="command-buttons">
-  <button id="buttonE" onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
-  <button id="buttonX" onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
-  <button id="buttonG" onclick="sendApiCommand({ command: 'generate' })">Generate</button>
-  <button id="button|" onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
-  <button id="buttonP" onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
-  <button id="buttonN" onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
-  <button id="buttonM" onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
+  <button onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
+  <button onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
+  <button onclick="sendApiCommand({ command: 'generate' })">Generate</button>
+  <button onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
+  <button onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
+  <button onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
+  <button onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
   <button onclick="sendApiCommand({ command: 'feeling-lucky' })">Feeling Lucky</button>
 </div>
 <div id="property-selections">
@@ -140,16 +140,16 @@
     })">
       Direct Edit
   </button>
-  <button id="button]" onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
-  <button id="button[" onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
+  <button onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
+  <button onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
 </div>
 <div id="preview-edit-intervals">
-  <button id="button1" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
-  <button id="button2" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
-  <button id="button4" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 5000 })">+5000</button>
-  <button id="button5" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -5000 })">-5000</button>
-  <button id="button7" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
-  <button id="button8" onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 5000 })">+5000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -5000 })">-5000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
+  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
 </div>
 
 <%- include('partials/console') %>

@@ -173,16 +173,7 @@ const getHexColorByInt = integerColor => {
   return getHexAlphaColorByInt(integerColor).substring(0, 7).toUpperCase();
 }
 
-export const generateSketchName = () => {}
-export const getColorNameByHex = () => {}
-export const getSketchId = () => {}
-
-export const buildSketchDataObject = ({
-  sketchFileContent,
-  _generateSketchName = generateSketchName,
-  _getColorNameByHex = getColorNameByHex,
-  _getSketchId = getSketchId
-}) => {
+export const buildSketchDataObject = sketchFileContent => {
   const output = {}
 
   const allSketchFileLines = sketchFileContent
@@ -265,15 +256,11 @@ export const buildSketchDataObject = ({
 
       const colorInt = Number(line.match(COLOR_EXTRACTION_REGEX)[1]);
       const colorHex = getHexColorByInt(colorInt);
-      const colorName = _getColorNameByHex(colorHex);
-      const colorObjectValue = { int: colorInt, value: colorHex, name: colorName }
+      const colorObjectValue = { int: colorInt, value: colorHex }
 
       output.colors = { ...output.colors, [colorObjectKey]: colorObjectValue }
     }
   });
-
-  output.name = _generateSketchName();
-  output.id = _getSketchId();
 
   return output
 }

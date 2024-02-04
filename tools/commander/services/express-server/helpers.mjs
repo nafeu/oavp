@@ -3,6 +3,19 @@ import fs from "fs/promises";
 import { EXPORT_FILE_DIR } from "../../constants.mjs";
 import { buildSketchDataObject } from '../filewatch-event-handlers/helpers.mjs';
 
+async function fileExists(filePath) {
+  try {
+    await fs.access(filePath, fs.constants.F_OK);
+    return true; // File exists
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return false; // File does not exist
+    } else {
+      throw error; // Other errors are propagated
+    }
+  }
+}
+
 export const getSketchDataObjects = async () => {
   const files = await fs.readdir(EXPORT_FILE_DIR);
 
@@ -17,12 +30,28 @@ export const getSketchDataObjects = async () => {
   async function readFilesToObject(filenames) {
     const sketchDataObjects = {};
 
-    async function buildSketchDataObjectsFromFile({ filename, filepath }) {
+    async function buildSketchDataObjectsFromFile({ filename, textFilePath, jsonFilePath }) {
       try {
-        const data = await fs.readFile(filepath, 'utf8');
-        sketchDataObjects[filename] = buildSketchDataObject({ sketchFileContent: data });
+        const jsonExists = await fileExists(jsonFilePath)
+
+        if (jsonExists) {
+          console.log(`[ oavp-commader:load-sketch-data-objects ] loading ${filename}.json`);
+          const jsonContent = await fs.readFile(jsonFilePath, 'utf-8');
+          const jsonData = JSON.parse(jsonContent);
+
+          sketchDataObjects[filename] = jsonData;
+        } else {
+          console.log(`[ oavp-commader:load-sketch-data-objects ] ${filename}.json does not exist, constructing...`);
+          const data = await fs.readFile(textFilePath, 'utf8');
+          const jsonData = buildSketchDataObject(data);
+          sketchDataObjects[filename] = jsonData;
+
+          await fs.writeFile(jsonFilePath, JSON.stringify(jsonData), 'utf-8');
+        }
+
+        // TODO: Continue ~ add "save" button in viewer which will save changes to the appropriate sketchDataObject, it should just be in #_sketch.json
       } catch (err) {
-        console.error(`[ oavp-commander:express-server ] Error reading ${filepath}:`, err);
+        console.error(`[ oavp-commander:express-server ] Error building sketchDataObjects`, err);
       }
     }
 
@@ -30,7 +59,8 @@ export const getSketchDataObjects = async () => {
       filenames.map(
         (filename) => buildSketchDataObjectsFromFile({
           filename,
-          filepath: `../../exports/${filename}.txt`
+          textFilePath: `../../exports/${filename}.txt`,
+          jsonFilePath: `../../exports/${filename}.json`
         })
       )
     );

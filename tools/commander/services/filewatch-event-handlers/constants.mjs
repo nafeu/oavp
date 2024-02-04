@@ -22,40 +22,33 @@ void drawSketch() {}
 `
 
 export const EXAMPLE_SKETCH_DATA_OBJECT = {
-  "name": "Example Sketch Name",
   "date": "Tue Jan 23 22:06:22 EST 2024",
   "seed": 26,
   "colors": {
     "background": {
       "int": -10564128,
-      "value": "#5ECDE0",
-      "name": "red"
+      "value": "#5ECDE0"
     },
     "accentA": {
       "int": -3866679,
-      "value": "#C4FFC9",
-      "name": "red"
+      "value": "#C4FFC9"
     },
     "accentB": {
       "int": -6381922,
-      "value": "#9E9E9E",
-      "name": "red"
+      "value": "#9E9E9E"
     },
     "accentC": {
       "int": -2039584,
-      "value": "#E0E0E0",
-      "name": "red"
+      "value": "#E0E0E0"
     },
     "accentD": {
       "int": -16711694,
-      "value": "#00FFF2",
-      "name": "red"
+      "value": "#00FFF2"
     }
   },
   "tags": [
     "horizon"
   ],
-  "id": "00001",
   "objects": [
     {
       "name": "background",

@@ -174,13 +174,11 @@ pre {
 
 #sketch-matrix {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--spacing);
-  flex: 2;
   height: 80vh;
-  overflow-y: hidden;
   border-radius: var(--border-radius);
+  overflow-x: hidden;
 }
 
 #sketch-preview {
@@ -188,19 +186,23 @@ pre {
 }
 
 .matrix-image {
-  flex: 1 0 calc(50% - 10px);
+  height: 75px;
+  width: 140px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: var(--border-radius);
   background-color: var(--color-grey-dark);
-  cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
 
   button {
+    cursor: pointer;
     font-size: 0.75em;
+    padding: 5px;
+    display: flex;
+    background-color: var(--color-white);
     margin-bottom: var(--spacing-sm);
     margin-left: var(--spacing-sm);
   }
@@ -214,4 +216,66 @@ pre {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+#details-menu {
+  display: none;
+  flex: 2;
+  background-color: var(--color-grey-dark);
+  padding: var(--spacing);
+
+  svg {
+    fill: var(--color-white);
+  }
+
+  pre {
+    border: none;
+    width: 100%;
+  }
+}
+
+#loaded-actions {
+  display: none;
+  position: absolute;
+  gap: var(--spacing);
+  padding: var(--spacing);
+
+  svg {
+    fill: var(--color-white);
+    width: 25px;
+    height: 25px;
+  }
+
+  button {
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+  }
+}
+
+svg {
+  width: 15px;
+  height: 15px;
+  fill: var(--color-black);
+}
+
+#details-menu {
+  textarea, input {
+    border-radius: 5px;
+    padding: var(--spacing);
+    background-color: var(--color-black);
+    color: var(--color-white);
+    margin-top: var(--spacing);
+  }
+}
+
+#details-menu-actions, #details-finalization-actions {
+  display: flex;
+  gap: var(--spacing);
+  flex-wrap: wrap;
+  padding: var(--spacing) 0;
+
+  button {
+    font-size: 0.75em;
+  }
 }

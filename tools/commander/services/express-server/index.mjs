@@ -3,6 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { getSketchDataObjects } from "./helpers.mjs";
+import { generateName } from "../name-generator/index.mjs";
+import { getNamesByColorPalette } from "../color-palette-info/index.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -123,6 +125,16 @@ const setupExpressServer = ws => {
         message: `Unrecognized command: ${command}`,
       });
     }
+  });
+
+  app.get("/api/name", (req, res) => {
+    res.json({ name: generateName() })
+  });
+
+  app.post("/api/colors", (req, res) => {
+    const { colors } = req.body;
+
+    res.json({ colorNames: getNamesByColorPalette(colors) });
   });
 
   app.listen(WEBSERVER_PORT, () => {
