@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from 'fs/promises';
 
 import { getSketchDataObjects } from "./helpers.mjs";
 import { generateName } from "../name-generator/index.mjs";
@@ -136,6 +137,20 @@ const setupExpressServer = ws => {
 
     res.json({ colorNames: getNamesByColorPalette(colors) });
   });
+
+  app.post("/api/save-sketch", async (req, res) => {
+    const { filename, sketchDataObject } = req.body;
+
+    try {
+      await fs.writeFile(`../../exports/${filename}.json`, JSON.stringify(sketchDataObject, null, 2), 'utf-8');
+
+      res.json({ message: `Saved ../../exports/${filename}.json successfully` });
+    } catch (err) {
+      console.error(err);
+
+      res.json({ error: err });
+    }
+  })
 
   app.listen(WEBSERVER_PORT, () => {
     console.log(

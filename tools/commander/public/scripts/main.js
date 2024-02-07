@@ -7,7 +7,7 @@ follow for more ▶ #landscapeart #art #generativeart #creativecoding #abstractl
 let selectedSketch = null;
 let isLoading = false;
 let idCounter = 0;
-let socialMediaTextContent;
+let socialMediaTextContent = '';
 
 const oavpObjectPropertiesTypeMapping = {};
 
@@ -68,6 +68,26 @@ commanderSocket.addEventListener('close', (event) => {
   $('#commander-socket').textContent = "[ commander ] WebSocket connection closed.";
   console.log('WebSocket connection closed:', event);
 });
+
+// eslint-disable-next-line no-unused-vars
+function debounce(func, delay) {
+  let timeoutId;
+  return function () {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
+      func.apply(context, args);
+    }, delay);
+  };
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleTextareaUpdate() {
+  socialMediaTextContent = $('#social-media-text').value;
+  window.sketchDataObjects[selectedSketch].socialMediaTextContent = socialMediaTextContent;
+  handleClickSave();
+}
 
 function sendSocketCommand({ command, ...params }) {
   const responseElement = $('#response');
@@ -181,6 +201,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.execCommand('copy');
     document.body.removeChild(tempTextarea);
   });
+
+  $('#social-media-text').addEventListener('input', debounce(handleTextareaUpdate, 200));
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -193,19 +215,24 @@ function handleClickReseedSketch() {
   sendApiCommand({ command: 'reseed', sketchDataObject: window.sketchDataObjects[selectedSketch] })
 }
 
-function rebuildSocialMediaText({ newId, newName, newPaletteString } = {}) {
-  const { colors, tags, name, paletteString, id } = window.sketchDataObjects[selectedSketch];
+function rebuildSocialMediaText({ newId, newName, newPaletteString, save } = {}) {
+  const { colors, tags, name, paletteString, id, socialMediaTextContent } = window.sketchDataObjects[selectedSketch];
 
-  const encodedId = newId || id || '0000X';
-  const encodedName = (newName || name || 'example_name')
-    .split(' ')
-    .join('_');
+  if (socialMediaTextContent) {
+    $('#social-media-text').textContent = socialMediaTextContent;
+    $('#social-media-text').value = socialMediaTextContent;
+  } else {
+    const encodedId = newId || id || '0000X';
+    const encodedName = (newName || name || 'example_name')
+      .split(' ')
+      .join('_');
 
-  const encodedPalette = newPaletteString
-    || paletteString
-    || Object.keys(colors).map(key => colors[key].value).join(' ');
+    const encodedPalette = newPaletteString
+      || paletteString
+      || Object.keys(colors).map(key => colors[key].value).join(' ');
 
-  const socialMediaText = `${encodedId}_${encodedName}
+/* Line-spacing specific constant - START */
+    const socialMediaText = `${encodedId}_${encodedName}
 
 ${`palette ▶ ${encodedPalette}`}
 
@@ -213,8 +240,14 @@ ${`objects ▶ ${tags.join(' ')}`}
 
 ${socialMediaTemplate}
 `
+/* Line-spacing specific constant - END */
+    $("#social-media-text").textContent = socialMediaText;
+    $("#social-media-text").value = socialMediaText;
+  }
 
-  $("#social-media-text").textContent = socialMediaText;
+  if (save) {
+    handleTextareaUpdate();
+  }
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -222,6 +255,7 @@ function handleClickViewSketch(filename) {
   selectedSketch = filename;
 
   $("#sketch-preview-image").style.backgroundImage = `url(${filename}.png)`;
+  $("#sketch-filename").textContent = filename;
 
   rebuildSocialMediaText();
 
@@ -240,7 +274,7 @@ function handleClickGenerateName() {
       .then(({ name }) => {
         window.sketchDataObjects[selectedSketch].name = name;
 
-        rebuildSocialMediaText({ newName: name });
+        rebuildSocialMediaText({ newName: name, save: true });
 
         $("#sketch-name-button").textContent = "Generate Name";
 
@@ -273,7 +307,7 @@ function handleClickGeneratePalette() {
       .then(({ colorNames }) => {
         window.sketchDataObjects[selectedSketch].paletteString = colorNames.join(' ');
 
-        rebuildSocialMediaText({ newPaletteString: colorNames.join(' ') });
+        rebuildSocialMediaText({ newPaletteString: colorNames.join(' '), save: true });
 
         $("#sketch-palette-button").textContent = "Generate Palette"
 
@@ -282,6 +316,41 @@ function handleClickGeneratePalette() {
       .catch(error => {
         console.error(error);
         $("#sketch-palette-button").textContent = "Generate Palette"
+
+        isLoading = false;
+      });
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleClickSave() {
+  if (!isLoading) {
+    isLoading = true;
+
+    $("#sketch-save-button").textContent = "Saving..."
+
+    fetch('/api/save-sketch', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ filename: selectedSketch, sketchDataObject: window.sketchDataObjects[selectedSketch] }),
+    })
+      .then(response => response.json())
+      .then(({ message }) => {
+        console.log(message);
+
+        $("#sketch-save-button").textContent = "Saved."
+
+        isLoading = false;
+      })
+      .catch(error => {
+        console.error(error);
+
+        // eslint-disable-next-line no-undef
+        alert(error);
+
+        $("#sketch-save-button").textContent = "Error Saving"
 
         isLoading = false;
       });
@@ -303,7 +372,7 @@ function handleClickIncrementId() {
 
   window.sketchDataObjects[selectedSketch].id = newId;
 
-  rebuildSocialMediaText({ newId })
+  rebuildSocialMediaText({ newId, save: true })
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -312,7 +381,7 @@ function handleClickDecrementId() {
 
   window.sketchDataObjects[selectedSketch].id = newId;
 
-  rebuildSocialMediaText({ newId })
+  rebuildSocialMediaText({ newId, save: true })
 }
 
 // eslint-disable-next-line no-unused-vars
