@@ -1,5 +1,5 @@
 export const EXAMPLE_SKETCH_FILE = `
-//GENOBJ:[{"oavpObject":"Rectangle","params":[{"id":"y","value":40000,"eval":"40000","type":"int"},{"id":"z","value":-65000,"eval":"-65000","type":"int"},{"id":"w","value":200000,"eval":"200000.0","type":"float"},{"id":"h","value":80000,"eval":"80000.0","type":"float"}],"id":"Rectangle_horizon_accentafill_3QgpWVUAZ"}]
+//GENOBJ:[{"oavpObject":"Rectangle","params":[{"property":"y","value":40000,"eval":"40000","type":"int"},{"property":"z","value":-65000,"eval":"-65000","type":"int"},{"property":"w","value":200000,"eval":"200000.0","type":"float"},{"property":"h","value":80000,"eval":"80000.0","type":"float"}],"property":"Rectangle_horizon_accentafill_3QgpWVUAZ"}]
 //DATE:Tue Jan 23 22:06:22 EST 2024
 //PALETTE:#9E9E9E,#5ECDE0,#00FFF2,#C4FFC9,#E0E0E0
 //SEED:26
@@ -351,31 +351,31 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
       "params":
       [
         {
-          "id": "y",
+          "property": "y",
           "value": 40000,
           "eval": "40000",
           "type": "int"
         },
         {
-          "id": "z",
+          "property": "z",
           "value": -65000,
           "eval": "-65000",
           "type": "int"
         },
         {
-          "id": "w",
+          "property": "w",
           "value": 200000,
           "eval": "200000.0",
           "type": "float"
         },
         {
-          "id": "h",
+          "property": "h",
           "value": 80000,
           "eval": "80000.0",
           "type": "float"
         }
       ],
-      "id": "Rectangle_horizon_accentafill_3QgpWVUAZ"
+      "property": "Rectangle_horizon_accentafill_3QgpWVUAZ"
     }
   ]
 }

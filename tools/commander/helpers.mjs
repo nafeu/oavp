@@ -59,7 +59,7 @@ export const getOverridesFromParameterSet = (singleLineParameterSet) => {
     .forEach((valueMapping) => {
       const [property, value] = valueMapping.split(PROPERTY_VALUE_DELIMITER);
 
-      const objectProperty = _.find(OAVP_OBJECT_PROPERTIES, { id: property });
+      const objectProperty = _.find(OAVP_OBJECT_PROPERTIES, { property });
 
       if (objectProperty === null || objectProperty === undefined) {
         console.log(
@@ -67,15 +67,15 @@ export const getOverridesFromParameterSet = (singleLineParameterSet) => {
         );
       } else {
         const isString =
-          _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type === "String";
+          _.find(OAVP_OBJECT_PROPERTIES, { property }).type === "String";
         const overrideValue = isString ? value : eval(value);
 
         overrides.push({
-          id: property,
+          property,
           value: overrideValue,
           eval: value,
           type:
-            _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type || "String",
+            _.find(OAVP_OBJECT_PROPERTIES, { property }).type || "String",
         });
       }
     });
@@ -107,20 +107,20 @@ export const buildObjectString = (encodedParameters) => {
       }_${shortid.generate()}", "${objectName}")`,
     );
 
-    OAVP_OBJECT_PROPERTIES.forEach(({ id, defaultValue, type }) => {
-      const override = _.find(overrides, { id });
+    OAVP_OBJECT_PROPERTIES.forEach(({ property, defaultValue, type }) => {
+      const override = _.find(overrides, { property });
 
       const isString = type === "String";
 
       if (override) {
         output.push(
-          `.set("${override.id}", ${
+          `.set("${override.property}", ${
             isString ? `"${override.value}"` : override.value
           })`,
         );
       } else {
         output.push(
-          `.set("${id}", ${isString ? `"${defaultValue}"` : defaultValue})`,
+          `.set("${property}", ${isString ? `"${defaultValue}"` : defaultValue})`,
         );
       }
     });
@@ -237,12 +237,11 @@ export const loadSketchDataObjectToServer = ({ ws, sketchDataObject }) => {
 
   const objects = sketchDataObject.objects.map(({ shape, name, properties }) => {
     const overrides = properties.map(({ property, value }) => {
-      const id = property;
-      const type = _.find(OAVP_OBJECT_PROPERTIES, { id: property }).type;
+      const type = _.find(OAVP_OBJECT_PROPERTIES, { property }).type;
 
-      return { id, type, value }
-    }).filter(({ id, value }) => {
-      const { defaultValue } = _.find(OAVP_OBJECT_PROPERTIES, { id });
+      return { property, type, value }
+    }).filter(({ property, value }) => {
+      const { defaultValue } = _.find(OAVP_OBJECT_PROPERTIES, { property });
 
       return value !== defaultValue;
     });
@@ -293,10 +292,10 @@ export const reseedSketchOnServer = ({ ws, sketchDataObject }) => {
       .filter(
         ({ type, ...attributes }) => (type === 'int' || type === 'float') && attributes.eval.includes("rand")
       )
-      .map(({ id, type, ...attributes }) => {
+      .map(({ property, type, ...attributes }) => {
         const value = eval(attributes.eval);
 
-        return { id, type, value }
+        return { property, type, value }
       });
 
     return {

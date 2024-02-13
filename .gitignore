@@ -25,4 +25,6 @@ screencap-code-exports/
 **/export.png
 **/genobj.json
 **/preset-dump.txt
+**/timelapse-export.txt
+**/test-sketch-data-obj.json
 exports/

@@ -220,7 +220,7 @@ export const buildSketchDataObject = sketchFileContent => {
       const properties = allProperties.map(keyValuePair => {
         const [, propertyKey, propertyValue] = keyValuePair.match(OBJECT_PROPERTY_KEY_AND_VALUE_REGEX);
 
-        const isString = _.find(OAVP_OBJECT_PROPERTIES, { id: propertyKey }).type === "String";
+        const isString = _.find(OAVP_OBJECT_PROPERTIES, { property: propertyKey }).type === "String";
 
         return {
           property: propertyKey,

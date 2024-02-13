@@ -489,6 +489,8 @@ public class OavpEditor {
   }
 
   private void directEdit(String fieldName, Object value) {
+    println("[ oavp ] Direct editing: " + fieldName + ", " + value);
+
     try {
       OavpVariable activeVariable = objects.getActiveVariable();
       Field field = activeVariable.getClass().getDeclaredField(fieldName);
@@ -512,6 +514,7 @@ public class OavpEditor {
   }
 
   private void externalDirectEdit(String fieldName, Object value) {
+    // Note: does not reference "original values", use this for editing from eternal source
     try {
       OavpVariable activeVariable = objects.getActiveVariable();
       Field field = activeVariable.getClass().getDeclaredField(fieldName);
@@ -1022,6 +1025,18 @@ public class OavpEditor {
   }
 
   private void handleCreateModeSelection(int index) {
+    this.queuedObjectToCreate = index;
+    this.isCreateMode = false;
+    objects.useOptions(this.selectableObjects.get(index));
+    if (this.modalOptions.size() == 0) {
+      this.finalizeCreation();
+    } else {
+      this.openModal();
+    }
+  }
+
+  public void handleExternalCreateModeSelection() {
+    int index = this.createModeSelectionIndex;
     this.queuedObjectToCreate = index;
     this.isCreateMode = false;
     objects.useOptions(this.selectableObjects.get(index));
@@ -1571,6 +1586,10 @@ public class OavpEditor {
           .done();
       }
     }
+  }
+
+  public void setCreateModeSelectionIndex(int index) {
+    this.createModeSelectionIndex = index;
   }
 
   private String getActiveModifierField() {

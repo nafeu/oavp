@@ -1,98 +1,251 @@
+export const OAVP_EDITOR_TOOL = {
+  MOVE: 0,
+  RESIZE: 1,
+  TRANSFORM: 2,
+  ROTATE: 3,
+  COLOR: 4,
+  WEIGHT: 5,
+  MODIFIER: 6,
+  VARIATION: 7,
+  PARAMS: 8,
+  MOD_DELAY: 9,
+  ITERATION: 10,
+  ITERATION_COUNT: 11
+}
+
 export const OAVP_OBJECT_PROPERTIES = [
-  { id: "x", defaultValue: 0, type: "int" },
-  { id: "xMod", defaultValue: 0.0, type: "float" },
-  { id: "xModType", defaultValue: "none", type: "String" },
-  { id: "xIter", defaultValue: 0.0, type: "float" },
-  { id: "xIterFunc", defaultValue: "none", type: "String" },
-  { id: "xr", defaultValue: 0, type: "int" },
-  { id: "xrMod", defaultValue: 0.0, type: "float" },
-  { id: "xrModType", defaultValue: "none", type: "String" },
-  { id: "xrIter", defaultValue: 0.0, type: "float" },
-  { id: "xrIterFunc", defaultValue: "none", type: "String" },
-  { id: "y", defaultValue: 0, type: "int" },
-  { id: "yMod", defaultValue: 0.0, type: "float" },
-  { id: "yModType", defaultValue: "none", type: "String" },
-  { id: "yIter", defaultValue: 0.0, type: "float" },
-  { id: "yIterFunc", defaultValue: "none", type: "String" },
-  { id: "yr", defaultValue: 0, type: "int" },
-  { id: "yrMod", defaultValue: 0.0, type: "float" },
-  { id: "yrModType", defaultValue: "none", type: "String" },
-  { id: "yrIter", defaultValue: 0.0, type: "float" },
-  { id: "yrIterFunc", defaultValue: "none", type: "String" },
-  { id: "z", defaultValue: 0, type: "int" },
-  { id: "zMod", defaultValue: 0.0, type: "float" },
-  { id: "zModType", defaultValue: "none", type: "String" },
-  { id: "zIter", defaultValue: 0.0, type: "float" },
-  { id: "zIterFunc", defaultValue: "none", type: "String" },
-  { id: "zr", defaultValue: 0, type: "int" },
-  { id: "zrMod", defaultValue: 0.0, type: "float" },
-  { id: "zrModType", defaultValue: "none", type: "String" },
-  { id: "zrIter", defaultValue: 0.0, type: "float" },
-  { id: "zrIterFunc", defaultValue: "none", type: "String" },
-  { id: "w", defaultValue: 0.0, type: "float" },
-  { id: "wMod", defaultValue: 0.0, type: "float" },
-  { id: "wModType", defaultValue: "none", type: "String" },
-  { id: "wIter", defaultValue: 0.0, type: "float" },
-  { id: "wIterFunc", defaultValue: "none", type: "String" },
-  { id: "h", defaultValue: 0.0, type: "float" },
-  { id: "hMod", defaultValue: 0.0, type: "float" },
-  { id: "hModType", defaultValue: "none", type: "String" },
-  { id: "hIter", defaultValue: 0.0, type: "float" },
-  { id: "hIterFunc", defaultValue: "none", type: "String" },
-  { id: "l", defaultValue: 0.0, type: "float" },
-  { id: "lMod", defaultValue: 0.0, type: "float" },
-  { id: "lModType", defaultValue: "none", type: "String" },
-  { id: "lIter", defaultValue: 0.0, type: "float" },
-  { id: "lIterFunc", defaultValue: "none", type: "String" },
-  { id: "s", defaultValue: 0.0, type: "float" },
-  { id: "sMod", defaultValue: 0.0, type: "float" },
-  { id: "sModType", defaultValue: "none", type: "String" },
-  { id: "sIter", defaultValue: 0.0, type: "float" },
-  { id: "sIterFunc", defaultValue: "none", type: "String" },
-  { id: "strokeColor", defaultValue: -1, type: "color" },
-  { id: "strokeColorMod", defaultValue: 0.0, type: "float" },
-  { id: "strokeColorModType", defaultValue: "none", type: "String" },
-  { id: "strokeColorIter", defaultValue: 0.0, type: "float" },
-  { id: "strokeColorIterFunc", defaultValue: "none", type: "String" },
-  { id: "strokeWeight", defaultValue: 2.0, type: "float" },
-  { id: "strokeWeightMod", defaultValue: 0.0, type: "float" },
-  { id: "strokeWeightModType", defaultValue: "none", type: "String" },
-  { id: "strokeWeightIter", defaultValue: 0.0, type: "float" },
-  { id: "strokeWeightIterFunc", defaultValue: "none", type: "String" },
-  { id: "fillColor", defaultValue: -16777216, type: "color" },
-  { id: "fillColorMod", defaultValue: 0.0, type: "float" },
-  { id: "fillColorModType", defaultValue: "none", type: "String" },
-  { id: "fillColorIter", defaultValue: 0.0, type: "float" },
-  { id: "fillColorIterFunc", defaultValue: "none", type: "String" },
-  { id: "paramA", defaultValue: 0.0, type: "float" },
-  { id: "paramAMod", defaultValue: 0.0, type: "float" },
-  { id: "paramAModType", defaultValue: "none", type: "String" },
-  { id: "paramAIter", defaultValue: 0.0, type: "float" },
-  { id: "paramAIterFunc", defaultValue: "none", type: "String" },
-  { id: "paramB", defaultValue: 0.0, type: "float" },
-  { id: "paramBMod", defaultValue: 0.0, type: "float" },
-  { id: "paramBModType", defaultValue: "none", type: "String" },
-  { id: "paramBIter", defaultValue: 0.0, type: "float" },
-  { id: "paramBIterFunc", defaultValue: "none", type: "String" },
-  { id: "paramC", defaultValue: 0.0, type: "float" },
-  { id: "paramCMod", defaultValue: 0.0, type: "float" },
-  { id: "paramCModType", defaultValue: "none", type: "String" },
-  { id: "paramCIter", defaultValue: 0.0, type: "float" },
-  { id: "paramCIterFunc", defaultValue: "none", type: "String" },
-  { id: "paramD", defaultValue: 0.0, type: "float" },
-  { id: "paramDMod", defaultValue: 0.0, type: "float" },
-  { id: "paramDModType", defaultValue: "none", type: "String" },
-  { id: "paramDIter", defaultValue: 0.0, type: "float" },
-  { id: "paramDIterFunc", defaultValue: "none", type: "String" },
-  { id: "paramE", defaultValue: 0.0, type: "float" },
-  { id: "paramEMod", defaultValue: 0.0, type: "float" },
-  { id: "paramEModType", defaultValue: "none", type: "String" },
-  { id: "paramEIter", defaultValue: 0.0, type: "float" },
-  { id: "paramEIterFunc", defaultValue: "none", type: "String" },
-  { id: "modDelay", defaultValue: 0, type: "int" },
-  { id: "variation", defaultValue: "none", type: "String" },
-  { id: "i", defaultValue: 1, type: "int" },
+  { property: "x", defaultValue: 0, type: "int", tool: OAVP_EDITOR_TOOL.MOVE },
+  { property: "xMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "xModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "xIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "xIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "xr", defaultValue: 0, type: "int", tool: OAVP_EDITOR_TOOL.ROTATE },
+  { property: "xrMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "xrModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "xrIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "xrIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "y", defaultValue: 0, type: "int", tool: OAVP_EDITOR_TOOL.MOVE },
+  { property: "yMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "yModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "yIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "yIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "yr", defaultValue: 0, type: "int", tool: OAVP_EDITOR_TOOL.ROTATE },
+  { property: "yrMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "yrModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "yrIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "yrIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "z", defaultValue: 0, type: "int", tool: OAVP_EDITOR_TOOL.MOVE },
+  { property: "zMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "zModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "zIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "zIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "zr", defaultValue: 0, type: "int", tool: OAVP_EDITOR_TOOL.ROTATE },
+  { property: "zrMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "zrModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "zrIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "zrIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "w", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.TRANSFORM },
+  { property: "wMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "wModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "wIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "wIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "h", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.TRANSFORM },
+  { property: "hMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "hModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "hIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "hIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "l", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.TRANSFORM },
+  { property: "lMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "lModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "lIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "lIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "s", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.RESIZE },
+  { property: "sMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "sModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "sIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "sIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "strokeColor", defaultValue: -1, type: "color", tool: OAVP_EDITOR_TOOL.COLOR },
+  { property: "strokeColorMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "strokeColorModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "strokeColorIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "strokeColorIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "strokeWeight", defaultValue: 2.0, type: "float", tool: OAVP_EDITOR_TOOL.WEIGHT },
+  { property: "strokeWeightMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "strokeWeightModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "strokeWeightIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "strokeWeightIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "fillColor", defaultValue: -16777216, type: "color", tool: OAVP_EDITOR_TOOL.COLOR },
+  { property: "fillColorMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "fillColorModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "fillColorIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "fillColorIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramA", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.PARAMS },
+  { property: "paramAMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramAModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramAIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramAIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramB", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.PARAMS },
+  { property: "paramBMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramBModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramBIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramBIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramC", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.PARAMS },
+  { property: "paramCMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramCModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramCIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramCIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramD", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.PARAMS },
+  { property: "paramDMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramDModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramDIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramDIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramE", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.PARAMS },
+  { property: "paramEMod", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramEModType", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.MODIFIER },
+  { property: "paramEIter", defaultValue: 0.0, type: "float", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "paramEIterFunc", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.ITERATION },
+  { property: "modDelay", defaultValue: 0, type: "int", tool: OAVP_EDITOR_TOOL.MOD_DELAY },
+  { property: "variation", defaultValue: "none", type: "String", tool: OAVP_EDITOR_TOOL.VARIATION },
+  { property: "i", defaultValue: 1, type: "int", tool: OAVP_EDITOR_TOOL.ITERATION_COUNT },
 ];
+
+const palette = {
+  flat: {
+    white: -1,
+    black: -1618884
+  }
+}
+
+export const OAVP_OBJECT_DEFAULTS = {
+  "Arc": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "strokeColor", value: palette.flat.white },
+    { property: "paramA", value: 0 },
+    { property: "paramB", value: 180 }
+  ],
+  "Box": [
+    { property: "s", value: 100 },
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "l", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Bullseye": [
+    { property: "s", value: 100 },
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Circle": [
+    { property: "s", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "CurvedLine": [
+    { property: "w", value: 100 },
+    { property: "s", value: 0 },
+    { property: "paramB", value: -50 },
+    { property: "paramD", value: 50 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Flatbox": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "l", value: 100 },
+    { property: "strokeColor", value: palette.flat.white },
+    { property: "fillColor", value: palette.flat.black }
+  ],
+  "GoldenRatio": [
+    { property: "s", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Gradient": [
+    { property: "w", value: 100 }
+  ],
+  "GridInterval": [
+    { property: "w", value: 100 }
+  ],
+  "Line": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "s", value: 0 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Orbital": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "s", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Pyramid": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "l", value: 100 },
+    { property: "strokeColor", value: palette.flat.white },
+    { property: "fillColor", value: palette.flat.black }
+  ],
+  "RadialSpectrum": [
+    { property: "w", value: 100 }
+  ],
+  "Rectangle": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "strokeColor", value: palette.flat.white },
+    { property: "s", value: 0 }
+  ],
+  "Shader": [
+    // Note: skip for the time being
+    { property: "w", value: 100 }
+  ],
+  "Spectrum": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "SpectrumMesh": [
+    { property: "s", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Sphere": [
+    { property: "s", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Splash": [
+    { property: "s", value: 100 },
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Terrain": [
+    { property: "s", value: 10 },
+    { property: "paramA", value: 50 },
+    { property: "paramB", value: 100 },
+    { property: "paramC", value: 100 },
+    { property: "paramD", value: 50 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Triangle": [
+    { property: "s", value: 100 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Vegetation": [
+    { property: "s", value: 20 },
+    { property: "h", value: 0 },
+    { property: "paramA", value: 500 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "Waveform": [
+    { property: "w", value: 100 },
+    { property: "h", value: 100 },
+    { property: "s", value: 5 },
+    { property: "strokeColor", value: palette.flat.white }
+  ],
+  "ZRectangles": [
+    { property: "s", value: 100 },
+    { property: "radius", value: 50 },
+    { property: "strokeColor", value: palette.flat.white }
+  ]
+}
 
 export const OAVP_AVAILABLE_SHAPES = [
   "Arc",
@@ -120,6 +273,197 @@ export const OAVP_AVAILABLE_SHAPES = [
   "Waveform",
   "ZRectangles",
 ];
+
+export const OAVP_AVAILABLE_SHAPE_INDEX_MAPPING = OAVP_AVAILABLE_SHAPES.reduce((mapping, item, index) => {
+  mapping[item] = index;
+
+  return mapping;
+}, {});
+
+export const OAVP_SNAP_LEVEL_STANDARD = 'STANDARD';
+export const OAVP_SNAP_LEVEL_ROTATIONAL = 'ROTATIONAL';
+export const OAVP_SNAP_LEVEL_CARDINAL = 'CARDINAL';
+export const OAVP_SNAP_LEVEL_SINGULAR = 'SINGULAR';
+
+export const OAVP_SNAP_LEVEL_TYPES = [
+  OAVP_SNAP_LEVEL_STANDARD,
+  OAVP_SNAP_LEVEL_ROTATIONAL,
+  OAVP_SNAP_LEVEL_CARDINAL,
+  OAVP_SNAP_LEVEL_SINGULAR
+]
+
+export const OAVP_SNAP_LEVELS = {
+  [OAVP_SNAP_LEVEL_STANDARD]: { off: 1, low: 5, medium: 50, high: 200 },
+  [OAVP_SNAP_LEVEL_ROTATIONAL]: { off: 1, low: 5, medium: 15, high: 30 },
+  [OAVP_SNAP_LEVEL_CARDINAL]: { off: 1, low: 5, medium: 10, high: 20 },
+  [OAVP_SNAP_LEVEL_SINGULAR]: { off: 1, low: 1, medium: 1, high: 1 }
+}
+
+export const OAVP_SNAP_LEVELS_PROPERTY_MAPPING = {
+  [OAVP_SNAP_LEVEL_STANDARD]: [
+    'h',
+    'hIter',
+    'hMod',
+    'l',
+    'lIter',
+    'lMod',
+    'paramA',
+    'paramAIter',
+    'paramAMod',
+    'paramB',
+    'paramBIter',
+    'paramBMod',
+    'paramC',
+    'paramCIter',
+    'paramCMod',
+    'paramD',
+    'paramDIter',
+    'paramDMod',
+    'paramE',
+    'paramEIter',
+    'paramEMod',
+    's',
+    'sIter',
+    'sMod',
+    'w',
+    'wIter',
+    'wMod',
+    'x',
+    'xIter',
+    'xMod',
+    'y',
+    'yIter',
+    'yMod',
+    'z',
+    'zIter',
+    'zMod',
+  ],
+  [OAVP_SNAP_LEVEL_ROTATIONAL]: [
+    'xr',
+    'xrIter',
+    'xrMod',
+    'yr',
+    'yrIter',
+    'yrMod',
+    'zr',
+    'zrIter',
+    'zrMod',
+  ],
+  [OAVP_SNAP_LEVEL_CARDINAL]: [
+    'modDelay',
+    'i'
+  ],
+  [OAVP_SNAP_LEVEL_SINGULAR]: [
+    'strokeColor',
+    'fillColor',
+    'fillColorIterFunc',
+    'fillColorModType',
+    'hIterFunc',
+    'hModType',
+    'lIterFunc',
+    'lModType',
+    'paramAIterFunc',
+    'paramAModType',
+    'paramBIterFunc',
+    'paramBModType',
+    'paramCIterFunc',
+    'paramCModType',
+    'paramDIterFunc',
+    'paramDModType',
+    'paramEIterFunc',
+    'paramEModType',
+    'sIterFunc',
+    'sModType',
+    'strokeColorIterFunc',
+    'strokeColorModType',
+    'strokeWeight',
+    'strokeWeightIterFunc',
+    'strokeWeightModType',
+    'variation',
+    'wIterFunc',
+    'wModType',
+    'xIterFunc',
+    'xModType',
+    'xrIterFunc',
+    'xrModType',
+    'yIterFunc',
+    'yModType',
+    'yrIterFunc',
+    'yrModType',
+    'zIterFunc',
+    'zModType',
+    'zrIterFunc',
+    'zrModType',
+  ]
+}
+
+export const OAVP_PROPERTY_SNAP_LEVELS_MAPPING = OAVP_SNAP_LEVEL_TYPES.reduce((mapping, snapLevelType) => {
+  OAVP_SNAP_LEVELS_PROPERTY_MAPPING[snapLevelType].forEach(property => {
+    mapping[property] = OAVP_SNAP_LEVELS[snapLevelType]
+  });
+
+  return mapping;
+}, {})
+
+export const OAVP_ITER_FUNCS = [
+  'none',
+  'fib 20',
+  'sin(x)',
+  'sqrt(x)',
+  '2x',
+  'x/2',
+  'x/3',
+  'x/4',
+  'x*(x/10)',
+  '1/x',
+  'x^2',
+  'mod 3',
+  'floor(x/3)',
+  'mod 5',
+  'floor(x/5)',
+  'mod 10',
+  'floor(x/10)',
+  'mod 25',
+  'floor(x/25)',
+  'random 100'
+]
+
+export const OAVP_MOD_TYPES = [
+  'none',
+  'spacebar-pulser',
+  'spacebar-toggle-hard',
+  'spacebar-toggle-soft',
+  'spacebar-counter',
+  'spacebar-counter-2',
+  'spacebar-counter-4',
+  'spacebar-counter-8',
+  'spacebar-rotator',
+  'spacebar-rotator-2',
+  'spacebar-rotator-4',
+  'spacebar-rotator-8',
+  'framecount',
+  'level',
+  'osc-fast',
+  'osc-normal',
+  'osc-slow',
+  'sine',
+  'square',
+  'sawtooth',
+  // 'lows',
+  // 'mid-lows',
+  // 'mid-highs',
+  // 'highs',
+  // 'beat-pulser',
+  // 'beat-toggle-hard',
+  // 'beat-toggle-soft',
+  // 'beat-counter',
+  // 'quantized-pulser',
+  // 'quantized-toggle-hard',
+  // 'quantized-toggle-soft',
+  // 'quantized-counter',
+  'mouse-x',
+  'mouse-y'
+]
 
 export const SINGLE_LINE_PARAMETER_SET_DELIMITER = "&";
 export const OBJECT_NAME_AND_PROPERTIES_DELIMITER = "|";
