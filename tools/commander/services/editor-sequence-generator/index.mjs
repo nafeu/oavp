@@ -24,10 +24,10 @@ export const getMinutesByMs = millis => {
 }
 
 export const getRandomMsDelay = delayType => {
-  const DELAY_TYPE_SHORT_MS_HIGH = 150;
-  const DELAY_TYPE_SHORT_MS_LOW = 100;
+  const DELAY_TYPE_SHORT_MS_HIGH = 70;
+  const DELAY_TYPE_SHORT_MS_LOW = 50;
   const DELAY_TYPE_LONG_MS_HIGH = 500;
-  const DELAY_TYPE_LONG_MS_LOW = 300;
+  const DELAY_TYPE_LONG_MS_LOW = 450;
 
   let output = 0;
 
@@ -35,6 +35,8 @@ export const getRandomMsDelay = delayType => {
     output = Math.floor(Math.random() * (DELAY_TYPE_SHORT_MS_HIGH - DELAY_TYPE_SHORT_MS_LOW + 1)) + DELAY_TYPE_SHORT_MS_LOW;
   } else if (delayType === 'loading') {
     output = 1250;
+  } else if (delayType === 'ending') {
+    output = 5000;
   } else {
     output = Math.floor(Math.random() * (DELAY_TYPE_LONG_MS_HIGH - DELAY_TYPE_LONG_MS_LOW + 1)) + DELAY_TYPE_LONG_MS_LOW;
   }
@@ -64,8 +66,8 @@ export const getPalette = colors => _.keys(colors)
   .map(key => colors[key].int)
 
 export const generateColorSequence = ({ from, palette, to }) => {
-  const SEQUENCE_LENGTH_LOW = 5;
-  const SEQUENCE_LENGTH_HIGH = 10;
+  const SEQUENCE_LENGTH_LOW = 3;
+  const SEQUENCE_LENGTH_HIGH = 6;
 
   const sequenceLength = Math.floor(Math.random() * (SEQUENCE_LENGTH_LOW + 1))
     + (SEQUENCE_LENGTH_HIGH - SEQUENCE_LENGTH_LOW);
@@ -184,7 +186,7 @@ export const generateTimelapse = sketchDataObject => {
 
   fs.writeFileSync('./timelapse-export.txt', macrosFromSortedSteps.join('\n'), 'utf-8');
 
-  return macrosFromSortedSteps;
+  return macrosFromSortedSteps.join('\n');
 }
 
 export const generateSequence = ({ sketchDataObject, sequenceType = SEQUENCE_TYPE_TIMELAPSE }) => {
@@ -238,6 +240,10 @@ export const getInterpolatedStepsForPropertyPair = ({ propertyPair, palette }) =
     return generateIterSequence({ from, to })
   }
 
+  if (property === 'variation') {
+    return ['none', to];
+  }
+
   const gridSnappingLevels = OAVP_PROPERTY_SNAP_LEVELS_MAPPING[property];
 
   const destination = to;
@@ -249,8 +255,8 @@ export const getInterpolatedStepsForPropertyPair = ({ propertyPair, palette }) =
   const HESITATION_STEPS_THRESHOLD = 3;
   const HESITATION_FACTOR_HIGH = 0.2;
   const HESITATION_FACTOR_LOW = 0.1;
-  const MAX_STEPS_HIGH = 20;
-  const MAX_STEPS_LOW = 10;
+  const MAX_STEPS_HIGH = 15;
+  const MAX_STEPS_LOW = 8;
 
   const maxSteps = Math.floor(Math.random() * (MAX_STEPS_HIGH - MAX_STEPS_LOW + 1))
     + MAX_STEPS_LOW;
@@ -298,7 +304,6 @@ export const getInterpolatedStepsForPropertyPair = ({ propertyPair, palette }) =
 }
 
 export const getStepsSortedByArtisticOrder = interpolatedSteps => {
-  // TODO: Continue ~ adjust this based on output realism
   const output = [];
 
   const artisticSortOrder = (a, b) => {
@@ -320,8 +325,8 @@ export const getStepsSortedByArtisticOrder = interpolatedSteps => {
       return mapping;
     }, {})
 
-    const propertyA = a.property.toLowerCase();
-    const propertyB = b.property.toLowerCase();
+    const propertyA = a.property;
+    const propertyB = b.property;
 
     if (order.hasOwnProperty(propertyA) && order.hasOwnProperty(propertyB)) {
       return order[propertyA] - order[propertyB];
@@ -379,10 +384,12 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
 
     sortedSteps.forEach(({ macro, args }) => {
       if (macro === 'create-default') {
+        output.push(`  println("[ oavp ] Timelapse: creating default object: ${args.name}");`);
         output.push(`  objects.add("${args.name}", "OavpObject");`);
       }
 
       if (macro === 'create') {
+        output.push(`  println("[ oavp ] Timelapse: creating object: ${args.name}");`);
         output.push(`  editor.toggleCreateMode();`);
         output.push(`  delay(${getRandomMsDelay('long')});`);
         output.push(`  editor.setCreateModeSelectionIndex(${OAVP_AVAILABLE_SHAPE_INDEX_MAPPING[args.name]});`);
@@ -412,7 +419,7 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
 
   const setup = [
     `void setupSketch() { println("[ oavp ] Approx Timelapse Time: ${getMinutesByMs(approxTotalTimeMs)}"); setSketchSeed(${sketchDataObject.seed}); }`,
-    `void setupSketchPostEditor() { thread("queueGeneratedTimelapse"); }`,
+    `void setupSketchPostEditor() { thread("queueGeneratedTimelapse"); enableRecording(); }`,
     `void updateSketch() {}`,
     `void drawSketch() {}`,
     ``,
@@ -424,14 +431,11 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
       (_, index) => `  println("[ oavp ] Queueing Timelapse Part ${index}"); queueGeneratedTimelapse${index}();`
     )),
     `  editor.toggleEditMode();`,
+    `  delay(${getRandomMsDelay('ending')});`,
+    `  closeApplication();`,
     `}`,
     ``
   ];
 
   return [...setup, ...output];
-}
-
-export const getEditorMacrosWithFauxObjectSelection = editorMacros => {
-  // return processedEditorMacros
-  return false;
 }

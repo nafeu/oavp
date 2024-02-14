@@ -322,6 +322,4 @@ export const EXAMPLE_ITER_FUNC_SEQUENCE = [
   'sin(x)'
 ]
 
-export const IGNORED_PROPERTIES = [
-  'variation'
-]
+export const IGNORED_PROPERTIES = []

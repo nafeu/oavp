@@ -308,3 +308,11 @@ void setSketchSeed(int seedValue) {
   noiseSeed(seedValue);
   RANDOM_HUNDRED = getRandomNumbers(100);
 }
+
+void closeApplication() {
+  shouldExit = true;
+}
+
+void enableRecording() {
+  isRecording = true;
+}

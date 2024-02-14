@@ -52,6 +52,9 @@ WebsocketServer server;
 
 int SCALE_FACTOR = 1;
 
+boolean isRecording = false;
+boolean shouldExit = false;
+
 void setup() {
   context = this;
   noLoop();
@@ -59,7 +62,7 @@ void setup() {
   println("[ oavp ] github.com/nafeu/oavp");
 
   // DISPLAY_SETTINGS_START
-  fullScreen(P3D, 3);
+  fullScreen(P3D, 2);
   // size(3840, 2160, P3D); // 4K
   // DISPLAY_SETTINGS_END
 
@@ -96,6 +99,7 @@ synchronized void draw() {
     text("[ oavp ] : github.com/nafeu/oavp\n\npress 'e' to enter edit mode", width * 0.5, height * 0.5);
   } else {
     try {
+      // TODO: Remove deprecated recording code...
       if (oavp.ENABLE_VIDEO_RENDER) {
         String line;
         try {
@@ -146,6 +150,14 @@ synchronized void draw() {
         if (EXPORT_SKETCH) {
           editor.exportSketchToFile();
           EXPORT_SKETCH = false;
+        }
+
+        if (shouldExit) {
+          exit();
+        }
+
+        if (isRecording) {
+          saveFrame("../video-export-frames/video-export-frame-######.png");
         }
       }
     } catch (Exception e) {

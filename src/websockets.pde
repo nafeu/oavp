@@ -156,6 +156,7 @@ void handleReceivedOavpObjects(JSONArray oavpObjects) {
       JSONObject receivedOavpObject = oavpObjects.getJSONObject(i);
 
       String objectClassName = receivedOavpObject.getString("oavpObject");
+
       String objectId = receivedOavpObject.getString("id");
       JSONArray objectParams = receivedOavpObject.getJSONArray("params");
 
@@ -167,7 +168,7 @@ void handleReceivedOavpObjects(JSONArray oavpObjects) {
         for (int j = 0; j < objectParams.size(); j++) {
           JSONObject objectParam = objectParams.getJSONObject(j);
 
-          String paramId = objectParam.getString("id");
+          String paramId = objectParam.getString("property");
           String paramType = objectParam.getString("type");
 
           if (paramType.equals("String")) {
