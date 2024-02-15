@@ -394,8 +394,36 @@ function handleClickCopyToClipboard() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function handleClickPackage() {
-  console.log('TODO: Package')
+function handleClickGenerateTimelapse() {
+  console.log();
+
+  if (!isLoading) {
+    isLoading = true;
+
+    $("#sketch-generate-timelapse-button").textContent = "Generating..."
+
+    fetch('/api/generate-timelapse', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ sketchDataObject: window.sketchDataObjects[selectedSketch] }),
+    })
+      .then(response => response.json())
+      .then(({ message }) => {
+        $("#sketch-generate-timelapse-button").textContent = "Generate Timelapse"
+
+        console.log(message);
+
+        isLoading = false;
+      })
+      .catch(error => {
+        console.error(error);
+        $("#sketch-generate-timelapse-button").textContent = "Generate Timelapse"
+
+        isLoading = false;
+      });
+  }
 }
 
 function react() {

@@ -184,8 +184,6 @@ export const generateTimelapse = sketchDataObject => {
 
   const macrosFromSortedSteps = getEditorMacrosFromSortedSteps({ stepsSortedByArtisticOrder, sketchDataObject });
 
-  fs.writeFileSync('./timelapse-export.txt', macrosFromSortedSteps.join('\n'), 'utf-8');
-
   return macrosFromSortedSteps.join('\n');
 }
 

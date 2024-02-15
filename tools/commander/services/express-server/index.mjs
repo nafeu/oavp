@@ -6,6 +6,7 @@ import fs from 'fs/promises';
 import { getSketchDataObjects } from "./helpers.mjs";
 import { generateName } from "../name-generator/index.mjs";
 import { getNamesByColorPalette } from "../color-palette-info/index.mjs";
+import { generateTimelapse } from '../editor-sequence-generator/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -145,6 +146,22 @@ const setupExpressServer = ws => {
       await fs.writeFile(`../../exports/${filename}.json`, JSON.stringify(sketchDataObject, null, 2), 'utf-8');
 
       res.json({ message: `Saved ../../exports/${filename}.json successfully` });
+    } catch (err) {
+      console.error(err);
+
+      res.json({ error: err });
+    }
+  })
+
+  app.post("/api/generate-timelapse", async (req, res) => {
+    const { sketchDataObject } = req.body;
+
+    try {
+      const timelapse = generateTimelapse(sketchDataObject);
+
+      await fs.writeFile(`../../src/sketch.pde`, timelapse, 'utf-8');
+
+      res.json({ message: `Saved ../../src/sketch.pde successfully` });
     } catch (err) {
       console.error(err);
 

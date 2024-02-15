@@ -85,11 +85,11 @@ public class OavpEditor {
   private HashMap<String, Object> modalValues;
   private String modalHeader;
   private int queuedObjectToCreate = 0;
-  private color backgroundColor = 0;
-  private color accentA = 0;
-  private color accentB = 0;
-  private color accentC = 0;
-  private color accentD = 0;
+  private color backgroundColor = #FFFFFF;
+  private color accentA = #000000;
+  private color accentB = #E74C3C;
+  private color accentC = #2ECC71;
+  private color accentD = #3498DB;
   private color[] shuffledPalette = new color[5];
 
   OavpEditor(OavpInput input, OavpObjectManager objects, OavpText text) {
@@ -519,7 +519,11 @@ public class OavpEditor {
       OavpVariable activeVariable = objects.getActiveVariable();
       Field field = activeVariable.getClass().getDeclaredField(fieldName);
 
-      if (activeVariable.get(fieldName).getClass() == Float.class) {
+      // Note: this handles the case where variation is an index which references a mutable List<String>
+      //       but the value comes in as a string, ie: "none" or "trees"
+      if (fieldName.equals("variation")) {
+        field.set(activeVariable, activeVariable.getVariationIndex((String) value));
+      } else if (activeVariable.get(fieldName).getClass() == Float.class) {
         field.set(activeVariable, (float) value);
       } else if (activeVariable.get(fieldName).getClass() == String.class) {
         field.set(activeVariable, (String) value);
