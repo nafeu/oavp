@@ -40,14 +40,24 @@
       <button id="sketch-name-button" onclick="handleClickGenerateName()">Generate Name</button>
       <button id="sketch-palette-button" onclick="handleClickGeneratePalette()">Generate Palette</button>
     </div>
-    <textarea id="social-media-text" rows="30" cols="30"></textarea>
+    <input id="sketch-id-input" class="save-on-change" type="number" placeholder="Enter #"></input>
+    <textarea id="sketch-name-input" class="save-on-change" type="text" placeholder="Enter name"></textarea>
+    <textarea id="sketch-palette-input" class="save-on-change" type="text" placeholder="Enter palette"></textarea>
     <div id="details-finalization-actions">
       <button id="sketch-clipboard-button" onclick="handleClickCopyToClipboard()">Copy To Clipboard</button>
       <button id="sketch-generate-timelapse-button" onclick="handleClickGenerateTimelapse()">Generate Timelapse</button>
-      <button id="sketch-save-button" onclick="handleClickSave()">Save</button>
     </div>
   </div>
 </div>
+
+<script>
+  setTimeout(() => {
+    const firstSketch = Object.keys(window.sketchDataObjects)[0];
+
+    handleClickViewSketch(firstSketch);
+  }, 1000);
+
+</script>
 
 <%- include('partials/console') %>
 <%- include('partials/footer') %>

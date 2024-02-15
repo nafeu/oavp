@@ -267,6 +267,12 @@ svg {
     color: var(--color-white);
     margin-top: var(--spacing);
   }
+
+  textarea {
+    width: 90%;
+    border: none;
+    height: 100px;
+  }
 }
 
 #details-menu-actions, #details-finalization-actions {
