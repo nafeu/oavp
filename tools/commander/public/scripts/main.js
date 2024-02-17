@@ -394,8 +394,6 @@ function handleClickCopyToClipboard() {
 
 // eslint-disable-next-line no-unused-vars
 function handleClickGenerateTimelapse() {
-  console.log();
-
   if (!isLoading) {
     isLoading = true;
 
@@ -419,6 +417,37 @@ function handleClickGenerateTimelapse() {
       .catch(error => {
         console.error(error);
         $("#sketch-generate-timelapse-button").textContent = "Generate Timelapse"
+
+        isLoading = false;
+      });
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleClickConstructVideo() {
+  if (!isLoading) {
+    isLoading = true;
+
+    $("#sketch-construct-video-button").textContent = "Constructing..."
+
+    fetch('/api/construct-video', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: window.sketchDataObjects[selectedSketch].id })
+    })
+      .then(response => response.json())
+      .then(({ message }) => {
+        $("#sketch-construct-video-button").textContent = "Construct Video"
+
+        console.log(message);
+
+        isLoading = false;
+      })
+      .catch(error => {
+        console.error(error);
+        $("#sketch-construct-video-button").textContent = "Construct Video"
 
         isLoading = false;
       });

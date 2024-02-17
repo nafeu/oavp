@@ -24,6 +24,8 @@ export const getMinutesByMs = millis => {
 }
 
 export const getRandomMsDelay = delayType => {
+  const FAST_EXPORT = true;
+
   const DELAY_TYPE_SHORT_MS_HIGH = 70;
   const DELAY_TYPE_SHORT_MS_LOW = 50;
   const DELAY_TYPE_LONG_MS_HIGH = 500;
@@ -32,13 +34,21 @@ export const getRandomMsDelay = delayType => {
   let output = 0;
 
   if (delayType === 'short') {
-    output = Math.floor(Math.random() * (DELAY_TYPE_SHORT_MS_HIGH - DELAY_TYPE_SHORT_MS_LOW + 1)) + DELAY_TYPE_SHORT_MS_LOW;
+    if (FAST_EXPORT) {
+      output = 30;
+    } else {
+      output = Math.floor(Math.random() * (DELAY_TYPE_SHORT_MS_HIGH - DELAY_TYPE_SHORT_MS_LOW + 1)) + DELAY_TYPE_SHORT_MS_LOW;
+    }
   } else if (delayType === 'loading') {
     output = 1250;
   } else if (delayType === 'ending') {
     output = 5000;
   } else {
-    output = Math.floor(Math.random() * (DELAY_TYPE_LONG_MS_HIGH - DELAY_TYPE_LONG_MS_LOW + 1)) + DELAY_TYPE_LONG_MS_LOW;
+    if (FAST_EXPORT) {
+      output = 500;
+    } else {
+      output = Math.floor(Math.random() * (DELAY_TYPE_LONG_MS_HIGH - DELAY_TYPE_LONG_MS_LOW + 1)) + DELAY_TYPE_LONG_MS_LOW;
+    }
   }
 
   approxTotalTimeMs += output;

@@ -2,8 +2,9 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from 'fs/promises';
+import { spawn } from 'child_process';
 
-import { getSketchDataObjects } from "./helpers.mjs";
+import { getSketchDataObjects, runCommand } from "./helpers.mjs";
 import { generateName } from "../name-generator/index.mjs";
 import { getNamesByColorPalette } from "../color-palette-info/index.mjs";
 import { generateTimelapse } from '../editor-sequence-generator/index.mjs';
@@ -169,11 +170,41 @@ const setupExpressServer = ws => {
     }
   })
 
-  app.listen(WEBSERVER_PORT, () => {
+  app.post("/api/construct-video", async (req, res) => {
+    const { id } = req.body;
+
+    const child = spawn('bash', ['./construct-video.sh', id]);
+
+    child.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    child.on('error', (error) => {
+      console.error(`[ oavp-commander:construct-video ] Failed to run construct-video.sh: ${error}`);
+      res.status(500).json({ message: 'Failed to run construct-video.sh.' });
+    });
+
+    child.on('close', (code) => {
+      console.log(`[ oavp-commander:construct-video ] Video construction concluded.`);
+      if (code === 0) {
+        res.json({ message: 'construct-video.sh script executed successfully.' });
+      } else {
+        res.status(500).json({ message: 'construct-video.sh script execution failed.' });
+      }
+    });
+  })
+
+  const server = app.listen(WEBSERVER_PORT, () => {
     console.log(
       `[ oavp-commander:webserver ] Webserver is running at http://localhost:${WEBSERVER_PORT}`,
     );
   });
+
+  server.setTimeout(900000);
 };
 
 export default setupExpressServer;

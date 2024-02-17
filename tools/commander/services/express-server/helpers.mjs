@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import { exec } from "child_process";
 
 import { EXPORT_FILE_DIR } from "../../constants.mjs";
 import { buildSketchDataObject } from '../filewatch-event-handlers/helpers.mjs';
@@ -78,3 +79,22 @@ export const getSketchDataObjects = async () => {
 
   return {}
 };
+
+export const runCommand = command => {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`[ oavp:run-command ] error: ${error.message}`);
+        reject('error');
+        return;
+      }
+      if (stderr) {
+        console.error(`[ oavp:run-command ] stderr: ${stderr}`);
+        reject('error');
+        return;
+      }
+      console.log(`[ oavp:run-command ] stdout: ${stdout}`);
+      resolve(stdout);
+    });
+  });
+}
