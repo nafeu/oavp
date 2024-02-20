@@ -1,4 +1,4 @@
-import { buildSketchDataObject } from './helpers.mjs'
+import { buildSketchDataObject, getAnimationOverrides } from './helpers.mjs'
 import {
   EXAMPLE_SKETCH_FILE,
   EXAMPLE_SKETCH_DATA_OBJECT
@@ -42,4 +42,42 @@ describe('buildSketchDataObject', () => {
       expect(result.generatorObject).toEqual(EXAMPLE_SKETCH_DATA_OBJECT.generatorObject);
     });
   })
+});
+
+describe('getAnimationOverrides', () => {
+  describe('given a valid object name with one animation', () => {
+    it('returns a valid set of animation overrides', () => {
+      expect(getAnimationOverrides('Rectangle_anim^z^-^normal_1234')).toEqual([
+        { property: 'zMod', value: -3000 },
+        { property: 'zModType', value: 'b-roll' },
+      ]);
+
+      expect(getAnimationOverrides('Rectangle_anim^z^-^faster_1234')).toEqual([
+        { property: 'zMod', value: -5000 },
+        { property: 'zModType', value: 'b-roll' },
+      ]);
+
+      expect(getAnimationOverrides('Rectangle_anim^z^-^slower_1234')).toEqual([
+        { property: 'zMod', value: -1000 },
+        { property: 'zModType', value: 'b-roll' },
+      ]);
+    });
+  });
+
+  describe('given a valid object name with no animations', () => {
+    it('returns a valid empty array', () => {
+      expect(getAnimationOverrides('Rectangle_1234')).toEqual([])
+    });
+  });
+
+  describe('given a valid object name with multiple animations', () => {
+    it('returns a valid set of animation overrides', () => {
+      expect(getAnimationOverrides('Rectangle_anim^z^-^normal_anim^x^+^slower_1234')).toEqual([
+        { property: 'zMod', value: -3000 },
+        { property: 'zModType', value: 'b-roll' },
+        { property: 'xMod', value: 1000 },
+        { property: 'xModType', value: 'b-roll' }
+      ]);
+    });
+  });
 });

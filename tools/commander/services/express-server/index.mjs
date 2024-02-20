@@ -157,10 +157,13 @@ const setupExpressServer = ws => {
   app.post("/api/package", async (req, res) => {
     const { sketchDataObject, exportId } = req.body;
 
-    // TODO: Continue ~ Generate broll code here...
+    console.log(`[ oavp-commander:package ] Generating timelapse code...`);
     const timelapse = generateTimelapse(sketchDataObject);
 
+    console.log(`[ oavp-commander:package ] Overwriting src/sketch.pde...`);
     await fs.writeFile(`../../src/sketch.pde`, timelapse);
+
+    console.log(`[ oavp-commander:package ] Exporting social.txt for ${sketchDataObject.id}...`);
     await fs.writeFile(`../../package-export-files/${sketchDataObject.id}_social.txt`, sketchDataObject.socialMediaTextContent);
 
     const child = spawn('bash', ['./package.sh', sketchDataObject.id, exportId]);

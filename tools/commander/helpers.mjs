@@ -365,7 +365,7 @@ export const countFiles = (directoryPath, filePattern) => {
       return file.endsWith(filePattern);
     }).map(file => Number(file.split('_')[0]));
 
-    return Math.max(...sketchFileNumbers);
+    return Math.max(...[...sketchFileNumbers, 0]);
   } catch (err) {
     console.error(`Error counting files: ${err}`);
     return -1;

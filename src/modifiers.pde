@@ -81,7 +81,8 @@ String[] MODIFIER_TYPES = {
   // "quantized-toggle-soft",
   // "quantized-counter",
   "mouse-x",
-  "mouse-y"
+  "mouse-y",
+  "b-roll"
 };
 
 void setupPreSketchIntervals() {
@@ -118,8 +119,8 @@ void setupPreSketchIntervals() {
   // entities.addInterval("quantized-toggle-hard", 100, 1);
   // entities.addInterval("quantized-toggle-soft", 100, 1);
   // entities.addInterval("quantized-counter", 100, 1);
-  entities.addInterval("mouse-x", 100, 1);
-  entities.addInterval("mouse-y", 100, 1);
+  entities.addInterval("mouse-x", modDistance, 1);
+  entities.addInterval("mouse-y", modDistance, 1);
 }
 
 void updateDefaultIntervals() {
@@ -264,6 +265,9 @@ public float getMod(String type, int modDelay) {
       break;
     case "mouse-y":
       out = entities.getInterval("mouse-y").getOneDimensionalData(delayIndex);
+      break;
+    case "b-roll":
+      out = brollValue;
       break;
     default:
       out = 1.0;

@@ -534,3 +534,9 @@ export const INVALID_TAGS = [
   'a',
   'b'
 ]
+
+export const ANIMATION_SPEED_MAPPING = {
+  slower: 1000,
+  normal: 3000,
+  faster: 5000
+}

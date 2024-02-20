@@ -49,8 +49,6 @@ export const getSketchDataObjects = async () => {
 
           await fs.writeFile(jsonFilePath, JSON.stringify(jsonData), 'utf-8');
         }
-
-        // TODO: Continue ~ add "save" button in viewer which will save changes to the appropriate sketchDataObject, it should just be in #_sketch.json
       } catch (err) {
         console.error(`[ oavp-commander:express-server ] Error building sketchDataObjects`, err);
       }

@@ -52,7 +52,9 @@ WebsocketServer server;
 
 int SCALE_FACTOR = 1;
 
+String framePrefix = "frame";
 boolean isRecording = false;
+boolean isAnimatingBroll = false;
 boolean shouldExit = false;
 
 void setup() {
@@ -157,7 +159,7 @@ synchronized void draw() {
         }
 
         if (isRecording) {
-          saveFrame("../package-export-files/video-export-frame-######.png");
+          saveFrame("../package-export-files/" + framePrefix + "-######.png");
         }
       }
     } catch (Exception e) {

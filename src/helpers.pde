@@ -1,6 +1,7 @@
 float normalMouseX;
 float normalMouseY;
 boolean newMovieFrame;
+float brollValue = 0.0;
 
 float globalSpeed = 0.01;
 
@@ -313,6 +314,27 @@ void closeApplication() {
   shouldExit = true;
 }
 
+void startTimelapse() {
+  setFramePrefix("timelapse");
+}
+
 void enableRecording() {
   isRecording = true;
+}
+
+void setBrollValue(float updatedValue) {
+  brollValue = updatedValue;
+}
+
+void setFramePrefix(String newFramePrefix) {
+  framePrefix = newFramePrefix;
+}
+
+void startAnimatingBroll() {
+  setFramePrefix("broll");
+  isAnimatingBroll = true;
+}
+
+void stopAnimatingBroll() {
+  isAnimatingBroll = false;
 }

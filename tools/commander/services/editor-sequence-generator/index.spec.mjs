@@ -2,7 +2,13 @@ import seedRandom from 'seedRandom';
 
 jest.setTimeout(5000);
 
-import { generateSequence, getCustomizationsForOavpObject, getInterpolatedStepsForPropertyPair } from './index.mjs'
+import {
+  generateSequence,
+  getCustomizationsForOavpObject,
+  getInterpolatedStepsForPropertyPair,
+  getInterpolatedAnimationValues,
+  easingFunctions
+} from './index.mjs'
 
 import {
   EXAMPLE_COLOR_PROPERTY_PAIR,
@@ -12,12 +18,14 @@ import {
   EXAMPLE_ITER_FUNC_SEQUENCE,
   EXAMPLE_PALETTE,
   EXAMPLE_PALETTE_SEQUENCE,
-  EXAMPLE_SKETCH_DATA_OBJECT
+  EXAMPLE_SKETCH_DATA_OBJECT,
+  EXAMPLE_ANIMATION_VALUES,
+  EXAMPLE_ANIMATION_VALUES_EASE_IN_QUAD
 } from './constants.mjs'
 
 import testSketchDataObject from './test-sketch-data-obj.json';
 
-describe.only('generateSequence', () => {
+describe('generateSequence', () => {
   beforeEach(() => {
     Math.random = seedRandom('test');
   });
@@ -66,5 +74,19 @@ describe('getInterpolatedStepsForPropertyPair', () => {
     const result = getInterpolatedStepsForPropertyPair({ propertyPair: EXAMPLE_ITER_FUNC_PROPERTY_PAIR, palette: EXAMPLE_PALETTE });
 
     expect(result).toEqual(EXAMPLE_ITER_FUNC_SEQUENCE)
+  });
+});
+
+describe('getInterpolatedAnimationValues', () => {
+  it('returns a valid array of interpolated animation values', () => {
+    const result = getInterpolatedAnimationValues({ frameCount: 10 });
+
+    expect(result).toEqual(EXAMPLE_ANIMATION_VALUES)
+  });
+
+  it('returns a valid array of interpolated animation values with easeInQuad easing', () => {
+    const result = getInterpolatedAnimationValues({ frameCount: 30, easing: easingFunctions.easeInQuad });
+
+    expect(result).toEqual(EXAMPLE_ANIMATION_VALUES_EASE_IN_QUAD)
   });
 });

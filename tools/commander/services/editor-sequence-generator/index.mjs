@@ -17,6 +17,24 @@ import {
   SEQUENCE_TYPE_TIMELAPSE
 } from './constants.mjs';
 
+export const easingFunctions = {
+  linear: t => t,
+  easeInQuad: t => t * t,
+  easeOutCubic: t => (--t) * t * t + 1
+}
+
+export const getInterpolatedAnimationValues = ({ frameCount, easing = easingFunctions.linear }) => {
+  let values = [];
+
+  for (let i = 0; i < frameCount; i++) {
+    let t = i / (frameCount - 1);
+    let easedValue = easing(t);
+    values.push(easedValue);
+  }
+
+  return values;
+}
+
 export const getMinutesByMs = millis => {
   var minutes = Math.floor(millis / 60000);
   var seconds = ((millis % 60000) / 1000).toFixed(0);
@@ -178,12 +196,14 @@ export const generateTimelapse = sketchDataObject => {
   const customizationSets = objects.map(object => ({
     name: object.name,
     shape: object.shape,
+    animations: object.animations,
     customizations: getCustomizationsForOavpObject(object)
   }));
 
   const interpolatedSets = customizationSets.map(customizationSet => ({
     shape: customizationSet.shape,
     name: customizationSet.name,
+    animations: customizationSet.animations,
     interpolations: customizationSet.customizations.map(customization => ({
       ...customization,
       sequence: getInterpolatedStepsForPropertyPair({ propertyPair: customization, palette })
@@ -355,7 +375,7 @@ export const getStepsSortedByArtisticOrder = interpolatedSteps => {
     .map(
       ({ interpolations, ...rest }) => ({ interpolations: interpolations.sort(artisticSortOrder), ...rest })
     )
-    .forEach(({ shape, name, interpolations }) => {
+    .forEach(({ shape, name, interpolations, animations }) => {
       const objectOutput = [];
 
       const isDefaultShape = _.includes(['background', 'camera'], name);
@@ -367,6 +387,12 @@ export const getStepsSortedByArtisticOrder = interpolatedSteps => {
       }
 
       objectOutput.push({ macro: 'delay', args: { ms: getRandomMsDelay('long') } })
+
+      // TODO: Continue ~ verify this...
+      animations.forEach(({ property, value }) => {
+        objectOutput.push({ macro: 'set', args: { property, value }});
+        objectOutput.push({ macro: 'delay', args: { ms: getRandomMsDelay('short') } })
+      });
 
       interpolations.forEach(({ property, sequence }) => {
         objectOutput.push({ macro: 'switch-tool', args: { enum: _.find(OAVP_OBJECT_PROPERTIES, { property }).tool } });
@@ -385,6 +411,8 @@ export const getStepsSortedByArtisticOrder = interpolatedSteps => {
 }
 
 export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sortedStepGroups, sketchDataObject }) => {
+  const FRAMECOUNT = 300;
+
   const output = []
 
   sortedStepGroups.forEach((sortedSteps, index) => {
@@ -426,9 +454,15 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
   })
 
   const setup = [
-    `void setupSketch() { println("[ oavp ] Approx Timelapse Time: ${getMinutesByMs(approxTotalTimeMs)}"); setSketchSeed(${sketchDataObject.seed}); }`,
-    `void setupSketchPostEditor() { thread("queueGeneratedTimelapse"); enableRecording(); }`,
-    `void updateSketch() {}`,
+    `int brollIndex = 0; int brollInterpolationLength = ${FRAMECOUNT};`,
+    `void setupSketch() { println("[ oavp ] Approx Recording Time: ${getMinutesByMs(approxTotalTimeMs)}"); setSketchSeed(${sketchDataObject.seed}); }`,
+    `void setupSketchPostEditor() { thread("queueGeneratedTimelapse"); enableRecording(); startTimelapse(); }`,
+    `void updateSketch() {`,
+    `  if (isAnimatingBroll) {`,
+    `    if (brollIndex < brollInterpolationLength - 1) { brollIndex += 1; setBrollValue(brollInterpolation[brollIndex]); }`,
+    `    else { stopAnimatingBroll(); closeApplication(); }`,
+    `  }`,
+    `}`,
     `void drawSketch() {}`,
     ``,
     `void queueGeneratedTimelapse() {`,
@@ -440,10 +474,18 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
     )),
     `  editor.toggleEditMode();`,
     `  delay(${getRandomMsDelay('ending')});`,
-    `  closeApplication();`,
+    `  startAnimatingBroll();`,
     `}`,
     ``
   ];
 
-  return [...setup, ...output];
+  // 5s @ 60FPS = 300 frames
+  const brollInterpolation = [
+    'float[] brollInterpolation = {',
+    ...getInterpolatedAnimationValues({ frameCount: FRAMECOUNT })
+      .map(value => `  ${value},`),
+    '};'
+  ];
+
+  return [...setup, ...output, ...brollInterpolation];
 }
