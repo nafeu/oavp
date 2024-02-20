@@ -157,7 +157,7 @@ synchronized void draw() {
         }
 
         if (isRecording) {
-          saveFrame("../video-export-frames/video-export-frame-######.png");
+          saveFrame("../package-export-files/video-export-frame-######.png");
         }
       }
     } catch (Exception e) {

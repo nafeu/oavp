@@ -27,5 +27,5 @@ screencap-code-exports/
 **/preset-dump.txt
 **/timelapse-export.txt
 **/test-sketch-data-obj.json
-video-export-frames/
+package-export-files/
 exports/

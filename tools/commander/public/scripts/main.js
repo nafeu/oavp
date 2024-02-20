@@ -167,6 +167,12 @@ function setAndSendDirectEdit(property, value) {
   sendSocketCommand({ command: 'direct-edit', name: getPropertyName(), type: getPropertyType(), value })
 }
 
+function getSocialMediaTextContent(sketchDataObject) {
+  const { name, id, paletteString } = sketchDataObject;
+
+  return `${id}_${name.split(' ').join('_').toLowerCase()}\n\npalette ▶ ${paletteString}\n\n${socialMediaTemplate}`;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   $('#data').addEventListener('click', function () {
     const originalText = $('#data').textContent;
@@ -183,9 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   $('#sketch-clipboard-button').addEventListener('click', function() {
-    const { name, id, paletteString } = window.sketchDataObjects[selectedSketch];
-
-    const textToCopy = `${id}_${name.split(' ').join('_').toLowerCase()}\n\npalette ▶ ${paletteString}\n\n${socialMediaTemplate}`;
+    const textToCopy = getSocialMediaTextContent(window.sketchDataObjects[selectedSketch]);
 
     window.sketchDataObjects[selectedSketch].socialMediaTextContent = textToCopy;
 
@@ -393,22 +397,26 @@ function handleClickCopyToClipboard() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function handleClickGenerateTimelapse() {
+function handleClickPackage() {
   if (!isLoading) {
     isLoading = true;
 
-    $("#sketch-generate-timelapse-button").textContent = "Generating..."
+    window.sketchDataObjects[selectedSketch].socialMediaTextContent = getSocialMediaTextContent(
+      window.sketchDataObjects[selectedSketch]
+    )
 
-    fetch('/api/generate-timelapse', {
+    $("#sketch-package-button").textContent = "Packaging..."
+
+    fetch('/api/package', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ sketchDataObject: window.sketchDataObjects[selectedSketch] }),
+      body: JSON.stringify({ sketchDataObject: window.sketchDataObjects[selectedSketch], exportId: selectedSketch })
     })
       .then(response => response.json())
       .then(({ message }) => {
-        $("#sketch-generate-timelapse-button").textContent = "Generate Timelapse"
+        $("#sketch-package-button").textContent = "Package"
 
         console.log(message);
 
@@ -416,38 +424,7 @@ function handleClickGenerateTimelapse() {
       })
       .catch(error => {
         console.error(error);
-        $("#sketch-generate-timelapse-button").textContent = "Generate Timelapse"
-
-        isLoading = false;
-      });
-  }
-}
-
-// eslint-disable-next-line no-unused-vars
-function handleClickConstructVideo() {
-  if (!isLoading) {
-    isLoading = true;
-
-    $("#sketch-construct-video-button").textContent = "Constructing..."
-
-    fetch('/api/construct-video', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: window.sketchDataObjects[selectedSketch].id })
-    })
-      .then(response => response.json())
-      .then(({ message }) => {
-        $("#sketch-construct-video-button").textContent = "Construct Video"
-
-        console.log(message);
-
-        isLoading = false;
-      })
-      .catch(error => {
-        console.error(error);
-        $("#sketch-construct-video-button").textContent = "Construct Video"
+        $("#sketch-package-button").textContent = "Package"
 
         isLoading = false;
       });

@@ -154,26 +154,16 @@ const setupExpressServer = ws => {
     }
   })
 
-  app.post("/api/generate-timelapse", async (req, res) => {
-    const { sketchDataObject } = req.body;
+  app.post("/api/package", async (req, res) => {
+    const { sketchDataObject, exportId } = req.body;
 
-    try {
-      const timelapse = generateTimelapse(sketchDataObject);
+    // TODO: Continue ~ Generate broll code here...
+    const timelapse = generateTimelapse(sketchDataObject);
 
-      await fs.writeFile(`../../src/sketch.pde`, timelapse, 'utf-8');
+    await fs.writeFile(`../../src/sketch.pde`, timelapse);
+    await fs.writeFile(`../../package-export-files/${sketchDataObject.id}_social.txt`, sketchDataObject.socialMediaTextContent);
 
-      res.json({ message: `Saved ../../src/sketch.pde successfully` });
-    } catch (err) {
-      console.error(err);
-
-      res.json({ error: err });
-    }
-  })
-
-  app.post("/api/construct-video", async (req, res) => {
-    const { id } = req.body;
-
-    const child = spawn('bash', ['./construct-video.sh', id]);
+    const child = spawn('bash', ['./package.sh', sketchDataObject.id, exportId]);
 
     child.stdout.on('data', (data) => {
       console.log(data.toString());
@@ -184,16 +174,16 @@ const setupExpressServer = ws => {
     });
 
     child.on('error', (error) => {
-      console.error(`[ oavp-commander:construct-video ] Failed to run construct-video.sh: ${error}`);
-      res.status(500).json({ message: 'Failed to run construct-video.sh.' });
+      console.error(`[ oavp-commander:package ] Failed to run package.sh: ${error}`);
+      res.status(500).json({ message: 'Failed to run package.sh.' });
     });
 
     child.on('close', (code) => {
-      console.log(`[ oavp-commander:construct-video ] Video construction concluded.`);
+      console.log(`[ oavp-commander:package ] Package creation concluded.`);
       if (code === 0) {
-        res.json({ message: 'construct-video.sh script executed successfully.' });
+        res.json({ message: 'package.sh script executed successfully.' });
       } else {
-        res.status(500).json({ message: 'construct-video.sh script execution failed.' });
+        res.status(500).json({ message: 'package.sh script execution failed.' });
       }
     });
   })
