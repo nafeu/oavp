@@ -19,7 +19,8 @@ import {
   OBJECT_NAME_REGEX,
   OBJECT_PROPERTIES_REGEX,
   OBJECT_PROPERTY_KEY_AND_VALUE_REGEX,
-  ANIMATION_SPEED_MAPPING
+  ANIMATION_SPEED_MULTIPLIER,
+  BROLL_CAMERA_PRESETS
 } from '../../constants.mjs';
 
 import { conceptMaps } from '../../concept-maps.mjs';
@@ -174,42 +175,39 @@ const getHexColorByInt = integerColor => {
   return getHexAlphaColorByInt(integerColor).substring(0, 7).toUpperCase();
 }
 
-export const getAnimationOverrides = nameWithTags => {
-  if (nameWithTags === 'camera') {
-    return [
-      { property: "zMod", value: -5000 },
-      // TODO: Continue ~ make animation styles less hardcoded
-      { property: "zModType", value: "b-roll" },
-    ]
-  }
+export const getBrollAnimationOverrides = nameWithTags => {
+  const output = BROLL_CAMERA_PRESETS.map(({
+    cameraPresetName,
+    modValue,
+    orientation,
+    easing
+  }) => {
+    if (nameWithTags === 'camera') {
+      return {
+        cameraPresetName,
+        orientation,
+        easing,
+        zModValue: modValue
+      }
+    }
 
-  const animations = nameWithTags.split('_').filter(item => item.includes('anim^'));
+    const animations = nameWithTags.split('_').filter(item => item.includes('camera^'));
 
-  if (animations.length === 0) {
-    return []
-  }
+    if (animations.length === 0) {
+      return null;
+    }
 
-  const output = [];
+    const multiplier = ANIMATION_SPEED_MULTIPLIER[animations[0].split('^')[1]];
 
-  animations.forEach(animationString => {
-    // eslint-disable-next-line no-unused-vars
-    const [_, property, direction, speed] = animationString.split('^');
-
-    const sign = direction === '+' ? '' : '-';
-
-    output.push({
-      property: `${property}Mod`,
-      value: Number(`${sign}${ANIMATION_SPEED_MAPPING[speed]}`)
-    });
-    // TODO: Continue ~ make animation styles less hardcoded
-    // NOTE: If you want to do advanced animation patterns, modify ANIMATION_SPEED_MAPPING
-    output.push({
-      property: `${property}ModType`,
-      value: "b-roll"
-    });
+    return {
+      cameraPresetName,
+      easing,
+      orientation,
+      zModValue: modValue * multiplier
+    }
   });
 
-  return output;
+  return _.compact(output).length === 0 ? [] : output;
 }
 
 export const buildSketchDataObject = sketchFileContent => {
@@ -273,7 +271,7 @@ export const buildSketchDataObject = sketchFileContent => {
           name: objectName,
           shape: objectShape,
           properties,
-          animations: getAnimationOverrides(objectName)
+          animations: getBrollAnimationOverrides(objectName)
         }
       ]
 

@@ -12,10 +12,10 @@
     anim^[prop]^[+/-]^[speed]
 
     eg: move object in z direction forward fast
-        anim^z^-^faster
+        camera^faster
 
     eg: move object in x direction backward slow
-        anim^z^-^faster
+        camera^faster
 */
 
 const sharedValues = `
@@ -46,7 +46,7 @@ const backgroundObjects = `
 [trees]&[pyramids]
 
 #pyramids
-Pyramid_pyramids_accentbfill_accentastroke|x:[pyramids_x];xIter:[pyramids_xIter];y:-[pyramids_dimensions*a]/2;yIter:-[pyramids_dimensions_iter*a]/2;yrIter:95.0;yrIterFunc:random 100;z:-60000;zIter:-[pyramids_dimensions_iter*a]*3;w:[pyramids_dimensions*a];wIter:[pyramids_dimensions_iter*a];h:[pyramids_dimensions*a];hIter:[pyramids_dimensions_iter*a];l:[pyramids_dimensions*a];lIter:[pyramids_dimensions_iter*a];s:100.0;i:[pyramids_i];
+Pyramid_pyramids_accentbfill_accentastroke_camera^slowest|x:[pyramids_x];xIter:[pyramids_xIter];y:-[pyramids_dimensions*a]/2;yIter:-[pyramids_dimensions_iter*a]/2;yrIter:95.0;yrIterFunc:random 100;z:-60000;zIter:-[pyramids_dimensions_iter*a]*3;w:[pyramids_dimensions*a];wIter:[pyramids_dimensions_iter*a];h:[pyramids_dimensions*a];hIter:[pyramids_dimensions_iter*a];l:[pyramids_dimensions*a];lIter:[pyramids_dimensions_iter*a];s:100.0;i:[pyramids_i];
 #pyramids_x
 rand(-30000, 30000)
 #pyramids_xIter
@@ -63,10 +63,10 @@ rand(1, 3)
 [city_main]&[city_flair]
 
 #city_main
-Flatbox_city_main_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4450;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_main_accentastroke_accentbfill_camera^slowest|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4450;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
 #city_flair
-Flatbox_city_flair_accentastroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
-Flatbox_city_flair_accentcstroke_accentbfill|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a]-[city_flair_w_offset];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_flair_accentastroke_accentbfill_camera^slowest|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_flair_accentcstroke_accentbfill_camera^slowest|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a]-[city_flair_w_offset];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
 [skip]
 #city_i
 rand(20, 51, 'ci')
@@ -91,17 +91,17 @@ rand(12600, 60000, 'cxiter')
 [left_valley_f]
 [right_valley_f]
 #left_valley_f
-Triangle_leftvalley_accentbfill|x:-[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
-Triangle_leftvalley_accentbfill|x:[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill_camera^slowest|x:-[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill_camera^slowest|x:[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
 #right_valley_b
-Triangle_rightvalley_accentcfill|x:-[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
-Triangle_rightvalley_accentcfill|x:[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill_camera^slowest|x:-[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill_camera^slowest|x:[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
 #left_valley_b
-Triangle_leftvalley_accentbfill|x:-[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
-Triangle_leftvalley_accentbfill|x:[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill_camera^slowest|x:-[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill_camera^slowest|x:[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
 #right_valley_f
-Triangle_rightvalley_accentcfill|x:-[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
-Triangle_rightvalley_accentcfill|x:[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill_camera^slowest|x:-[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill_camera^slowest|x:[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
 #left_valley_rotation
 rand(8, 42)
 #right_valley_rotation
@@ -114,8 +114,8 @@ rand(100, 100000, 'offset_b')
 rand(100, 100000)
 
 #trees
-Terrain_trees|z:-6000;zIter:930.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramA:50.0;paramB:350.0;paramC:50.0;paramCIter:-30.0;paramD:50.0;variation:trees;i:3;
-Terrain_trees|y:15;z:-6000;zIter:970.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramB:610.0;paramCIter:140.0;paramD:135.0;variation:trees;i:3;
+Terrain_trees_camera^slowest|z:-6000;zIter:930.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramA:50.0;paramB:350.0;paramC:50.0;paramCIter:-30.0;paramD:50.0;variation:trees;i:3;
+Terrain_trees_camera^slowest|y:15;z:-6000;zIter:970.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramB:610.0;paramCIter:140.0;paramD:135.0;variation:trees;i:3;
 
 #mountains
 [mountains_a]
@@ -123,11 +123,11 @@ Terrain_trees|y:15;z:-6000;zIter:970.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;pa
 [mountains_a]&[mountains_b]&[mountains_c]
 
 #mountains_a
-Terrain_mountains_accentastroke|y:-300;z:-70000;w:150000.0;h:20000.0;s:10760.0;paramA:[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+Terrain_mountains_accentastroke_camera^slowest|y:-300;z:-70000;w:150000.0;h:20000.0;s:10760.0;paramA:[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
 #mountains_b
-Terrain_mountains_accentbfill_accentcstroke|y:-300;z:-75000;w:200000.0;h:20000.0;s:10760.0;paramA:2000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+Terrain_mountains_accentbfill_accentcstroke_camera^slowest|y:-300;z:-75000;w:200000.0;h:20000.0;s:10760.0;paramA:2000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
 #mountains_c
-Terrain_mountains_accentdfill|y:-300;z:-77000;w:250000.0;h:20000.0;s:10760.0;paramA:4000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+Terrain_mountains_accentdfill_camera^slowest|y:-300;z:-77000;w:250000.0;h:20000.0;s:10760.0;paramA:4000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
 #mountains_height
 rand(-5000, 3000)
 #mountains_density
@@ -151,9 +151,9 @@ const celestialObjects = `
 [skypyramid_main]&[skypyramid_rings]
 
 #skypyramid_main
-Pyramid_skypyramid_main_accentdstroke_notaccentdfill_anim^z^-^normal|x:[skypyramid_x*a];xr:180;y:-[skypyramid_y*a];yIter:-7000.0;yr:[skypyramid_yr];z:-80000;w:10000.0;wIter:10000.0;h:10000.0;hIter:10000.0;l:10000.0;lIter:10000.0;i:5;
+Pyramid_skypyramid_main_accentdstroke_notaccentdfill_camera^fixed|x:[skypyramid_x*a];xr:180;y:-[skypyramid_y*a];yIter:-7000.0;yr:[skypyramid_yr];z:-80000;w:10000.0;wIter:10000.0;h:10000.0;hIter:10000.0;l:10000.0;lIter:10000.0;i:5;
 #skypyramid_rings
-Circle_skypyramid_circle_nofill_accentcstroke_anim^z^-^normal|x:[skypyramid_x*a];y:-[skypyramid_y*a]+6000;yIter:600.0;xr:90;z:-80000;w:100.0;h:100.0;s:1000.0;sIter:1600.0;;i:6;
+Circle_skypyramid_circle_nofill_accentcstroke_camera^fixed|x:[skypyramid_x*a];y:-[skypyramid_y*a]+6000;yIter:600.0;xr:90;z:-80000;w:100.0;h:100.0;s:1000.0;sIter:1600.0;;i:6;
 
 #skypyramid_x
 rand(-50000, 50000, 'x')
@@ -170,7 +170,7 @@ rand(8000, 30000, 'y')
 [skip]
 
 #body
-Circle_planetbody_anim^z^-^normal|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*celestial3];
+Circle_planetbody_camera^fixed|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*celestial3];
 #planet_x
 rand(-25000, 25000, 'celestial1')
 #planet_y
@@ -178,7 +178,7 @@ rand(-35000, -7000, 'celestial2')
 #planet_s
 rand(5000, 75000, 'celestial3')
 #shadow
-Circle_planetshadow_nostroke_backgroundfill_anim^z^-^normal|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000+[shadow_z_offset];w:100.0;h:100.0;s:[planet_s*celestial3]-[shadow_s_offset];
+Circle_planetshadow_nostroke_backgroundfill_camera^fixed|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000+[shadow_z_offset];w:100.0;h:100.0;s:[planet_s*celestial3]-[shadow_s_offset];
 #shadow_z_offset
 rand(500, 2000)
 #shadow_s_offset
@@ -191,7 +191,7 @@ rand(500, 2000)
 [ring]&[ring]&[ring]&[ring]
 [ring]&[ring]&[ring]&[ring]&[ring]
 #ring
-Circle_planetring_nofill_anim^z^-^normal|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*f3]+[ring_s_offset];xr:[ring_xr*celestial4];yr:[ring_xr*celestial5];zr:[ring_xr*celestial6];
+Circle_planetring_nofill_camera^fixed|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*f3]+[ring_s_offset];xr:[ring_xr*celestial4];yr:[ring_xr*celestial5];zr:[ring_xr*celestial6];
 #ring_s_offset
 rand(1000, 20000)
 #ring_xr
@@ -204,11 +204,11 @@ rand(0, 180, 'celestial6')
 #station
 [station_base]&[station_ring]&[station_square]
 #station_base
-Pyramid_station_base_accentbstroke_accentdfill_anim^z^-^normal|x:[station_x*a];y:-40000;yIter:[station_dimensions*a]+1000;yr:45+[station_zr*a];z:-85000;zrIter:180.0;w:[station_dimensions*a];h:[station_dimensions*a];l:[station_dimensions*a];s:100.0;i:2;wIter:-[station_dimensions_iter*a];lIter:-[station_dimensions_iter*a];
+Pyramid_station_base_accentbstroke_accentdfill_camera^fixed|x:[station_x*a];y:-40000;yIter:[station_dimensions*a]+1000;yr:45+[station_zr*a];z:-85000;zrIter:180.0;w:[station_dimensions*a];h:[station_dimensions*a];l:[station_dimensions*a];s:100.0;i:2;wIter:-[station_dimensions_iter*a];lIter:-[station_dimensions_iter*a];
 #station_square
-Box_station_square_nofill_accentcstroke_anim^z^-^normal|x:[station_x*a];y:-25000;yIter:1600.0;yr:45+[station_zr*a];z:-85000;w:[station_dimensions*a];wIter:-2000.0;h:1100.0;l:[station_dimensions*a];lIter:-2000.0;s:100.0;i:3;
+Box_station_square_nofill_accentcstroke_camera^fixed|x:[station_x*a];y:-25000;yIter:1600.0;yr:45+[station_zr*a];z:-85000;w:[station_dimensions*a];wIter:-2000.0;h:1100.0;l:[station_dimensions*a];lIter:-2000.0;s:100.0;i:3;
 #station_ring
-Circle_station_ring_nofill_accentastroke_anim^z^-^normal|x:[station_x*a];xIter:200.0;xr:60;y:-31000;yIter:-200.0;yr:[station_ring_yr];z:-85000;w:100.0;h:100.0;s:[station_dimensions*a]*2;sIter:2000;i:3;
+Circle_station_ring_nofill_accentastroke_camera^fixed|x:[station_x*a];xIter:200.0;xr:60;y:-31000;yIter:-200.0;yr:[station_ring_yr];z:-85000;w:100.0;h:100.0;s:[station_dimensions*a]*2;sIter:2000;i:3;
 #station_x
 rand(-45000, 45000, 'x')
 #station_dimensions
@@ -223,11 +223,11 @@ rand(-75, 45)
 #fleet
 [fleet_main]&[fleet_shields]&[fleet_lights]
 #fleet_main
-Box_fleet_main_accentafill_backgroundstroke_anim^z^-^normal|x:0+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-30000+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+Box_fleet_main_accentafill_backgroundstroke_camera^fixed|x:0+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-30000+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
 #fleet_shields
-Box_fleet_shields_nofill_accentbstroke_anim^z^-^normal|x:-200+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-29400+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+Box_fleet_shields_nofill_accentbstroke_camera^fixed|x:-200+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-29400+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
 #fleet_lights
-Rectangle_fleet_lights_nostroke_accentcfill_anim^z^-^normal|x:1600+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-27000+[fleet_y*a];yIter:[fleet_yiter*a];z:-86000;zIter:-[fleet_ziter*a];w:[fleet_w*a]*0.5;wIter:-4010.0;h:500.0;hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+Rectangle_fleet_lights_nostroke_accentcfill_camera^fixed|x:1600+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-27000+[fleet_y*a];yIter:[fleet_yiter*a];z:-86000;zIter:-[fleet_ziter*a];w:[fleet_w*a]*0.5;wIter:-4010.0;h:500.0;hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
 #fleet_i
 rand(3, 5, 'i')
 #fleet_x
@@ -252,7 +252,7 @@ rand(45, -45, 'fyr')
 rand(-45, 30, 'fxr')
 
 #tesseract
-Box_tesseract_accentdstroke_nofill_anim^z^-^normal|x:[tesseract_x];xr:[tesseract_r];y:[tesseract_y];yr:[tesseract_r];z:-90000;zr:[tesseract_r];w:[tesseract_dimensions*a];wIter:-1000.0;wIterFunc:x^2;h:[tesseract_dimensions*a];hIter:-1000.0;hIterFunc:x^2;l:[tesseract_dimensions*a];lIter:-1000.0;lIterFunc:x^2;s:100.0;i:6;
+Box_tesseract_accentdstroke_nofill_camera^fixed|x:[tesseract_x];xr:[tesseract_r];y:[tesseract_y];yr:[tesseract_r];z:-90000;zr:[tesseract_r];w:[tesseract_dimensions*a];wIter:-1000.0;wIterFunc:x^2;h:[tesseract_dimensions*a];hIter:-1000.0;hIterFunc:x^2;l:[tesseract_dimensions*a];lIter:-1000.0;lIterFunc:x^2;s:100.0;i:6;
 #tesseract_x
 rand(-50600, 50600, 'tx')
 #tesseract_y
@@ -263,13 +263,13 @@ rand(5000, 20100, 'tdim')
 rand(-180, 180)
 
 #nebula
-CurvedLine_nebula_accentastroke_anim^z^-^normal|x:40000;xIter:-607.0;y:-20000;z:-90000;zr:60;w:130100.0;wIter:-350.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-185.0;paramCIter:-200.0;paramD:7050.0;i:100;
-CurvedLine_nebula_accentbstroke_anim^z^-^normal|x:40000;xIter:-807.0;y:-20000;z:-90000;zr:150;w:130100.0;wIter:50.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-185.0;paramCIter:-200.0;paramD:7050.0;i:100;
-CurvedLine_nebula_accentcstroke_anim^z^-^normal|x:40000;xIter:-807.0;y:-20000;z:-90000;zr:60;zrIter:-1.0;w:390100.0;wIter:-755.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-1385.0;paramCIter:-200.0;paramD:7050.0;variation:two-point;i:100;
-CurvedLine_nebula_accentdstroke_anim^z^-^normal|x:-40200;xIter:-607.0;y:-20000;z:-90000;zr:60;zrIter:-1.0;w:390100.0;wIter:1045.0;h:100.0;strokeWeight:5.0;paramB:-1250.0;paramBIter:-2185.0;paramD:7050.0;variation:two-point;i:100;
+CurvedLine_nebula_accentastroke_camera^fixed|x:40000;xIter:-607.0;y:-20000;z:-90000;zr:60;w:130100.0;wIter:-350.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-185.0;paramCIter:-200.0;paramD:7050.0;i:100;
+CurvedLine_nebula_accentbstroke_camera^fixed|x:40000;xIter:-807.0;y:-20000;z:-90000;zr:150;w:130100.0;wIter:50.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-185.0;paramCIter:-200.0;paramD:7050.0;i:100;
+CurvedLine_nebula_accentcstroke_camera^fixed|x:40000;xIter:-807.0;y:-20000;z:-90000;zr:60;zrIter:-1.0;w:390100.0;wIter:-755.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-1385.0;paramCIter:-200.0;paramD:7050.0;variation:two-point;i:100;
+CurvedLine_nebula_accentdstroke_camera^fixed|x:-40200;xIter:-607.0;y:-20000;z:-90000;zr:60;zrIter:-1.0;w:390100.0;wIter:1045.0;h:100.0;strokeWeight:5.0;paramB:-1250.0;paramBIter:-2185.0;paramD:7050.0;variation:two-point;i:100;
 
 #artifact
-Arc_artifact_anim^z^-^normal|y:-30000;z:-90000;w:30100.0;wIter:-1000.0;h:30100.0;hIter:-1000.0;s:100.0;paramAIter:-25.0;paramB:180.0;paramBIter:-25.0;i:5;
+Arc_artifact_camera^fixed|y:-30000;z:-90000;w:30100.0;wIter:-1000.0;h:30100.0;hIter:-1000.0;s:100.0;paramAIter:-25.0;paramB:180.0;paramBIter:-25.0;i:5;
 
 `+sharedValues;
 
@@ -300,14 +300,14 @@ rand(-3000, -5000)
 #ship
 [ship_cockpit]&[ship_thruster]&[ship_wings]&[ship_contrail]
 #ship_cockpit
-Pyramid_ship_cockpit_accentbfill_accentcstroke_anim^z^-^faster|x:[ship_x*a];y:[ship_y*a];z:-150+[ship_z*a];xr:90;w:150.0;h:350.0;l:50.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+Pyramid_ship_cockpit_accentbfill_accentcstroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:-150+[ship_z*a];xr:90;w:150.0;h:350.0;l:50.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
 #ship_thruster
-Pyramid_ship_thruster_accentdstroke_anim^z^-^faster|x:[ship_x*a];y:[ship_y*a];z:[ship_z*a];xr:90;w:130.0;h:150.0;l:30.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+Pyramid_ship_thruster_accentdstroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:[ship_z*a];xr:90;w:130.0;h:150.0;l:30.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
 #ship_wings
-Flatbox_ship_wings_accentbfill_accentcstroke_anim^z^-^faster|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a];xr:90;w:650.0;h:100.0;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+Flatbox_ship_wings_accentbfill_accentcstroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a];xr:90;w:650.0;h:100.0;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
 [skip]
 #ship_contrail
-Box_ship_contrail_accentafill_nostroke_anim^z^-^faster|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a]+50000;xr:90;w:40.0;h:100000;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+Box_ship_contrail_accentafill_nostroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a]+50000;xr:90;w:40.0;h:100000;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
 #ship_x
 rand(-20000, 20000, 'sx')
 #ship_y
@@ -343,12 +343,12 @@ rand(-3600, 3600)
 rand(1750, 3000)
 
 #bigsmoke
-Arc_bigsmoke_nofill_accentastroke_anim^z^-^slower|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;yIter:[bigsmoke_y];yIterFunc:random 100;
+Arc_bigsmoke_nofill_accentastroke_camera^slower|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;yIter:[bigsmoke_y];yIterFunc:random 100;
 #bigsmoke_y
 rand(500, 1200)
 
 #birds
-CurvedLine_birds_accentastroke_anim^z^-^slower|x:[birds_x];xIter:-[birds_xiter];xIterFunc:random 100;xr:90;y:-[birds_y];z:-[birds_z];zIter:-[birds_ziter];w:30.0;h:100.0;paramB:-15.0;paramD:50.0;i:31;
+CurvedLine_birds_accentastroke_camera^slower|x:[birds_x];xIter:-[birds_xiter];xIterFunc:random 100;xr:90;y:-[birds_y];z:-[birds_z];zIter:-[birds_ziter];w:30.0;h:100.0;paramB:-15.0;paramD:50.0;i:31;
 #birds_x
 rand(-600, 600)
 #birds_y

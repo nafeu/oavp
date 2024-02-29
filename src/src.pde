@@ -64,7 +64,7 @@ void setup() {
   println("[ oavp ] github.com/nafeu/oavp");
 
   // DISPLAY_SETTINGS_START
-  fullScreen(P3D, 2);
+  fullScreen(P3D, 3);
   // size(3840, 2160, P3D); // 4K
   // DISPLAY_SETTINGS_END
 

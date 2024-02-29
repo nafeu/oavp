@@ -535,8 +535,43 @@ export const INVALID_TAGS = [
   'b'
 ]
 
-export const ANIMATION_SPEED_MAPPING = {
-  slower: 1000,
-  normal: 3000,
-  faster: 5000
+export const ANIMATION_SPEED_MULTIPLIER = {
+  slowest: 0.25,
+  slower:  0.5,
+  fixed:   1,
+  faster:  3,
+  fastest: 5
 }
+
+export const BROLL_CAMERA_PRESETS = [
+  {
+    cameraPresetName: 'Stationary',
+    modValue: 0,
+    orientation: 'forward',
+    easing: 'linear'
+  },
+  {
+    cameraPresetName: 'FixedForward',
+    modValue: -1000,
+    orientation: 'forward',
+    easing: 'linear'
+  },
+  {
+    cameraPresetName: 'FastestBackward',
+    modValue: -5000,
+    orientation: 'backward',
+    easing: 'linear'
+  },
+  {
+    cameraPresetName: 'SlowerForward',
+    modValue: -500,
+    orientation: 'forward',
+    easing: 'linear'
+  },
+  {
+    cameraPresetName: 'EaseInFasterBackward',
+    modValue: -3000,
+    orientation: 'backward',
+    easing: 'easeInQuad'
+  }
+]

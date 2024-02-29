@@ -1,4 +1,4 @@
-import { buildSketchDataObject, getAnimationOverrides } from './helpers.mjs'
+import { buildSketchDataObject, getBrollAnimationOverrides } from './helpers.mjs'
 import {
   EXAMPLE_SKETCH_FILE,
   EXAMPLE_SKETCH_DATA_OBJECT
@@ -44,40 +44,84 @@ describe('buildSketchDataObject', () => {
   })
 });
 
-describe('getAnimationOverrides', () => {
+describe('getBrollAnimationOverrides', () => {
+  describe('given a camera object', () => {
+    it('returns a valid set of animation overrides', () => {
+      expect(getBrollAnimationOverrides('camera')).toEqual([
+        {
+          "cameraPresetName": "Stationary",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 0
+        },
+        {
+          "cameraPresetName": "FixedForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 1000
+        },
+        {
+          "cameraPresetName": "FastestBackward",
+          "easing": "linear",
+          "orientation": "backward",
+          "zModValue": 5000
+        },
+        {
+          "cameraPresetName": "SlowerForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 500
+        },
+        {
+          "cameraPresetName": "EaseInFasterBackward",
+          "easing": "easeInQuad",
+          "orientation": "backward",
+          "zModValue": 3000
+        }
+      ]);
+    });
+  });
+
   describe('given a valid object name with one animation', () => {
     it('returns a valid set of animation overrides', () => {
-      expect(getAnimationOverrides('Rectangle_anim^z^-^normal_1234')).toEqual([
-        { property: 'zMod', value: -3000 },
-        { property: 'zModType', value: 'b-roll' },
-      ]);
-
-      expect(getAnimationOverrides('Rectangle_anim^z^-^faster_1234')).toEqual([
-        { property: 'zMod', value: -5000 },
-        { property: 'zModType', value: 'b-roll' },
-      ]);
-
-      expect(getAnimationOverrides('Rectangle_anim^z^-^slower_1234')).toEqual([
-        { property: 'zMod', value: -1000 },
-        { property: 'zModType', value: 'b-roll' },
+      expect(getBrollAnimationOverrides('Rectangle_camera^fixed_1234')).toEqual([
+        {
+          "cameraPresetName": "Stationary",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 0
+        },
+        {
+          "cameraPresetName": "FixedForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 1000
+        },
+        {
+          "cameraPresetName": "FastestBackward",
+          "easing": "linear",
+          "orientation": "backward",
+          "zModValue": 5000
+        },
+        {
+          "cameraPresetName": "SlowerForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 500
+        },
+        {
+          "cameraPresetName": "EaseInFasterBackward",
+          "easing": "easeInQuad",
+          "orientation": "backward",
+          "zModValue": 3000
+        }
       ]);
     });
   });
 
   describe('given a valid object name with no animations', () => {
     it('returns a valid empty array', () => {
-      expect(getAnimationOverrides('Rectangle_1234')).toEqual([])
-    });
-  });
-
-  describe('given a valid object name with multiple animations', () => {
-    it('returns a valid set of animation overrides', () => {
-      expect(getAnimationOverrides('Rectangle_anim^z^-^normal_anim^x^+^slower_1234')).toEqual([
-        { property: 'zMod', value: -3000 },
-        { property: 'zModType', value: 'b-roll' },
-        { property: 'xMod', value: 1000 },
-        { property: 'xModType', value: 'b-roll' }
-      ]);
+      expect(getBrollAnimationOverrides('Rectangle_1234')).toEqual([])
     });
   });
 });

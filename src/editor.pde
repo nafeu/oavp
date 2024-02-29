@@ -1051,10 +1051,39 @@ public class OavpEditor {
     }
   }
 
+  public void handleExternalCreateModeSelection(String name) {
+    int index = this.createModeSelectionIndex;
+    this.queuedObjectToCreate = index;
+    this.isCreateMode = false;
+    objects.useOptions(this.selectableObjects.get(index));
+    if (this.modalOptions.size() == 0) {
+      this.finalizeCreation(name);
+    } else {
+      this.openModal();
+    }
+  }
+
   private void finalizeCreation() {
     if (this.queuedObjectToCreate < this.selectableObjects.size()) {
       String className = this.selectableObjects.get(this.queuedObjectToCreate);
       objects.add(getNewObjectName(className, 1), className);
+      editorToolbar.show();
+      if (this.activeTool == TOOL_COLOR) {
+        editorColorButtons.show();
+      }
+      editorToggleSnappingButton.show();
+      editorObjectsList.show();
+      editorObjectButtons.show();
+      editorVariableMeta.show();
+      editorHelp.show();
+      editorCreateObject.hide();
+    }
+  }
+
+  private void finalizeCreation(String name) {
+    if (this.queuedObjectToCreate < this.selectableObjects.size()) {
+      String className = this.selectableObjects.get(this.queuedObjectToCreate);
+      objects.add(name, className);
       editorToolbar.show();
       if (this.activeTool == TOOL_COLOR) {
         editorColorButtons.show();

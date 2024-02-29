@@ -20,11 +20,11 @@ FPS_BROLL=60
 RECORDING_FILE_TIMELAPSE=$1_raw-timelapse.mp4
 TIMELAPSE_FILE=$1_timelapse.mp4
 TIMELAPSE_VERTICAL_FILE=$1_timelapse-vertical.mp4
-RECORDING_FILE_BROLL=$1_broll.mp4
-BROLL_VERTICAL_FILE=$1_broll-vertical.mp4
+BROLL_FILE=$1_broll.mp4
 SKETCH_PDE=$2.txt
 SKETCH_DATA_OBJECT=$2.json
 ORIGINAL_IMAGE=$2.png
+IMAGE_ENHANCER_DIR=$PROJECT_DIR/tools/lib/waifu2x-ncnn-vulkan
 
 echo "[ oavp:package.sh ] Executing video construction for:"
 echo $PACKAGES_DIR/$1
@@ -44,13 +44,18 @@ echo "[ oavp:package.sh ] Creating vertical version of timelapse..."
 ffmpeg -i $TIMELAPSE_FILE -vf 'split[original][copy];[copy]scale=-1:ih*(16/9)*(16/9),crop=w=ih*9/16[copy_cropped];[copy_cropped][original]overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2' $TIMELAPSE_VERTICAL_FILE
 
 echo "[ oavp:package.sh ] Converting frames to video for broll..."
-ffmpeg -framerate $FPS_BROLL -pattern_type glob -i 'broll-*.png' -r $FPS_BROLL -pix_fmt yuv420p $RECORDING_FILE_BROLL
+ffmpeg -framerate $FPS_BROLL -pattern_type glob -i 'broll-*.png' -r $FPS_BROLL -pix_fmt yuv420p $BROLL_FILE
 
-echo "[ oavp:package.sh ] Creating vertical version of broll..."
-ffmpeg -i $RECORDING_FILE_BROLL -vf 'split[original][copy];[copy]scale=-1:ih*(16/9)*(16/9),crop=w=ih*9/16[copy_cropped];[copy_cropped][original]overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2' $BROLL_VERTICAL_FILE
+echo "[ oavp:package.sh ] Creating video-list.txt..."
+echo "file '$TIMELAPSE_FILE'" > video-list.txt
+echo "file '$BROLL_FILE'" >> video-list.txt
 
-echo "[ oavp:package.sh ] Cleaning up frames..."
+echo "[ oavp:package.sh ] Concatenating videos..."
+ffmpeg -f concat -safe 0 -i video-list.txt -c copy $1_promo.mp4
+
+echo "[ oavp:package.sh ] Cleaning up frames and video-list..."
 rm *.png
+rm video-list.txt
 
 echo "[ oavp:package.sh ] Creating package folder..."
 
@@ -72,6 +77,11 @@ cd $EXPORTS_DIR
 cp ./$SKETCH_PDE $NEW_PACKAGE_DIR/$1_sketch.pde
 cp ./$SKETCH_DATA_OBJECT $NEW_PACKAGE_DIR/$1_sketchDataObject.json
 cp ./$ORIGINAL_IMAGE $NEW_PACKAGE_DIR/$1_original.png
+
+cd $IMAGE_ENHANCER_DIR
+echo "[ oavp:package.sh ] Upscaling original image"
+./waifu2x-ncnn-vulkan -i $NEW_PACKAGE_DIR/$1_original.png -o $NEW_PACKAGE_DIR/$1_original-2x.png -s 2 -n 2
+./waifu2x-ncnn-vulkan -i $NEW_PACKAGE_DIR/$1_original-2x.png -o $NEW_PACKAGE_DIR/$1_original-4x.png -s 2 -n 2
 
 echo "[ oavp:package.sh ] Opening new package directory..."
 open $NEW_PACKAGE_DIR

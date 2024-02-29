@@ -9,7 +9,8 @@ import {
   OAVP_PROPERTY_SNAP_LEVELS_MAPPING,
   OAVP_ITER_FUNCS,
   OAVP_MOD_TYPES,
-  OAVP_AVAILABLE_SHAPE_INDEX_MAPPING
+  OAVP_AVAILABLE_SHAPE_INDEX_MAPPING,
+  BROLL_CAMERA_PRESETS
 } from '../../constants.mjs';
 
 import {
@@ -23,7 +24,7 @@ export const easingFunctions = {
   easeOutCubic: t => (--t) * t * t + 1
 }
 
-export const getInterpolatedAnimationValues = ({ frameCount, easing = easingFunctions.linear }) => {
+export const getInterpolatedAnimationValues = ({ frameCount, easing = easingFunctions.linear, orientation = 'forward' }) => {
   let values = [];
 
   for (let i = 0; i < frameCount; i++) {
@@ -32,7 +33,7 @@ export const getInterpolatedAnimationValues = ({ frameCount, easing = easingFunc
     values.push(easedValue);
   }
 
-  return values;
+  return orientation === 'backward' ? values.reverse() : values;
 }
 
 export const getMinutesByMs = millis => {
@@ -44,8 +45,8 @@ export const getMinutesByMs = millis => {
 export const getRandomMsDelay = delayType => {
   const FAST_EXPORT = true;
 
-  const DELAY_TYPE_SHORT_MS_HIGH = 70;
-  const DELAY_TYPE_SHORT_MS_LOW = 50;
+  const DELAY_TYPE_SHORT_MS_HIGH = 80;
+  const DELAY_TYPE_SHORT_MS_LOW = 60;
   const DELAY_TYPE_LONG_MS_HIGH = 500;
   const DELAY_TYPE_LONG_MS_LOW = 450;
 
@@ -196,14 +197,14 @@ export const generateTimelapse = sketchDataObject => {
   const customizationSets = objects.map(object => ({
     name: object.name,
     shape: object.shape,
-    animations: object.animations,
+    brollAnimations: object.brollAnimations,
     customizations: getCustomizationsForOavpObject(object)
   }));
 
   const interpolatedSets = customizationSets.map(customizationSet => ({
     shape: customizationSet.shape,
     name: customizationSet.name,
-    animations: customizationSet.animations,
+    brollAnimations: customizationSet.brollAnimations,
     interpolations: customizationSet.customizations.map(customization => ({
       ...customization,
       sequence: getInterpolatedStepsForPropertyPair({ propertyPair: customization, palette })
@@ -375,7 +376,7 @@ export const getStepsSortedByArtisticOrder = interpolatedSteps => {
     .map(
       ({ interpolations, ...rest }) => ({ interpolations: interpolations.sort(artisticSortOrder), ...rest })
     )
-    .forEach(({ shape, name, interpolations, animations }) => {
+    .forEach(({ shape, name, interpolations, brollAnimations }) => {
       const objectOutput = [];
 
       const isDefaultShape = _.includes(['background', 'camera'], name);
@@ -383,16 +384,10 @@ export const getStepsSortedByArtisticOrder = interpolatedSteps => {
       if (isDefaultShape) {
         objectOutput.push({ macro: 'create-default', args: { name } });
       } else {
-        objectOutput.push({ macro: 'create', args: { name: shape } });
+        objectOutput.push({ macro: 'create', args: { shape, name } });
       }
 
       objectOutput.push({ macro: 'delay', args: { ms: getRandomMsDelay('long') } })
-
-      // TODO: Continue ~ verify this...
-      animations.forEach(({ property, value }) => {
-        objectOutput.push({ macro: 'set', args: { property, value }});
-        objectOutput.push({ macro: 'delay', args: { ms: getRandomMsDelay('short') } })
-      });
 
       interpolations.forEach(({ property, sequence }) => {
         objectOutput.push({ macro: 'switch-tool', args: { enum: _.find(OAVP_OBJECT_PROPERTIES, { property }).tool } });
@@ -411,7 +406,10 @@ export const getStepsSortedByArtisticOrder = interpolatedSteps => {
 }
 
 export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sortedStepGroups, sketchDataObject }) => {
-  const FRAMECOUNT = 300;
+  // 10s @ 60FPS = 600 frames
+  const BROLL_VIDEO_LENGTH_S = 10;
+  const BROLL_FPS = 60;
+  const FRAMECOUNT = BROLL_VIDEO_LENGTH_S * BROLL_FPS;
 
   const output = []
 
@@ -425,12 +423,12 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
       }
 
       if (macro === 'create') {
-        output.push(`  println("[ oavp ] Timelapse: creating object: ${args.name}");`);
+        output.push(`  println("[ oavp ] Timelapse: creating object: ${args.shape}");`);
         output.push(`  editor.toggleCreateMode();`);
         output.push(`  delay(${getRandomMsDelay('long')});`);
-        output.push(`  editor.setCreateModeSelectionIndex(${OAVP_AVAILABLE_SHAPE_INDEX_MAPPING[args.name]});`);
+        output.push(`  editor.setCreateModeSelectionIndex(${OAVP_AVAILABLE_SHAPE_INDEX_MAPPING[args.shape]});`);
         output.push(`  delay(${getRandomMsDelay('long')});`);
-        output.push(`  editor.handleExternalCreateModeSelection();`);
+        output.push(`  editor.handleExternalCreateModeSelection("${args.name}");`);
         // output.push(`  objects.add(getNewObjectName("${args.name}", 1), "${args.name}");`);
       }
 
@@ -454,17 +452,37 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
   })
 
   const setup = [
-    `int brollIndex = 0; int brollInterpolationLength = ${FRAMECOUNT};`,
+    `int brollIndex = 0; int brollInterpolationLength = ${FRAMECOUNT}; String brollPreset = ""; boolean allAnimationsDone = false;`,
     `void setupSketch() { println("[ oavp ] Approx Recording Time: ${getMinutesByMs(approxTotalTimeMs)}"); setSketchSeed(${sketchDataObject.seed}); }`,
     `void setupSketchPostEditor() { thread("queueGeneratedTimelapse"); enableRecording(); startTimelapse(); }`,
     `void updateSketch() {`,
     `  if (isAnimatingBroll) {`,
-    `    if (brollIndex < brollInterpolationLength - 1) { brollIndex += 1; setBrollValue(brollInterpolation[brollIndex]); }`,
-    `    else { stopAnimatingBroll(); closeApplication(); }`,
+    `    if (brollIndex < brollInterpolationLength - 1) {`,
+    `      brollIndex += 1;`,
+    ...(BROLL_CAMERA_PRESETS.map(
+      ({ cameraPresetName }) => `      if (brollPreset.equals("${cameraPresetName}")) { setBrollValue(brollInterpolation${cameraPresetName}[brollIndex]); }`)
+    ),
+    `    }`,
+    `    else {`,
+    `      if (allAnimationsDone) { stopAnimatingBroll(); closeApplication(); }`,
+    `      else {`,
+    ...(BROLL_CAMERA_PRESETS.map(
+      ({ cameraPresetName }, index) => {
+        const isFirstPreset = index === 0;
+        const isLastPreset = index === BROLL_CAMERA_PRESETS.length - 1;
+
+        if (isLastPreset) {
+          return `        else { allAnimationsDone = true; }`
+        } else {
+          return `        ${!isFirstPreset ? 'else if' : 'if' } (brollPreset.equals("${cameraPresetName}")) { queueBrollAnimation${BROLL_CAMERA_PRESETS[index + 1].cameraPresetName}(); }`
+        }
+      }
+    )),
+    `      }`,
+    `    }`,
     `  }`,
-    `}`,
-    `void drawSketch() {}`,
-    ``,
+    `}\n`,
+    `void drawSketch() {}\n`,
     `void queueGeneratedTimelapse() {`,
     `  delay(${getRandomMsDelay('loading')});`,
     `  editor.toggleEditMode();`,
@@ -475,17 +493,42 @@ export const getEditorMacrosFromSortedSteps = ({ stepsSortedByArtisticOrder: sor
     `  editor.toggleEditMode();`,
     `  delay(${getRandomMsDelay('ending')});`,
     `  startAnimatingBroll();`,
-    `}`,
-    ``
+    `  queueBrollAnimation${BROLL_CAMERA_PRESETS[0].cameraPresetName}();`,
+    `}\n`
   ];
 
-  // 5s @ 60FPS = 300 frames
-  const brollInterpolation = [
-    'float[] brollInterpolation = {',
-    ...getInterpolatedAnimationValues({ frameCount: FRAMECOUNT })
-      .map(value => `  ${value},`),
-    '};'
-  ];
+  let brollInterpolation = []
+
+  BROLL_CAMERA_PRESETS.forEach(({
+    cameraPresetName,
+    modValue,
+    orientation,
+    easing
+  }, index) => {
+    brollInterpolation.push(`void queueBrollAnimation${cameraPresetName}() {`);
+    brollInterpolation.push(`  println("[ oavp ] Broll: animating preset ${cameraPresetName}");`);
+
+    brollInterpolation.push(`  brollPreset = "${cameraPresetName}";`);
+    brollInterpolation.push(`  setBrollValue(0);`);
+    brollInterpolation.push(`  brollIndex = 0;`);
+
+    sketchDataObject.objects.forEach(({ name: id, animations }) => {
+      if (animations && animations.length > 0) {
+        const { zModValue } = _.find(animations, { cameraPresetName });
+
+        brollInterpolation.push(`  objects.get("${id}").variable.set("zMod", ${modValue}).set("zModType", "b-roll");`);
+      }
+    });
+
+    brollInterpolation.push(`}\n`);
+
+    brollInterpolation.push(`float[] brollInterpolation${cameraPresetName} = {`);
+    brollInterpolation.push(
+      ...getInterpolatedAnimationValues({ frameCount: FRAMECOUNT, orientation, easing: easingFunctions[easing] })
+        .map(value => `  ${value},`)
+    );
+    brollInterpolation.push(`};\n`);
+  });
 
   return [...setup, ...output, ...brollInterpolation];
 }

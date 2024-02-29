@@ -6,7 +6,7 @@ export const EXAMPLE_SKETCH_FILE = `
 void setupSketch() {
 setSketchSeed(26);
 objects.add("background", "OavpObject").set("x",0).set("xMod",0.0).set("xModType","none").set("xIter",0.0).set("xIterFunc","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("xrIter",0.0).set("xrIterFunc","none").set("y",0).set("yMod",0.0).set("yModType","none").set("yIter",0.0).set("yIterFunc","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("yrIter",0.0).set("yrIterFunc","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zIter",0.0).set("zIterFunc","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("zrIter",0.0).set("zrIterFunc","none").set("w",100.0).set("wMod",0.0).set("wModType","none").set("wIter",0.0).set("wIterFunc","none").set("h",100.0).set("hMod",0.0).set("hModType","none").set("hIter",0.0).set("hIterFunc","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("lIter",0.0).set("lIterFunc","none").set("s",100.0).set("sMod",0.0).set("sModType","none").set("sIter",0.0).set("sIterFunc","none").set("strokeColor",-2039584).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeColorIter",0.0).set("strokeColorIterFunc","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("strokeWeightIter",0.0).set("strokeWeightIterFunc","none").set("fillColor",-10564128).set("fillColorMod",0.0).set("fillColorModType","none").set("fillColorIter",0.0).set("fillColorIterFunc","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramAIter",0.0).set("paramAIterFunc","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramBIter",0.0).set("paramBIterFunc","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramCIter",0.0).set("paramCIterFunc","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramDIter",0.0).set("paramDIterFunc","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("paramEIter",0.0).set("paramEIterFunc","none").set("modDelay",0).set("i",1);
-objects.add("Rectangle_horizon_accentafill_anim^z^-^normal_3QgpWVUAZ", "Rectangle").set("x",0).set("xMod",0.0).set("xModType","none").set("xIter",0.0).set("xIterFunc","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("xrIter",0.0).set("xrIterFunc","none").set("y",40000).set("yMod",0.0).set("yModType","none").set("yIter",0.0).set("yIterFunc","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("yrIter",0.0).set("yrIterFunc","none").set("z",-65000).set("zMod",0.0).set("zModType","none").set("zIter",0.0).set("zIterFunc","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("zrIter",0.0).set("zrIterFunc","none").set("w",200000.0).set("wMod",0.0).set("wModType","none").set("wIter",0.0).set("wIterFunc","none").set("h",80000.0).set("hMod",0.0).set("hModType","none").set("hIter",0.0).set("hIterFunc","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("lIter",0.0).set("lIterFunc","none").set("s",0.0).set("sMod",0.0).set("sModType","none").set("sIter",0.0).set("sIterFunc","none").set("strokeColor",-10564128).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeColorIter",0.0).set("strokeColorIterFunc","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("strokeWeightIter",0.0).set("strokeWeightIterFunc","none").set("fillColor",-3866679).set("fillColorMod",0.0).set("fillColorModType","none").set("fillColorIter",0.0).set("fillColorIterFunc","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramAIter",0.0).set("paramAIterFunc","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramBIter",0.0).set("paramBIterFunc","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramCIter",0.0).set("paramCIterFunc","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramDIter",0.0).set("paramDIterFunc","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("paramEIter",0.0).set("paramEIterFunc","none").set("modDelay",0).set("i",1);
+objects.add("Rectangle_horizon_accentafill_camera^fixed_3QgpWVUAZ", "Rectangle").set("x",0).set("xMod",0.0).set("xModType","none").set("xIter",0.0).set("xIterFunc","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("xrIter",0.0).set("xrIterFunc","none").set("y",40000).set("yMod",0.0).set("yModType","none").set("yIter",0.0).set("yIterFunc","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("yrIter",0.0).set("yrIterFunc","none").set("z",-65000).set("zMod",0.0).set("zModType","none").set("zIter",0.0).set("zIterFunc","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("zrIter",0.0).set("zrIterFunc","none").set("w",200000.0).set("wMod",0.0).set("wModType","none").set("wIter",0.0).set("wIterFunc","none").set("h",80000.0).set("hMod",0.0).set("hModType","none").set("hIter",0.0).set("hIterFunc","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("lIter",0.0).set("lIterFunc","none").set("s",0.0).set("sMod",0.0).set("sModType","none").set("sIter",0.0).set("sIterFunc","none").set("strokeColor",-10564128).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeColorIter",0.0).set("strokeColorIterFunc","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("strokeWeightIter",0.0).set("strokeWeightIterFunc","none").set("fillColor",-3866679).set("fillColorMod",0.0).set("fillColorModType","none").set("fillColorIter",0.0).set("fillColorIterFunc","none").set("paramA",0.0).set("paramAMod",0.0).set("paramAModType","none").set("paramAIter",0.0).set("paramAIterFunc","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramBIter",0.0).set("paramBIterFunc","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramCIter",0.0).set("paramCIterFunc","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramDIter",0.0).set("paramDIterFunc","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("paramEIter",0.0).set("paramEIterFunc","none").set("modDelay",0).set("i",1);
 objects.add("camera", "OavpObject").set("x",0).set("xMod",0.0).set("xModType","none").set("xIter",0.0).set("xIterFunc","none").set("xr",0).set("xrMod",0.0).set("xrModType","none").set("xrIter",0.0).set("xrIterFunc","none").set("y",0).set("yMod",0.0).set("yModType","none").set("yIter",0.0).set("yIterFunc","none").set("yr",0).set("yrMod",0.0).set("yrModType","none").set("yrIter",0.0).set("yrIterFunc","none").set("z",0).set("zMod",0.0).set("zModType","none").set("zIter",0.0).set("zIterFunc","none").set("zr",0).set("zrMod",0.0).set("zrModType","none").set("zrIter",0.0).set("zrIterFunc","none").set("w",0.0).set("wMod",0.0).set("wModType","none").set("wIter",0.0).set("wIterFunc","none").set("h",0.0).set("hMod",0.0).set("hModType","none").set("hIter",0.0).set("hIterFunc","none").set("l",0.0).set("lMod",0.0).set("lModType","none").set("lIter",0.0).set("lIterFunc","none").set("s",100.0).set("sMod",0.0).set("sModType","none").set("sIter",0.0).set("sIterFunc","none").set("strokeColor",-2039584).set("strokeColorMod",0.0).set("strokeColorModType","none").set("strokeColorIter",0.0).set("strokeColorIterFunc","none").set("strokeWeight",2.0).set("strokeWeightMod",0.0).set("strokeWeightModType","none").set("strokeWeightIter",0.0).set("strokeWeightIterFunc","none").set("fillColor",-16711694).set("fillColorMod",0.0).set("fillColorModType","none").set("fillColorIter",0.0).set("fillColorIterFunc","none").set("paramA",100000.0).set("paramAMod",0.0).set("paramAModType","none").set("paramAIter",0.0).set("paramAIterFunc","none").set("paramB",0.0).set("paramBMod",0.0).set("paramBModType","none").set("paramBIter",0.0).set("paramBIterFunc","none").set("paramC",0.0).set("paramCMod",0.0).set("paramCModType","none").set("paramCIter",0.0).set("paramCIterFunc","none").set("paramD",0.0).set("paramDMod",0.0).set("paramDModType","none").set("paramDIter",0.0).set("paramDIterFunc","none").set("paramE",0.0).set("paramEMod",0.0).set("paramEModType","none").set("paramEIter",0.0).set("paramEIterFunc","none").set("modDelay",0).set("i",1);
 }
 void setupSketchPostEditor() {
@@ -150,7 +150,7 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
       "animations": []
     },
     {
-      "name": "Rectangle_horizon_accentafill_anim^z^-^normal_3QgpWVUAZ",
+      "name": "Rectangle_horizon_accentafill_camera^fixed_3QgpWVUAZ",
       "shape": "Rectangle",
       "properties": [
         { "property": "x", "value": 0 },
@@ -247,8 +247,36 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
         { "property": "i", "value": 1 }
       ],
       "animations": [
-        { "property": "zMod", "value": -3000 },
-        { "property": "zModType", "value": "b-roll" },
+        {
+          "cameraPresetName": "Stationary",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 0,
+        },
+        {
+          "cameraPresetName": "FixedForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 1000,
+        },
+        {
+          "cameraPresetName": "FastestBackward",
+          "easing": "linear",
+          "orientation": "backward",
+          "zModValue": 5000,
+        },
+        {
+          "cameraPresetName": "SlowerForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 500,
+        },
+        {
+          "cameraPresetName": "EaseInFasterBackward",
+          "easing": "easeInQuad",
+          "orientation": "backward",
+          "zModValue": 3000,
+        }
       ]
     },
     {
@@ -349,8 +377,36 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
         { "property": "i", "value": 1 }
       ],
       "animations": [
-        { "property": "zMod", "value": -5000 },
-        { "property": "zModType", "value": "b-roll" },
+        {
+          "cameraPresetName": "Stationary",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 0,
+        },
+        {
+          "cameraPresetName": "FixedForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 1000,
+        },
+        {
+          "cameraPresetName": "FastestBackward",
+          "easing": "linear",
+          "orientation": "backward",
+          "zModValue": 5000,
+        },
+        {
+          "cameraPresetName": "SlowerForward",
+          "easing": "linear",
+          "orientation": "forward",
+          "zModValue": 500,
+        },
+        {
+          "cameraPresetName": "EaseInFasterBackward",
+          "easing": "easeInQuad",
+          "orientation": "backward",
+          "zModValue": 3000,
+        }
       ]
     }
   ],

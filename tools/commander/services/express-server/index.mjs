@@ -163,6 +163,8 @@ const setupExpressServer = ws => {
     console.log(`[ oavp-commander:package ] Overwriting src/sketch.pde...`);
     await fs.writeFile(`../../src/sketch.pde`, timelapse);
 
+    // res.json({ 'success': 'early short' }); return;
+
     console.log(`[ oavp-commander:package ] Exporting social.txt for ${sketchDataObject.id}...`);
     await fs.writeFile(`../../package-export-files/${sketchDataObject.id}_social.txt`, sketchDataObject.socialMediaTextContent);
 
