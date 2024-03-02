@@ -298,6 +298,18 @@ export const buildSketchDataObject = sketchFileContent => {
 
       output.colors = { ...output.colors, [colorObjectKey]: colorObjectValue }
     }
+
+    const PRINT_OFFSETS = {
+      "print-offset-2x3": 2400,
+      "print-offset-3x4": 2220,
+      "print-offset-4x5": 2112,
+      "print-offset-11x14": 2143,
+      "print-offset-international": 2308
+    }
+
+    _.keys(PRINT_OFFSETS).forEach(key => {
+      output[key] = PRINT_OFFSETS[key]
+    });
   });
 
   return output

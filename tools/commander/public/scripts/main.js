@@ -228,6 +228,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.sketchDataObjects[selectedSketch].paletteString = value;
   });
+
+  const PRINT_SIZES = [
+    '2x3',
+    '3x4',
+    '4x5',
+    '11x14',
+    'international'
+  ];
+
+  const ORIGINAL_WIDTH = 7680;
+
+  PRINT_SIZES.forEach(size => {
+    const sliderElement = $(`#print-offset-${size}`);
+
+    sliderElement.addEventListener('input', ({ target: { value }}) => {
+      $(`#print-guide-${size}`).style.left = `${value}%`;
+    });
+
+    sliderElement.addEventListener('mousedown', () => {
+      $(`#print-guide-${size}`).style.opacity = 1;
+    });
+
+    sliderElement.addEventListener('mouseup', () => {
+      $(`#print-guide-${size}`).style.opacity = 0;
+
+      const offsetPx = Math.round(ORIGINAL_WIDTH * ($(`#print-offset-${size}`).value / 100))
+
+      console.log({ offsetPx });
+
+      window.sketchDataObjects[selectedSketch][`print-offset-${size}`] = offsetPx;
+
+      saveSketch();
+    });
+  });
 })
 
 // eslint-disable-next-line no-unused-vars

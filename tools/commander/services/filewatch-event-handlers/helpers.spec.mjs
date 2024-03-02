@@ -41,7 +41,15 @@ describe('buildSketchDataObject', () => {
     it('returns a valid generatorObject', () => {
       expect(result.generatorObject).toEqual(EXAMPLE_SKETCH_DATA_OBJECT.generatorObject);
     });
-  })
+
+    it('returns valid printOffsets', () => {
+      expect(result["print-offset-2x3"]).toEqual(2400);
+      expect(result["print-offset-3x4"]).toEqual(2220);
+      expect(result["print-offset-4x5"]).toEqual(2112);
+      expect(result["print-offset-11x14"]).toEqual(2143);
+      expect(result["print-offset-international"]).toEqual(2308);
+    });
+  });
 });
 
 describe('getBrollAnimationOverrides', () => {
@@ -58,25 +66,25 @@ describe('getBrollAnimationOverrides', () => {
           "cameraPresetName": "FixedForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 1000
+          "zModValue": -2000
         },
         {
           "cameraPresetName": "FastestBackward",
           "easing": "linear",
           "orientation": "backward",
-          "zModValue": 5000
+          "zModValue": -10000
         },
         {
           "cameraPresetName": "SlowerForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 500
+          "zModValue": -1000
         },
         {
           "cameraPresetName": "EaseInFasterBackward",
           "easing": "easeInQuad",
           "orientation": "backward",
-          "zModValue": 3000
+          "zModValue": -6000
         }
       ]);
     });
@@ -95,25 +103,25 @@ describe('getBrollAnimationOverrides', () => {
           "cameraPresetName": "FixedForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 1000
+          "zModValue": -2000
         },
         {
           "cameraPresetName": "FastestBackward",
           "easing": "linear",
           "orientation": "backward",
-          "zModValue": 5000
+          "zModValue": -10000
         },
         {
           "cameraPresetName": "SlowerForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 500
+          "zModValue": -1000
         },
         {
           "cameraPresetName": "EaseInFasterBackward",
           "easing": "easeInQuad",
           "orientation": "backward",
-          "zModValue": 3000
+          "zModValue": -6000
         }
       ]);
     });

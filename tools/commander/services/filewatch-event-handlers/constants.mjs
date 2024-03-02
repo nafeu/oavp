@@ -257,25 +257,25 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
           "cameraPresetName": "FixedForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 1000,
+          "zModValue": -2000,
         },
         {
           "cameraPresetName": "FastestBackward",
           "easing": "linear",
           "orientation": "backward",
-          "zModValue": 5000,
+          "zModValue": -10000,
         },
         {
           "cameraPresetName": "SlowerForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 500,
+          "zModValue": -1000,
         },
         {
           "cameraPresetName": "EaseInFasterBackward",
           "easing": "easeInQuad",
           "orientation": "backward",
-          "zModValue": 3000,
+          "zModValue": -6000,
         }
       ]
     },
@@ -387,25 +387,25 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
           "cameraPresetName": "FixedForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 1000,
+          "zModValue": -2000,
         },
         {
           "cameraPresetName": "FastestBackward",
           "easing": "linear",
           "orientation": "backward",
-          "zModValue": 5000,
+          "zModValue": -10000,
         },
         {
           "cameraPresetName": "SlowerForward",
           "easing": "linear",
           "orientation": "forward",
-          "zModValue": 500,
+          "zModValue": -1000,
         },
         {
           "cameraPresetName": "EaseInFasterBackward",
           "easing": "easeInQuad",
           "orientation": "backward",
-          "zModValue": 3000,
+          "zModValue": -6000,
         }
       ]
     }

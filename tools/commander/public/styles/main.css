@@ -216,6 +216,7 @@ pre {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  position: relative;
 }
 
 #details-menu {
@@ -273,6 +274,18 @@ svg {
     border: none;
     height: 100px;
   }
+
+  .print-slider {
+    width: 90%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .print-slider-label {
+    font-size: 0.25em;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 #details-menu-actions, #details-finalization-actions {
@@ -284,4 +297,43 @@ svg {
   button {
     font-size: 0.75em;
   }
+}
+
+#print-guide-2x3 {
+  height: 100%;
+  width: 37.5%;
+  border: 1px solid var(--color-a);
+  position: absolute;
+}
+
+#print-guide-3x4 {
+  height: 100%;
+  width: 42.2%;
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-4x5 {
+  height: 100%;
+  width: 45%;
+  border: 1px solid var(--color-c);
+  position: absolute;
+}
+
+#print-guide-11x14 {
+  height: 100%;
+  width: 44.2%;
+  border: 1px solid var(--color-d);
+  position: absolute;
+}
+
+#print-guide-international {
+  height: 100%;
+  width: 39.9%;
+  border: 1px solid var(--color-e);
+  position: absolute;
+}
+
+.print-guide {
+  opacity: 0;
 }
