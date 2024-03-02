@@ -552,25 +552,25 @@ export const BROLL_CAMERA_PRESETS = [
   },
   {
     cameraPresetName: 'FixedForward',
-    modValue: -1000,
+    modValue: -2000,
     orientation: 'forward',
     easing: 'linear'
   },
   {
     cameraPresetName: 'FastestBackward',
-    modValue: -5000,
+    modValue: -10000,
     orientation: 'backward',
     easing: 'linear'
   },
   {
     cameraPresetName: 'SlowerForward',
-    modValue: -500,
+    modValue: -1000,
     orientation: 'forward',
     easing: 'linear'
   },
   {
     cameraPresetName: 'EaseInFasterBackward',
-    modValue: -3000,
+    modValue: -6000,
     orientation: 'backward',
     easing: 'easeInQuad'
   }

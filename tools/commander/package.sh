@@ -10,6 +10,11 @@ if [ -z "$2" ]; then
   exit 1
 fi
 
+if [ -z "$3" ]; then
+  echo "[ oavp:package.sh ] Error: no sketch name specified."
+  exit 1
+fi
+
 PROJECT_DIR=$(dirname $(dirname $(pwd)))
 EXPORTS_DIR=$PROJECT_DIR/exports
 SKETCH_DIR=$PROJECT_DIR/src
@@ -23,8 +28,10 @@ TIMELAPSE_VERTICAL_FILE=$1_timelapse-vertical.mp4
 BROLL_FILE=$1_broll.mp4
 SKETCH_PDE=$2.txt
 SKETCH_DATA_OBJECT=$2.json
+SKETCH_NAME=$1_$3
 ORIGINAL_IMAGE=$2.png
 IMAGE_ENHANCER_DIR=$PROJECT_DIR/tools/lib/waifu2x-ncnn-vulkan
+WATERMARK_FONT=$PROJECT_DIR/tools/lib/fonts/CPMono_v07_Light.otf
 
 echo "[ oavp:package.sh ] Executing video construction for:"
 echo $PACKAGES_DIR/$1
@@ -81,7 +88,22 @@ cp ./$ORIGINAL_IMAGE $NEW_PACKAGE_DIR/$1_original.png
 cd $IMAGE_ENHANCER_DIR
 echo "[ oavp:package.sh ] Upscaling original image"
 ./waifu2x-ncnn-vulkan -i $NEW_PACKAGE_DIR/$1_original.png -o $NEW_PACKAGE_DIR/$1_original-2x.png -s 2 -n 2
-./waifu2x-ncnn-vulkan -i $NEW_PACKAGE_DIR/$1_original-2x.png -o $NEW_PACKAGE_DIR/$1_original-4x.png -s 2 -n 2
+./waifu2x-ncnn-vulkan -i $NEW_PACKAGE_DIR/$1_original-2x.png -o $NEW_PACKAGE_DIR/$1_print.png -s 2 -n 2
+
+echo "[ oavp:package.sh ] Creating print size variations"
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=2880:4320:2400:0" $NEW_PACKAGE_DIR/$1_print-2x3.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3240:4320:2220:0" $NEW_PACKAGE_DIR/$1_print-3x4.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3456:4320:2112:0" $NEW_PACKAGE_DIR/$1_print-4x5.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3394:4320:2143:0" $NEW_PACKAGE_DIR/$1_print-11x14.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3063:4320:2308:0" $NEW_PACKAGE_DIR/$1_print-international.png
+
+echo "[ oavp:package.sh ] Adding watermark to print variations"
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-watermark.png;
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print-2x3.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-2x3-watermark.png;
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print-3x4.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-3x4-watermark.png;
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print-4x5.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-4x5-watermark.png;
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print-11x14.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-11x14-watermark.png;
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print-international.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-international-watermark.png;
 
 echo "[ oavp:package.sh ] Opening new package directory..."
 open $NEW_PACKAGE_DIR

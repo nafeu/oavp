@@ -168,7 +168,7 @@ const setupExpressServer = ws => {
     console.log(`[ oavp-commander:package ] Exporting social.txt for ${sketchDataObject.id}...`);
     await fs.writeFile(`../../package-export-files/${sketchDataObject.id}_social.txt`, sketchDataObject.socialMediaTextContent);
 
-    const child = spawn('bash', ['./package.sh', sketchDataObject.id, exportId]);
+    const child = spawn('bash', ['./package.sh', sketchDataObject.id, exportId, sketchDataObject.name.toLowerCase().split(' ').join('_')]);
 
     child.stdout.on('data', (data) => {
       console.log(data.toString());
