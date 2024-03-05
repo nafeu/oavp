@@ -576,3 +576,9 @@ export const generateName = () => {
 
   return topics[0];
 }
+
+export const getFormattedSketchName = sketchDataObject => sketchDataObject
+  .name
+  .toLowerCase()
+  .split(' ')
+  .join('_')

@@ -4,9 +4,10 @@ import { fileURLToPath } from "url";
 import fs from 'fs/promises';
 import { spawn } from 'child_process';
 
-import { getSketchDataObjects, runCommand } from "./helpers.mjs";
-import { generateName } from "../name-generator/index.mjs";
+import { getSketchDataObjects } from "./helpers.mjs";
+import { generateName, getFormattedSketchName } from "../name-generator/index.mjs";
 import { getNamesByColorPalette } from "../color-palette-info/index.mjs";
+import { getPrintSizeOptions } from "../print-size-info/index.mjs";
 import { generateTimelapse } from '../editor-sequence-generator/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -168,7 +169,14 @@ const setupExpressServer = ws => {
     console.log(`[ oavp-commander:package ] Exporting social.txt for ${sketchDataObject.id}...`);
     await fs.writeFile(`../../package-export-files/${sketchDataObject.id}_social.txt`, sketchDataObject.socialMediaTextContent);
 
-    const child = spawn('bash', ['./package.sh', sketchDataObject.id, exportId, sketchDataObject.name.toLowerCase().split(' ').join('_')]);
+
+    const child = spawn('bash', [
+      './package.sh',
+      sketchDataObject.id,
+      exportId,
+      getFormattedSketchName(sketchDataObject),
+      ...getPrintSizeOptions(sketchDataObject)
+    ]);
 
     child.stdout.on('data', (data) => {
       console.log(data.toString());

@@ -408,7 +408,8 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
           "zModValue": -6000,
         }
       ]
-    }
+    },
+
   ],
   "generatorObject": [
     {
@@ -442,5 +443,10 @@ export const EXAMPLE_SKETCH_DATA_OBJECT = {
       ],
       "property": "Rectangle_horizon_accentafill_3QgpWVUAZ"
     }
-  ]
+  ],
+  "print-offset-2x3": 2400,
+  "print-offset-3x4": 2220,
+  "print-offset-4x5": 2112,
+  "print-offset-11x14": 2143,
+  "print-offset-international": 2308
 }
