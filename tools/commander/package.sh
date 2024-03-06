@@ -40,6 +40,11 @@ if [ -z "$8" ]; then
   exit 1
 fi
 
+if [ -z "$9" ]; then
+  echo "[ oavp:package.sh ] Error: missing print-size offset."
+  exit 1
+fi
+
 PROJECT_DIR=$(dirname $(dirname $(pwd)))
 EXPORTS_DIR=$PROJECT_DIR/exports
 SKETCH_DIR=$PROJECT_DIR/src
@@ -116,14 +121,16 @@ echo "[ oavp:package.sh ] Upscaling original image"
 ./waifu2x-ncnn-vulkan -i $NEW_PACKAGE_DIR/$1_original-2x.png -o $NEW_PACKAGE_DIR/$1_print.png -s 2 -n 2
 
 echo "[ oavp:package.sh ] Creating print size variations"
-ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=2880:4320:$4:0" $NEW_PACKAGE_DIR/$1_print-2x3.png
-ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3240:4320:$5:0" $NEW_PACKAGE_DIR/$1_print-3x4.png
-ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3456:4320:$6:0" $NEW_PACKAGE_DIR/$1_print-4x5.png
-ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3394:4320:$7:0" $NEW_PACKAGE_DIR/$1_print-11x14.png
-ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3063:4320:$8:0" $NEW_PACKAGE_DIR/$1_print-international.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=4320:4320:$4:0" $NEW_PACKAGE_DIR/$1_print-1x1.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=2880:4320:$5:0" $NEW_PACKAGE_DIR/$1_print-2x3.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3240:4320:$6:0" $NEW_PACKAGE_DIR/$1_print-3x4.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3456:4320:$7:0" $NEW_PACKAGE_DIR/$1_print-4x5.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3394:4320:$8:0" $NEW_PACKAGE_DIR/$1_print-11x14.png
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "crop=3063:4320:$9:0" $NEW_PACKAGE_DIR/$1_print-international.png
 
 echo "[ oavp:package.sh ] Adding watermark to print variations"
 ffmpeg -i $NEW_PACKAGE_DIR/$1_print.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-watermark.png;
+ffmpeg -i $NEW_PACKAGE_DIR/$1_print-1x1.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-1x1-watermark.png;
 ffmpeg -i $NEW_PACKAGE_DIR/$1_print-2x3.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-2x3-watermark.png;
 ffmpeg -i $NEW_PACKAGE_DIR/$1_print-3x4.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-3x4-watermark.png;
 ffmpeg -i $NEW_PACKAGE_DIR/$1_print-4x5.png -vf "drawtext=text='nafeuvisual.space \: $SKETCH_NAME':fontfile=$WATERMARK_FONT:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.75:boxborderw=16:x=(w-text_w-50):y=(h-text_h-50)" -codec:a copy $NEW_PACKAGE_DIR/$1_print-4x5-watermark.png;

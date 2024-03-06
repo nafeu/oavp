@@ -30,11 +30,24 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M403.8 34.4c12-5 25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V160H352c-10.1 0-19.6 4.7-25.6 12.8L284 229.3 244 176l31.2-41.6C293.3 110.2 321.8 96 352 96h32V64c0-12.9 7.8-24.6 19.8-29.6zM164 282.7L204 336l-31.2 41.6C154.7 401.8 126.2 416 96 416H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c10.1 0 19.6-4.7 25.6-12.8L164 282.7zm274.6 188c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V416H352c-30.2 0-58.7-14.2-76.8-38.4L121.6 172.8c-6-8.1-15.5-12.8-25.6-12.8H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c30.2 0 58.7 14.2 76.8 38.4L326.4 339.2c6 8.1 15.5 12.8 25.6 12.8h32V320c0-12.9 7.8-24.6 19.8-29.6s25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64z"/></svg>
         </button>
       </div>
+      <div class="print-guide" id="print-guide-1x1"></div>
+      <div class="print-guide-horizontal" id="print-guide-horizontal-1x1"></div>
+      <div class="print-guide-vertical" id="print-guide-vertical-1x1"></div>
       <div class="print-guide" id="print-guide-2x3"></div>
+      <div class="print-guide-horizontal" id="print-guide-horizontal-2x3"></div>
+      <div class="print-guide-vertical" id="print-guide-vertical-2x3"></div>
       <div class="print-guide" id="print-guide-3x4"></div>
+      <div class="print-guide-horizontal" id="print-guide-horizontal-3x4"></div>
+      <div class="print-guide-vertical" id="print-guide-vertical-3x4"></div>
       <div class="print-guide" id="print-guide-4x5"></div>
+      <div class="print-guide-horizontal" id="print-guide-horizontal-4x5"></div>
+      <div class="print-guide-vertical" id="print-guide-vertical-4x5"></div>
       <div class="print-guide" id="print-guide-11x14"></div>
+      <div class="print-guide-horizontal" id="print-guide-horizontal-11x14"></div>
+      <div class="print-guide-vertical" id="print-guide-vertical-11x14"></div>
       <div class="print-guide" id="print-guide-international"></div>
+      <div class="print-guide-horizontal" id="print-guide-horizontal-international"></div>
+      <div class="print-guide-vertical" id="print-guide-vertical-international"></div>
     </div>
   </div>
   <div id="details-menu">
@@ -49,6 +62,8 @@
     <textarea id="sketch-name-input" class="save-on-change" type="text" placeholder="Enter name"></textarea>
     <textarea id="sketch-palette-input" class="save-on-change" type="text" placeholder="Enter palette"></textarea>
     <div id="details-print-size-offset">
+      <div class="print-slider-label">1x1 Offset (56.2% of width, 43.8% max offset)</div>
+      <input class="print-slider" id="print-offset-1x1" type="range" min="0" max="43.8" value="0" class="slider">
       <div class="print-slider-label">2x3 Offset (37.5% of width, 62.5% max offset)</div>
       <input class="print-slider" id="print-offset-2x3" type="range" min="0" max="62.5" value="0" class="slider">
       <div class="print-slider-label">3x4 Offset (42.2% of width, 57.8% max offset)</div>

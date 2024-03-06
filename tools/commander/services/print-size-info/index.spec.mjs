@@ -6,7 +6,7 @@ describe('getPrintSizeOptions', () => {
     it('returns a valid encoded string of print size options (for package script)', () => {
       const result = getPrintSizeOptions(EXAMPLE_SKETCH_DATA_OBJECT);
 
-      expect(result).toEqual(["2400", "2220", "2112", "2143", "2308"]);
+      expect(result).toEqual(["1680", "2400", "2220", "2112", "2143", "2308"]);
     });
   })
 });

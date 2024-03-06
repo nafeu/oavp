@@ -299,10 +299,45 @@ svg {
   }
 }
 
+#print-guide-1x1 {
+  height: 100%;
+  width: 56.2%;
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-vertical-1x1 {
+  height: 100%;
+  width: calc(56.2% / 2);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-horizontal-1x1 {
+  height: 50%;
+  width: 56.2%;
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
 #print-guide-2x3 {
   height: 100%;
   width: 37.5%;
-  border: 1px solid var(--color-a);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-vertical-2x3 {
+  height: 100%;
+  width: calc(37.5% / 2);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-horizontal-2x3 {
+  height: 50%;
+  width: 37.5%;
+  border: 1px solid var(--color-b);
   position: absolute;
 }
 
@@ -313,27 +348,83 @@ svg {
   position: absolute;
 }
 
+#print-guide-vertical-3x4 {
+  height: 100%;
+  width: calc(42.2% / 2);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-horizontal-3x4 {
+  height: 50%;
+  width: 42.2%;
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
 #print-guide-4x5 {
   height: 100%;
   width: 45%;
-  border: 1px solid var(--color-c);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-vertical-4x5 {
+  height: 100%;
+  width: calc(45% / 2);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-horizontal-4x5 {
+  height: 50%;
+  width: 45%;
+  border: 1px solid var(--color-b);
   position: absolute;
 }
 
 #print-guide-11x14 {
   height: 100%;
   width: 44.2%;
-  border: 1px solid var(--color-d);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-vertical-11x14 {
+  height: 100%;
+  width: calc(44.2% / 2);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-horizontal-11x14 {
+  height: 50%;
+  width: 44.2%;
+  border: 1px solid var(--color-b);
   position: absolute;
 }
 
 #print-guide-international {
   height: 100%;
   width: 39.9%;
-  border: 1px solid var(--color-e);
+  border: 1px solid var(--color-b);
   position: absolute;
 }
 
-.print-guide {
+#print-guide-vertical-international {
+  height: 100%;
+  width: calc(39.9% / 2);
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+#print-guide-horizontal-international {
+  height: 50%;
+  width: 39.9%;
+  border: 1px solid var(--color-b);
+  position: absolute;
+}
+
+.print-guide, .print-guide-vertical, .print-guide-horizontal {
   opacity: 0;
 }

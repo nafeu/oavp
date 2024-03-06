@@ -230,6 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const PRINT_SIZES = [
+    '1x1',
     '2x3',
     '3x4',
     '4x5',
@@ -244,18 +245,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sliderElement.addEventListener('input', ({ target: { value }}) => {
       $(`#print-guide-${size}`).style.left = `${value}%`;
+      $(`#print-guide-vertical-${size}`).style.left = `${value}%`;
+      $(`#print-guide-horizontal-${size}`).style.left = `${value}%`;
     });
 
     sliderElement.addEventListener('mousedown', () => {
       $(`#print-guide-${size}`).style.opacity = 1;
+      $(`#print-guide-vertical-${size}`).style.opacity = 1;
+      $(`#print-guide-horizontal-${size}`).style.opacity = 1;
     });
 
     sliderElement.addEventListener('mouseup', () => {
       $(`#print-guide-${size}`).style.opacity = 0;
+      $(`#print-guide-vertical-${size}`).style.opacity = 0;
+      $(`#print-guide-horizontal-${size}`).style.opacity = 0;
 
       const offsetPx = Math.round(ORIGINAL_WIDTH * ($(`#print-offset-${size}`).value / 100))
-
-      console.log({ offsetPx });
 
       window.sketchDataObjects[selectedSketch][`print-offset-${size}`] = offsetPx;
 
