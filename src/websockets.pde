@@ -46,6 +46,17 @@ void webSocketServerEvent(String msg) {
     loop();
   }
 
+  else if (command.equals("sandbox")) {
+    JSONArray receivedOavpObjects = message.getJSONArray("objects");
+
+    noLoop();
+    objects.removeAll("sandbox");
+    // TODO ~ Continue: instead of randomizing colours here, manually assign the accent + bg colors
+    randomizeAllColors();
+    handleReceivedOavpObjects(receivedOavpObjects);
+    loop();
+  }
+
   else if (command.equals("load")) {
     JSONArray receivedOavpObjects = message.getJSONArray("objects");
     int seed = message.getInt("seed");

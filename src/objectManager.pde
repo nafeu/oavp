@@ -118,6 +118,27 @@ public class OavpObjectManager {
     }
   }
 
+  public void removeAll(String subString) {
+    int MAX_ATTEMPTS = 400;
+    int attempts = 0;
+
+    while (activeObjects.size() > 2 && objectsStorage.size() > 2 && attempts < MAX_ATTEMPTS) {
+      String activeObjectName = this.getActiveVariable().name;
+
+      while(activeObjectName.equals("background") || activeObjectName.equals("camera")) {
+        nextActiveVariable();
+        activeObjectName = this.getActiveVariable().name;
+        attempts += 1;
+      }
+
+      if (activeObjectName.contains(subString)) {
+        this.remove();
+      }
+
+      attempts += 1;
+    }
+  }
+
   public void update() {
     for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
       entry.getValue().update();

@@ -6,13 +6,15 @@ import {
   EXPORT_FILE_DIR,
   EXPORT_FILE_NAME,
   EXPORT_IMAGE_NAME,
-  TARGET_FILE_NAME
+  TARGET_FILE_NAME,
+  SANDBOX_CONCEPT_MAPS_FILE_NAME
 } from '../../constants.mjs'
 
 import {
   handlePresetEvent,
   handleExportFileEvent,
-  handleExportImageEvent
+  handleExportImageEvent,
+  handleSandboxConceptMapsFileEvent
 } from './helpers.mjs'
 
 const setupFilewatchEventHandlers = wsClients => {
@@ -29,6 +31,7 @@ const setupFilewatchEventHandlers = wsClients => {
     if (filename === TARGET_FILE_NAME) handlePresetEvent({ wsClients, logStream });
     if (filename === EXPORT_FILE_NAME) handleExportFileEvent();
     if (filename === EXPORT_IMAGE_NAME) handleExportImageEvent();
+    if (filename === SANDBOX_CONCEPT_MAPS_FILE_NAME) handleSandboxConceptMapsFileEvent(wsClients);
   });
 }
 

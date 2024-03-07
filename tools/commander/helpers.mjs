@@ -42,7 +42,11 @@ export const rand = (start, end, cacheId) => {
   }
 };
 
-export const getOverridesFromParameterSet = (singleLineParameterSet) => {
+export const clearCache = () => {
+  rand.cache = {};
+}
+
+export const getOverridesFromParameterSet = singleLineParameterSet => {
   const [objectNameAndTags, valuesMapping] = singleLineParameterSet.split(
     OBJECT_NAME_AND_PROPERTIES_DELIMITER,
   );
@@ -98,7 +102,7 @@ export const buildObjectString = (encodedParameters) => {
 
   singleLineParameterSets.forEach((singleLineParameterSet, index) => {
     const { overrides, objectName, objectTags } = getOverridesFromParameterSet(
-      singleLineParameterSet,
+      singleLineParameterSet
     );
 
     output.push(

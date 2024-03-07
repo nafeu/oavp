@@ -22,6 +22,7 @@ screencap-code-exports/
 **/node_modules/
 **/target.txt
 **/export.txt
+**/concept-maps-sandbox.txt
 **/export.png
 **/genobj.json
 **/preset-dump.txt

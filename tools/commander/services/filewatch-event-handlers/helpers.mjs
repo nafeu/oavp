@@ -2,6 +2,7 @@ import path from "path";
 import ncpPackage from "ncp";
 import _ from "lodash";
 import fs from "fs";
+import { weaveTopics } from "topic-weaver";
 
 const { ncp } = ncpPackage;
 
@@ -10,6 +11,8 @@ import {
   EXPORT_FILE_DIR,
   EXPORT_FILE_NAME,
   EXPORT_IMAGE_NAME,
+  SANDBOX_CONCEPT_MAPS_FILE_NAME,
+  SINGLE_LINE_PARAMETER_SET_DELIMITER,
   GENOBJ_FILE_NAME,
   FILE_COPY_TIMEOUT_DURATION,
   IMAGE_COPY_TIMEOUT_DURATION,
@@ -29,7 +32,9 @@ import {
   wsServerBroadcast,
   compareFiles,
   splitString,
-  countFiles
+  countFiles,
+  getOverridesFromParameterSet,
+  clearCache
 } from '../../helpers.mjs';
 
 let presetOutput = "";
@@ -314,3 +319,46 @@ export const buildSketchDataObject = sketchFileContent => {
 
   return output
 }
+
+export const handleSandboxConceptMapsFileEvent = wsClients => {
+  const conceptMap = fs.readFileSync(SANDBOX_CONCEPT_MAPS_FILE_NAME, 'utf8');
+
+  const { topics: encodedParameters, issues } = weaveTopics(conceptMap, 1, {
+    generatorOptions: { strictMode: true },
+  });
+
+  if (issues.length > 0) {
+    console.log(`[ oavp-commander:filewatch-event-handlers ] Issues in sandbox concept map:`)
+    console.log(JSON.stringify(issues, null, 2));
+  }
+
+  const objects = [];
+
+  const singleLineParameterSets = encodedParameters[0].split(
+    SINGLE_LINE_PARAMETER_SET_DELIMITER,
+  );
+
+  singleLineParameterSets.forEach((singleLineParameterSet, index) => {
+    const { overrides, objectName, objectTags } =
+      getOverridesFromParameterSet(singleLineParameterSet);
+
+    objects.push({
+      oavpObject: objectName,
+      params: overrides,
+      id: `${objectName}${
+        objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
+      }_${index}`,
+    });
+  });
+
+  console.log(`[ oavp-commander:sandbox-event ] Emitting sandbox update...`);
+  wsServerBroadcast({
+    message: JSON.stringify({
+      command: "sandbox",
+      objects
+    }),
+    wsClients: [wsClients]
+  });
+
+  clearCache();
+};
