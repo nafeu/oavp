@@ -479,3 +479,17 @@ function react() {
     $("#loaded-actions").style.display = 'none';
   }
 }
+
+// eslint-disable-next-line no-unused-vars
+function getCheckedConceptMaps() {
+  const output = [
+    ...($('#default-objects-checkbox').checked ? ['defaultObjects'] : []),
+    ...($('#background-objects-checkbox').checked ? ['backgroundObjects'] : []),
+    ...($('#celestial-objects-checkbox').checked ? ['celestialObjects'] : []),
+    ...($('#sky-objects-checkbox').checked ? ['skyObjects'] : []),
+    ...($('#surrounding-objects-checkbox').checked ? ['surroundingObjects'] : []),
+    ...($('#foreground-objects-checkbox').checked ? ['foregroundObjects'] : [])
+  ]
+
+  return output;
+}

@@ -560,11 +560,11 @@ rand(5, 4000, 'pl')
 rand(300, 4000, 'px')
 `+sharedValues;
 
-export const conceptMaps = [
+export const conceptMaps = {
   defaultObjects,
   backgroundObjects,
   celestialObjects,
   skyObjects,
   surroundingObjects,
   foregroundObjects
-]
+}

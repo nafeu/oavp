@@ -137,7 +137,7 @@ export const handleExportImageEvent = () => {
 export const getValidTags = () => {
   let output = [];
 
-  conceptMaps.forEach(conceptMap => {
+  _.each(conceptMaps, conceptMap => {
     conceptMap.split('\n').forEach(line => {
       if (line.includes('|')) {
         output.push(line);

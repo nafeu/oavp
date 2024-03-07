@@ -17,7 +17,6 @@ import { OAVP_OBJECT_PROPERTIES, WEBSERVER_PORT } from "../../constants.mjs";
 
 import {
   emitGeneratedSketchToServer,
-  writeGeneratedSketchToFile,
   loadSketchDataObjectToServer,
   reseedSketchOnServer,
 } from "../../helpers.mjs";
@@ -68,16 +67,12 @@ const setupExpressServer = ws => {
       ...params
     } = req.body;
 
-    if (command === "export") {
-      writeGeneratedSketchToFile();
-      res.json({
-        status: "success",
-        message: `Saved generated sketch to file sketch.pde`,
+    if (command === "generate") {
+      const objects = emitGeneratedSketchToServer({
+        ws,
+        options: { conceptMaps: params.conceptMaps || [] }
       });
-    }
 
-    else if (command === "generate") {
-      const objects = emitGeneratedSketchToServer({ ws });
       res.json({
         status: "success",
         message: `Emitted generated sketch to server.`,
@@ -88,8 +83,12 @@ const setupExpressServer = ws => {
     else if (command === "feeling-lucky") {
       const objects = emitGeneratedSketchToServer({
         ws,
-        options: { isFeelingLucky: true },
+        options: {
+          isFeelingLucky: true,
+          conceptMaps:    params.conceptMaps || []
+        },
       });
+
       res.json({
         status: "success",
         message: `Resetting previous sketch, generating a new sketch, randomize colors.`,

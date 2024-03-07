@@ -98,7 +98,8 @@ pre {
 #property-selections,
 #command-buttons,
 #property-quick-setters,
-#preview-edit-intervals {
+#preview-edit-intervals,
+#active-concept-maps {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
@@ -110,25 +111,33 @@ pre {
     background-color: var(--color-a);
   }
 }
+
 #property-selections {
   button {
     background-color: var(--color-b);
   }
 }
+
 #command-buttons {
   button {
     background-color: var(--color-c);
   }
 }
+
 #property-quick-setters {
   button {
     background-color: var(--color-d);
   }
 }
+
 #preview-edit-intervals {
   button {
     background-color: var(--color-e);
   }
+}
+
+#active-concept-maps {
+  flex-direction: column;
 }
 
 #data {
@@ -427,4 +436,22 @@ svg {
 
 .print-guide, .print-guide-vertical, .print-guide-horizontal {
   opacity: 0;
+}
+
+.section-label {
+  margin-bottom: var(--spacing);
+}
+
+.col-container {
+  display: flex;
+}
+
+.col {
+  flex: 1;
+}
+
+.concept-map-checkbox {
+  input {
+    margin-right: var(--spacing);
+  }
 }

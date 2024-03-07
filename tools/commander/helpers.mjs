@@ -142,11 +142,25 @@ void updateSketch() {}
 void drawSketch() {}
 `;
 
-export const getAllEncodedParameters = () => {
+export const getAllEncodedParameters = options => {
   let allEncodedParameters = [];
   let allIssues = [];
 
-  conceptMaps.forEach((conceptMap) => {
+  const hasConceptMapFilters = options?.conceptMaps?.length > 0;
+
+  const selectedConceptMaps = _.filter(conceptMaps, (_, conceptMapName) => {
+    const noConceptMapFilters = !hasConceptMapFilters;
+
+    if (noConceptMapFilters) {
+      return true;
+    }
+
+    const containsConceptMap = options.conceptMaps.includes(conceptMapName);
+
+    return containsConceptMap;
+  })
+
+  _.each(selectedConceptMaps, (conceptMap) => {
     const { topics: encodedParameters, issues } = weaveTopics(conceptMap, 1, {
       generatorOptions: { strictMode: true },
     });
@@ -163,34 +177,12 @@ export const getAllEncodedParameters = () => {
   return allEncodedParameters;
 };
 
-export const writeGeneratedSketchToFile = () => {
-  const allEncodedParameters = getAllEncodedParameters();
-
-  const setupSketch = [];
-
-  allEncodedParameters.forEach((encodedParameters) => {
-    const objectString = buildObjectString(encodedParameters);
-
-    setupSketch.push(objectString);
-  });
-
-  const sketch = buildTemplatedSketch({
-    setupSketch: setupSketch.join("\n  "),
-  });
-
-  console.log(
-    `[ oavp-commander ] Exporting sketch.pde file at ../../src/sketch.pde`,
-  );
-
-  fs.writeFileSync("../../src/sketch.pde", sketch);
-};
-
 export const emitGeneratedSketchToServer = ({ ws, options = {} }) => {
   console.log(
     `[ oavp-commander ] Emitting generated sketch to ${SKETCH_WEBSOCKET_SERVER_URL}`,
   );
 
-  const allEncodedParameters = getAllEncodedParameters();
+  const allEncodedParameters = getAllEncodedParameters(options);
 
   const objects = [];
 

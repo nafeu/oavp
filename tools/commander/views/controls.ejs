@@ -1,16 +1,33 @@
 <%- include('partials/head') %>
 <%- include('partials/navigation') %>
 
-<div id="command-buttons">
-  <button onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
-  <button onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
-  <button onclick="sendApiCommand({ command: 'generate' })">Generate</button>
-  <button onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
-  <button onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
-  <button onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
-  <button onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
-  <button onclick="sendApiCommand({ command: 'feeling-lucky' })">Feeling Lucky</button>
+<div class="col-container">
+  <div class="col">
+    <p class="section-label">Editor Commands</p>
+    <div id="command-buttons">
+      <button onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
+      <button onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
+      <button onclick="sendApiCommand({ command: 'generate', conceptMaps: getCheckedConceptMaps() })">Generate</button>
+      <button onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
+      <button onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
+      <button onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
+      <button onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
+      <button onclick="sendApiCommand({ command: 'feeling-lucky', conceptMaps: getCheckedConceptMaps() })">Feeling Lucky</button>
+    </div>
+  </div>
+  <div class="col">
+    <p class="section-label">Active Concept Maps</p>
+    <div id="active-concept-maps">
+      <div class="concept-map-checkbox"><input type="checkbox" id="default-objects-checkbox" />Default Objects</div>
+      <div class="concept-map-checkbox"><input type="checkbox" id="background-objects-checkbox" />Background Objects</div>
+      <div class="concept-map-checkbox"><input type="checkbox" id="celestial-objects-checkbox" />Celestial Objects</div>
+      <div class="concept-map-checkbox"><input type="checkbox" id="sky-objects-checkbox" />Sky Objects</div>
+      <div class="concept-map-checkbox"><input type="checkbox" id="surrounding-objects-checkbox" />Surrounding Objects</div>
+      <div class="concept-map-checkbox"><input type="checkbox" id="foreground-objects-checkbox" />Foreground Objects</div>
+    </div>
+  </div>
 </div>
+<p class="section-label">Object Property Selectors</p>
 <div id="property-selections">
   <button onclick="setSelectedProperty('x')">Select X</button>
   <button onclick="setSelectedProperty('y')">Select Y</button>
@@ -21,6 +38,7 @@
   <button onclick="setSelectedProperty('s')">Select S</button>
   <button onclick="setSelectedProperty('zIter')">Select zIter</button>
 </div>
+<p class="section-label">Object Property Quick Setters</p>
 <div id="property-quick-setters">
   <button onclick="setAndSendDirectEdit('xr', 90)">xr=90</button>
   <button onclick="setAndSendDirectEdit('y', 300)">y=300</button>
@@ -35,6 +53,7 @@
   <button onclick="setAndSendDirectEdit('w', 10000);setAndSendDirectEdit('h', 10000);setAndSendDirectEdit('l', 10000);">w&h&l=10000</button>
   <button onclick="setAndSendDirectEdit('s', 10000);">s=10000</button>
 </div>
+<p class="section-label">Direct Edit</p>
 <div id="direct-edit">
   <select name="property-name" id="property-name">
     <option value="x">x</option>
@@ -143,6 +162,7 @@
   <button onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
   <button onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
 </div>
+<p class="section-label">Preview Edit Intervals</p>
 <div id="preview-edit-intervals">
   <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
   <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
