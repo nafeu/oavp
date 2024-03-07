@@ -2,7 +2,9 @@ void webSocketServerEvent(String msg) {
   JSONObject message = parseJSONObject(msg);
   String command = message.getString("command");
 
-  println("[ oavp ] Socket command received: " + command);
+  if (!command.equals("ping")) {
+    println("[ oavp ] Socket command received: " + command);
+  }
 
   if (command.equals("write-objects")) {
     JSONArray receivedOavpObjects = message.getJSONArray("objects");
@@ -142,6 +144,8 @@ void webSocketServerEvent(String msg) {
   else if (command.equals("export-sketch")) {
     editor.queueExportSketchToFile();
   }
+
+  else if (command.equals("ping")) {}
 
   else {
     println("[ oavp ] Command not recognized");
