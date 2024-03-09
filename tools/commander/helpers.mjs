@@ -367,3 +367,16 @@ export const countFiles = (directoryPath, filePattern) => {
     return -1;
   }
 };
+
+export const removeTrailingWhitespaceAndNewlines = conceptMap => {
+  let output = conceptMap;
+
+  output = output.replace(/^\s+/gm, '');
+  output = output.replace(/\|[\s\S]*?\n|\;(?!\n#)[\s\S]*?\n/g, match => {
+    if (match.endsWith('|\n')) return '|';
+    else if (match.endsWith(';\n')) return ';';
+    return match;
+  });
+
+  return output;
+}

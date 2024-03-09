@@ -34,7 +34,8 @@ import {
   splitString,
   countFiles,
   getOverridesFromParameterSet,
-  clearCache
+  clearCache,
+  removeTrailingWhitespaceAndNewlines
 } from '../../helpers.mjs';
 
 let presetOutput = "";
@@ -321,7 +322,9 @@ export const buildSketchDataObject = sketchFileContent => {
 }
 
 export const handleSandboxConceptMapsFileEvent = wsClients => {
-  const conceptMap = fs.readFileSync(SANDBOX_CONCEPT_MAPS_FILE_NAME, 'utf8');
+  const conceptMap = removeTrailingWhitespaceAndNewlines(
+    fs.readFileSync(SANDBOX_CONCEPT_MAPS_FILE_NAME, 'utf8')
+  );
 
   const { topics: encodedParameters, issues } = weaveTopics(conceptMap, 1, {
     generatorOptions: { strictMode: true },
@@ -345,7 +348,7 @@ export const handleSandboxConceptMapsFileEvent = wsClients => {
     objects.push({
       oavpObject: objectName,
       params: overrides,
-      id: `${objectName}${
+      id: `${objectName}_sandbox_${
         objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
       }_${index}`,
     });

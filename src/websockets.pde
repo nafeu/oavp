@@ -51,9 +51,8 @@ void webSocketServerEvent(String msg) {
 
     noLoop();
     objects.removeAll("sandbox");
-    // TODO ~ Continue: instead of randomizing colours here, manually assign the accent + bg colors
-    randomizeAllColors();
     handleReceivedOavpObjects(receivedOavpObjects);
+    randomizeAllColors();
     loop();
   }
 
