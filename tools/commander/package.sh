@@ -16,32 +16,32 @@ if [ -z "$3" ]; then
 fi
 
 if [ -z "$4" ]; then
-  echo "[ oavp:package.sh ] Error: missing print-size offset."
+  echo "[ oavp:package.sh ] Error: missing 1x1 print-size offset."
   exit 1
 fi
 
 if [ -z "$5" ]; then
-  echo "[ oavp:package.sh ] Error: missing print-size offset."
+  echo "[ oavp:package.sh ] Error: missing 2x3 print-size offset."
   exit 1
 fi
 
 if [ -z "$6" ]; then
-  echo "[ oavp:package.sh ] Error: missing print-size offset."
+  echo "[ oavp:package.sh ] Error: missing 3x4 print-size offset."
   exit 1
 fi
 
 if [ -z "$7" ]; then
-  echo "[ oavp:package.sh ] Error: missing print-size offset."
+  echo "[ oavp:package.sh ] Error: missing 4x5 print-size offset."
   exit 1
 fi
 
 if [ -z "$8" ]; then
-  echo "[ oavp:package.sh ] Error: missing print-size offset."
+  echo "[ oavp:package.sh ] Error: missing 11x14 print-size offset."
   exit 1
 fi
 
 if [ -z "$9" ]; then
-  echo "[ oavp:package.sh ] Error: missing print-size offset."
+  echo "[ oavp:package.sh ] Error: missing international print-size offset."
   exit 1
 fi
 

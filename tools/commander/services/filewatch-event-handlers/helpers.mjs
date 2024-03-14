@@ -306,6 +306,7 @@ export const buildSketchDataObject = sketchFileContent => {
     }
 
     const PRINT_OFFSETS = {
+      "print-offset-1x1": 1680,
       "print-offset-2x3": 2400,
       "print-offset-3x4": 2220,
       "print-offset-4x5": 2112,
