@@ -1,0 +1,68 @@
+#prefabs
+[fleet]
+[skypyramid]
+[station]
+
+#fleet
+[fleet_main]&[fleet_shields]&[fleet_lights]
+#fleet_main
+Box_fleet_main_accentafill_backgroundstroke_camera^fixed|x:0+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-30000+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+#fleet_shields
+Box_fleet_shields_nofill_accentbstroke_camera^fixed|x:-200+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-29400+[fleet_y*a];yIter:[fleet_yiter*a];z:-90000;zIter:-[fleet_ziter*a];w:[fleet_w*a];wIter:-4010.0;h:[fleet_h*a];hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+#fleet_lights
+Rectangle_fleet_lights_nostroke_accentcfill_camera^fixed|x:1600+[fleet_x*a];xIter:-[fleet_xiter*a];xr:[fleet_xr*a];y:-27000+[fleet_y*a];yIter:[fleet_yiter*a];z:-86000;zIter:-[fleet_ziter*a];w:[fleet_w*a]*0.5;wIter:-4010.0;h:500.0;hIter:-10.0;l:5100.0;lIter:-10.0;s:100.0;i:[fleet_i*a];yr:[fleet_yr*a];
+#fleet_i
+rand(3, 5, 'i')
+#fleet_x
+rand(-50000, 50000, 'fx')
+#fleet_y
+rand(-10000, 2500, 'fy')
+#fleet_w
+rand(15000, 35500, 'fw')
+#fleet_h
+rand(1000, 4000, 'fh')
+#fleet_l
+rand(3000, 7345, 'fyiter')
+#fleet_ziter
+rand(650, 4000, 'fziter')
+#fleet_yiter
+[fleet_h*a]
+#fleet_xiter
+rand(0, 8000, 'fxiter')
+#fleet_yr
+rand(45, -45, 'fyr')
+#fleet_xr
+rand(-45, 30, 'fxr')
+
+#skypyramid
+[skypyramid_main]&[skypyramid_rings]
+
+#skypyramid_main
+Pyramid_skypyramid_main_accentdstroke_notaccentdfill_camera^fixed|x:[skypyramid_x*a];xr:180;y:-[skypyramid_y*a];yIter:-7000.0;yr:[skypyramid_yr];z:-80000;w:10000.0;wIter:10000.0;h:10000.0;hIter:10000.0;l:10000.0;lIter:10000.0;i:5;
+#skypyramid_rings
+Circle_skypyramid_circle_nofill_accentcstroke_camera^fixed|x:[skypyramid_x*a];y:-[skypyramid_y*a]+6000;yIter:600.0;xr:90;z:-80000;w:100.0;h:100.0;s:1000.0;sIter:1600.0;;i:6;
+#skypyramid_x
+rand(-50000, 50000, 'x')
+#skypyramid_yr
+rand(-180, 180)
+#skypyramid_y
+rand(8000, 30000, 'y')
+
+#station
+[station_base]&[station_ring]&[station_square]
+#station_base
+Pyramid_station_base_accentbstroke_accentdfill_camera^fixed|x:[station_x*a];y:-40000;yIter:[station_dimensions*a]+1000;yr:45+[station_zr*a];z:-85000;zrIter:180.0;w:[station_dimensions*a];h:[station_dimensions*a];l:[station_dimensions*a];s:100.0;i:2;wIter:-[station_dimensions_iter*a];lIter:-[station_dimensions_iter*a];
+#station_square
+Box_station_square_nofill_accentcstroke_camera^fixed|x:[station_x*a];y:-25000;yIter:1600.0;yr:45+[station_zr*a];z:-85000;w:[station_dimensions*a];wIter:-2000.0;h:1100.0;l:[station_dimensions*a];lIter:-2000.0;s:100.0;i:3;
+#station_ring
+Circle_station_ring_nofill_accentastroke_camera^fixed|x:[station_x*a];xIter:200.0;xr:60;y:-31000;yIter:-200.0;yr:[station_ring_yr];z:-85000;w:100.0;h:100.0;s:[station_dimensions*a]*2;sIter:2000;i:3;
+#station_x
+rand(-45000, 45000, 'x')
+#station_dimensions
+rand(10000, 20000, 'sd')
+#station_dimensions_iter
+rand(1000, 2000, 'sdi')
+#station_zr
+rand(0, 180, 'szr')
+#station_ring_yr
+rand(-75, 45)

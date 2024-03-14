@@ -1,31 +1,34 @@
 <%- include('partials/head') %>
 <%- include('partials/navigation') %>
 
-<div class="col-container">
-  <div class="col">
-    <p class="section-label">Editor Commands</p>
-    <div id="command-buttons">
-      <button onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
-      <button onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
-      <button onclick="sendApiCommand({ command: 'generate', conceptMaps: getCheckedConceptMaps() })">Generate</button>
-      <button onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
-      <button onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
-      <button onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
-      <button onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
-      <button onclick="sendApiCommand({ command: 'feeling-lucky', conceptMaps: getCheckedConceptMaps() })">Feeling Lucky</button>
+<p class="section-label">Editor Commands</p>
+<div id="command-buttons">
+  <button onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
+  <button onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
+  <button onclick="sendApiCommand({ command: 'generate', conceptMaps: getCheckedConceptMaps() })">Generate</button>
+  <button onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
+  <button onclick="sendSocketCommand({ command: 'save-preset' })">Save Preset</button>
+  <button onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
+  <button onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
+  <button onclick="sendApiCommand({ command: 'feeling-lucky', conceptMaps: getCheckedConceptMaps() })">Feeling Lucky</button>
+  <button onclick="alert(getCheckedConceptMaps())">Check Map Config</button>
+</div>
+<p class="section-label">Active Concept Maps</p>
+<div id="active-concept-maps">
+  <% CONCEPT_MAP_META.forEach(activeConceptMap => { %>
+    <div class="concept-map-checkbox">
+      <input
+        data-height="<%= activeConceptMap.height %>"
+        data-presence="<%= activeConceptMap.presence %>"
+        data-subject="<%= activeConceptMap.subject %>"
+        type="checkbox"
+        id="<%= activeConceptMap.mapId %>-checkbox"
+      />
+      <span class="concept-map-height"><%= activeConceptMap.height %></span>
+      <span class="concept-map-presence"><%= activeConceptMap.presence %></span>
+      <span class="concept-map-subject"><%= activeConceptMap.subject %></span>
     </div>
-  </div>
-  <div class="col">
-    <p class="section-label">Active Concept Maps</p>
-    <div id="active-concept-maps">
-      <div class="concept-map-checkbox"><input type="checkbox" id="default-objects-checkbox" />Default Objects</div>
-      <div class="concept-map-checkbox"><input type="checkbox" id="background-objects-checkbox" />Background Objects</div>
-      <div class="concept-map-checkbox"><input type="checkbox" id="celestial-objects-checkbox" />Celestial Objects</div>
-      <div class="concept-map-checkbox"><input type="checkbox" id="sky-objects-checkbox" />Sky Objects</div>
-      <div class="concept-map-checkbox"><input type="checkbox" id="surrounding-objects-checkbox" />Surrounding Objects</div>
-      <div class="concept-map-checkbox"><input type="checkbox" id="foreground-objects-checkbox" />Foreground Objects</div>
-    </div>
-  </div>
+  <% }); %>
 </div>
 <p class="section-label">Object Property Selectors</p>
 <div id="property-selections">

@@ -1,0 +1,47 @@
+#prefabs
+[city]
+[huge_pillars]
+
+#city
+[city_main]&[city_flair]
+#city_main
+Flatbox_city_main_accentastroke_accentbfill_camera^slowest|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4450;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0;lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+#city_flair
+Flatbox_city_flair_accentastroke_accentbfill_camera^slowest|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+Flatbox_city_flair_accentcstroke_accentbfill_camera^slowest|x:[city_x*a];xIter:[city_xiter*a];xIterFunc:sin(x);xr:90;y:-4850;yIter:400.0;yIterFunc:random 100;z:-46000;zIter:[city_ziter*a];zr:45;w:[city_w*a]-[city_flair_w_offset];h:600.0;l:10000.0-[city_l_offset];lIter:-800.0;lIterFunc:random 100;s:100.0;i:[city_i*a];zrIter:10;
+[skip]
+#city_i
+rand(20, 51, 'ci')
+#city_x
+0
+rand(-20000, 20000, 'cx')
+#city_w
+rand(500, 2000, 'cw')
+#city_ziter
+rand(600, 200, 'cziter')
+#city_l_offset
+rand(1200, 4000, 'clo')
+#city_flair_w_offset
+rand(200, 600)
+#city_xiter
+12600
+rand(12600, 60000, 'cxiter')
+
+#huge_pillars
+[huge_pillars_a]&[huge_pillars_b]&[huge_pillars_c]&[huge_pillars_d]
+#huge_pillars_a
+Box_huge_pillars_accentbstroke_accentcfill|x:-5000;y:-[huge_pillars_h*a]/2+1000;z:-14000;zIter:-[huge_pillars_ziter*a];w:2000.0;h:[huge_pillars_h*a];l:2000.0;s:100.0;fillColor:-14409446;i:[huge_pillars_i*a];
+#huge_pillars_b
+Box_huge_pillars_accentbstroke_accentcfill|x:5000;y:-[huge_pillars_h*a]/2+1000;z:-14000;zIter:-[huge_pillars_ziter*a];w:2000.0;h:[huge_pillars_h*a];l:2000.0;s:100.0;fillColor:-14409446;i:[huge_pillars_i*a];
+#huge_pillars_c
+Box_huge_pillars_accentbstroke_accentcfill|x:-15000;y:-[huge_pillars_h*a]/2+1000;z:-14000;zIter:-[huge_pillars_ziter*a];w:2000.0;h:[huge_pillars_h*a];l:2000.0;s:100.0;fillColor:-14409446;i:[huge_pillars_i*a];
+#huge_pillars_d
+Box_huge_pillars_accentbstroke_accentcfill|x:15000;y:-[huge_pillars_h*a]/2+1000;z:-14000;zIter:-[huge_pillars_ziter*a];w:2000.0;h:[huge_pillars_h*a];l:2000.0;s:100.0;fillColor:-14409446;i:[huge_pillars_i*a];
+#huge_pillars_h
+rand(5000, 30000, 'h')
+#huge_pillars_dims
+rand(1000, 2000, 'dims')
+#huge_pillars_ziter
+rand(5000, 20000.0, 'ziter')
+#huge_pillars_i
+rand(5, 30, 'i')

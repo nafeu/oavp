@@ -1,0 +1,6 @@
+#prefabs
+[horizon]
+
+#horizon
+Rectangle_horizon_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;
+Rectangle_horizon_nostroke_accentafill|y:40000;z:-65000;w:200000.0;h:80000.0;

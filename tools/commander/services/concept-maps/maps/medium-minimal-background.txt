@@ -1,0 +1,45 @@
+#prefabs
+[pyramids]
+[valley]
+
+#pyramids
+Pyramid_pyramids_accentbfill_accentastroke_camera^slowest|x:[pyramids_x];xIter:[pyramids_xIter];y:-[pyramids_dimensions*a]/2;yIter:-[pyramids_dimensions_iter*a]/2;yrIter:95.0;yrIterFunc:random 100;z:-60000;zIter:-[pyramids_dimensions_iter*a]*3;w:[pyramids_dimensions*a];wIter:[pyramids_dimensions_iter*a];h:[pyramids_dimensions*a];hIter:[pyramids_dimensions_iter*a];l:[pyramids_dimensions*a];lIter:[pyramids_dimensions_iter*a];s:100.0;i:[pyramids_i];
+#pyramids_x
+rand(-30000, 30000)
+#pyramids_xIter
+rand(-7000, -10000)
+rand(7000, 10000)
+#pyramids_dimensions_iter
+rand(2000, 5000, 'pditer')
+#pyramids_dimensions
+rand(5000, 12000, 'pdd')
+#pyramids_i
+rand(1, 3)
+
+#valley
+[left_valley_f]&[right_valley_b]
+[left_valley_b]&[right_valley_f]
+[left_valley_f]
+[right_valley_f]
+#left_valley_f
+Triangle_leftvalley_accentbfill_camera^slowest|x:-[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill_camera^slowest|x:[left_valley_growth*a];z:-70000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+#right_valley_b
+Triangle_rightvalley_accentcfill_camera^slowest|x:-[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill_camera^slowest|x:[right_valley_growth*b];z:-72000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+#left_valley_b
+Triangle_leftvalley_accentbfill_camera^slowest|x:-[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+Triangle_leftvalley_accentbfill_camera^slowest|x:[left_valley_growth*a];z:-72000;w:150000.0+[left_valley_growth*a]*2+[valley_w];h:25000.0+[left_valley_growth];s:100.0;variation:left-right;
+#right_valley_f
+Triangle_rightvalley_accentcfill_camera^slowest|x:-[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]*2-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+Triangle_rightvalley_accentcfill_camera^slowest|x:[right_valley_growth*b];z:-70000;w:-150000.0-[right_valley_growth*b]-[valley_w];h:25000.0+[right_valley_growth*b];s:100.0;variation:left-right;
+#left_valley_rotation
+rand(8, 42)
+#right_valley_rotation
+rand(-50, -5)
+#left_valley_growth
+rand(100, 100000, 'offset_a')
+#right_valley_growth
+rand(100, 100000, 'offset_b')
+#valley_w
+rand(100, 100000)

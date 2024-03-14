@@ -1,0 +1,15 @@
+#prefabs
+[floor]
+[water]
+
+#floor
+Rectangle_floor_accentcfill|xr:90;y:[floor_y];z:-20000;w:100000.0;h:60000.0;fillColor:0;
+#floor_y
+rand(50, 500)
+
+#water
+Rectangle_water|xr:90;y:[water_level];yMod:[water_tide];yModType:sine;z:-20000;w:100000.0;h:60000.0;fillColor:0;
+#water_level
+rand(150, 220)
+#water_tide
+rand(80, 200)

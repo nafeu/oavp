@@ -23,9 +23,8 @@ try {
   console.log(`[ oavp-commander] Cannot connect to processing editor websocket server...`);
 }
 
-sketchSocket.addEventListener('open', (event) => {
+sketchSocket.addEventListener('open', () => {
   $('#sketch-socket').textContent = "[ socket ] WebSocket connection opened.";
-  console.log('WebSocket connection opened:', event);
 });
 
 sketchSocket.addEventListener('message', (event) => {
@@ -33,21 +32,18 @@ sketchSocket.addEventListener('message', (event) => {
   console.log('Received:', receivedData);
 });
 
-sketchSocket.addEventListener('error', (event) => {
+sketchSocket.addEventListener('error', () => {
   $('#sketch-socket').textContent = "[ socket ] WebSocket error.";
-  console.log('[ oavp-commander ] WebSocket error:', event);
 });
 
-sketchSocket.addEventListener('close', (event) => {
+sketchSocket.addEventListener('close', () => {
   $('#sketch-socket').textContent = "[ socket ] WebSocket connection closed.";
-  console.log('WebSocket connection closed:', event);
 });
 
 const commanderSocket = new WebSocket('ws://localhost:3002');
 
-commanderSocket.addEventListener('open', (event) => {
+commanderSocket.addEventListener('open', () => {
   $('#commander-socket').textContent = "[ commander ] WebSocket connection opened.";
-  console.log('WebSocket connection opened:', event);
 });
 
 commanderSocket.addEventListener('message', (event) => {
@@ -59,14 +55,12 @@ commanderSocket.addEventListener('message', (event) => {
   }
 });
 
-commanderSocket.addEventListener('error', (event) => {
+commanderSocket.addEventListener('error', () => {
   $('#commander-socket').textContent = "[ commander ] WebSocket error.";
-  console.error('WebSocket error:', event);
 });
 
-commanderSocket.addEventListener('close', (event) => {
+commanderSocket.addEventListener('close', () => {
   $('#commander-socket').textContent = "[ commander ] WebSocket connection closed.";
-  console.log('WebSocket connection closed:', event);
 });
 
 // eslint-disable-next-line no-unused-vars
@@ -188,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   });
 
-  $('#sketch-clipboard-button').addEventListener('click', function() {
+  $('#sketch-clipboard-button')?.addEventListener('click', function() {
     const textToCopy = getSocialMediaTextContent(window.sketchDataObjects[selectedSketch]);
 
     window.sketchDataObjects[selectedSketch].socialMediaTextContent = textToCopy;
@@ -211,19 +205,19 @@ document.addEventListener("DOMContentLoaded", () => {
     saveOnChangeElements[i].addEventListener('input', debounce(saveSketch, 500))
   }
 
-  $('#sketch-id-input').addEventListener('input', ({ target: { value }}) => {
+  $('#sketch-id-input')?.addEventListener('input', ({ target: { value }}) => {
     console.log('[ oavp ] Persisting id change...');
 
     window.sketchDataObjects[selectedSketch].id = value;
   });
 
-  $('#sketch-name-input').addEventListener('input', ({ target: { value }}) => {
+  $('#sketch-name-input')?.addEventListener('input', ({ target: { value }}) => {
     console.log('[ oavp ] Persisting name change...');
 
     window.sketchDataObjects[selectedSketch].name = value;
   });
 
-  $('#sketch-palette-input').addEventListener('input', ({ target: { value }}) => {
+  $('#sketch-palette-input')?.addEventListener('input', ({ target: { value }}) => {
     console.log('[ oavp ] Persisting palette change...');
 
     window.sketchDataObjects[selectedSketch].paletteString = value;
@@ -243,19 +237,19 @@ document.addEventListener("DOMContentLoaded", () => {
   PRINT_SIZES.forEach(size => {
     const sliderElement = $(`#print-offset-${size}`);
 
-    sliderElement.addEventListener('input', ({ target: { value }}) => {
+    sliderElement?.addEventListener('input', ({ target: { value }}) => {
       $(`#print-guide-${size}`).style.left = `${value}%`;
       $(`#print-guide-vertical-${size}`).style.left = `${value}%`;
       $(`#print-guide-horizontal-${size}`).style.left = `${value}%`;
     });
 
-    sliderElement.addEventListener('mousedown', () => {
+    sliderElement?.addEventListener('mousedown', () => {
       $(`#print-guide-${size}`).style.opacity = 1;
       $(`#print-guide-vertical-${size}`).style.opacity = 1;
       $(`#print-guide-horizontal-${size}`).style.opacity = 1;
     });
 
-    sliderElement.addEventListener('mouseup', () => {
+    sliderElement?.addEventListener('mouseup', () => {
       $(`#print-guide-${size}`).style.opacity = 0;
       $(`#print-guide-vertical-${size}`).style.opacity = 0;
       $(`#print-guide-horizontal-${size}`).style.opacity = 0;
@@ -482,14 +476,15 @@ function react() {
 
 // eslint-disable-next-line no-unused-vars
 function getCheckedConceptMaps() {
-  const output = [
-    ...($('#default-objects-checkbox').checked ? ['defaultObjects'] : []),
-    ...($('#background-objects-checkbox').checked ? ['backgroundObjects'] : []),
-    ...($('#celestial-objects-checkbox').checked ? ['celestialObjects'] : []),
-    ...($('#sky-objects-checkbox').checked ? ['skyObjects'] : []),
-    ...($('#surrounding-objects-checkbox').checked ? ['surroundingObjects'] : []),
-    ...($('#foreground-objects-checkbox').checked ? ['foregroundObjects'] : [])
-  ]
+  const output = [];
+
+  window.conceptMapMeta.forEach(({ mapId }) => {
+    const isMapIdChecked = $(`#${mapId}-checkbox`)?.checked;
+
+    if (isMapIdChecked) {
+      output.push(mapId);
+    }
+  });
 
   return output;
 }

@@ -1,0 +1,39 @@
+#prefabs
+[planet]
+
+#planet
+[planet_body]
+[planet_body]&[planet_shadow]
+[planet_body]&[planet_rings]
+[planet_body]&[planet_shadow]&[planet_rings]
+[skip]
+#planet_body
+Circle_planetbody_camera^fixed|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*celestial3];
+#planet_x
+rand(-25000, 25000, 'celestial1')
+#planet_y
+rand(-35000, -7000, 'celestial2')
+#planet_s
+rand(5000, 75000, 'celestial3')
+#planet_shadow
+Circle_planetshadow_nostroke_backgroundfill_camera^fixed|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000+[planet_shadow_z_offset];w:100.0;h:100.0;s:[planet_s*celestial3]-[planet_shadow_s_offset];
+#planet_shadow_z_offset
+rand(500, 2000)
+#planet_shadow_s_offset
+rand(500, 2000)
+#planet_rings
+[planet_ring]
+[planet_ring]&[planet_ring]
+[planet_ring]&[planet_ring]&[planet_ring]
+[planet_ring]&[planet_ring]&[planet_ring]&[planet_ring]
+[planet_ring]&[planet_ring]&[planet_ring]&[planet_ring]&[planet_ring]
+#planet_ring
+Circle_planetring_nofill_camera^fixed|x:[planet_x*celestial1];y:[planet_y*celestial2];z:-100000;w:100.0;h:100.0;s:[planet_s*f3]+[planet_ring_s_offset];xr:[planet_ring_xr*celestial4];yr:[planet_ring_xr*celestial5];zr:[planet_ring_xr*celestial6];
+#planet_ring_s_offset
+rand(1000, 20000)
+#planet_ring_xr
+rand(0, 180, 'celestial4')
+#planet_ring_yr
+rand(0, 180, 'celestial5')
+#planet_ring_zr
+rand(0, 180, 'celestial6')

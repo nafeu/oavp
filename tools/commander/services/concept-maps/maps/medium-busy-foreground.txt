@@ -1,0 +1,86 @@
+#prefabs
+[poles]
+[posts]
+[square_arch]
+
+#poles
+[base_pole]&[pole_tip]
+#base_pole
+Flatbox_basepole_accentafill_accentbstroke|x:[pole_x*a];xr:90;y:200;z:345;zIter:-[pole_ziter*a];zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h];l:1110.0;s:100.0;i:75;fillColor:0;xIter:[pole_xiter*a];
+Flatbox_basepole_accentcfill_accentdstroke|x:[pole_x*a];xr:90;y:200;z:345;zIter:-[pole_ziter*a];zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h];l:1110.0;s:100.0;i:75;fillColor:0;xIter:[pole_xiter*a];
+#pole_tip
+Flatbox_poletip_accentbfill_accentastroke|x:[pole_x*a];xr:90;y:-415;z:345;zIter:-[pole_ziter*a];zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h];l:110.0;s:100.0;i:75;fillColor:0;xIter:[pole_xiter*a];
+Flatbox_poletip_accentdfill_accentcstroke|x:[pole_x*a];xr:90;y:-415;z:345;zIter:-[pole_ziter*a];zrIter:65.0;zrIterFunc:random 100;w:-50.0;h:[pole_h];l:110.0;s:100.0;i:75;fillColor:0;xIter:[pole_xiter*a];
+#pole_h
+rand(50, 300)
+#pole_x
+rand(-1000, -300, 'x')
+rand(300, 1000, 'x')
+#pole_ziter
+rand(300, 800, 'ziter')
+#pole_xiter
+rand(1, 10, 'xiter')*20
+
+#posts
+[posts_left]&[posts_right]
+#posts_left
+[post_base_left]&[post_middle_left]&[post_extra_a_left]&[post_extra_b_left]
+#posts_right
+[post_base_right]&[post_middle_right]&[post_extra_a_right]&[post_extra_b_right]
+#post_base_left
+Flatbox_post_base_accentcfill_accentdstroke|x:-[post_x*a];xr:90;y:100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:[post_w*a];h:50.0;l:[post_l*a];s:100.0;fillColor:-16777216;i:30;
+#post_middle_left
+Flatbox_post_middle_accentbfill_accentcstroke|x:-[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:25.0;h:25.0;l:150.0;s:100.0;fillColor:-16777216;i:30;
+#post_extra_a_left
+Box_post_extra_a_nofill_accentastroke|x:-[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:[post_box_dimensions_a*a];h:[post_box_dimensions_a*a];l:100.0+([post_l*a]/2);s:100.0;i:30;
+#post_extra_b_left
+Box_post_extra_b_nofill_backgroundstroke|x:-[post_x*a];xr:90;y:-75-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:-45;w:[post_box_dimensions_b*a];h:[post_box_dimensions_b*a];l:35.0;s:100.0;i:30;
+#post_base_right
+Flatbox_post_base_accentcfill_accentdstroke|x:[post_x*a];xr:90;y:100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:[post_w*a];h:50.0;l:[post_l];s:100.0;fillColor:-16777216;i:30;
+#post_middle_right
+Flatbox_post_middle_accentbfill_accentcstroke|x:[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:25.0;h:25.0;l:150.0;s:100.0;fillColor:-16777216;i:30;
+#post_extra_a_right
+Box_post_extra_a_nofill_accentastroke|x:[post_x*a];xr:90;y:-100-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:[post_box_dimensions_a*a];h:[post_box_dimensions_a*a];l:100.0+([post_l*a]/2);s:100.0;i:30;
+#post_extra_b_right
+Box_post_extra_b_nofill_backgroundstroke|x:[post_x*a];xr:90;y:-75-([post_l*a]/2);z:500;zIter:-[post_ziter*a];zr:45;w:[post_box_dimensions_b*a];h:[post_box_dimensions_b*a];l:35.0;s:100.0;i:30;
+#post_ziter
+rand(500, 2000, 'ziter')
+#post_box_dimensions_a
+rand(75, 80, 'dima')
+#post_box_dimensions_b
+rand(55, 65, 'dimb')
+#post_w
+rand(50, 200, 'pw')
+#post_l
+rand(5, 4000, 'pl')
+#post_x
+rand(300, 4000, 'px')
+
+#square_arch
+[square_arch_a1]&[square_arch_a2]&[square_arch_b1]&[square_arch_b2]
+[square_arch_a1]&[square_arch_a2]&[square_arch_b1]&[square_arch_b2]&[square_arch_c1]&[square_arch_c2]&[square_arch_top]
+#square_arch_a1
+Flatbox_squarearch_a1_accentdfill_accentastroke|x:-[square_arch_x_offset*a];xr:90;y:100;zIter:-[square_arch_ziter*a];w:50.0;h:[square_arch_a_h*a];l:170.0;s:100.0;i:50;z:600;zr:[square_arch_a_zr*a];
+#square_arch_a2
+Flatbox_squarearch_a2_accentdfill_accentastroke|x:[square_arch_x_offset*a];xr:90;y:100;zIter:-[square_arch_ziter*a];w:50.0;h:[square_arch_a_h*a];l:170.0;s:100.0;i:50;z:600;zr:-[square_arch_a_zr*a];
+#square_arch_a_h
+rand(50, 245, 'a_h')
+#square_arch_a_zr
+rand(1, 3, 'a_zr')*15
+#square_arch_b1
+Flatbox_squarearch_b1_accentafill_accentbstroke|x:-[square_arch_x_offset*a];xr:90;y:-55;zIter:-[square_arch_ziter*a];zr:-45;w:25.0;h:35.0;l:145.0;s:100.0;i:50;z:600;
+#square_arch_b2
+Flatbox_squarearch_b2_accentafill_accentbstroke|x:[square_arch_x_offset*a];xr:90;y:-55;zIter:-[square_arch_ziter*a];zr:45;w:25.0;h:35.0;l:145.0;s:100.0;i:50;z:600;
+#square_arch_c1
+Flatbox_squarearch_c1_accentbfill_accentcstroke|x:[square_arch_x_offset*a];xr:90;y:-225;zIter:-[square_arch_ziter*a];w:25.0;h:10.0;l:195.0;s:100.0;i:50;z:600;
+#square_arch_c2
+Flatbox_squarearch_c2_accentbfill_accentcstroke|x:-[square_arch_x_offset*a];xr:90;y:-225;zIter:-[square_arch_ziter*a];w:25.0;h:10.0;l:195.0;s:100.0;i:50;z:600;
+#square_arch_top
+Flatbox_squarearch_top_accentcfill_accentdstroke|y:-340;yr:90;zIter:-[square_arch_ziter*a];w:[square_arch_top_w];h:25.0;l:425.0+[square_arch_x_offset*a];s:100.0;i:50;z:600;
+#square_arch_top_w
+rand(40, 240)
+rand(15, 25)
+#square_arch_x_offset
+rand(195, 400, 'x_offset')
+#square_arch_ziter
+rand(300, 600, 'ziter')

@@ -1,9 +1,16 @@
 import WebSocket, { WebSocketServer } from "ws";
 
+import { runDebugScript } from './debug.mjs';
+
 import {
   COMMANDER_WEBSOCKET_SERVER_PORT,
   SKETCH_WEBSOCKET_SERVER_URL,
 } from "./constants.mjs";
+
+if (process.env.OAVP_DEBUG) {
+  runDebugScript();
+  process.exit(0);
+}
 
 import setupExpressServer from "./services/express-server/index.mjs";
 import setupSketchSocketConnection from "./services/sketch-socket-connection/index.mjs";

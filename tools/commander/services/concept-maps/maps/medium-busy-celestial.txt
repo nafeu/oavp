@@ -1,0 +1,7 @@
+#prefabs
+[nebula]
+
+#nebula
+CurvedLine_sandbox_nebula_accentastroke_camera^fixed|x:40000;xIter:-607.0;y:-20000;z:-90000;zr:rand(45, 130);w:130100.0;wIter:rand(-350.0, 2050.0);h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-185.0;paramCIter:-200.0;paramD:7050.0;i:100;yIter:rand(-400,400);
+CurvedLine_sandbox_nebula_accentbstroke_camera^fixed|x:40000;xIter:-807.0;y:-20000;z:-90000;zr:rand(-180, 180);w:300100.0;h:100.0;strokeWeight:2.0;paramB:-10250.0;paramBIter:rand(-500, 0);paramCIter:-200.0;paramD:7050.0;i:rand(30,100);
+CurvedLine_sandbox_nebula_accentcstroke_camera^fixed|x:rand(-40000, 40000);xIter:rand(-807.0, -500);y:rand(-20000, -5000);z:-90000;zr:60;zrIter:-1.0;w:390100.0;wIter:-755.0;h:100.0;strokeWeight:1.0;paramB:-1250.0;paramBIter:-1385.0;paramCIter:-200.0;paramD:7050.0;variation:two-point;i:100;

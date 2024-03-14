@@ -1,0 +1,25 @@
+#prefabs
+[mountains]
+[trees]
+
+#mountains
+[mountains_a]
+[mountains_a]&[mountains_b]
+[mountains_a]&[mountains_b]&[mountains_c]
+#mountains_a
+Terrain_mountains_accentastroke_camera^slowest|y:-300;z:-70000;w:150000.0;h:20000.0;s:10760.0;paramA:[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+#mountains_b
+Terrain_mountains_accentbfill_accentcstroke_camera^slowest|y:-300;z:-75000;w:200000.0;h:20000.0;s:10760.0;paramA:2000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+#mountains_c
+Terrain_mountains_accentdfill_camera^slowest|y:-300;z:-77000;w:250000.0;h:20000.0;s:10760.0;paramA:4000+[mountains_height];paramB:[mountains_density];paramC:[mountains_phase];
+#mountains_height
+rand(-5000, 3000)
+#mountains_density
+rand(850, 2050)
+rand(300, 500)
+#mountains_phase
+rand(0, 4000)
+
+#trees
+Terrain_trees_camera^slowest|z:-6000;zIter:930.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramA:50.0;paramB:350.0;paramC:50.0;paramCIter:-30.0;paramD:50.0;variation:trees;i:3;
+Terrain_trees_camera^slowest|y:15;z:-6000;zIter:970.0;w:13700.0;wIter:-3195.0;h:100.0;s:60.0;paramB:610.0;paramCIter:140.0;paramD:135.0;variation:trees;i:3;

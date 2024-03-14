@@ -9,6 +9,7 @@ import { generateName, getFormattedSketchName } from "../name-generator/index.mj
 import { getNamesByColorPalette } from "../color-palette-info/index.mjs";
 import { getPrintSizeOptions } from "../print-size-info/index.mjs";
 import { generateTimelapse } from '../editor-sequence-generator/index.mjs';
+import { getConceptMapMeta } from '../concept-maps/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,7 @@ const setupExpressServer = ws => {
 
   app.locals.OAVP_OBJECT_PROPERTIES = JSON.stringify(OAVP_OBJECT_PROPERTIES);
   app.locals.SKETCH_DATA_OBJECTS = {};
+  app.locals.CONCEPT_MAP_META = getConceptMapMeta();
 
   app.use((req, res, next) => {
     console.log(

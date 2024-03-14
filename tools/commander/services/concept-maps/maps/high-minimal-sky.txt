@@ -1,0 +1,38 @@
+#prefabs
+[lightbeams]
+[ship]
+
+#lightbeams
+[lightbeam]
+[lightbeam]&[lightbeam]
+[skip]
+#lightbeam
+Line_lightbeam_nofill_accentdstroke|x:[lightbeam_x];y:-[lightbeam_y];z:-99999;w:300000.0;h:100.0;zr:[lightbeam_r];
+#lightbeam_r
+rand(-10, 10)
+#lightbeam_x
+rand(-20000, 20000)
+#lightbeam_y
+rand(8000, 30000)
+
+#ship
+[ship_cockpit]&[ship_thruster]&[ship_wings]&[ship_contrail]
+#ship_cockpit
+Pyramid_ship_cockpit_accentbfill_accentcstroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:-150+[ship_z*a];xr:90;w:150.0;h:350.0;l:50.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+#ship_thruster
+Pyramid_ship_thruster_accentdstroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:[ship_z*a];xr:90;w:130.0;h:150.0;l:30.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+#ship_wings
+Flatbox_ship_wings_accentbfill_accentcstroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a];xr:90;w:650.0;h:100.0;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+[skip]
+#ship_contrail
+Box_ship_contrail_accentafill_nostroke_camera^faster|x:[ship_x*a];y:[ship_y*a];z:20+[ship_z*a]+50000;xr:90;w:40.0;h:100000;l:10.0;s:100.0;i:[ship_i*a];xIter:500;zIter:[ship_ziter*a];
+#ship_x
+rand(-20000, 20000, 'sx')
+#ship_y
+rand(-10000, -13000, 'sy')
+#ship_z
+rand(-30000, -60000, 'sz')
+#ship_i
+rand(1, 5, 'si')
+#ship_ziter
+rand(400, 2000, 'sziter')

@@ -1,0 +1,22 @@
+#prefabs
+[rolling_hills]
+
+#rolling_hills
+[rolling_hills_main]
+[rolling_hills_main]&[rolling_hills_trees]
+#rolling_hills_main
+Terrain_rolling_hills_main|y:[rolling_hills_y*a];yIter:-[rolling_hills_yiter*a];zIter:-[rolling_hills_ziter*a];w:50000;wIter:8200.0;h:9800.0;s:[rolling_hills_s*a];paramA:50.0;paramB:[rolling_hills_window*a];paramBIter:200.0;paramC:100.0;paramCIter:[rolling_hills_phase*a];paramD:50.0;paramDIter:40.0;i:15;
+#rolling_hills_trees
+Terrain_rolling_hills_trees_accentbfill_accentbstroke|y:[rolling_hills_y*a];yIter:-[rolling_hills_yiter*a];zIter:-[rolling_hills_ziter*a];w:50000.0;wIter:8200.0;h:9800.0;s:[rolling_hills_s*a];paramA:50.0;paramB:[rolling_hills_window*a];paramBIter:200.0;paramC:100.0;paramCIter:[rolling_hills_phase*a];paramD:50.0;paramDIter:40.0;i:15;variation:trees;
+#rolling_hills_s
+rand(100, 3000, 'rhs')
+#rolling_hills_y
+rand(4700, 7000, 'rhy')
+#rolling_hills_ziter
+rand(2600, 5000, 'rhziter')
+#rolling_hills_window
+rand(100, 500, 'rhwindow')
+#rolling_hills_phase
+rand(100, 300, 'rhphase')
+#rolling_hills_yiter
+rand(0, 300, 'rhyiter')

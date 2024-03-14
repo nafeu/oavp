@@ -13,10 +13,11 @@ import {
   PROPERTY_VALUE_DELIMITER,
   SINGLE_LINE_PARAMETER_SET_DELIMITER,
   SKETCH_WEBSOCKET_SERVER_URL,
-  GENOBJ_FILE_NAME
+  GENOBJ_FILE_NAME,
+  DEFAULT_CONCEPT_MAP_GENERATOR_FILTER_SET
 } from "./constants.mjs";
 
-import { conceptMaps } from "./concept-maps.mjs";
+import { getConceptMaps } from "./services/concept-maps/index.mjs";
 
 export const rand = (start, end, cacheId) => {
   if (!rand.cache) {
@@ -150,16 +151,12 @@ export const getAllEncodedParameters = options => {
   let allEncodedParameters = [];
   let allIssues = [];
 
+  const conceptMaps = getConceptMaps();
   const hasConceptMapFilters = options?.conceptMaps?.length > 0;
+  const filterSet = hasConceptMapFilters ? options.conceptMaps : DEFAULT_CONCEPT_MAP_GENERATOR_FILTER_SET;
 
   const selectedConceptMaps = _.filter(conceptMaps, (_, conceptMapName) => {
-    const noConceptMapFilters = !hasConceptMapFilters;
-
-    if (noConceptMapFilters) {
-      return true;
-    }
-
-    const containsConceptMap = options.conceptMaps.includes(conceptMapName);
+    const containsConceptMap = filterSet.includes(conceptMapName);
 
     return containsConceptMap;
   })
@@ -368,15 +365,8 @@ export const countFiles = (directoryPath, filePattern) => {
   }
 };
 
-export const removeTrailingWhitespaceAndNewlines = conceptMap => {
-  let output = conceptMap;
-
-  output = output.replace(/^\s+/gm, '');
-  output = output.replace(/\|[\s\S]*?\n|\;(?!\n#)[\s\S]*?\n/g, match => {
-    if (match.endsWith('|\n')) return '|';
-    else if (match.endsWith(';\n')) return ';';
-    return match;
-  });
-
-  return output;
-}
+export const toCamelCase = str => (
+  str
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase())
+)

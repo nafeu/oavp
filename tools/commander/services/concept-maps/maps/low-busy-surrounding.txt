@@ -1,0 +1,21 @@
+#prefabs
+[fields]
+[vortex]
+[waves]
+
+#fields
+Line_fields_nofill_accentbstroke|y:200;yr:[fields_yr*a];zIter:-600.0;w:40400.0;h:100.0;strokeWeight:0.75;i:51;
+#fields_yr
+rand(-40, 40, 'fyr')
+
+#vortex
+Circle_vortex_nofill_accentbstroke|xr:90;y:1800;yIter:-24.0;z:-10000;w:100.0;h:100.0;s:100.0;sIter:1000.0;i:51;
+Circle_vortex_nofill_accentbstroke|xr:90;y:4900;yIter:-84.0;z:-10000;w:100.0;h:100.0;s:100.0;sIter:1000.0;strokeColor:-8554647;strokeWeight:1.0;i:51;
+
+#waves
+Arc_waves_nofill|xr:90;y:190;z:700;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;zMod:200;zModType:sawtooth;fillColor:0;
+Arc_waves_nofill|xr:90;y:190;z:700;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;fillColor:0;
+Arc_waves_nofill|xr:90;y:190;yIter:-2.0;z:900;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:190;yIter:-2.0;z:900;zr:180;w:100.0;wIter:200.0;h:100.0;hIter:200.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:91;z:1000;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:400.0;h:100.0;hIter:400.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;
+Arc_waves_nofill|xr:90;y:400;yIter:-4.0;z:1001;zMod:200.0;zModType:sawtooth;zr:180;w:100.0;wIter:400.0;h:100.0;hIter:400.0;s:100.0;strokeWeight:1.0;paramB:180.0;i:100;

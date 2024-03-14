@@ -1,0 +1,5 @@
+#prefabs
+[artifact]
+
+#artifact
+Arc_artifact_camera^fixed|y:-30000;z:-90000;w:30100.0;wIter:-1000.0;h:30100.0;hIter:-1000.0;s:100.0;paramAIter:-25.0;paramB:180.0;paramBIter:-25.0;i:5;

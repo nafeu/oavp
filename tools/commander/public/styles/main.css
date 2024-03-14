@@ -137,7 +137,8 @@ pre {
 }
 
 #active-concept-maps {
-  flex-direction: column;
+  flex-flow: column wrap;
+  height: 300px;
 }
 
 #data {
@@ -442,16 +443,8 @@ svg {
   margin-bottom: var(--spacing);
 }
 
-.col-container {
-  display: flex;
-}
-
-.col {
-  flex: 1;
-}
-
 .concept-map-checkbox {
-  input {
-    margin-right: var(--spacing);
-  }
+  display: flex;
+  gap: var(--spacing);
+  align-items: flex-start
 }

@@ -1,0 +1,35 @@
+#prefabs
+[bigsmoke]
+[birds]
+[trail]
+[trail]&[trail]
+[bigsmoke]&[trail]
+[bigsmoke]&[birds]
+[trail]&[birds]
+
+#birds
+CurvedLine_birds_accentastroke_camera^slower|x:[birds_x];xIter:-[birds_xiter];xIterFunc:random 100;xr:90;y:-[birds_y];z:-[birds_z];zIter:-[birds_ziter];w:30.0;h:100.0;paramB:-15.0;paramD:50.0;i:31;
+#birds_x
+rand(-600, 600)
+#birds_y
+rand(400, 900)
+#birds_z
+rand(0, 2000)
+#birds_xiter
+rand(200, 500)
+#birds_ziter
+rand(30, 100)
+
+#bigsmoke
+Arc_bigsmoke_nofill_accentastroke_camera^slower|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;yIter:[bigsmoke_y];yIterFunc:random 100;
+#bigsmoke_y
+rand(500, 1200)
+
+#trail
+Arc_trail_nofill_accenta|x:[trail_x];y:-[trail_y];zIter:-200.0;zrIter:25.0;w:[trail_size*a];h:[trail_size*a];s:100.0;paramB:180.0;i:100;
+#trail_size
+rand(25, 100, 'size')
+#trail_x
+rand(-3600, 3600)
+#trail_y
+rand(1750, 3000)

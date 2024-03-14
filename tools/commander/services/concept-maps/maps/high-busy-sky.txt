@@ -1,0 +1,11 @@
+#prefabs
+[shootingbeam]
+
+#shootingbeam
+Triangle_shootingbeam_nofill_accentdstroke|x:[shootingbeam_x];y:[shootingbeam_y];xIter:[shootingbeam_xiter];xIterFunc:random 100;yIter:-30.0;z:-4400;zIter:-265.0;zrIter:9.0;w:100.0;h:100.0;s:100.0;sIter:-5.0;variation:equilateral;i:51;
+#shootingbeam_xiter
+rand(-200, -400)
+#shootingbeam_x
+rand(-7000, 7000)
+#shootingbeam_y
+rand(-3000, -5000)

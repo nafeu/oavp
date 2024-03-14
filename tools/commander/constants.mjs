@@ -474,6 +474,8 @@ export const COMMANDER_WEBSOCKET_SERVER_PORT = 3002;
 export const DIRECTORY_PATH = "./";
 export const TARGET_FILE_NAME = "target.txt";
 export const SANDBOX_CONCEPT_MAPS_FILE_NAME = "concept-maps-sandbox.txt";
+export const CONCEPT_MAPS_DIR = "services/concept-maps/maps";
+export const SHARED_VALUES_FILE = "services/concept-maps/maps/shared.txt";
 export const DUMP_FILE_PATH = "preset-dump.txt";
 export const EXPORT_FILE_NAME = "export.txt";
 export const EXPORT_IMAGE_NAME = "export.png";
@@ -575,4 +577,12 @@ export const BROLL_CAMERA_PRESETS = [
     orientation: 'backward',
     easing: 'easeInQuad'
   }
+]
+
+export const DEFAULT_CONCEPT_MAP_GENERATOR_FILTER_SET = [
+  'default',
+  'mediumMinimalBackground',
+  'highBusyCelestial',
+  'lowMinimalSurrounding',
+  'lowMinimalForeground'
 ]

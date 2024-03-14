@@ -26,7 +26,7 @@ import {
   BROLL_CAMERA_PRESETS
 } from '../../constants.mjs';
 
-import { conceptMaps } from '../../concept-maps.mjs';
+import { getConceptMaps } from '../concept-maps/index.mjs';
 
 import {
   wsServerBroadcast,
@@ -35,7 +35,6 @@ import {
   countFiles,
   getOverridesFromParameterSet,
   clearCache,
-  removeTrailingWhitespaceAndNewlines
 } from '../../helpers.mjs';
 
 let presetOutput = "";
@@ -142,6 +141,8 @@ export const handleExportImageEvent = () => {
 
 export const getValidTags = () => {
   let output = [];
+
+  const conceptMaps = getConceptMaps();
 
   _.each(conceptMaps, conceptMap => {
     conceptMap.split('\n').forEach(line => {
@@ -323,9 +324,7 @@ export const buildSketchDataObject = sketchFileContent => {
 }
 
 export const handleSandboxConceptMapsFileEvent = wsClients => {
-  const conceptMap = removeTrailingWhitespaceAndNewlines(
-    fs.readFileSync(SANDBOX_CONCEPT_MAPS_FILE_NAME, 'utf8')
-  );
+  const conceptMap = fs.readFileSync(SANDBOX_CONCEPT_MAPS_FILE_NAME, 'utf8');
 
   const { topics: encodedParameters, issues } = weaveTopics(conceptMap, 1, {
     generatorOptions: { strictMode: true },
