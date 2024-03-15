@@ -137,8 +137,7 @@ pre {
 }
 
 #active-concept-maps {
-  flex-flow: column wrap;
-  height: 300px;
+  flex-flow: row;
 }
 
 #data {
@@ -447,4 +446,25 @@ svg {
   display: flex;
   gap: var(--spacing);
   align-items: flex-start
+}
+
+.inactive-concept-map {
+  opacity: 0.1;
+}
+
+.concept-map-group {
+  padding: var(--spacing);
+  text-align: center;
+}
+
+.concept-map-group-title {
+  margin-bottom: var(--spacing);
+}
+
+.concept-map-presence-bsy {
+  color: var(--color-c);
+}
+
+.concept-map-presence-min {
+  color: var(--color-e);
 }

@@ -478,13 +478,17 @@ function react() {
 function getCheckedConceptMaps() {
   const output = [];
 
-  window.conceptMapMeta.forEach(({ mapId }) => {
-    const isMapIdChecked = $(`#${mapId}-checkbox`)?.checked;
+  const categories = ['default', 'background', 'celestial', 'sky', 'surrounding', 'foreground'];
 
-    if (isMapIdChecked) {
-      output.push(mapId);
-    }
-  });
+  categories.forEach(category => {
+    window.conceptMapMeta[category].forEach(({ mapId }) => {
+      const isMapIdChecked = $(`#${mapId}-checkbox`)?.checked;
 
-  return output;
+      if (isMapIdChecked) {
+        output.push(mapId);
+      }
+    });
+  })
+
+  return output.join(' ');
 }

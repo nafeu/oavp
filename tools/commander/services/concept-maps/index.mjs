@@ -31,7 +31,7 @@ export const getConceptMaps = () => {
 }
 
 export const getConceptMapMeta = () => readdirSync(resolve(CONCEPT_MAPS_DIR))
-  .filter(file => extname(file) === '.txt' && !_.includes(['shared'], basename(file, '.txt')))
+  .filter(file => extname(file) === '.txt' && !_.includes(['shared', 'default'], basename(file, '.txt')))
   .map(file => {
     const filePath = join(CONCEPT_MAPS_DIR, file);
     const data     = readFileSync(filePath, 'utf8');
@@ -39,12 +39,64 @@ export const getConceptMapMeta = () => readdirSync(resolve(CONCEPT_MAPS_DIR))
 
     const [height, presence, subject] = mapName.split('-');
 
+    const heightCodeMapping = {
+      high: 'hi',
+      medium: 'md',
+      low: 'lo'
+    }
+
+    const presenceCodeMapping = {
+      busy: 'bsy',
+      minimal: 'min'
+    }
+
     return {
-      height: height || 'default',
-      presence: presence || 'default',
-      subject: subject || 'default',
+      height: heightCodeMapping[height],
+      presence: presenceCodeMapping[presence],
+      subject,
       mapId: toCamelCase(mapName),
       prefabsCount: data.split(/\n\n+/).map(part => part.includes('\n') ? part : part + '\n').length - 1
     }
-  })
-  .filter(map => map.prefabsCount > 0);
+  }).sort((
+    { subject: subjectA, presence: presenceA },
+    { subject: subjectB, presence: presenceB }
+  ) => {
+    if (subjectA < subjectB) return -1;
+    if (subjectA > subjectB) return 1;
+    if (presenceA < presenceB) return -1;
+    if (presenceA > presenceB) return 1;
+    return 0;
+  }).concat([{
+    height: '',
+    presence: '',
+    subject: 'default',
+    mapId: 'default',
+    prefabsCount: 1
+  }])
+  .reduce((mapping, conceptMap) => {
+    if (conceptMap.subject === 'background') {
+      mapping['background'] = [...(mapping['background'] || []), conceptMap];
+    }
+
+    if (conceptMap.subject === 'celestial') {
+      mapping['celestial'] = [...(mapping['celestial'] || []), conceptMap];
+    }
+
+    if (conceptMap.subject === 'sky') {
+      mapping['sky'] = [...(mapping['sky'] || []), conceptMap];
+    }
+
+    if (conceptMap.subject === 'surrounding') {
+      mapping['surrounding'] = [...(mapping['surrounding'] || []), conceptMap];
+    }
+
+    if (conceptMap.subject === 'foreground') {
+      mapping['foreground'] = [...(mapping['foreground'] || []), conceptMap];
+    }
+
+    if (conceptMap.subject === 'default') {
+      mapping['default'] = [...(mapping['default'] || []), conceptMap];
+    }
+
+    return mapping;
+  }, {});

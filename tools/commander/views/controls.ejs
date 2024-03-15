@@ -15,20 +15,90 @@
 </div>
 <p class="section-label">Active Concept Maps</p>
 <div id="active-concept-maps">
-  <% CONCEPT_MAP_META.forEach(activeConceptMap => { %>
-    <div class="concept-map-checkbox">
-      <input
-        data-height="<%= activeConceptMap.height %>"
-        data-presence="<%= activeConceptMap.presence %>"
-        data-subject="<%= activeConceptMap.subject %>"
-        type="checkbox"
-        id="<%= activeConceptMap.mapId %>-checkbox"
-      />
-      <span class="concept-map-height"><%= activeConceptMap.height %></span>
-      <span class="concept-map-presence"><%= activeConceptMap.presence %></span>
-      <span class="concept-map-subject"><%= activeConceptMap.subject %></span>
-    </div>
-  <% }); %>
+  <div class="concept-map-group">
+    <div class="concept-map-group-title">default</div>
+    <% CONCEPT_MAP_META.default.forEach(activeConceptMap => { %>
+      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+        <input
+          type="checkbox"
+          id="<%= activeConceptMap.mapId %>-checkbox"
+          checked
+        />
+        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      </div>
+    <% }); %>
+  </div>
+  <div class="concept-map-group">
+    <div class="concept-map-group-title">background</div>
+    <% CONCEPT_MAP_META.background.forEach(activeConceptMap => { %>
+      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+        <input
+          type="checkbox"
+          id="<%= activeConceptMap.mapId %>-checkbox"
+        />
+        <span class="concept-map-height"><%= activeConceptMap.height %></span>
+        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
+        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      </div>
+    <% }); %>
+  </div>
+  <div class="concept-map-group">
+    <div class="concept-map-group-title">celestial</div>
+    <% CONCEPT_MAP_META.celestial.forEach(activeConceptMap => { %>
+      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+        <input
+          type="checkbox"
+          id="<%= activeConceptMap.mapId %>-checkbox"
+        />
+        <span class="concept-map-height"><%= activeConceptMap.height %></span>
+        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
+        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      </div>
+    <% }); %>
+  </div>
+  <div class="concept-map-group">
+    <div class="concept-map-group-title">sky</div>
+    <% CONCEPT_MAP_META.sky.forEach(activeConceptMap => { %>
+      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+        <input
+          type="checkbox"
+          id="<%= activeConceptMap.mapId %>-checkbox"
+        />
+        <span class="concept-map-height"><%= activeConceptMap.height %></span>
+        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
+        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      </div>
+    <% }); %>
+  </div>
+  <div class="concept-map-group">
+    <div class="concept-map-group-title">surrounding</div>
+    <% CONCEPT_MAP_META.surrounding.forEach(activeConceptMap => { %>
+      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+        <input
+          type="checkbox"
+          id="<%= activeConceptMap.mapId %>-checkbox"
+        />
+        <span class="concept-map-height"><%= activeConceptMap.height %></span>
+        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
+        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      </div>
+    <% }); %>
+  </div>
+  <div class="concept-map-group">
+    <div class="concept-map-group-title">foreground</div>
+    <% CONCEPT_MAP_META.foreground.forEach(activeConceptMap => { %>
+      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+        <input
+          type="checkbox"
+          id="<%= activeConceptMap.mapId %>-checkbox"
+          <%= activeConceptMap.mapId === 'default' ? 'checked' : '' %>
+        />
+        <span class="concept-map-height"><%= activeConceptMap.height %></span>
+        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
+        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      </div>
+    <% }); %>
+  </div>
 </div>
 <p class="section-label">Object Property Selectors</p>
 <div id="property-selections">
