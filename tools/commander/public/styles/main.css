@@ -476,16 +476,51 @@ svg {
   color: var(--color-e);
 }
 
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-divider);
+}
+
+.main-column-left,
+.main-column-right {
+  flex: 1;
+}
+
 #sketch-preview-container {
   margin-bottom: var(--spacing-divider);
 }
 
 #sketch-preview-image {
   max-width: 100%;
+  width: 100%;
   height: auto;
   border-radius: var(--border-radius);
   border: 2px solid var(--color-white);
   background-color: var(--color-grey-dark);
+  display: none;
+}
+
+#sketch-preview-container {
+  max-width: 800px;
+}
+
+/* Two-column layout for larger screens */
+@media (min-width: 1200px) {
+  .main-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .main-column-left {
+    flex: 0 0 800px;
+    position: sticky;
+    top: var(--spacing);
+  }
+
+  .main-column-right {
+    flex: 1;
+  }
 }
 
 #concept-map-selector {

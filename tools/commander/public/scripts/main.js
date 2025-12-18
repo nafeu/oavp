@@ -85,8 +85,8 @@ function debounce(func, delay) {
 
 function sendSocketCommand({ command, ...params }) {
   const responseElement = $('#response');
-  responseElement.textContent += `SOCKET @ ${new Date().toLocaleString()} : ${command}\n`;
   sketchSocket.send(JSON.stringify({ command, ...params }));
+  responseElement.textContent += `SOCKET @ ${new Date().toLocaleString()} : ${command}\n`;
 }
 
 // eslint-disable-next-line no-unused-vars
