@@ -24,7 +24,8 @@ try {
 }
 
 sketchSocket.addEventListener('open', () => {
-  $('#sketch-socket').textContent = "[ socket ] WebSocket connection opened.";
+  const element = $('#sketch-socket');
+  if (element) element.textContent = "[ socket ] WebSocket connection opened.";
 });
 
 sketchSocket.addEventListener('message', (event) => {
@@ -33,24 +34,27 @@ sketchSocket.addEventListener('message', (event) => {
 });
 
 sketchSocket.addEventListener('error', () => {
-  $('#sketch-socket').textContent = "[ socket ] WebSocket error.";
+  const element = $('#sketch-socket');
+  if (element) element.textContent = "[ socket ] WebSocket error.";
 });
 
 sketchSocket.addEventListener('close', () => {
-  $('#sketch-socket').textContent = "[ socket ] WebSocket connection closed.";
+  const element = $('#sketch-socket');
+  if (element) element.textContent = "[ socket ] WebSocket connection closed.";
 });
 
 const commanderSocket = new WebSocket('ws://localhost:3002');
 
 commanderSocket.addEventListener('open', () => {
-  $('#commander-socket').textContent = "[ commander ] WebSocket connection opened.";
+  const element = $('#commander-socket');
+  if (element) element.textContent = "[ commander ] WebSocket connection opened.";
 });
 
 commanderSocket.addEventListener('message', (event) => {
   const dataElement = $('#data');
   const receivedData = JSON.parse(event.data);
 
-  if (receivedData.command === 'preset-builder-result') {
+  if (receivedData.command === 'preset-builder-result' && dataElement) {
     dataElement.textContent = receivedData.data;
   } else if (receivedData.type === 'screenshot') {
     // Display the screenshot
@@ -63,11 +67,13 @@ commanderSocket.addEventListener('message', (event) => {
 });
 
 commanderSocket.addEventListener('error', () => {
-  $('#commander-socket').textContent = "[ commander ] WebSocket error.";
+  const element = $('#commander-socket');
+  if (element) element.textContent = "[ commander ] WebSocket error.";
 });
 
 commanderSocket.addEventListener('close', () => {
-  $('#commander-socket').textContent = "[ commander ] WebSocket connection closed.";
+  const element = $('#commander-socket');
+  if (element) element.textContent = "[ commander ] WebSocket connection closed.";
 });
 
 // eslint-disable-next-line no-unused-vars
@@ -86,7 +92,9 @@ function debounce(func, delay) {
 function sendSocketCommand({ command, ...params }) {
   const responseElement = $('#response');
   sketchSocket.send(JSON.stringify({ command, ...params }));
-  responseElement.textContent += `SOCKET @ ${new Date().toLocaleString()} : ${command}\n`;
+  if (responseElement) {
+    responseElement.textContent += `SOCKET @ ${new Date().toLocaleString()} : ${command}\n`;
+  }
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -102,9 +110,11 @@ function sendApiCommand({ command, ...params }) {
     .then(data => {
       const responseElement = $('#response');
       const dataElement = $('#data');
-      responseElement.textContent = `API @ ${new Date().toLocaleString()} : ${data.message}`;
+      if (responseElement) {
+        responseElement.textContent = `API @ ${new Date().toLocaleString()} : ${data.message}`;
+      }
 
-      if (data.data) {
+      if (data.data && dataElement) {
         if (command === 'generate-ontop') {
           let dataElementText = '';
 
@@ -120,7 +130,9 @@ function sendApiCommand({ command, ...params }) {
     .catch(error => {
       console.error('Error:', error);
       const responseElement = $('#response');
-      responseElement.textContent = 'Error occurred during API request.';
+      if (responseElement) {
+        responseElement.textContent = 'Error occurred during API request.';
+      }
     });
 }
 
@@ -130,22 +142,24 @@ function sendDebug({ command, ...params }) {
 }
 
 function getPropertyName() {
-  const propertyNameElement = $('#property-name')
-
+  const propertyNameElement = $('#property-name');
+  if (!propertyNameElement) return null;
   return propertyNameElement.value;
 }
 
 function getPropertyType() {
-  const propertyNameElement = $('#property-name')
-
+  const propertyNameElement = $('#property-name');
+  if (!propertyNameElement) return null;
   return oavpObjectPropertiesTypeMapping[propertyNameElement.value];
 }
 
 // eslint-disable-next-line no-unused-vars
 function getPropertyValue() {
   const propertyValueElement = $('#property-value');
+  if (!propertyValueElement) return null;
 
-  if (getPropertyType() !== 'String') {
+  const propertyType = getPropertyType();
+  if (propertyType !== 'String') {
     return Number(propertyValueElement.value);
   }
 
@@ -154,10 +168,12 @@ function getPropertyValue() {
 
 function setSelectedProperty(property) {
   const propertyNameElement = $('#property-name');
+  if (!propertyNameElement) return;
 
   const lastButtonElement = $('#last-button');
-
-  lastButtonElement.textContent = `Last button pressed: Select ${property}`;
+  if (lastButtonElement) {
+    lastButtonElement.textContent = `Last button pressed: Select ${property}`;
+  }
 
   propertyNameElement.value = property;
 }
@@ -175,19 +191,22 @@ function getSocialMediaTextContent(sketchDataObject) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  $('#data').addEventListener('click', function () {
-    const originalText = $('#data').textContent;
-    const textarea = document.createElement('textarea');
-    textarea.value = this.textContent;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    this.textContent = 'Copied to Clipboard!';
-    setTimeout(() => {
-      this.textContent = originalText;
-    }, 1000);
-  });
+  const dataElement = $('#data');
+  if (dataElement) {
+    dataElement.addEventListener('click', function () {
+      const originalText = $('#data').textContent;
+      const textarea = document.createElement('textarea');
+      textarea.value = this.textContent;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      this.textContent = 'Copied to Clipboard!';
+      setTimeout(() => {
+        this.textContent = originalText;
+      }, 1000);
+    });
+  }
 
   $('#sketch-clipboard-button')?.addEventListener('click', function () {
     const textToCopy = getSocialMediaTextContent(window.sketchDataObjects[selectedSketch]);
