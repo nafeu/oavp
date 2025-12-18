@@ -475,3 +475,20 @@ svg {
 .concept-map-presence-min {
   color: var(--color-e);
 }
+
+#concept-map-selector {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-divider);
+}
+
+.concept-map-toggle {
+  background-color: var(--color-d);
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.concept-map-toggle.active {
+  opacity: 1;
+}

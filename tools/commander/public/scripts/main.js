@@ -478,17 +478,40 @@ function react() {
 function getCheckedConceptMaps() {
   const output = [];
 
-  const categories = ['default', 'background', 'celestial', 'sky', 'surrounding', 'foreground'];
+  // Check if query parameter options is set to 'all'
+  const urlParams = new URLSearchParams(window.location.search);
+  const optionsParam = urlParams.get('options');
 
-  categories.forEach(category => {
-    window.conceptMapMeta[category].forEach(({ mapId }) => {
-      const isMapIdChecked = $(`#${mapId}-checkbox`)?.checked;
+  if (optionsParam === 'all') {
+    // Use existing logic: check checkboxes
+    const categories = ['default', 'background', 'celestial', 'sky', 'surrounding', 'foreground'];
 
-      if (isMapIdChecked) {
-        output.push(mapId);
+    categories.forEach(category => {
+      window.conceptMapMeta[category].forEach(({ mapId }) => {
+        const isMapIdChecked = $(`#${mapId}-checkbox`)?.checked;
+
+        if (isMapIdChecked) {
+          output.push(mapId);
+        }
+      });
+    });
+  } else {
+    // Use new logic: find toggled buttons and randomly select from each category
+    const toggledButtons = $a('.concept-map-toggle.active');
+
+    toggledButtons.forEach(button => {
+      const category = button.getAttribute('data-category');
+
+      if (category && window.conceptMapMeta[category] && window.conceptMapMeta[category].length > 0) {
+        // Randomly select one entry from this category
+        const randomIndex = Math.floor(Math.random() * window.conceptMapMeta[category].length);
+        const selectedMap = window.conceptMapMeta[category][randomIndex];
+        output.push(selectedMap.mapId);
       }
     });
-  })
+  }
+
+  console.log(output);
 
   return output.join(' ');
 }
