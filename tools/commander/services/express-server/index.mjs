@@ -44,7 +44,7 @@ const setupExpressServer = ws => {
     next();
   });
 
-  app.get("/", (req, res) => res.render("controls"));
+  app.get("/", (req, res) => res.render("controls", { query: req.query }));
   app.get("/viewer", async (req, res) => {
     try {
       app.locals.SKETCH_DATA_OBJECTS = (await getSketchDataObjects());
@@ -69,7 +69,7 @@ const setupExpressServer = ws => {
       ...params
     } = req.body;
 
-    if (command === "generate") {
+    if (command === "generate-ontop") {
       const objects = emitGeneratedSketchToServer({
         ws,
         options: { conceptMaps: params.conceptMaps || [] }
@@ -82,7 +82,7 @@ const setupExpressServer = ws => {
       });
     }
 
-    else if (command === "feeling-lucky") {
+    else if (command === "regenerate") {
       const objects = emitGeneratedSketchToServer({
         ws,
         options: {

@@ -33,7 +33,7 @@ void webSocketServerEvent(String msg) {
     randomizeAllColors();
   }
 
-  else if (command.equals("feeling-lucky")) {
+  else if (command.equals("regenerate")) {
     JSONArray receivedOavpObjects = message.getJSONArray("objects");
     int seed = message.getInt("seed");
 

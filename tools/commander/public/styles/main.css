@@ -12,6 +12,8 @@
   --border-radius: 5px;
   --spacing-divider: 15px;
   --color-grey-dark: rgba(72, 84, 96, 0.25);
+  --controls-button-width: 200px;
+  --controls-button-height: 100px;
 }
 
 /* Firefox */
@@ -69,6 +71,11 @@ button {
   font-size: 1.15rem;
   padding: var(--spacing);
   cursor: pointer;
+}
+
+.controls-button {
+  width: var(--controls-button-width);
+  height: var(--controls-button-height);
 }
 
 button:hover {

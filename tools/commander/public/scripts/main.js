@@ -98,7 +98,7 @@ function sendApiCommand({ command, ...params }) {
       responseElement.textContent = `API @ ${new Date().toLocaleString()} : ${data.message}`;
 
       if (data.data) {
-        if (command === 'generate') {
+        if (command === 'generate-ontop') {
           let dataElementText = '';
 
           data.data.forEach(item => {

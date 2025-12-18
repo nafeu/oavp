@@ -1,249 +1,278 @@
 <%- include('partials/head') %>
-<%- include('partials/navigation') %>
+  <%- include('partials/navigation') %>
 
-<p class="section-label">Editor Commands</p>
-<div id="command-buttons">
-  <button onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
-  <button onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
-  <button onclick="sendApiCommand({ command: 'generate', conceptMaps: getCheckedConceptMaps() })">Generate</button>
-  <button onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
-  <button onclick="sendSocketCommand({ command: 'dump-prefab' })">Dump Prefab</button>
-  <button onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize Palette</button>
-  <button onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize Colors</button>
-  <button onclick="sendApiCommand({ command: 'feeling-lucky', conceptMaps: getCheckedConceptMaps() })">Feeling Lucky</button>
-  <button onclick="alert(getCheckedConceptMaps())">Check Map Config</button>
-</div>
-<p class="section-label">Active Concept Maps</p>
-<div id="active-concept-maps">
-  <div class="concept-map-group">
-    <div class="concept-map-group-title">default</div>
-    <% CONCEPT_MAP_META.default.forEach(activeConceptMap => { %>
-      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
-        <input
-          type="checkbox"
-          id="<%= activeConceptMap.mapId %>-checkbox"
-          checked
-        />
-        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+    <p class="section-label">Editor Commands</p>
+    <div id="command-buttons">
+      <button class="controls-button" onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>
+      <button class="controls-button" onclick="sendSocketCommand({ command: 'reset' })">Reset</button>
+      <button class="controls-button"
+        onclick="sendApiCommand({ command: 'regenerate', conceptMaps: getCheckedConceptMaps() })">Regenerate</button>
+      <button class="controls-button"
+        onclick="sendApiCommand({ command: 'generate-ontop', conceptMaps: getCheckedConceptMaps() })">Generate On
+        Top</button>
+      <button class="controls-button" onclick="sendSocketCommand({ command: 'randomize-palette' })">Randomize
+        Palette</button>
+      <button class="controls-button" onclick="sendSocketCommand({ command: 'randomize-colors' })">Randomize
+        Colors</button>
+      <button class="controls-button" onclick="sendSocketCommand({ command: 'dump-prefab' })">Dump Prefab</button>
+      <button class="controls-button" onclick="sendSocketCommand({ command: 'export-sketch' })">Export Sketch</button>
+      <% if (query && query.options==='all' ) { %>
+        <button class="controls-button" onclick="alert(getCheckedConceptMaps())">Check Map Config</button>
+        <% } %>
+    </div>
+    <p class="section-label">Active Concept Maps</p>
+    <div id="active-concept-maps">
+      <div class="concept-map-group">
+        <div class="concept-map-group-title">default</div>
+        <% CONCEPT_MAP_META.default.forEach(activeConceptMap=> { %>
+          <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+            <input type="checkbox" id="<%= activeConceptMap.mapId %>-checkbox" checked />
+            <span class="concept-map-prefabs-count">
+              <%= activeConceptMap.prefabsCount %>
+            </span>
+          </div>
+          <% }); %>
       </div>
-    <% }); %>
-  </div>
-  <div class="concept-map-group">
-    <div class="concept-map-group-title">background</div>
-    <% CONCEPT_MAP_META.background.forEach(activeConceptMap => { %>
-      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
-        <input
-          type="checkbox"
-          id="<%= activeConceptMap.mapId %>-checkbox"
-        />
-        <span class="concept-map-height"><%= activeConceptMap.height %></span>
-        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
-        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      <div class="concept-map-group">
+        <div class="concept-map-group-title">background</div>
+        <% CONCEPT_MAP_META.background.forEach(activeConceptMap=> { %>
+          <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+            <input type="checkbox" id="<%= activeConceptMap.mapId %>-checkbox" />
+            <span class="concept-map-height">
+              <%= activeConceptMap.height %>
+            </span>
+            <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>">
+              <%= activeConceptMap.presence %>
+            </span>
+            <span class="concept-map-prefabs-count">
+              <%= activeConceptMap.prefabsCount %>
+            </span>
+          </div>
+          <% }); %>
       </div>
-    <% }); %>
-  </div>
-  <div class="concept-map-group">
-    <div class="concept-map-group-title">celestial</div>
-    <% CONCEPT_MAP_META.celestial.forEach(activeConceptMap => { %>
-      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
-        <input
-          type="checkbox"
-          id="<%= activeConceptMap.mapId %>-checkbox"
-        />
-        <span class="concept-map-height"><%= activeConceptMap.height %></span>
-        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
-        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      <div class="concept-map-group">
+        <div class="concept-map-group-title">celestial</div>
+        <% CONCEPT_MAP_META.celestial.forEach(activeConceptMap=> { %>
+          <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+            <input type="checkbox" id="<%= activeConceptMap.mapId %>-checkbox" />
+            <span class="concept-map-height">
+              <%= activeConceptMap.height %>
+            </span>
+            <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>">
+              <%= activeConceptMap.presence %>
+            </span>
+            <span class="concept-map-prefabs-count">
+              <%= activeConceptMap.prefabsCount %>
+            </span>
+          </div>
+          <% }); %>
       </div>
-    <% }); %>
-  </div>
-  <div class="concept-map-group">
-    <div class="concept-map-group-title">sky</div>
-    <% CONCEPT_MAP_META.sky.forEach(activeConceptMap => { %>
-      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
-        <input
-          type="checkbox"
-          id="<%= activeConceptMap.mapId %>-checkbox"
-        />
-        <span class="concept-map-height"><%= activeConceptMap.height %></span>
-        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
-        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      <div class="concept-map-group">
+        <div class="concept-map-group-title">sky</div>
+        <% CONCEPT_MAP_META.sky.forEach(activeConceptMap=> { %>
+          <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+            <input type="checkbox" id="<%= activeConceptMap.mapId %>-checkbox" />
+            <span class="concept-map-height">
+              <%= activeConceptMap.height %>
+            </span>
+            <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>">
+              <%= activeConceptMap.presence %>
+            </span>
+            <span class="concept-map-prefabs-count">
+              <%= activeConceptMap.prefabsCount %>
+            </span>
+          </div>
+          <% }); %>
       </div>
-    <% }); %>
-  </div>
-  <div class="concept-map-group">
-    <div class="concept-map-group-title">surrounding</div>
-    <% CONCEPT_MAP_META.surrounding.forEach(activeConceptMap => { %>
-      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
-        <input
-          type="checkbox"
-          id="<%= activeConceptMap.mapId %>-checkbox"
-        />
-        <span class="concept-map-height"><%= activeConceptMap.height %></span>
-        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
-        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      <div class="concept-map-group">
+        <div class="concept-map-group-title">surrounding</div>
+        <% CONCEPT_MAP_META.surrounding.forEach(activeConceptMap=> { %>
+          <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+            <input type="checkbox" id="<%= activeConceptMap.mapId %>-checkbox" />
+            <span class="concept-map-height">
+              <%= activeConceptMap.height %>
+            </span>
+            <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>">
+              <%= activeConceptMap.presence %>
+            </span>
+            <span class="concept-map-prefabs-count">
+              <%= activeConceptMap.prefabsCount %>
+            </span>
+          </div>
+          <% }); %>
       </div>
-    <% }); %>
-  </div>
-  <div class="concept-map-group">
-    <div class="concept-map-group-title">foreground</div>
-    <% CONCEPT_MAP_META.foreground.forEach(activeConceptMap => { %>
-      <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
-        <input
-          type="checkbox"
-          id="<%= activeConceptMap.mapId %>-checkbox"
-          <%= activeConceptMap.mapId === 'default' ? 'checked' : '' %>
-        />
-        <span class="concept-map-height"><%= activeConceptMap.height %></span>
-        <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>"><%= activeConceptMap.presence %></span>
-        <span class="concept-map-prefabs-count"><%= activeConceptMap.prefabsCount %></span>
+      <div class="concept-map-group">
+        <div class="concept-map-group-title">foreground</div>
+        <% CONCEPT_MAP_META.foreground.forEach(activeConceptMap=> { %>
+          <div class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+            <input type="checkbox" id="<%= activeConceptMap.mapId %>-checkbox" <%=activeConceptMap.mapId==='default'
+              ? 'checked' : '' %>
+            />
+            <span class="concept-map-height">
+              <%= activeConceptMap.height %>
+            </span>
+            <span class="concept-map-presence concept-map-presence-<%= activeConceptMap.presence %>">
+              <%= activeConceptMap.presence %>
+            </span>
+            <span class="concept-map-prefabs-count">
+              <%= activeConceptMap.prefabsCount %>
+            </span>
+          </div>
+          <% }); %>
       </div>
-    <% }); %>
-  </div>
-</div>
-<p class="section-label">Object Property Selectors</p>
-<div id="property-selections">
-  <button onclick="setSelectedProperty('x')">Select X</button>
-  <button onclick="setSelectedProperty('y')">Select Y</button>
-  <button onclick="setSelectedProperty('z')">Select Z</button>
-  <button onclick="setSelectedProperty('h')">Select H</button>
-  <button onclick="setSelectedProperty('w')">Select W</button>
-  <button onclick="setSelectedProperty('l')">Select L</button>
-  <button onclick="setSelectedProperty('s')">Select S</button>
-  <button onclick="setSelectedProperty('zIter')">Select zIter</button>
-</div>
-<p class="section-label">Object Property Quick Setters</p>
-<div id="property-quick-setters">
-  <button onclick="setAndSendDirectEdit('xr', 90)">xr=90</button>
-  <button onclick="setAndSendDirectEdit('y', 300)">y=300</button>
-  <button onclick="setAndSendDirectEdit('i', 25)">i=25</button>
-  <button onclick="setAndSendDirectEdit('zIter', -200)">zIter=-200</button>
-  <button onclick="setAndSendDirectEdit('zr', 45)">zr=45</button>
-  <button onclick="setAndSendDirectEdit('xr', 45)">xr=45</button>
-  <button onclick="setAndSendDirectEdit('yr', 45)">yr=45</button>
-  <button onclick="setAndSendDirectEdit('z', -90000)">z=-90000</button>
-  <button onclick="setAndSendDirectEdit('z', -40000)">z=-40000</button>
-  <button onclick="setAndSendDirectEdit('w', 10000);setAndSendDirectEdit('h', 10000)">w&h=10000</button>
-  <button onclick="setAndSendDirectEdit('w', 10000);setAndSendDirectEdit('h', 10000);setAndSendDirectEdit('l', 10000);">w&h&l=10000</button>
-  <button onclick="setAndSendDirectEdit('s', 10000);">s=10000</button>
-</div>
-<p class="section-label">Direct Edit</p>
-<div id="direct-edit">
-  <select name="property-name" id="property-name">
-    <option value="x">x</option>
-    <option value="xMod">xMod</option>
-    <option value="xModType">xModType</option>
-    <option value="xIter">xIter</option>
-    <option value="xIterFunc">xIterFunc</option>
-    <option value="xr">xr</option>
-    <option value="xrMod">xrMod</option>
-    <option value="xrModType">xrModType</option>
-    <option value="xrIter">xrIter</option>
-    <option value="xrIterFunc">xrIterFunc</option>
-    <option value="y">y</option>
-    <option value="yMod">yMod</option>
-    <option value="yModType">yModType</option>
-    <option value="yIter">yIter</option>
-    <option value="yIterFunc">yIterFunc</option>
-    <option value="yr">yr</option>
-    <option value="yrMod">yrMod</option>
-    <option value="yrModType">yrModType</option>
-    <option value="yrIter">yrIter</option>
-    <option value="yrIterFunc">yrIterFunc</option>
-    <option value="z">z</option>
-    <option value="zMod">zMod</option>
-    <option value="zModType">zModType</option>
-    <option value="zIter">zIter</option>
-    <option value="zIterFunc">zIterFunc</option>
-    <option value="zr">zr</option>
-    <option value="zrMod">zrMod</option>
-    <option value="zrModType">zrModType</option>
-    <option value="zrIter">zrIter</option>
-    <option value="zrIterFunc">zrIterFunc</option>
-    <option value="w">w</option>
-    <option value="wMod">wMod</option>
-    <option value="wModType">wModType</option>
-    <option value="wIter">wIter</option>
-    <option value="wIterFunc">wIterFunc</option>
-    <option value="h">h</option>
-    <option value="hMod">hMod</option>
-    <option value="hModType">hModType</option>
-    <option value="hIter">hIter</option>
-    <option value="hIterFunc">hIterFunc</option>
-    <option value="l">l</option>
-    <option value="lMod">lMod</option>
-    <option value="lModType">lModType</option>
-    <option value="lIter">lIter</option>
-    <option value="lIterFunc">lIterFunc</option>
-    <option value="s">s</option>
-    <option value="sMod">sMod</option>
-    <option value="sModType">sModType</option>
-    <option value="sIter">sIter</option>
-    <option value="sIterFunc">sIterFunc</option>
-    <option value="strokeColor">strokeColor</option>
-    <option value="strokeColorMod">strokeColorMod</option>
-    <option value="strokeColorModType">strokeColorModType</option>
-    <option value="strokeColorIter">strokeColorIter</option>
-    <option value="strokeColorIterFunc">strokeColorIterFunc</option>
-    <option value="strokeWeight">strokeWeight</option>
-    <option value="strokeWeightMod">strokeWeightMod</option>
-    <option value="strokeWeightModType">strokeWeightModType</option>
-    <option value="strokeWeightIter">strokeWeightIter</option>
-    <option value="strokeWeightIterFunc">strokeWeightIterFunc</option>
-    <option value="fillColor">fillColor</option>
-    <option value="fillColorMod">fillColorMod</option>
-    <option value="fillColorModType">fillColorModType</option>
-    <option value="fillColorIter">fillColorIter</option>
-    <option value="fillColorIterFunc">fillColorIterFunc</option>
-    <option value="paramA">paramA</option>
-    <option value="paramAMod">paramAMod</option>
-    <option value="paramAModType">paramAModType</option>
-    <option value="paramAIter">paramAIter</option>
-    <option value="paramAIterFunc">paramAIterFunc</option>
-    <option value="paramB">paramB</option>
-    <option value="paramBMod">paramBMod</option>
-    <option value="paramBModType">paramBModType</option>
-    <option value="paramBIter">paramBIter</option>
-    <option value="paramBIterFunc">paramBIterFunc</option>
-    <option value="paramC">paramC</option>
-    <option value="paramCMod">paramCMod</option>
-    <option value="paramCModType">paramCModType</option>
-    <option value="paramCIter">paramCIter</option>
-    <option value="paramCIterFunc">paramCIterFunc</option>
-    <option value="paramD">paramD</option>
-    <option value="paramDMod">paramDMod</option>
-    <option value="paramDModType">paramDModType</option>
-    <option value="paramDIter">paramDIter</option>
-    <option value="paramDIterFunc">paramDIterFunc</option>
-    <option value="paramE">paramE</option>
-    <option value="paramEMod">paramEMod</option>
-    <option value="paramEModType">paramEModType</option>
-    <option value="paramEIter">paramEIter</option>
-    <option value="paramEIterFunc">paramEIterFunc</option>
-    <option value="modDelay">modDelay</option>
-    <option value="i">i</option>
-  </select>
-  <input id="property-value" type="text" placeholder="Enter value"/>
-  <button
-    onclick="sendSocketCommand({
-      command: 'direct-edit',
-      name: getPropertyName(),
-      type: getPropertyType(),
-      value: getPropertyValue()
-    })">
-      Direct Edit
-  </button>
-  <button onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
-  <button onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
-</div>
-<p class="section-label">Preview Edit Intervals</p>
-<div id="preview-edit-intervals">
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 5000 })">+5000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -5000 })">-5000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
-  <button onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
-</div>
+    </div>
+    <% if (query && query.options==='all' ) { %>
+      <p class="section-label">Object Property Selectors</p>
+      <div id="property-selections">
+        <button onclick="setSelectedProperty('x')">Select X</button>
+        <button onclick="setSelectedProperty('y')">Select Y</button>
+        <button onclick="setSelectedProperty('z')">Select Z</button>
+        <button onclick="setSelectedProperty('h')">Select H</button>
+        <button onclick="setSelectedProperty('w')">Select W</button>
+        <button onclick="setSelectedProperty('l')">Select L</button>
+        <button onclick="setSelectedProperty('s')">Select S</button>
+        <button onclick="setSelectedProperty('zIter')">Select zIter</button>
+      </div>
+      <p class="section-label">Object Property Quick Setters</p>
+      <div id="property-quick-setters">
+        <button onclick="setAndSendDirectEdit('xr', 90)">xr=90</button>
+        <button onclick="setAndSendDirectEdit('y', 300)">y=300</button>
+        <button onclick="setAndSendDirectEdit('i', 25)">i=25</button>
+        <button onclick="setAndSendDirectEdit('zIter', -200)">zIter=-200</button>
+        <button onclick="setAndSendDirectEdit('zr', 45)">zr=45</button>
+        <button onclick="setAndSendDirectEdit('xr', 45)">xr=45</button>
+        <button onclick="setAndSendDirectEdit('yr', 45)">yr=45</button>
+        <button onclick="setAndSendDirectEdit('z', -90000)">z=-90000</button>
+        <button onclick="setAndSendDirectEdit('z', -40000)">z=-40000</button>
+        <button onclick="setAndSendDirectEdit('w', 10000);setAndSendDirectEdit('h', 10000)">w&h=10000</button>
+        <button
+          onclick="setAndSendDirectEdit('w', 10000);setAndSendDirectEdit('h', 10000);setAndSendDirectEdit('l', 10000);">w&h&l=10000</button>
+        <button onclick="setAndSendDirectEdit('s', 10000);">s=10000</button>
+      </div>
+      <p class="section-label">Direct Edit</p>
+      <div id="direct-edit">
+        <select name="property-name" id="property-name">
+          <option value="x">x</option>
+          <option value="xMod">xMod</option>
+          <option value="xModType">xModType</option>
+          <option value="xIter">xIter</option>
+          <option value="xIterFunc">xIterFunc</option>
+          <option value="xr">xr</option>
+          <option value="xrMod">xrMod</option>
+          <option value="xrModType">xrModType</option>
+          <option value="xrIter">xrIter</option>
+          <option value="xrIterFunc">xrIterFunc</option>
+          <option value="y">y</option>
+          <option value="yMod">yMod</option>
+          <option value="yModType">yModType</option>
+          <option value="yIter">yIter</option>
+          <option value="yIterFunc">yIterFunc</option>
+          <option value="yr">yr</option>
+          <option value="yrMod">yrMod</option>
+          <option value="yrModType">yrModType</option>
+          <option value="yrIter">yrIter</option>
+          <option value="yrIterFunc">yrIterFunc</option>
+          <option value="z">z</option>
+          <option value="zMod">zMod</option>
+          <option value="zModType">zModType</option>
+          <option value="zIter">zIter</option>
+          <option value="zIterFunc">zIterFunc</option>
+          <option value="zr">zr</option>
+          <option value="zrMod">zrMod</option>
+          <option value="zrModType">zrModType</option>
+          <option value="zrIter">zrIter</option>
+          <option value="zrIterFunc">zrIterFunc</option>
+          <option value="w">w</option>
+          <option value="wMod">wMod</option>
+          <option value="wModType">wModType</option>
+          <option value="wIter">wIter</option>
+          <option value="wIterFunc">wIterFunc</option>
+          <option value="h">h</option>
+          <option value="hMod">hMod</option>
+          <option value="hModType">hModType</option>
+          <option value="hIter">hIter</option>
+          <option value="hIterFunc">hIterFunc</option>
+          <option value="l">l</option>
+          <option value="lMod">lMod</option>
+          <option value="lModType">lModType</option>
+          <option value="lIter">lIter</option>
+          <option value="lIterFunc">lIterFunc</option>
+          <option value="s">s</option>
+          <option value="sMod">sMod</option>
+          <option value="sModType">sModType</option>
+          <option value="sIter">sIter</option>
+          <option value="sIterFunc">sIterFunc</option>
+          <option value="strokeColor">strokeColor</option>
+          <option value="strokeColorMod">strokeColorMod</option>
+          <option value="strokeColorModType">strokeColorModType</option>
+          <option value="strokeColorIter">strokeColorIter</option>
+          <option value="strokeColorIterFunc">strokeColorIterFunc</option>
+          <option value="strokeWeight">strokeWeight</option>
+          <option value="strokeWeightMod">strokeWeightMod</option>
+          <option value="strokeWeightModType">strokeWeightModType</option>
+          <option value="strokeWeightIter">strokeWeightIter</option>
+          <option value="strokeWeightIterFunc">strokeWeightIterFunc</option>
+          <option value="fillColor">fillColor</option>
+          <option value="fillColorMod">fillColorMod</option>
+          <option value="fillColorModType">fillColorModType</option>
+          <option value="fillColorIter">fillColorIter</option>
+          <option value="fillColorIterFunc">fillColorIterFunc</option>
+          <option value="paramA">paramA</option>
+          <option value="paramAMod">paramAMod</option>
+          <option value="paramAModType">paramAModType</option>
+          <option value="paramAIter">paramAIter</option>
+          <option value="paramAIterFunc">paramAIterFunc</option>
+          <option value="paramB">paramB</option>
+          <option value="paramBMod">paramBMod</option>
+          <option value="paramBModType">paramBModType</option>
+          <option value="paramBIter">paramBIter</option>
+          <option value="paramBIterFunc">paramBIterFunc</option>
+          <option value="paramC">paramC</option>
+          <option value="paramCMod">paramCMod</option>
+          <option value="paramCModType">paramCModType</option>
+          <option value="paramCIter">paramCIter</option>
+          <option value="paramCIterFunc">paramCIterFunc</option>
+          <option value="paramD">paramD</option>
+          <option value="paramDMod">paramDMod</option>
+          <option value="paramDModType">paramDModType</option>
+          <option value="paramDIter">paramDIter</option>
+          <option value="paramDIterFunc">paramDIterFunc</option>
+          <option value="paramE">paramE</option>
+          <option value="paramEMod">paramEMod</option>
+          <option value="paramEModType">paramEModType</option>
+          <option value="paramEIter">paramEIter</option>
+          <option value="paramEIterFunc">paramEIterFunc</option>
+          <option value="modDelay">modDelay</option>
+          <option value="i">i</option>
+        </select>
+        <input id="property-value" type="text" placeholder="Enter value" />
+        <button onclick="sendSocketCommand({
+  command: 'direct-edit',
+  name: getPropertyName(),
+  type: getPropertyType(),
+  value: getPropertyValue()
+})">
+          Direct Edit
+        </button>
+        <button onclick="sendSocketCommand({ command: 'next-object' })">Next Object</button>
+        <button onclick="sendSocketCommand({ command: 'prev-object' })">Previous Object</button>
+      </div>
+      <p class="section-label">Preview Edit Intervals</p>
+      <div id="preview-edit-intervals">
+        <button
+          onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 1000 })">+1000</button>
+        <button
+          onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -1000 })">-1000</button>
+        <button
+          onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 5000 })">+5000</button>
+        <button
+          onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -5000 })">-5000</button>
+        <button
+          onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: 10000 })">+10000</button>
+        <button
+          onclick="sendSocketCommand({ command: 'preview-edit', name: getPropertyName(), type: getPropertyType(), value: -10000 })">-10000</button>
+      </div>
+      <% } %>
 
-<%- include('partials/console') %>
-<%- include('partials/footer') %>
+        <%- include('partials/console') %>
+          <%- include('partials/footer') %>

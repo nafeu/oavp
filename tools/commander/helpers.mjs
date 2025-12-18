@@ -208,7 +208,7 @@ export const emitGeneratedSketchToServer = ({ ws, options = {} }) => {
   rand.cache = {};
 
   const message = {
-    command: options.isFeelingLucky ? "feeling-lucky" : "write-objects",
+    command: options.isFeelingLucky ? "regenerate" : "write-objects",
     objects,
     seed: rand(0, 100),
   };
