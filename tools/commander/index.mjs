@@ -23,7 +23,7 @@ const wsClients = new Set();
 
 const main = () => {
   setupExpressServer(ws);
-  setupSketchSocketConnection(ws);
+  setupSketchSocketConnection(ws, wsServer);
   setupWebsocketServer({ wsServer, wsClients });
   setupFilewatchEventHandlers(ws);
 };

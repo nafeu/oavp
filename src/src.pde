@@ -155,6 +155,12 @@ synchronized void draw() {
           EXPORT_SKETCH = false;
         }
 
+        // Check if screenshot should be captured (must be done on main thread)
+        if (shouldCaptureScreenshot) {
+          sendScreenshot();
+          shouldCaptureScreenshot = false;
+        }
+
         if (shouldExit) {
           exit();
         }

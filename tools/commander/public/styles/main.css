@@ -476,6 +476,18 @@ svg {
   color: var(--color-e);
 }
 
+#sketch-preview-container {
+  margin-bottom: var(--spacing-divider);
+}
+
+#sketch-preview-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--color-white);
+  background-color: var(--color-grey-dark);
+}
+
 #concept-map-selector {
   display: flex;
   gap: 5px;

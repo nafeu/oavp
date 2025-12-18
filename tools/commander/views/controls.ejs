@@ -1,6 +1,12 @@
 <%- include('partials/head') %>
   <%- include('partials/navigation') %>
 
+    <p class="section-label">Sketch Preview</p>
+    <div id="sketch-preview-container">
+      <img id="sketch-preview-image" src="" alt="Sketch Preview"
+        style="max-width: 100%; height: auto; border-radius: var(--border-radius); display: none;" />
+    </div>
+
     <p class="section-label">Editor Commands</p>
     <div id="command-buttons">
       <button class="controls-button" onclick="sendSocketCommand({ command: 'toggle-edit' })">Toggle Edit Mode</button>

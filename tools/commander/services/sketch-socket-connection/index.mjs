@@ -3,7 +3,7 @@ let pingInterval;
 const PING_COUNT_RESET = 30;
 const PING_INTERVAL_MS = 1000;
 
-const setupSketchSocketConnection = ws => {
+const setupSketchSocketConnection = (ws, wsServer) => {
   ws.on("open", () => {
     console.log(
       "[ oavp-commander:sketch-socket-connection ] WebSocket connection opened.",
@@ -22,6 +22,23 @@ const setupSketchSocketConnection = ws => {
         pingCount += 1;
       }
     }, PING_INTERVAL_MS)
+  });
+
+  ws.on("message", (data) => {
+    try {
+      const message = JSON.parse(data.toString());
+
+      // If it's a screenshot message, broadcast it to all connected clients
+      if (message.type === "screenshot") {
+        wsServer.clients.forEach((client) => {
+          if (client.readyState === 1) { // WebSocket.OPEN
+            client.send(JSON.stringify(message));
+          }
+        });
+      }
+    } catch (error) {
+      // Not JSON or other error, ignore
+    }
   });
 
   ws.on("close", () => {

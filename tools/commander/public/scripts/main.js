@@ -52,6 +52,13 @@ commanderSocket.addEventListener('message', (event) => {
 
   if (receivedData.command === 'preset-builder-result') {
     dataElement.textContent = receivedData.data;
+  } else if (receivedData.type === 'screenshot') {
+    // Display the screenshot
+    const previewImage = $('#sketch-preview-image');
+    if (previewImage && receivedData.data) {
+      previewImage.src = receivedData.data;
+      previewImage.style.display = 'block';
+    }
   }
 });
 

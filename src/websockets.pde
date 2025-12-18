@@ -1,3 +1,48 @@
+import java.util.Base64;
+import java.io.File;
+
+// Flag to indicate when a screenshot should be captured (must be done on main thread)
+boolean shouldCaptureScreenshot = false;
+
+void sendScreenshot() {
+  try {
+    // Capture the current frame
+    PImage screenshot = get();
+
+    // Save to a temporary file
+    String tempPath = sketchPath("temp_screenshot.png");
+    screenshot.save(tempPath);
+
+    // Read the file as bytes
+    byte[] imageBytes = loadBytes(tempPath);
+
+    // Encode to base64
+    String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+    // Create JSON message
+    JSONObject screenshotMessage = new JSONObject();
+    screenshotMessage.setString("type", "screenshot");
+    screenshotMessage.setString("data", "data:image/png;base64," + base64Image);
+
+    // Send via websocket
+    server.sendMessage(screenshotMessage.toString());
+
+    // Clean up temp file
+    File tempFile = new File(tempPath);
+    if (tempFile.exists()) {
+      tempFile.delete();
+    }
+  } catch (Exception e) {
+    println("[ oavp ] Error sending screenshot: " + e.getMessage());
+    e.printStackTrace();
+  }
+}
+
+void queueScreenshot() {
+  // Set flag to capture screenshot on next draw() call
+  shouldCaptureScreenshot = true;
+}
+
 void webSocketServerEvent(String msg) {
   JSONObject message = parseJSONObject(msg);
   String command = message.getString("command");
@@ -12,25 +57,30 @@ void webSocketServerEvent(String msg) {
     noLoop();
     handleReceivedOavpObjects(receivedOavpObjects);
     loop();
+    queueScreenshot();
   }
 
   else if (command.equals("reset")) {
     noLoop();
     objects.removeAll();
     loop();
+    queueScreenshot();
   }
 
   else if (command.equals("dump-prefab")) {
     objects.exportObjectData();
+    queueScreenshot();
   }
 
   else if (command.equals("randomize-palette")){
     randomizePalette();
     randomizeAllColors();
+    queueScreenshot();
   }
 
   else if (command.equals("randomize-colors")) {
     randomizeAllColors();
+    queueScreenshot();
   }
 
   else if (command.equals("regenerate")) {
@@ -44,6 +94,7 @@ void webSocketServerEvent(String msg) {
     randomizePalette();
     randomizeAllColors();
     loop();
+    queueScreenshot();
   }
 
   else if (command.equals("sandbox")) {
@@ -54,6 +105,7 @@ void webSocketServerEvent(String msg) {
     handleReceivedOavpObjects(receivedOavpObjects);
     randomizeAllColors();
     loop();
+    queueScreenshot();
   }
 
   else if (command.equals("load")) {
@@ -77,6 +129,7 @@ void webSocketServerEvent(String msg) {
     println("[ oavp ] Inserting new objects...");
     handleReceivedOavpObjects(receivedOavpObjects);
     loop();
+    queueScreenshot();
   }
 
   else if (command.equals("reseed")) {
@@ -89,6 +142,7 @@ void webSocketServerEvent(String msg) {
     println("[ oavp ] Updating existing objects with reseed values...");
     handleReceivedReseedObjects(receivedReseedObjects);
     loop();
+    queueScreenshot();
   }
 
   else if (command.equals("direct-edit")) {
@@ -112,6 +166,7 @@ void webSocketServerEvent(String msg) {
 
       editor.externalDirectEdit(propertyName, propertyValue);
     }
+    queueScreenshot();
   }
 
   else if (command.equals("preview-edit")) {
@@ -135,24 +190,29 @@ void webSocketServerEvent(String msg) {
 
       editor.previewEdit(propertyName, propertyValue); editor.commitEdit(propertyName);
     }
+    queueScreenshot();
   }
 
   else if (command.equals("toggle-edit")) {
     editor.toggleEditMode();
+    queueScreenshot();
   }
 
   else if (command.equals("next-object")) {
     objects.nextActiveVariable();
     updateEditorVariableMeta();
+    queueScreenshot();
   }
 
   else if (command.equals("prev-object")) {
     objects.prevActiveVariable();
     updateEditorVariableMeta();
+    queueScreenshot();
   }
 
   else if (command.equals("export-sketch")) {
     editor.queueExportSketchToFile();
+    queueScreenshot();
   }
 
   else if (command.equals("ping")) {}
