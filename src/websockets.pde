@@ -20,7 +20,7 @@ void webSocketServerEvent(String msg) {
     loop();
   }
 
-  else if (command.equals("save-preset")) {
+  else if (command.equals("dump-prefab")) {
     objects.exportObjectData();
   }
 

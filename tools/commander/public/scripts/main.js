@@ -19,7 +19,7 @@ let sketchSocket;
 
 try {
   sketchSocket = new WebSocket('ws://localhost:6287/commands');
-} catch(err) {
+} catch (err) {
   console.log(`[ oavp-commander] Cannot connect to processing editor websocket server...`);
 }
 
@@ -91,30 +91,30 @@ function sendApiCommand({ command, ...params }) {
     },
     body: JSON.stringify({ command, ...params }),
   })
-  .then(response => response.json())
-  .then(data => {
-    const responseElement = $('#response');
-    const dataElement = $('#data');
-    responseElement.textContent = `API @ ${new Date().toLocaleString()} : ${data.message}`;
+    .then(response => response.json())
+    .then(data => {
+      const responseElement = $('#response');
+      const dataElement = $('#data');
+      responseElement.textContent = `API @ ${new Date().toLocaleString()} : ${data.message}`;
 
-    if (data.data) {
-      if (command === 'generate') {
-        let dataElementText = '';
+      if (data.data) {
+        if (command === 'generate') {
+          let dataElementText = '';
 
-        data.data.forEach(item => {
-          dataElementText += `${item.id}\n${item.params.map((param, index) => `[${param.id} : ${param.value}]`).join(' ').trim()}\n\n`;
-        })
+          data.data.forEach(item => {
+            dataElementText += `${item.id}\n${item.params.map((param, index) => `[${param.id} : ${param.value}]`).join(' ').trim()}\n\n`;
+          })
 
-        dataElementText += `Total Objects: ${data.data.length}`;
-        dataElement.textContent = dataElementText;
+          dataElementText += `Total Objects: ${data.data.length}`;
+          dataElement.textContent = dataElementText;
+        }
       }
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    const responseElement = $('#response');
-    responseElement.textContent = 'Error occurred during API request.';
-  });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      const responseElement = $('#response');
+      responseElement.textContent = 'Error occurred during API request.';
+    });
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   });
 
-  $('#sketch-clipboard-button')?.addEventListener('click', function() {
+  $('#sketch-clipboard-button')?.addEventListener('click', function () {
     const textToCopy = getSocialMediaTextContent(window.sketchDataObjects[selectedSketch]);
 
     window.sketchDataObjects[selectedSketch].socialMediaTextContent = textToCopy;
@@ -205,19 +205,19 @@ document.addEventListener("DOMContentLoaded", () => {
     saveOnChangeElements[i].addEventListener('input', debounce(saveSketch, 500))
   }
 
-  $('#sketch-id-input')?.addEventListener('input', ({ target: { value }}) => {
+  $('#sketch-id-input')?.addEventListener('input', ({ target: { value } }) => {
     console.log('[ oavp ] Persisting id change...');
 
     window.sketchDataObjects[selectedSketch].id = value;
   });
 
-  $('#sketch-name-input')?.addEventListener('input', ({ target: { value }}) => {
+  $('#sketch-name-input')?.addEventListener('input', ({ target: { value } }) => {
     console.log('[ oavp ] Persisting name change...');
 
     window.sketchDataObjects[selectedSketch].name = value;
   });
 
-  $('#sketch-palette-input')?.addEventListener('input', ({ target: { value }}) => {
+  $('#sketch-palette-input')?.addEventListener('input', ({ target: { value } }) => {
     console.log('[ oavp ] Persisting palette change...');
 
     window.sketchDataObjects[selectedSketch].paletteString = value;
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
   PRINT_SIZES.forEach(size => {
     const sliderElement = $(`#print-offset-${size}`);
 
-    sliderElement?.addEventListener('input', ({ target: { value }}) => {
+    sliderElement?.addEventListener('input', ({ target: { value } }) => {
       $(`#print-guide-${size}`).style.left = `${value}%`;
       $(`#print-guide-vertical-${size}`).style.left = `${value}%`;
       $(`#print-guide-horizontal-${size}`).style.left = `${value}%`;

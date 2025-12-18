@@ -1,0 +1,5 @@
+#prefabs
+[example]
+
+#example
+Circle_example_nofill_accentdstroke|xIter:50.0;yrIter:15.0;w:100.0;h:100.0;s:100.0;i:11

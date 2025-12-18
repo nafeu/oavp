@@ -58,14 +58,16 @@ export const getConceptMapMeta = () => readdirSync(resolve(CONCEPT_MAPS_DIR))
       prefabsCount: data.split(/\n\n+/).map(part => part.includes('\n') ? part : part + '\n').length - 1
     }
   }).sort((
-    { subject: subjectA, presence: presenceA },
-    { subject: subjectB, presence: presenceB }
+    { subject: subjectA, presence: presenceA, height: heightA },
+    { subject: subjectB, presence: presenceB, height: heightB }
   ) => {
+    const heightOrder = { hi: 1, md: 2, lo: 3 };
+
     if (subjectA < subjectB) return -1;
     if (subjectA > subjectB) return 1;
     if (presenceA < presenceB) return -1;
     if (presenceA > presenceB) return 1;
-    return 0;
+    return heightOrder[heightA] - heightOrder[heightB];
   }).concat([{
     height: '',
     presence: '',

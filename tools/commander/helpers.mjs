@@ -107,8 +107,7 @@ export const buildObjectString = (encodedParameters) => {
     );
 
     output.push(
-      `objects.add("${objectName}${
-        objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
+      `objects.add("${objectName}${objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
       }_${shortid.generate()}", "${objectName}")`,
     );
 
@@ -119,8 +118,7 @@ export const buildObjectString = (encodedParameters) => {
 
       if (override) {
         output.push(
-          `.set("${override.property}", ${
-            isString ? `"${override.value}"` : override.value
+          `.set("${override.property}", ${isString ? `"${override.value}"` : override.value
           })`,
         );
       } else {
@@ -199,9 +197,8 @@ export const emitGeneratedSketchToServer = ({ ws, options = {} }) => {
       objects.push({
         oavpObject: objectName,
         params: overrides,
-        id: `${objectName}${
-          objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
-        }_${shortid.generate()}`,
+        id: `${objectName}${objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
+          }_${shortid.generate()}`,
       });
     });
   });
@@ -342,8 +339,9 @@ export const compareFiles = () => {
   return differentLines;
 };
 
-export const wsServerBroadcast = ({ message, sender, wsClients }) => {
-  wsClients.forEach((client) => {
+export const wsServerBroadcast = ({ message, sender, wsClients = [] }) => {
+  const clients = Array.isArray(wsClients) ? wsClients : [wsClients];
+  clients.forEach((client) => {
     if (client !== sender && client.readyState === WebSocket.OPEN) {
       client.send(message);
     }
