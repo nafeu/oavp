@@ -68,7 +68,7 @@ void webSocketServerEvent(String msg) {
   }
 
   else if (command.equals("dump-prefab")) {
-    objects.exportObjectData();
+    objects.exportAllObjectData();
     queueScreenshot();
   }
 

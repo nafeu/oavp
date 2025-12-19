@@ -258,6 +258,10 @@ public class OavpObjectManager {
     StringSelection stringSelection = new StringSelection(objectData.toString());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     clipboard.setContents(stringSelection, null);
+
+    String[] lines = objectData.toString().split("\n");
+    saveStrings(sketchPath("") + "../tools/commander/target.txt", lines);
+
     return objectData.toString();
   }
 

@@ -37,8 +37,7 @@ const setupExpressServer = ws => {
 
   app.use((req, res, next) => {
     console.log(
-      `[ oavp-commander ] Received ${req.method} request at ${
-        req.url
+      `[ oavp-commander ] Received ${req.method} request at ${req.url
       } : ${JSON.stringify(req.body).length}`,
     );
     next();
@@ -58,6 +57,7 @@ const setupExpressServer = ws => {
 
     res.render("viewer");
   });
+  app.get("/prefab-editor", (req, res) => res.render("prefab-editor"));
 
   app.get("/api", (req, res) => {
     res.sendStatus(200);
@@ -87,7 +87,7 @@ const setupExpressServer = ws => {
         ws,
         options: {
           isFeelingLucky: true,
-          conceptMaps:    params.conceptMaps || []
+          conceptMaps: params.conceptMaps || []
         },
       });
 

@@ -485,7 +485,8 @@ export const IMAGE_COPY_TIMEOUT_DURATION = 500;
 export const FILE_COPY_TIMEOUT_DURATION = 500;
 export const OVERRIDE_VALUES_DELIMITER = ";";
 export const PROPERTY_VALUE_DELIMITER = ":";
-export const OBJECT_NAME_REGEX = /\.add\("[^"]+","([^"]+)"\)/;
+export const ENTITY_NAME_REGEX = /\.add\("([^"]+)",\s*"[^"]+"\)/;
+export const OBJECT_NAME_REGEX = /\.add\("[^"]+",\s*"([^"]+)"\)/;
 export const OBJECT_NAME_AND_SHAPE_REGEX = /objects\.add\("([^"]+)",\s*"([^"]+)"\)/;
 export const OBJECT_PROPERTIES_REGEX = /\.set\("([^"]+)",\s*([^)]+)\)/g;
 export const OBJECT_PROPERTY_KEY_AND_VALUE_REGEX = /\("([^"]+)","?([^"]+)"?\)/;
@@ -540,9 +541,9 @@ export const INVALID_TAGS = [
 
 export const ANIMATION_SPEED_MULTIPLIER = {
   slowest: 0.25,
-  slower:  0.5,
-  fixed:   1,
-  faster:  3,
+  slower: 0.5,
+  fixed: 1,
+  faster: 3,
   fastest: 5
 }
 

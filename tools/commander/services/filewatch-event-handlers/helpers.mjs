@@ -18,6 +18,7 @@ import {
   IMAGE_COPY_TIMEOUT_DURATION,
   INVALID_TAGS,
   OAVP_OBJECT_PROPERTIES,
+  ENTITY_NAME_REGEX,
   OBJECT_NAME_AND_SHAPE_REGEX,
   OBJECT_NAME_REGEX,
   OBJECT_PROPERTIES_REGEX,
@@ -54,9 +55,74 @@ export const handlePresetEvent = ({ wsClients, logStream }) => {
     const isAddition = line.includes(".add(");
 
     if (isAddition) {
-      const objectName = line.match(OBJECT_NAME_REGEX)[1];
+      // Check entity name first to skip "camera" or "background"
+      const entityMatch = line.match(ENTITY_NAME_REGEX);
+      if (entityMatch && entityMatch[1]) {
+        const entityName = entityMatch[1];
 
-      presetOutput = `${objectName}|`;
+        // Skip processing for "camera" or "background" entities
+        if (entityName === "camera" || entityName === "background") {
+          return;
+        }
+      }
+
+      const match = line.match(OBJECT_NAME_REGEX);
+      if (match && match[1]) {
+        const objectName = match[1];
+        presetOutput = `${objectName}|`;
+
+        // Also process .set() calls on the same line (for exportAllObjectData format)
+        const regex = OBJECT_PROPERTIES_REGEX;
+        let propertyMatch;
+        while ((propertyMatch = regex.exec(line)) !== null) {
+          const property = propertyMatch[1].trim();
+          const value = propertyMatch[2].trim().replace(/["']/g, "");
+
+          // Find the property definition to get its default value
+          const propertyDef = OAVP_OBJECT_PROPERTIES.find(p => p.property === property);
+
+          // Only include property if value differs from default
+          if (propertyDef) {
+            const defaultValue = propertyDef.defaultValue;
+            let shouldInclude = false;
+
+            // Compare based on type
+            if (propertyDef.type === "String") {
+              shouldInclude = value !== String(defaultValue);
+            } else if (propertyDef.type === "int") {
+              shouldInclude = Number(value) !== Number(defaultValue);
+            } else if (propertyDef.type === "float") {
+              shouldInclude = parseFloat(value) !== parseFloat(defaultValue);
+            } else if (propertyDef.type === "color") {
+              shouldInclude = Number(value) !== Number(defaultValue);
+            } else {
+              // Fallback: include if values don't match as strings
+              shouldInclude = value !== String(defaultValue);
+            }
+
+            if (shouldInclude) {
+              presetOutput += `${property}:${value};`;
+            }
+          } else {
+            // If property not found in definitions, include it (might be custom)
+            presetOutput += `${property}:${value};`;
+          }
+        }
+
+        // If we have a complete preset output, write it immediately (for exportAllObjectData format)
+        if (presetOutput.includes('|') && presetOutput.length > 1) {
+          console.log(`[ oavp-commander:preset-event ] Added preset: ${presetOutput}`);
+          wsServerBroadcast({
+            message: JSON.stringify({
+              command: "preset-builder-result",
+              data: presetOutput,
+            }),
+            wsClients,
+          });
+          logStream.write(`\n${presetOutput}`);
+          presetOutput = ""; // Reset for next object
+        }
+      }
     } else {
       const regex = OBJECT_PROPERTIES_REGEX;
 
@@ -65,20 +131,52 @@ export const handlePresetEvent = ({ wsClients, logStream }) => {
       while ((match = regex.exec(line)) !== null) {
         const property = match[1].trim();
         const value = match[2].trim().replace(/["']/g, "");
-        presetOutput += `${property}:${value};`;
+
+        // Find the property definition to get its default value
+        const propertyDef = OAVP_OBJECT_PROPERTIES.find(p => p.property === property);
+
+        // Only include property if value differs from default
+        if (propertyDef) {
+          const defaultValue = propertyDef.defaultValue;
+          let shouldInclude = false;
+
+          // Compare based on type
+          if (propertyDef.type === "String") {
+            shouldInclude = value !== String(defaultValue);
+          } else if (propertyDef.type === "int") {
+            shouldInclude = Number(value) !== Number(defaultValue);
+          } else if (propertyDef.type === "float") {
+            shouldInclude = parseFloat(value) !== parseFloat(defaultValue);
+          } else if (propertyDef.type === "color") {
+            shouldInclude = Number(value) !== Number(defaultValue);
+          } else {
+            // Fallback: include if values don't match as strings
+            shouldInclude = value !== String(defaultValue);
+          }
+
+          if (shouldInclude) {
+            presetOutput += `${property}:${value};`;
+          }
+        } else {
+          // If property not found in definitions, include it (might be custom)
+          presetOutput += `${property}:${value};`;
+        }
       }
     }
   });
 
-  console.log(`[ oavp-commander:preset-event ] Added preset: ${presetOutput}`);
-  wsServerBroadcast({
-    message: JSON.stringify({
-      command: "preset-builder-result",
-      data: presetOutput,
-    }),
-    wsClients,
-  });
-  logStream.write(`\n${presetOutput}`);
+  // Write any remaining preset output (for exportObjectData format where .set() calls are on separate lines)
+  if (presetOutput && presetOutput.length > 0) {
+    console.log(`[ oavp-commander:preset-event ] Added preset: ${presetOutput}`);
+    wsServerBroadcast({
+      message: JSON.stringify({
+        command: "preset-builder-result",
+        data: presetOutput,
+      }),
+      wsClients,
+    });
+    logStream.write(`\n${presetOutput}`);
+  }
 };
 
 export const handleExportFileEvent = () => {
@@ -87,9 +185,8 @@ export const handleExportFileEvent = () => {
   }
 
   fileCopyTimeout = setTimeout(() => {
-    const newFileName = `${
-      countFiles(path.resolve(EXPORT_FILE_DIR), "_sketch.txt") + 1
-    }_sketch.txt`;
+    const newFileName = `${countFiles(path.resolve(EXPORT_FILE_DIR), "_sketch.txt") + 1
+      }_sketch.txt`;
     const destinationFilePath = path.join(EXPORT_FILE_DIR, newFileName);
 
     const genObjContent = fs.readFileSync(GENOBJ_FILE_NAME, 'utf8');
@@ -119,9 +216,8 @@ export const handleExportImageEvent = () => {
   }
 
   imageCopyTimeout = setTimeout(() => {
-    const newFileName = `${
-      countFiles(path.resolve(EXPORT_FILE_DIR), "_sketch.png") + 1
-    }_sketch.png`;
+    const newFileName = `${countFiles(path.resolve(EXPORT_FILE_DIR), "_sketch.png") + 1
+      }_sketch.png`;
     const destinationFilePath = path.join(EXPORT_FILE_DIR, newFileName);
 
     ncp(EXPORT_IMAGE_NAME, destinationFilePath, function (err) {
@@ -348,9 +444,8 @@ export const handleSandboxConceptMapsFileEvent = wsClients => {
     objects.push({
       oavpObject: objectName,
       params: overrides,
-      id: `${objectName}_sandbox_${
-        objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
-      }_${index}`,
+      id: `${objectName}_sandbox_${objectTags.length > 0 ? `_${objectTags.join("_")}` : ""
+        }_${index}`,
     });
   });
 
