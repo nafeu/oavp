@@ -215,7 +215,9 @@ void webSocketServerEvent(String msg) {
     queueScreenshot();
   }
 
-  else if (command.equals("ping")) {}
+  else if (command.equals("request-screenshot")) {
+    queueScreenshot();
+  }
 
   else {
     println("[ oavp ] Command not recognized");
@@ -312,6 +314,8 @@ void handleReceivedReseedObjects(JSONArray reseedObjects) {
 
 void webSocketConnectEvent(String uid, String ip) {
   println("[ oavp ] New websocket connection", uid, ip);
+  // Queue a screenshot to be sent immediately upon connection
+  queueScreenshot();
 }
 
 void webSocketDisconnectEvent(String uid, String ip) {

@@ -26,6 +26,8 @@ try {
 sketchSocket.addEventListener('open', () => {
   const element = $('#sketch-socket');
   if (element) element.textContent = "[ socket ] WebSocket connection opened.";
+  // Request initial screenshot immediately upon connection
+  sketchSocket.send(JSON.stringify({ command: 'request-screenshot' }));
 });
 
 sketchSocket.addEventListener('message', (event) => {
