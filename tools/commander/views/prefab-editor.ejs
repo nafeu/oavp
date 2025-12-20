@@ -14,6 +14,71 @@
         </div>
       </div>
 
+      <div class="prefab-augment-section" id="prefab-augment-section" style="display: none;">
+        <p class="section-label">Insert Augment</p>
+        <div class="prefab-augment-controls">
+          <div class="prefab-augment-field">
+            <label for="augment-property">Property:</label>
+            <select id="augment-property" class="prefab-select">
+              <option value="">Select Property</option>
+            </select>
+          </div>
+          <div class="prefab-augment-field">
+            <label for="augment-type">Augment Type:</label>
+            <select id="augment-type" class="prefab-select">
+              <option value="randomizer">Randomizer</option>
+              <option value="static">Static</option>
+            </select>
+          </div>
+          <div id="augment-randomizer-fields" class="prefab-augment-field-group">
+            <div class="prefab-augment-field">
+              <label for="augment-start">Start Value:</label>
+              <input type="number" id="augment-start" class="prefab-input" placeholder="Start" step="any" />
+            </div>
+            <div class="prefab-augment-field">
+              <label for="augment-end">End Value:</label>
+              <input type="number" id="augment-end" class="prefab-input" placeholder="End" step="any" />
+            </div>
+            <div class="prefab-augment-field">
+              <label for="augment-id">ID:</label>
+              <input type="text" id="augment-id" class="prefab-input" placeholder="ID (defaults to property)" />
+            </div>
+          </div>
+          <div id="augment-static-field" class="prefab-augment-field-group" style="display: none;">
+            <div class="prefab-augment-field">
+              <label for="augment-static-value">Value:</label>
+              <input type="text" id="augment-static-value" class="prefab-input" placeholder="Value" />
+            </div>
+          </div>
+          <div class="prefab-augment-field">
+            <label for="augment-components">Components:</label>
+            <select id="augment-components" class="prefab-select" multiple size="4">
+              <option value="">All Components</option>
+            </select>
+            <small>Hold Ctrl/Cmd to select multiple. Leave empty for all.</small>
+          </div>
+          <div class="prefab-augment-field">
+            <label for="augment-seed">Seed:</label>
+            <select id="augment-seed" class="prefab-select">
+              <option value="matched">Matched</option>
+              <option value="unique">Unique</option>
+            </select>
+          </div>
+          <div class="prefab-augment-field">
+            <label for="augment-operation">Operation:</label>
+            <select id="augment-operation" class="prefab-select">
+              <option value="+">+</option>
+              <option value="-">-</option>
+              <option value="*">*</option>
+              <option value="overwrite">Overwrite</option>
+            </select>
+          </div>
+          <div class="prefab-control-group">
+            <button id="augment-save-btn" class="prefab-button">Save Augment</button>
+          </div>
+        </div>
+      </div>
+
       <div class="prefab-editor-content">
         <textarea id="preset-dump-textarea" class="preset-dump-textarea"
           placeholder="Loading preset dump..."></textarea>
@@ -24,6 +89,97 @@
       // Undo history system
       let undoHistory = [];
       let textarea, prefabNameInput, saveBtn, undoBtn;
+      let augmentProperty, augmentType, augmentStart, augmentEnd, augmentId, augmentStaticValue;
+      let augmentComponents, augmentSeed, augmentOperation, augmentSaveBtn;
+
+      // Save current state to history before making changes
+      function saveToHistory() {
+        if (textarea && undoBtn) {
+          undoHistory.push(textarea.value);
+          undoBtn.disabled = false;
+        }
+      }
+
+      // Check if prefab name has been saved (no {prefab_name} macro exists)
+      function hasPrefabNameSaved(content) {
+        return !content.includes('{prefab_name}');
+      }
+
+      // Parse prefab content to extract components
+      function parsePrefabComponents(content) {
+        const components = [];
+        const lines = content.split('\n');
+        let currentPrefabName = '';
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+
+          // Find main prefab name (first # line that's not a component, doesn't have underscore, and doesn't contain brackets or rand)
+          if (line.startsWith('#') && !line.includes('[') && !line.includes('rand(') && !line.includes('_') && !line.includes('|')) {
+            const match = line.match(/^#([^\s]+)$/);
+            if (match) {
+              const potentialName = match[1];
+              // Make sure it's not an augment definition (those come after components)
+              // We'll use the first valid prefab name we find
+              if (currentPrefabName === '') {
+                currentPrefabName = potentialName;
+              }
+            }
+          }
+
+          // Find component definitions (lines like #prefab_name_a)
+          // These are lines that start with #, have the prefab name, underscore, and a single letter
+          if (line.startsWith('#') && currentPrefabName) {
+            const match = line.match(/^#([^\s|]+)$/);
+            if (match) {
+              const componentName = match[1].trim();
+              // Check if it's a component (has underscore and follows the pattern prefab_name_letter)
+              if (componentName.includes('_') && componentName.startsWith(currentPrefabName + '_')) {
+                // Extract the variant part (e.g., 'a' from 'prefab_name_a')
+                const variantPart = componentName.substring(currentPrefabName.length + 1);
+                // Check if it's a single letter variant (a, b, c, etc.) or if it's just the variant part
+                if (variantPart.length === 1 && /^[a-z]$/.test(variantPart)) {
+                  components.push(componentName);
+                }
+              }
+            }
+          }
+        }
+
+        return components;
+      }
+
+      // Update component select options and augment section visibility
+      function updateComponentOptions() {
+        const content = textarea.value;
+        const components = parsePrefabComponents(content);
+        const select = augmentComponents;
+        const augmentSection = document.getElementById('prefab-augment-section');
+
+        // Show/hide augment section based on whether prefab name is saved
+        if (hasPrefabNameSaved(content)) {
+          augmentSection.style.display = 'block';
+        } else {
+          augmentSection.style.display = 'none';
+        }
+
+        // Clear existing options
+        select.innerHTML = '';
+
+        // Add "All Components" option
+        const allOption = document.createElement('option');
+        allOption.value = '';
+        allOption.textContent = 'All Components';
+        select.appendChild(allOption);
+
+        // Add component options
+        components.forEach(component => {
+          const option = document.createElement('option');
+          option.value = component;
+          option.textContent = component;
+          select.appendChild(option);
+        });
+      }
 
       // Initialize all DOM-dependent code after DOM is loaded
       function initializePrefabEditor() {
@@ -33,11 +189,37 @@
         saveBtn = document.getElementById('prefab-name-save-btn');
         undoBtn = document.getElementById('prefab-undo-btn');
 
-        // Save current state to history before making changes
-        function saveToHistory() {
-          undoHistory.push(textarea.value);
-          undoBtn.disabled = false;
+        // Augment form elements
+        augmentProperty = document.getElementById('augment-property');
+        augmentType = document.getElementById('augment-type');
+        augmentStart = document.getElementById('augment-start');
+        augmentEnd = document.getElementById('augment-end');
+        augmentId = document.getElementById('augment-id');
+        augmentStaticValue = document.getElementById('augment-static-value');
+        augmentComponents = document.getElementById('augment-components');
+        augmentSeed = document.getElementById('augment-seed');
+        augmentOperation = document.getElementById('augment-operation');
+        augmentSaveBtn = document.getElementById('augment-save-btn');
+
+        // Populate property dropdown
+        if (window.oavpObjectProperties) {
+          window.oavpObjectProperties.forEach(prop => {
+            const option = document.createElement('option');
+            option.value = prop.property;
+            option.textContent = prop.property;
+            augmentProperty.appendChild(option);
+          });
         }
+
+        // Toggle augment type fields
+        augmentType.addEventListener('change', (e) => {
+          const isRandomizer = e.target.value === 'randomizer';
+          document.getElementById('augment-randomizer-fields').style.display = isRandomizer ? 'flex' : 'none';
+          document.getElementById('augment-static-field').style.display = isRandomizer ? 'none' : 'flex';
+        });
+
+        // Update component options and visibility when textarea changes
+        textarea.addEventListener('input', updateComponentOptions);
 
         // Undo function
         function handleUndo() {
@@ -70,6 +252,9 @@
 
           // Clear the input field
           prefabNameInput.value = '';
+
+          // Update component options and augment section visibility
+          updateComponentOptions();
         }
 
         // Attach event listeners
@@ -83,8 +268,193 @@
           }
         });
 
+        // Handle augment save
+        augmentSaveBtn.addEventListener('click', handleSaveAugment);
+
         // Load preset dump content
         loadPresetDump();
+      }
+
+      // Get prefab name from content
+      function getPrefabName(content) {
+        const lines = content.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith('#') && !line.includes('[') && !line.includes('rand(') && !line.includes('_')) {
+            const match = line.match(/^#([^{]+)$/);
+            if (match) {
+              return match[1];
+            }
+          }
+        }
+        return '{prefab_name}';
+      }
+
+      // Handle save augment
+      function handleSaveAugment() {
+        const property = augmentProperty.value;
+        const augmentTypeValue = augmentType.value;
+        const selectedComponents = Array.from(augmentComponents.selectedOptions).map(opt => opt.value).filter(v => v);
+        const seedType = augmentSeed.value;
+        const operation = augmentOperation.value;
+
+        if (!property) {
+          alert('Please select a property');
+          return;
+        }
+
+        // Get prefab name
+        const prefabName = getPrefabName(textarea.value);
+
+        // Generate augment name
+        const augmentName = `${prefabName}_${property}`;
+
+        // Generate augment definition
+        let augmentDefinition = '';
+        if (augmentTypeValue === 'randomizer') {
+          const start = augmentStart.value;
+          const end = augmentEnd.value;
+          const id = augmentId.value.trim() || property;
+
+          if (!start || !end) {
+            alert('Please enter start and end values for randomizer');
+            return;
+          }
+
+          augmentDefinition = `rand(${start}, ${end}, '${id}')`;
+        } else {
+          const staticValue = augmentStaticValue.value.trim();
+          if (!staticValue) {
+            alert('Please enter a static value');
+            return;
+          }
+          augmentDefinition = staticValue;
+        }
+
+        // Save to history
+        saveToHistory();
+
+        // Get all components if none selected
+        let componentsToUpdate = selectedComponents.filter(c => c !== '');
+        if (componentsToUpdate.length === 0) {
+          componentsToUpdate = parsePrefabComponents(textarea.value);
+        }
+
+        // Generate interpolation string based on seed type
+        let seedIndex = 0;
+        const seedLetter = 'a'; // For matched, always use 'a'
+
+        // Update content
+        let content = textarea.value;
+        const lines = content.split('\n');
+        const newLines = [];
+        let augmentDefinitionAdded = false;
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+
+          // Check if this is a component definition line
+          const componentMatch = line.trim().match(/^#([^|]+)$/);
+          if (componentMatch) {
+            const componentName = componentMatch[1].trim();
+
+            if (componentsToUpdate.includes(componentName)) {
+              newLines.push(line);
+
+              // Find the next line which should be the object declaration
+              if (i + 1 < lines.length) {
+                const objectLine = lines[i + 1];
+                const pipeIndex = objectLine.indexOf('|');
+
+                if (pipeIndex !== -1) {
+                  const beforePipe = objectLine.substring(0, pipeIndex);
+                  const afterPipe = objectLine.substring(pipeIndex + 1);
+
+                  // Parse properties
+                  const properties = afterPipe.split(';').filter(p => p.trim());
+                  let propertyFound = false;
+                  const updatedProperties = [];
+
+                  for (let j = 0; j < properties.length; j++) {
+                    const prop = properties[j].trim();
+                    if (!prop) continue;
+
+                    const propMatch = prop.match(/^([^:]+):(.+)$/);
+                    if (propMatch) {
+                      const propName = propMatch[1].trim();
+                      const propValue = propMatch[2].trim();
+
+                      if (propName === property) {
+                        propertyFound = true;
+
+                        // Generate interpolation string
+                        const currentSeed = seedType === 'matched' ? seedLetter : String.fromCharCode(97 + seedIndex);
+                        const interpolationString = `[${augmentName}*${currentSeed}]`;
+
+                        let newValue;
+                        if (operation === 'overwrite') {
+                          newValue = interpolationString;
+                        } else {
+                          newValue = `${propValue}${operation}${interpolationString}`;
+                        }
+
+                        updatedProperties.push(`${propName}:${newValue}`);
+
+                        if (seedType === 'unique') {
+                          seedIndex++;
+                        }
+                      } else {
+                        updatedProperties.push(prop);
+                      }
+                    } else {
+                      updatedProperties.push(prop);
+                    }
+                  }
+
+                  // If property wasn't found, add it (unless overwrite and property doesn't exist)
+                  if (!propertyFound) {
+                    if (operation !== 'overwrite') {
+                      const currentSeed = seedType === 'matched' ? seedLetter : String.fromCharCode(97 + seedIndex);
+                      const interpolationString = `[${augmentName}*${currentSeed}]`;
+                      updatedProperties.push(`${property}:${interpolationString}`);
+
+                      if (seedType === 'unique') {
+                        seedIndex++;
+                      }
+                    }
+                    // If overwrite and property doesn't exist, don't add it
+                  }
+
+                  // Update the object line
+                  newLines.push(`${beforePipe}|${updatedProperties.join(';')};`);
+                  i++; // Skip the next line since we've processed it
+                  continue;
+                }
+              }
+            }
+          }
+
+          newLines.push(line);
+        }
+
+        // Add augment definition at the end
+        newLines.push(`#${augmentName}`);
+        newLines.push(augmentDefinition);
+
+        textarea.value = newLines.join('\n');
+
+        // Clear form
+        augmentProperty.value = '';
+        augmentType.value = 'randomizer';
+        augmentStart.value = '';
+        augmentEnd.value = '';
+        augmentId.value = '';
+        augmentStaticValue.value = '';
+        augmentComponents.selectedIndex = 0;
+        augmentSeed.value = 'matched';
+        augmentOperation.value = '+';
+        document.getElementById('augment-randomizer-fields').style.display = 'flex';
+        document.getElementById('augment-static-field').style.display = 'none';
       }
 
       // Load preset dump content on page load
@@ -95,13 +465,17 @@
 
           if (data.content) {
             textarea.value = data.content;
+            // Update component options and augment section visibility after loading
+            updateComponentOptions();
           } else {
             console.error('No content received from API');
             textarea.placeholder = 'Error loading preset dump';
+            updateComponentOptions();
           }
         } catch (error) {
           console.error('Error loading preset dump:', error);
           textarea.placeholder = 'Error loading preset dump';
+          updateComponentOptions();
         }
       }
 
