@@ -1,9 +1,40 @@
 <%- include('partials/head') %>
-<%- include('partials/navigation') %>
+  <%- include('partials/navigation') %>
 
-<div class="prefab-editor-container">
-  <!-- Prefab Editor content will go here -->
-</div>
+    <div class="prefab-editor-container">
+      <p class="section-label">Prefab Editor</p>
+      <div class="prefab-editor-content">
+        <textarea id="preset-dump-textarea" class="preset-dump-textarea"
+          placeholder="Loading preset dump..."></textarea>
+      </div>
+    </div>
 
-<%- include('partials/footer') %>
+    <script>
+      // Load preset dump content on page load
+      async function loadPresetDump() {
+        try {
+          const response = await fetch('/api/preset-dump');
+          const data = await response.json();
 
+          if (data.content) {
+            const textarea = document.getElementById('preset-dump-textarea');
+            textarea.value = data.content;
+          } else {
+            console.error('No content received from API');
+            document.getElementById('preset-dump-textarea').placeholder = 'Error loading preset dump';
+          }
+        } catch (error) {
+          console.error('Error loading preset dump:', error);
+          document.getElementById('preset-dump-textarea').placeholder = 'Error loading preset dump';
+        }
+      }
+
+      // Load content when page is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadPresetDump);
+      } else {
+        loadPresetDump();
+      }
+    </script>
+
+    <%- include('partials/footer') %>

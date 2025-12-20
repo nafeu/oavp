@@ -25,10 +25,8 @@ const setupFilewatchEventHandlers = wsClients => {
     `[ oavp-commander:filewatch ] Saving exported sketches to ${EXPORT_FILE_DIR}`
   ].join('\n'));
 
-  const logStream = fs.createWriteStream(DUMP_FILE_PATH, { flags: "a" });
-
   fs.watch(DIRECTORY_PATH, (eventType, filename) => {
-    if (filename === TARGET_FILE_NAME) handlePresetEvent({ wsClients, logStream });
+    if (filename === TARGET_FILE_NAME) handlePresetEvent({ wsClients });
     if (filename === EXPORT_FILE_NAME) handleExportFileEvent();
     if (filename === EXPORT_IMAGE_NAME) handleExportImageEvent();
     if (filename === SANDBOX_CONCEPT_MAPS_FILE_NAME) handleSandboxConceptMapsFileEvent(wsClients);

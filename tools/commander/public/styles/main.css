@@ -539,3 +539,42 @@ svg {
 .concept-map-toggle.active {
   opacity: 1;
 }
+
+.prefab-editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-divider);
+  max-width: 100%;
+  padding: var(--spacing);
+  box-sizing: border-box;
+}
+
+.prefab-editor-content {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.preset-dump-textarea {
+  width: 100%;
+  max-width: 100%;
+  min-height: 400px;
+  padding: var(--spacing);
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: 2px solid var(--color-white);
+  border-radius: var(--border-radius);
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.preset-dump-textarea:focus {
+  outline: none;
+  border-color: var(--color-d);
+}

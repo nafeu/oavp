@@ -136,6 +136,17 @@ const setupExpressServer = ws => {
     res.json({ name: generateName() })
   });
 
+  app.get("/api/preset-dump", async (req, res) => {
+    try {
+      const presetDumpPath = path.join(__dirname, "../../preset-dump.txt");
+      const content = await fs.readFile(presetDumpPath, 'utf-8');
+      res.json({ content });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to read preset-dump.txt' });
+    }
+  });
+
   app.post("/api/colors", (req, res) => {
     const { colors } = req.body;
 
