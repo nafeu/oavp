@@ -3,6 +3,17 @@
 
     <div class="prefab-editor-container">
       <p class="section-label">Prefab Editor</p>
+
+      <div class="prefab-editor-controls">
+        <div class="prefab-control-group">
+          <input type="text" id="prefab-name-input" class="prefab-input" placeholder="Prefab Name" />
+          <button id="prefab-name-save-btn" class="prefab-button">Save</button>
+        </div>
+        <div class="prefab-control-group">
+          <button id="prefab-undo-btn" class="prefab-button" disabled>Undo</button>
+        </div>
+      </div>
+
       <div class="prefab-editor-content">
         <textarea id="preset-dump-textarea" class="preset-dump-textarea"
           placeholder="Loading preset dump..."></textarea>
@@ -10,6 +21,72 @@
     </div>
 
     <script>
+      // Undo history system
+      let undoHistory = [];
+      let textarea, prefabNameInput, saveBtn, undoBtn;
+
+      // Initialize all DOM-dependent code after DOM is loaded
+      function initializePrefabEditor() {
+        // Get DOM elements
+        textarea = document.getElementById('preset-dump-textarea');
+        prefabNameInput = document.getElementById('prefab-name-input');
+        saveBtn = document.getElementById('prefab-name-save-btn');
+        undoBtn = document.getElementById('prefab-undo-btn');
+
+        // Save current state to history before making changes
+        function saveToHistory() {
+          undoHistory.push(textarea.value);
+          undoBtn.disabled = false;
+        }
+
+        // Undo function
+        function handleUndo() {
+          if (undoHistory.length > 0) {
+            const previousState = undoHistory.pop();
+            textarea.value = previousState;
+
+            if (undoHistory.length === 0) {
+              undoBtn.disabled = true;
+            }
+          }
+        }
+
+        // Save prefab name - replace {prefab_name} macro
+        function handleSavePrefabName() {
+          const prefabName = prefabNameInput.value.trim();
+
+          if (!prefabName) {
+            alert('Please enter a prefab name');
+            return;
+          }
+
+          // Save current state to history before making changes
+          saveToHistory();
+
+          // Replace all instances of {prefab_name} with the entered value
+          const currentValue = textarea.value;
+          const newValue = currentValue.replace(/\{prefab_name\}/g, prefabName);
+          textarea.value = newValue;
+
+          // Clear the input field
+          prefabNameInput.value = '';
+        }
+
+        // Attach event listeners
+        saveBtn.addEventListener('click', handleSavePrefabName);
+        undoBtn.addEventListener('click', handleUndo);
+
+        // Allow Enter key to trigger save
+        prefabNameInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            handleSavePrefabName();
+          }
+        });
+
+        // Load preset dump content
+        loadPresetDump();
+      }
+
       // Load preset dump content on page load
       async function loadPresetDump() {
         try {
@@ -17,23 +94,23 @@
           const data = await response.json();
 
           if (data.content) {
-            const textarea = document.getElementById('preset-dump-textarea');
             textarea.value = data.content;
           } else {
             console.error('No content received from API');
-            document.getElementById('preset-dump-textarea').placeholder = 'Error loading preset dump';
+            textarea.placeholder = 'Error loading preset dump';
           }
         } catch (error) {
           console.error('Error loading preset dump:', error);
-          document.getElementById('preset-dump-textarea').placeholder = 'Error loading preset dump';
+          textarea.placeholder = 'Error loading preset dump';
         }
       }
 
-      // Load content when page is ready
+      // Wait for DOM to be fully loaded before initializing
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadPresetDump);
+        document.addEventListener('DOMContentLoaded', initializePrefabEditor);
       } else {
-        loadPresetDump();
+        // DOM is already loaded
+        initializePrefabEditor();
       }
     </script>
 

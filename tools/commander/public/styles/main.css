@@ -578,3 +578,59 @@ svg {
   outline: none;
   border-color: var(--color-d);
 }
+
+.prefab-editor-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+  margin-bottom: var(--spacing-divider);
+}
+
+.prefab-control-group {
+  display: flex;
+  gap: var(--spacing);
+  align-items: center;
+}
+
+.prefab-input {
+  flex: 1;
+  max-width: 200px;
+  padding: var(--spacing);
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: 2px solid var(--color-white);
+  border-radius: var(--border-radius);
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.prefab-input:focus {
+  outline: none;
+  border-color: var(--color-d);
+}
+
+.prefab-button {
+  padding: var(--spacing);
+  background-color: var(--color-c);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--border-radius);
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.prefab-button:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.prefab-button:active:not(:disabled) {
+  opacity: 0.6;
+}
+
+.prefab-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
