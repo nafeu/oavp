@@ -152,6 +152,18 @@
                     </div>
                     <% }); %>
                 </div>
+                <div class="concept-map-group">
+                  <div class="concept-map-group-title">sandbox</div>
+                  <% CONCEPT_MAP_META.sandbox.forEach(activeConceptMap=> { %>
+                    <div
+                      class="concept-map-checkbox <%= activeConceptMap.prefabsCount === 0 ? 'inactive-concept-map' : '' %>">
+                      <input type="checkbox" id="<%= activeConceptMap.mapId %>-checkbox" />
+                      <span class="concept-map-prefabs-count">
+                        <%= activeConceptMap.prefabsCount %>
+                      </span>
+                    </div>
+                    <% }); %>
+                </div>
               </div>
               <% } %>
                 <% if (query && query.options==='all' ) { %>

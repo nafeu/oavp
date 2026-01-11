@@ -31,3 +31,4 @@ screencap-code-exports/
 package-export-files/
 exports/
 **/packages
+**/sandbox.txt

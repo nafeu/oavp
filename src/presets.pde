@@ -22,6 +22,15 @@ void randomizePalette() {
   editor.randomPalette();
 }
 
+void resetPaletteToDefaults() {
+  editor.setPaletteByArrayString(palette.getFormattedPaletteString(0));
+  editor.setBackgroundColor(#FFFFFF);
+  editor.setAccentA(#000000);
+  editor.setAccentB(#FFFFFF);
+  editor.setAccentC(#FFFFFF);
+  editor.setAccentD(#FFFFFF);
+}
+
 void addNHorizonRectangles(int n) {
   for (int i = 0; i < n; i++) {
     objects.add("HorizonRectangle" + i, "Rectangle")

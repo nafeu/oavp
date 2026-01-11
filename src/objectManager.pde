@@ -139,6 +139,31 @@ public class OavpObjectManager {
     }
   }
 
+  public void resetBackground() {
+    if (objectsStorage.containsKey("background")) {
+      OavpVariable backgroundVariable = objectsStorage.get("background").getVariable();
+      backgroundVariable.fillColor(palette.flat.black);
+      backgroundVariable.strokeColor(palette.flat.white);
+      backgroundVariable.strokeWeight(2);
+    }
+  }
+
+  public void resetCamera() {
+    if (objectsStorage.containsKey("camera")) {
+      int perspectiveDistance = 100000 * SCALE_FACTOR;
+      OavpVariable cameraVariable = objectsStorage.get("camera").getVariable();
+      cameraVariable.set("x", 0);
+      cameraVariable.set("y", 0);
+      cameraVariable.set("z", 0);
+      cameraVariable.set("w", 0);
+      cameraVariable.set("h", 0);
+      cameraVariable.set("l", 0);
+      cameraVariable.set("paramA", perspectiveDistance);
+      cameraVariable.set("paramB", 0);
+      cameraVariable.set("paramC", 0);
+    }
+  }
+
   public void update() {
     for (HashMap.Entry<String, OavpObject> entry : objectsStorage.entrySet()) {
       entry.getValue().update();

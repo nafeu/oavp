@@ -63,6 +63,9 @@ void webSocketServerEvent(String msg) {
   else if (command.equals("reset")) {
     noLoop();
     objects.removeAll();
+    objects.resetBackground();
+    objects.resetCamera();
+    resetPaletteToDefaults();
     loop();
     queueScreenshot();
   }

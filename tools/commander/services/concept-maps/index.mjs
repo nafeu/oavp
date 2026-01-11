@@ -30,75 +30,102 @@ export const getConceptMaps = () => {
   }
 }
 
-export const getConceptMapMeta = () => readdirSync(resolve(CONCEPT_MAPS_DIR))
-  .filter(file => extname(file) === '.txt' && !_.includes(['shared', 'default'], basename(file, '.txt')))
-  .map(file => {
-    const filePath = join(CONCEPT_MAPS_DIR, file);
-    const data     = readFileSync(filePath, 'utf8');
-    const mapName  = basename(file, '.txt');
+export const getConceptMapMeta = () => {
+  const sandboxFilePath = join(CONCEPT_MAPS_DIR, 'sandbox.txt');
+  let sandboxData = '';
+  let sandboxPrefabsCount = 0;
 
-    const [height, presence, subject] = mapName.split('-');
+  try {
+    sandboxData = readFileSync(sandboxFilePath, 'utf8');
+    sandboxPrefabsCount = sandboxData.split(/\n\n+/).map(part => part.includes('\n') ? part : part + '\n').length - 1;
+    if (sandboxPrefabsCount < 0) sandboxPrefabsCount = 0;
+  } catch (err) {
+    // sandbox.txt might not exist, that's okay
+  }
 
-    const heightCodeMapping = {
-      high: 'hi',
-      medium: 'md',
-      low: 'lo'
-    }
+  return readdirSync(resolve(CONCEPT_MAPS_DIR))
+    .filter(file => extname(file) === '.txt' && !_.includes(['shared', 'default', 'sandbox'], basename(file, '.txt')))
+    .map(file => {
+      const filePath = join(CONCEPT_MAPS_DIR, file);
+      const data = readFileSync(filePath, 'utf8');
+      const mapName = basename(file, '.txt');
 
-    const presenceCodeMapping = {
-      busy: 'bsy',
-      minimal: 'min'
-    }
+      const [height, presence, subject] = mapName.split('-');
 
-    return {
-      height: heightCodeMapping[height],
-      presence: presenceCodeMapping[presence],
-      subject,
-      mapId: toCamelCase(mapName),
-      prefabsCount: data.split(/\n\n+/).map(part => part.includes('\n') ? part : part + '\n').length - 1
-    }
-  }).sort((
-    { subject: subjectA, presence: presenceA, height: heightA },
-    { subject: subjectB, presence: presenceB, height: heightB }
-  ) => {
-    const heightOrder = { hi: 1, md: 2, lo: 3 };
+      const heightCodeMapping = {
+        high: 'hi',
+        medium: 'md',
+        low: 'lo'
+      }
 
-    if (subjectA < subjectB) return -1;
-    if (subjectA > subjectB) return 1;
-    if (presenceA < presenceB) return -1;
-    if (presenceA > presenceB) return 1;
-    return heightOrder[heightA] - heightOrder[heightB];
-  }).concat([{
-    height: '',
-    presence: '',
-    subject: 'default',
-    mapId: 'default',
-    prefabsCount: 1
-  }])
-  .reduce((mapping, conceptMap) => {
-    if (conceptMap.subject === 'background') {
-      mapping['background'] = [...(mapping['background'] || []), conceptMap];
-    }
+      const presenceCodeMapping = {
+        busy: 'bsy',
+        minimal: 'min'
+      }
 
-    if (conceptMap.subject === 'celestial') {
-      mapping['celestial'] = [...(mapping['celestial'] || []), conceptMap];
-    }
+      return {
+        height: heightCodeMapping[height],
+        presence: presenceCodeMapping[presence],
+        subject,
+        mapId: toCamelCase(mapName),
+        prefabsCount: data.split(/\n\n+/).map(part => part.includes('\n') ? part : part + '\n').length - 1
+      }
+    }).sort((
+      { subject: subjectA, presence: presenceA, height: heightA },
+      { subject: subjectB, presence: presenceB, height: heightB }
+    ) => {
+      const heightOrder = { hi: 1, md: 2, lo: 3 };
 
-    if (conceptMap.subject === 'sky') {
-      mapping['sky'] = [...(mapping['sky'] || []), conceptMap];
-    }
+      if (subjectA < subjectB) return -1;
+      if (subjectA > subjectB) return 1;
+      if (presenceA < presenceB) return -1;
+      if (presenceA > presenceB) return 1;
+      return heightOrder[heightA] - heightOrder[heightB];
+    }).concat([
+      {
+        height: '',
+        presence: '',
+        subject: 'default',
+        mapId: 'default',
+        prefabsCount: 1
+      },
+      {
+        height: '',
+        presence: '',
+        subject: 'sandbox',
+        mapId: 'sandbox',
+        prefabsCount: sandboxPrefabsCount
+      }
+    ])
+    .reduce((mapping, conceptMap) => {
+      if (conceptMap.subject === 'background') {
+        mapping['background'] = [...(mapping['background'] || []), conceptMap];
+      }
 
-    if (conceptMap.subject === 'surrounding') {
-      mapping['surrounding'] = [...(mapping['surrounding'] || []), conceptMap];
-    }
+      if (conceptMap.subject === 'celestial') {
+        mapping['celestial'] = [...(mapping['celestial'] || []), conceptMap];
+      }
 
-    if (conceptMap.subject === 'foreground') {
-      mapping['foreground'] = [...(mapping['foreground'] || []), conceptMap];
-    }
+      if (conceptMap.subject === 'sky') {
+        mapping['sky'] = [...(mapping['sky'] || []), conceptMap];
+      }
 
-    if (conceptMap.subject === 'default') {
-      mapping['default'] = [...(mapping['default'] || []), conceptMap];
-    }
+      if (conceptMap.subject === 'surrounding') {
+        mapping['surrounding'] = [...(mapping['surrounding'] || []), conceptMap];
+      }
 
-    return mapping;
-  }, {});
+      if (conceptMap.subject === 'foreground') {
+        mapping['foreground'] = [...(mapping['foreground'] || []), conceptMap];
+      }
+
+      if (conceptMap.subject === 'default') {
+        mapping['default'] = [...(mapping['default'] || []), conceptMap];
+      }
+
+      if (conceptMap.subject === 'sandbox') {
+        mapping['sandbox'] = [...(mapping['sandbox'] || []), conceptMap];
+      }
+
+      return mapping;
+    }, {});
+};
