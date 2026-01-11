@@ -47,6 +47,10 @@ void webSocketServerEvent(String msg) {
   JSONObject message = parseJSONObject(msg);
   String command = message.getString("command");
 
+  if (command.equals("ping")) {
+    return;
+  }
+
   if (!command.equals("ping")) {
     println("[ oavp ] Socket command received: " + command);
   }
@@ -223,7 +227,7 @@ void webSocketServerEvent(String msg) {
   }
 
   else {
-    println("[ oavp ] Command not recognized");
+    println("[ oavp ] Command not recognized: " + command);
   }
 }
 

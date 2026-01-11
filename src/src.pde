@@ -15,6 +15,11 @@ import java.util.Date;
 import java.util.UUID;
 import java.lang.reflect.Field;
 import java.io.File;
+import java.lang.Process;
+import java.lang.ProcessBuilder;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 import processing.video.*;
@@ -49,6 +54,8 @@ boolean isInitializing = true;
 ControlP5 cp5;
 int loadingDelay = 500;
 WebsocketServer server;
+Process nodeServerProcess;
+boolean nodeServerStarted = false;
 
 int SCALE_FACTOR = 1;
 
@@ -87,6 +94,7 @@ void setup() {
   } catch (Exception e) {
     System.err.println("[ oavp ] Error during setup");
     debugError(e);
+    stopNodeServer();
     exit();
   }
 }
@@ -101,6 +109,12 @@ synchronized void draw() {
     textAlign(CENTER, CENTER);
     text("[ oavp ] : github.com/nafeu/oavp\n\npress 'e' to enter edit mode", width * 0.5, height * 0.5);
   } else {
+    // Start Node.js server once after loading is complete
+    if (!nodeServerStarted) {
+      startNodeServer();
+      nodeServerStarted = true;
+    }
+
     try {
       // TODO: Remove deprecated recording code...
       if (oavp.ENABLE_VIDEO_RENDER) {
@@ -120,6 +134,7 @@ synchronized void draw() {
           // Done reading the file.
           // Close the video file.
           videoExport.endMovie();
+          stopNodeServer();
           exit();
         } else {
           String[] rawAnalysisData = split(line, oavp.AUDIO_ANALYSIS_SEPERATOR);
@@ -162,6 +177,7 @@ synchronized void draw() {
         }
 
         if (shouldExit) {
+          stopNodeServer();
           exit();
         }
 
@@ -172,6 +188,7 @@ synchronized void draw() {
     } catch (Exception e) {
       println("[ oavp ] Error during draw loop");
       debugError(e);
+      stopNodeServer();
       exit();
     }
   }
@@ -188,6 +205,7 @@ void updateEntities() {
   } catch (Exception e) {
     println("[ oavp ] Error during update loop");
     debugError(e);
+    stopNodeServer();
     exit();
   }
 }
@@ -201,6 +219,7 @@ void updateEntities(OavpConfig config, float[] analysisData, String[] eventsData
   } catch (Exception e) {
     println("[ oavp ] Error during update loop");
     debugError(e);
+    stopNodeServer();
     exit();
   }
 }
@@ -519,4 +538,56 @@ void drawCamera() {
   perspective(
     fov, float(width)/float(height),
     cameraZ/10.0 * SCALE_FACTOR, (cameraZ * 10.0 + cameraVariable.val("paramA")) * SCALE_FACTOR);
+}
+
+void startNodeServer() {
+  try {
+    println("[ oavp ] Starting Node.js server...");
+    ProcessBuilder pb = new ProcessBuilder("node", "index.mjs");
+    pb.directory(new File(sketchPath("../tools/commander")));
+    pb.redirectErrorStream(true);
+    nodeServerProcess = pb.start();
+
+    // Start a thread to read and print process output
+    final BufferedReader reader = new BufferedReader(new InputStreamReader(nodeServerProcess.getInputStream()));
+    new Thread(new Runnable() {
+      public void run() {
+        String line;
+        try {
+          while ((line = reader.readLine()) != null) {
+            println("[ commander ] " + line);
+          }
+        } catch (IOException e) {
+          // Stream closed, process terminated
+        }
+      }
+    }).start();
+
+    println("[ oavp ] Node.js server started.");
+  } catch (IOException e) {
+    System.err.println("[ oavp ] Failed to start Node.js server");
+    debugError(e);
+  }
+}
+
+void stopNodeServer() {
+  if (nodeServerProcess != null) {
+    try {
+      println("[ oavp ] Stopping Node.js server...");
+      nodeServerProcess.destroy();
+      nodeServerProcess.waitFor();
+      println("[ oavp ] Node.js server stopped.");
+    } catch (InterruptedException e) {
+      System.err.println("[ oavp ] Error stopping Node.js server");
+      debugError(e);
+    } catch (Exception e) {
+      System.err.println("[ oavp ] Error stopping Node.js server");
+      debugError(e);
+    }
+    nodeServerProcess = null;
+  }
+}
+
+void dispose() {
+  stopNodeServer();
 }
