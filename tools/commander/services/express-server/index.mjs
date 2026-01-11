@@ -69,7 +69,7 @@ const setupExpressServer = ws => {
       ...params
     } = req.body;
 
-    if (command === "generate-ontop") {
+    if (command === "refresh") {
       const objects = emitGeneratedSketchToServer({
         ws,
         options: { conceptMaps: params.conceptMaps || [] }

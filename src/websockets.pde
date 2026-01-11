@@ -59,6 +59,9 @@ void webSocketServerEvent(String msg) {
     JSONArray receivedOavpObjects = message.getJSONArray("objects");
 
     noLoop();
+    objects.removeAll();
+    objects.resetBackground();
+    objects.resetCamera();
     handleReceivedOavpObjects(receivedOavpObjects);
     loop();
     queueScreenshot();

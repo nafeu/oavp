@@ -555,7 +555,7 @@ void startNodeServer() {
         String line;
         try {
           while ((line = reader.readLine()) != null) {
-            println("[ commander ] " + line);
+            println(line);
           }
         } catch (IOException e) {
           // Stream closed, process terminated

@@ -117,7 +117,7 @@ function sendApiCommand({ command, ...params }) {
       }
 
       if (data.data && dataElement) {
-        if (command === 'generate-ontop') {
+        if (command === 'refresh') {
           let dataElementText = '';
 
           data.data.forEach(item => {
