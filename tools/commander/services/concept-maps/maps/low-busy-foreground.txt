@@ -1,5 +1,6 @@
 #prefabs
 [turnway]
+[columnaralpha]
 
 #turnway
 [turnway_left]&[turnway_right]
@@ -14,3 +15,24 @@ Flatbox_turnway_left_accentafill_accentbstroke|xIter:-200.0;xr:90;y:250;zIter:-2
 Flatbox_turnway_right_accentafill_accentbstroke|xIter:200.0;xr:90;y:250;zIter:-200.0;zr:45;w:100.0;wIter:[turnway_stretch*a];h:100.0;l:300.0;s:100.0;i:80
 #turnway_stretch
 rand(0, 3, 'stretch')*50
+
+#columnaralpha
+[columnaralpha_bottom_box]&[columnaralpha_top_pyramid]&[columnaralpha_mid_box]&[columnaralpha_f]&[columnaralpha_g]&[columnaralpha_bottom_pyramid]
+
+#columnaralpha_bottom_box
+Box_backgroundstroke_nofill_columnaralpha|z:[?n500*a];y:300;yr:45;w:50.0+[?p100*a];h:150.0+[?p100*a];l:50.0+[?p100*a];s:100.0;fillColor:0;
+
+#columnaralpha_mid_box
+Box_accentbstroke_nofill_columnaralpha|z:[?n500*a];y:175;yr:45;w:75.0+[?p100*a];h:75.0+[?p100*a];l:75.0+[?p100*a];s:100.0;fillColor:0;
+
+#columnaralpha_f
+Pyramid_accentcfill_accentbstroke_columnaralpha|z:[?n500*a];y:190;yr:-45;zr:180;w:50.0+[?p100*a];h:50.0+[?p100*a];l:50.0+[?p100*a];s:100.0;
+
+#columnaralpha_top_pyramid
+Pyramid_accentcfill_accentbstroke_columnaralpha|z:[?n500*a];y:-215-[?p100*a];xr:180;yr:-45;zr:180;w:100.0;h:400.0;l:100.0;s:100.0;
+
+#columnaralpha_bottom_pyramid
+Pyramid_accentcfill_accentbstroke_columnaralpha|z:[?n500*a];y:35-[?p100*a];yr:45;zr:180;w:100.0;h:100.0;l:100.0;s:100.0;
+
+#columnaralpha_g
+Flatbox_accentafill_backgroundstroke_columnaralpha|y:-[?p200*a];z:[?n500*a];xr:90;y:105;zr:45;w:100.0;h:100.0;l:10.0;s:100.0;
