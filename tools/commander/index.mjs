@@ -16,6 +16,7 @@ import setupExpressServer from "./services/express-server/index.mjs";
 import setupSketchSocketConnection from "./services/sketch-socket-connection/index.mjs";
 import setupWebsocketServer from "./services/websocket-server/index.mjs";
 import setupFilewatchEventHandlers from "./services/filewatch-event-handlers/index.mjs";
+import setupWebview from "./services/webview/index.mjs";
 
 const ws = new WebSocket(SKETCH_WEBSOCKET_SERVER_URL);
 const wsServer = new WebSocketServer({ port: COMMANDER_WEBSOCKET_SERVER_PORT });
@@ -26,6 +27,7 @@ const main = () => {
   setupSketchSocketConnection(ws, wsServer);
   setupWebsocketServer({ wsServer, wsClients });
   setupFilewatchEventHandlers(ws);
+  setupWebview();
 };
 
 main();

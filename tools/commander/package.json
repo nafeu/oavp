@@ -30,6 +30,7 @@
     "seedrandom": "^3.0.5",
     "shortid": "^2.2.16",
     "topic-weaver": "^0.3.1",
+    "webview": "^1.1.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {
